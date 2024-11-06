@@ -1,0 +1,82 @@
+'use client'
+import * as React from "react"
+import { Plus } from "lucide-react"
+
+import { Calendars } from "@/components/calendars"
+import { DatePicker } from "@/components/date-picker"
+import { NavUser } from "@/components/nav-user"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+  SidebarSeparator,
+} from "@/components/ui/sidebar"
+import { useSession } from "next-auth/react"
+
+// This is sample data.
+const data = {
+  user: {
+    name: "shadcn",
+    email: "m@example.com",
+    avatar: "/avatars/shadcn.jpg",
+  },
+  calendars: [
+    {
+      name: "My Calendars",
+      items: ["Personal", "Work", "Family"],
+    },
+    {
+      name: "Favorites",
+      items: ["Holidays", "Birthdays"],
+    },
+    {
+      name: "Other",
+      items: ["Travel", "Reminders", "Deadlines"],
+    },
+  ],
+}
+
+export function SidebarRight({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  const { data: session, status: sessionStatus } = useSession();
+  console.log(session)
+  if (sessionStatus === "loading" || !session) {
+    return null;
+  }
+  return (
+    <Sidebar
+      collapsible="none"
+      className="sticky hidden lg:flex top-0 h-svh border-l"
+      {...props}
+    >
+      <SidebarHeader className="h-16 border-b border-sidebar-border">
+        <NavUser user={{
+          name: session.user?.name || "Unknown",
+          email: session.user?.email || "unknown@example.com",
+          image: session.user?.image || "/default-avatar.jpg"
+        }} />
+      </SidebarHeader>
+      <SidebarContent>
+        <DatePicker />
+        <SidebarSeparator className="mx-0" />
+        <Calendars calendars={data.calendars} />
+      </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton>
+              <Plus />
+              <span>New Calendar</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+    </Sidebar>
+  )
+}
