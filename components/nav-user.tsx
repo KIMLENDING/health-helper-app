@@ -37,6 +37,7 @@ export function NavUser({
     name: string
     email: string // Email
     image: string // URL
+    role?: string // Role
   }
 }) {
   const { isMobile } = useSidebar()
@@ -83,7 +84,7 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <Sparkles />
-                Upgrade to Pro
+                {user.role === 'admin' ? '관리자' : 'Upgrade to Pro'}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

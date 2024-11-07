@@ -11,7 +11,7 @@ import { Label } from "./ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
 
-const Register = () => {
+const Register = ({ fetchUrl }: { fetchUrl?: string }) => {
     const [error, setError] = useState("");
     const router = useRouter();
     const { data: session, status: sessionStatus } = useSession(); // 
@@ -51,7 +51,7 @@ const Register = () => {
         }
 
         try {
-            const res = await fetch("/api/register", {
+            const res = await fetch(fetchUrl || "/api/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -89,9 +89,9 @@ const Register = () => {
             <div className="flex h-screen w-full items-center justify-center px-4 ">
                 <Card className="mx-auto max-w-sm  ">
                     <CardHeader>
-                        <CardTitle className="text-2xl dark:text-white">계정 로그인</CardTitle>
+                        <CardTitle className="text-2xl dark:text-white">{fetchUrl && '관리자 '}계정 생성</CardTitle>
                         <CardDescription >
-                            계정에 로그인하려면 아래에 이메일을 입력하세요
+                            계정을 생성하려면 아래에 이메일을 입력하세요
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -103,7 +103,7 @@ const Register = () => {
                                         id="email"
                                         type="email"
                                         placeholder="m@example.com"
-                                        autoComplete="email"
+
                                         required
 
                                     />

@@ -18,6 +18,7 @@ export const authOptions: any = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
+
       async authorize(credentials: any) {
         await connect();
         try {
@@ -28,6 +29,7 @@ export const authOptions: any = {
               user.password
             );
             if (isPasswordCorrect) {
+
               return user;
             }
           }
@@ -36,6 +38,7 @@ export const authOptions: any = {
           throw new Error(err);
         }
       },
+
     }),
     GithubProvider({
       clientId: process.env.GITHUB_ID ?? "",
@@ -72,21 +75,23 @@ export const authOptions: any = {
       return false;
 
     },
-    async jwt({ token, user, trigger, session }: { token: any; user?: AuthUser; trigger: string; session: any }) {
+    async jwt({ token, user, trigger, session }: { token: any; user?: any; trigger: string; session: any }) {
       if (trigger === 'update' && session?.user) {  // 세션이 업데이트 될 때마다 실행
-        console.log("Session User----", session.user.name);
+        // console.log("Session User----", session.user);
         return { ...token, ...session.user };
       }
       if (user) { // 로그인할 때마다 실행
-        console.log("User----", user);
-
-        return { ...token, ...user };
+        // console.log("User----", user);
+        // console.log("Token----", token);
+        token.role = user.role; // user의 role을 token에 추가
+        return token;
+        // return { ...token, ...user }; //user를 굳이 추가 할 필요가 있나? _doc에 굳이 user정보를 넣을 필요가 없어 보임
       }
       return token; //  페이지를 새로고침할 때마다 실행
     },
     async session({ session, token }: { session: any; token: any }) { //사용자가 로그인 후 세션을  처음 요청 할 떄 , 페이지를 새로고침 할 때, 세션을 확인 할 때, getSession을 호출 할 때
       session.user = token;
-      console.log("Session----", session.user.name);
+      // console.log("Session----", session);
       return session;
     },
 

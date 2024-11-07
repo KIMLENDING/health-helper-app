@@ -176,7 +176,6 @@ const Sidebar = React.forwardRef<
     ref
   ) => {
     const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
-
     if (collapsible === "none") {
       return (
         <div
@@ -205,7 +204,9 @@ const Sidebar = React.forwardRef<
               } as React.CSSProperties
             }
             side={side}
-          ><SheetTitle>{/**이거 없으면 Dialog에서 에러 발생함 content안에 title이랑 description이 무조건 있어야함 없으면  오류남 */}</SheetTitle>
+          ><SheetTitle>
+
+            </SheetTitle>
             <SheetDescription></SheetDescription>
             <div className="flex h-full w-full flex-col">{children}</div>
           </SheetContent>

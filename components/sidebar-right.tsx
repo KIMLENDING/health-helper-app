@@ -45,7 +45,7 @@ export function SidebarRight({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const { data: session, status: sessionStatus } = useSession();
-  console.log(session)
+
   if (sessionStatus === "loading" || !session) {
     return null;
   }
@@ -55,13 +55,8 @@ export function SidebarRight({
       className="sticky hidden lg:flex top-0 h-svh border-l"
       {...props}
     >
-      <SidebarHeader className="h-16 border-b border-sidebar-border">
-        <NavUser user={{
-          name: session.user?.name || "Unknown",
-          email: session.user?.email || "unknown@example.com",
-          image: session.user?.image || "/default-avatar.jpg"
-        }} />
-      </SidebarHeader>
+      {/* <SidebarHeader className="h-16 border-b border-sidebar-border">
+      </SidebarHeader> */}
       <SidebarContent>
         <DatePicker />
         <SidebarSeparator className="mx-0" />

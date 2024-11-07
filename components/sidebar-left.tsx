@@ -16,10 +16,8 @@ import {
 } from "lucide-react"
 
 import { NavFavorites } from "@/components/nav-favorites"
-import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavWorkspaces } from "@/components/nav-workspaces"
-import { TeamSwitcher } from "@/components/team-switcher"
 import {
   Sidebar,
   SidebarContent,
@@ -27,8 +25,19 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { Button } from "./ui/button"
-import { useSession } from "next-auth/react"
+import { getSession, useSession } from "next-auth/react"
+import { DefaultUser } from "next-auth"
 import Link from "next/link"
+import { NavUser } from "./nav-user"
+import { NavMain } from "./nav-main"
+import { SearchForm } from "./search-form"
+import LoadingSpinner from "./LayoutCompents/LoadingSpinner"
+import { useQuery } from "@tanstack/react-query"
+import { get } from "http"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { getServerSession } from "next-auth/next"
+import useSessionStore from "@/store/SessionStore"
+
 
 // This is sample data.
 const data = {
@@ -50,27 +59,27 @@ const data = {
     },
   ],
   navMain: [
-    {
-      title: "Search",
-      url: "#",
-      icon: Search,
-    },
-    {
-      title: "Ask AI",
-      url: "#",
-      icon: Sparkles,
-    },
+    // {
+    //   title: "Search",
+    //   url: "#",
+    //   icon: Search,
+    // },
+    // {
+    //   title: "Dashboard",
+    //   url: "#",
+    //   icon: Sparkles,
+    // },
     {
       title: "Home",
-      url: "#",
+      url: "/dashboard",
       icon: Home,
-      isActive: true,
+      // isActive: true,
     },
     {
       title: "Inbox",
       url: "#",
       icon: Inbox,
-      badge: "10",
+      badge: "100",
     },
   ],
   navSecondary: [
@@ -260,24 +269,45 @@ const data = {
     },
   ],
 }
+interface CustomSession extends DefaultUser {
+  role: string
+}
 
 export function SidebarLeft({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  const { status: sessionStatus } = useSession()
+  const { data: session, status: sessionStatus } = useSession();
+  React.useEffect(() => {
+    if (session) {
+
+      sessionStorage.setItem('session', JSON.stringify(session));
+    } else {
+      sessionStorage.removeItem('session');
+    }
+  }, [session]);
+
+  const sessionData = session ? session : JSON.parse(sessionStorage.getItem('session') || '{}');
+
 
   return (
     <Sidebar className="border-r-0" {...props}>
       <SidebarHeader>
-        {
-          sessionStatus !== "authenticated" &&
-          <Button className="p-0">
-            <Link href={'/login'} className=" flex-1 h-full pt-2 ">
-              로그인
 
-            </Link>
-          </Button>
+        {
+          sessionStatus !== 'authenticated' ? sessionStatus === "loading" ? <div className="flex justify-center"><LoadingSpinner className="w-8 h-8 " /></div> :
+            <Button className="p-0">
+              <Link href={'/login'} className=" flex-1 h-full pt-2 ">
+                로그인
+              </Link>
+            </Button> : <NavUser user={{
+              name: sessionData.user.name || "Unknown",
+              email: sessionData.user.email || "unknown@example.com",
+              image: sessionData.user.image || "/img/defaultUserImage.png",
+              role: (sessionData.user as CustomSession)?.role || "user",
+            }} />
         }
+        <SearchForm />
+        <NavMain items={data.navMain} />
 
       </SidebarHeader>
       <SidebarContent>

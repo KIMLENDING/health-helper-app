@@ -91,7 +91,7 @@ export default function LoginPage() {
                                     id="email"
                                     type="email"
                                     placeholder="m@example.com"
-                                    autoComplete="email"
+
                                     required
 
                                 />

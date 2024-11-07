@@ -83,9 +83,12 @@ export function NavFavorites({
           </SidebarMenuItem>
         ))}
         <SidebarMenuItem>
-          <SidebarMenuButton className="text-sidebar-foreground/70">
-            <MoreHorizontal />
-            <span>More</span>
+          <SidebarMenuButton asChild className="text-sidebar-foreground/70" >
+            <a href="#">
+              <MoreHorizontal />
+              <span>More</span>
+
+            </a>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>
