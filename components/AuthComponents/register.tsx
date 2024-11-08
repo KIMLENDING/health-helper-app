@@ -5,10 +5,11 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { toast } from "@/hooks/use-toast";
 import Link from "next/link";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+;
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Button } from "../ui/button";
 
 
 const Register = ({ fetchUrl }: { fetchUrl?: string }) => {

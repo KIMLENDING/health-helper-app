@@ -50,8 +50,14 @@ export const authOptions: any = {
     }),
     // ...add more providers here
   ],
+  pages: {
+    signIn: '/login',
+  },
   callbacks: {
-    async signIn({ user, account }: { user: AuthUser; account: Account }) {
+    async signIn({ user, account, profile }: { profile: any, user: AuthUser; account: Account }) {
+      // console.log("User----", user);
+      // console.log("Account----", account);
+      // console.log("Profile----", profile);
       if (account?.provider == "credentials") {
         return true;
       }
@@ -63,6 +69,7 @@ export const authOptions: any = {
             const newUser = new User({
               email: user.email,
               name: user.name,
+              image: user.image,
             });
             await newUser.save(); // user 생성
           }
@@ -84,6 +91,7 @@ export const authOptions: any = {
         // console.log("User----", user);
         // console.log("Token----", token);
         token.role = user.role; // user의 role을 token에 추가
+        token.image = user.image; // user의 image를 token에 추가
         return token;
         // return { ...token, ...user }; //user를 굳이 추가 할 필요가 있나? _doc에 굳이 user정보를 넣을 필요가 없어 보임
       }

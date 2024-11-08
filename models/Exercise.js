@@ -8,6 +8,10 @@ const exerciseSchema = new Schema(
       unique: true,
       required: true,
     },
+    description: {
+      type: String,
+      required: true,
+    },
     url: {
       type: String,
       required: true,

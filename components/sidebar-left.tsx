@@ -1,4 +1,4 @@
-"use client"
+
 
 import * as React from "react"
 import {
@@ -9,7 +9,6 @@ import {
   Home,
   Inbox,
   MessageCircleQuestion,
-  Search,
   Settings2,
   Sparkles,
   Trash2,
@@ -32,12 +31,11 @@ import { NavUser } from "./nav-user"
 import { NavMain } from "./nav-main"
 import { SearchForm } from "./search-form"
 import LoadingSpinner from "./LayoutCompents/LoadingSpinner"
-import { useQuery } from "@tanstack/react-query"
-import { get } from "http"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import { getServerSession } from "next-auth/next"
-import useSessionStore from "@/store/SessionStore"
-
+import { useEffect, useState } from "react"
+import { Suspense } from "react";
+import { useSessionContext } from "@/providers/SessionContext"
+import { GetServerSideProps } from "next"
+import { unstable_cache } from "next/cache"
 
 // This is sample data.
 const data = {
@@ -64,16 +62,16 @@ const data = {
     //   url: "#",
     //   icon: Search,
     // },
-    // {
-    //   title: "Dashboard",
-    //   url: "#",
-    //   icon: Sparkles,
-    // },
     {
       title: "Home",
       url: "/dashboard",
       icon: Home,
       // isActive: true,
+    },
+    {
+      title: "Dashboard",
+      url: "/dashboard/admin/addExercise",
+      icon: Sparkles,
     },
     {
       title: "Inbox",
@@ -269,42 +267,39 @@ const data = {
     },
   ],
 }
+
 interface CustomSession extends DefaultUser {
   role: string
 }
-
 export function SidebarLeft({
+
   ...props
-}: React.ComponentProps<typeof Sidebar>) {
+}: any) {//
   const { data: session, status: sessionStatus } = useSession();
-  React.useEffect(() => {
-    if (session) {
+  const { session: sessions } = useSessionContext();
+  const [sessionData, setSession] = useState(sessions)
 
-      sessionStorage.setItem('session', JSON.stringify(session));
-    } else {
-      sessionStorage.removeItem('session');
+  useEffect(() => {
+    if (sessionStatus === "authenticated") { // 인증된 상태일 때
+      setSession(session) // 
     }
-  }, [session]);
-
-  const sessionData = session ? session : JSON.parse(sessionStorage.getItem('session') || '{}');
-
-
+  }
+    , [sessionStatus])
   return (
     <Sidebar className="border-r-0" {...props}>
       <SidebarHeader>
-
-        {
-          sessionStatus !== 'authenticated' ? sessionStatus === "loading" ? <div className="flex justify-center"><LoadingSpinner className="w-8 h-8 " /></div> :
+        {sessionData ? <NavUser user={{
+          name: sessionData.user?.name || "Unknown",
+          email: sessionData.user?.email || "unknown@example.com",
+          image: sessionData.user?.image || "/img/defaultUserImage.png",
+          role: (sessionData.user as CustomSession)?.role || "user",
+        }} /> :
+          sessionStatus === "loading" ? <div className="flex justify-center"><LoadingSpinner className="w-8 h-8 " /></div> :
             <Button className="p-0">
               <Link href={'/login'} className=" flex-1 h-full pt-2 ">
                 로그인
               </Link>
-            </Button> : <NavUser user={{
-              name: sessionData.user.name || "Unknown",
-              email: sessionData.user.email || "unknown@example.com",
-              image: sessionData.user.image || "/img/defaultUserImage.png",
-              role: (sessionData.user as CustomSession)?.role || "user",
-            }} />
+            </Button>
         }
         <SearchForm />
         <NavMain items={data.navMain} />

@@ -15,10 +15,12 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 
+
 export default function DachboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
+  data: any;
 }>) {
   return (
     <SidebarProvider>
@@ -47,3 +49,14 @@ export default function DachboardLayout({
     </SidebarProvider>
   )
 }
+
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   const res = await fetch('/api/auth');
+//   const data = await res.json();
+//   console.log('data', data)
+//   return {
+//     props: {
+//       data,
+//     },
+//   };
+// };
