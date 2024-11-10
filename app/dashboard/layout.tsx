@@ -2,6 +2,7 @@
 import { ModeToggle } from "@/components/LayoutCompents/ModeToggle"
 import { SidebarLeft } from "@/components/sidebar-left"
 import { SidebarRight } from "@/components/sidebar-right"
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -20,7 +21,6 @@ export default function DachboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-  data: any;
 }>) {
   return (
     <SidebarProvider>
@@ -46,6 +46,7 @@ export default function DachboardLayout({
         {children}
       </SidebarInset>
       <SidebarRight />
+
     </SidebarProvider>
   )
 }

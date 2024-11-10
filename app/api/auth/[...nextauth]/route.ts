@@ -88,7 +88,7 @@ export const authOptions: any = {
         return { ...token, ...session.user };
       }
       if (user) { // 로그인할 때마다 실행
-        // console.log("User----", user);
+        console.log("User----jwt", user);
         // console.log("Token----", token);
         token.role = user.role; // user의 role을 token에 추가
         token.image = user.image; // user의 image를 token에 추가
@@ -97,8 +97,19 @@ export const authOptions: any = {
       }
       return token; //  페이지를 새로고침할 때마다 실행
     },
-    async session({ session, token }: { session: any; token: any }) { //사용자가 로그인 후 세션을  처음 요청 할 떄 , 페이지를 새로고침 할 때, 세션을 확인 할 때, getSession을 호출 할 때
-      session.user = token;
+    async session({ session, token }: { session: any; token: any, }) { //사용자가 로그인 후 세션을  처음 요청 할 떄 , 페이지를 새로고침 할 때, 세션을 확인 할 때, getSession을 호출 할 때
+
+      console.log("Session----session", session);
+      session.user = { ...token };
+      console.log("Session----session", session);
+      // console.log("Token----", token);
+      // const newSession = { ...session, ...token };
+      // console.log("Session----", newSession);
+      // session.user.name = token.name;
+      // session.user.email = token.email;
+      // session.user.image = token.image || "/img/defaultUserImage.png";
+      // session.user.role = token.role;
+      // console.log("Token----", token);
       // console.log("Session----", session);
       return session;
     },

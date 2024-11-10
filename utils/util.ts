@@ -1,6 +1,6 @@
 export const tags = {
-    상체: {
-        팔: ["이두", "삼두"],
+    상체: { // 대분류
+        팔: ["이두", "삼두"], // 중분류 - [소분류]
         어깨: ["전면", "측면", "후면"],
         가슴: ["대흉근", "소흉근"],
         등: ["광배근", "승모근"],
@@ -12,6 +12,20 @@ export const tags = {
         종아리: ["비복근", "가자미근"]
     }
 };
+export interface Tags {
+    상체: {
+        팔: string[];
+        어깨: string[];
+        가슴: string[];
+        등: string[];
+        배: string[];
+    };
+    하체: {
+        엉덩이: string[];
+        허벅지: string[];
+        종아리: string[];
+    };
+}
 
 export interface exercise {
     title: string;

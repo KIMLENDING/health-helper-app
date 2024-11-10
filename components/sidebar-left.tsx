@@ -24,18 +24,16 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { Button } from "./ui/button"
-import { getSession, useSession } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import { DefaultUser } from "next-auth"
 import Link from "next/link"
 import { NavUser } from "./nav-user"
 import { NavMain } from "./nav-main"
 import { SearchForm } from "./search-form"
 import LoadingSpinner from "./LayoutCompents/LoadingSpinner"
-import { useEffect, useState } from "react"
-import { Suspense } from "react";
+import { useState } from "react"
 import { useSessionContext } from "@/providers/SessionContext"
-import { GetServerSideProps } from "next"
-import { unstable_cache } from "next/cache"
+
 
 // This is sample data.
 const data = {
@@ -68,11 +66,7 @@ const data = {
       icon: Home,
       // isActive: true,
     },
-    {
-      title: "Dashboard",
-      url: "/dashboard/admin/addExercise",
-      icon: Sparkles,
-    },
+
     {
       title: "Inbox",
       url: "#",
@@ -267,7 +261,128 @@ const data = {
     },
   ],
 }
+const AdminData = {
+  teams: [
+    {
+      name: "Acme Inc",
+      logo: Command,
+      plan: "Enterprise",
+    },
+    {
+      name: "Acme Corp.",
+      logo: AudioWaveform,
+      plan: "Startup",
+    },
+    {
+      name: "Evil Corp.",
+      logo: Command,
+      plan: "Free",
+    },
+  ],
+  navMain: [
 
+    {
+      title: "홈",
+      url: "/dashboard",
+      icon: Home,
+      // isActive: true,
+    },
+    {
+      title: "운동 추가",
+      url: "/dashboard/admin/addExercise",
+      icon: Sparkles,
+    },
+    {
+      title: "Inbox",
+      url: "#",
+      icon: Inbox,
+      badge: "100",
+    },
+  ],
+  navSecondary: [
+
+    {
+      title: "Help",
+      url: "#",
+      icon: MessageCircleQuestion,
+    },
+  ],
+  favorites: [
+    {
+      name: "Project Management & Task Tracking",
+      url: "#",
+      emoji: "📊",
+    },
+
+    {
+      name: "Daily Habit Tracker & Goal Setting",
+      url: "#",
+      emoji: "✅",
+    },
+  ],
+  workspaces: [
+    {
+      name: "Personal Life Management",
+      emoji: "🏠",
+      pages: [
+        {
+          name: "Daily Journal & Reflection",
+          url: "#",
+          emoji: "📔",
+        },
+
+      ],
+    },
+    {
+      name: "Professional Development",
+      emoji: "💼",
+      pages: [
+        {
+          name: "Career Objectives & Milestones",
+          url: "#",
+          emoji: "🎯",
+        },
+
+      ],
+    },
+    {
+      name: "Creative Projects",
+      emoji: "🎨",
+      pages: [
+        {
+          name: "Writing Ideas & Story Outlines",
+          url: "#",
+          emoji: "✍️",
+        },
+
+      ],
+    },
+    {
+      name: "Home Management",
+      emoji: "🏡",
+      pages: [
+        {
+          name: "Household Budget & Expense Tracking",
+          url: "#",
+          emoji: "💰",
+        },
+
+      ],
+    },
+    {
+      name: "Travel & Adventure",
+      emoji: "🧳",
+      pages: [
+        {
+          name: "Trip Planning & Itineraries",
+          url: "#",
+          emoji: "🗺️",
+        },
+
+      ],
+    },
+  ],
+}
 interface CustomSession extends DefaultUser {
   role: string
 }
@@ -277,17 +392,28 @@ export function SidebarLeft({
 }: any) {//
   const { data: session, status: sessionStatus } = useSession();
   const { session: sessions } = useSessionContext();
+  const [datas, setData] = useState(data)
   const [sessionData, setSession] = useState(sessions)
 
-  useEffect(() => {
+
+  React.useLayoutEffect(() => {
     if (sessionStatus === "authenticated") { // 인증된 상태일 때
       setSession(session) // 
     }
   }
     , [sessionStatus])
+  React.useLayoutEffect(() => {
+    console.log('sessionData', sessionData)
+    if (sessionData?.user?.role === "user" && setData(data))
+      sessionData?.user?.role === "admin" && setData(AdminData)
+  }
+    , [sessionData])
+
+
   return (
     <Sidebar className="border-r-0" {...props}>
       <SidebarHeader>
+
         {sessionData ? <NavUser user={{
           name: sessionData.user?.name || "Unknown",
           email: sessionData.user?.email || "unknown@example.com",
@@ -302,7 +428,7 @@ export function SidebarLeft({
             </Button>
         }
         <SearchForm />
-        <NavMain items={data.navMain} />
+        {sessionData?.user?.role === "admin" ? <NavMain items={AdminData.navMain} /> : <NavMain items={data.navMain} />}
 
       </SidebarHeader>
       <SidebarContent>
