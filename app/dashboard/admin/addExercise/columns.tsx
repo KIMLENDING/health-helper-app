@@ -16,6 +16,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Input } from "@/components/ui/input"
 import Link from 'next/link'
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useDeleteExercise } from "@/server/mutations"
+import { toast } from "@/hooks/use-toast"
 
 // Exercise 타입 정의
 export type Exercise = {
@@ -62,6 +64,7 @@ export const columns: ColumnDef<Exercise>[] = [
                 tags: exercise.tags.join(", "), // 폼에서 태그를 콤마로 구분된 문자열로 표시
                 url: exercise.url,
             })
+            const useDeleteMutation = useDeleteExercise();
 
             // 데이터 업데이트를 위한 useMutation 설정
             const { mutate: updateExercise } = useMutation(
@@ -93,9 +96,13 @@ export const columns: ColumnDef<Exercise>[] = [
             // 수정 버튼 클릭 시 호출되는 핸들러
             const handleEdit = () => {
                 const updatedTags = formData.tags.split(",").map((tag) => tag.trim())
-                updateExercise({ title: formData.title, tags: updatedTags, url: formData.url })
+                updateExercise({ _id: exercise._id, title: formData.title, tags: updatedTags, url: formData.url })
             }
 
+            const handleDelete = async () => {
+                const state = await useDeleteMutation.mutateAsync(exercise._id)
+                toast({ variant: "default", title: state.message })
+            }
             return (
                 <>
                     {/* DropdownMenu */}
@@ -108,14 +115,14 @@ export const columns: ColumnDef<Exercise>[] = [
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem
+                            {/* <DropdownMenuItem
                                 onClick={() => navigator.clipboard.writeText(exercise._id)}
                             >
                                 Copy Exercise ID
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={() => setDialogOpen(true)}>Edit</DropdownMenuItem>
-                            <DropdownMenuItem>Delete</DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleDelete}>Delete</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
 

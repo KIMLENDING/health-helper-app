@@ -30,8 +30,8 @@ const AddExercisePage = () => {
     if (loading === 'loading') return null;
     return (
         <div className="flex flex-1 flex-col gap-4 p-4">
-            <AddExercise />
             <GetExercise />
+            <AddExercise />
             {/* 여기에  지금까지 추가된 운동 리스트 보여줄까?*/}
         </div>
     )

@@ -2,7 +2,6 @@ import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { DataTable } from '@/app/dashboard/admin/addExercise/data-table';
 import { columns } from "@/app/dashboard/admin/addExercise/columns"
-import { useQuery } from '@tanstack/react-query';
 import { useEexercises } from '@/server/queries';
 
 
@@ -18,7 +17,7 @@ const GetExercise = () => {
     }
 
     return (
-        <div className="mx-auto h-[50vh] min-h-min w-full max-w-3xl rounded-xl bg-muted/50" >
+        <div className="mx-auto max-h-[50vh] min-h-min w-full max-w-3xl rounded-xl bg-muted/50" >
             <Card>
                 <CardHeader>
                     <CardTitle>운동 리스트</CardTitle>
