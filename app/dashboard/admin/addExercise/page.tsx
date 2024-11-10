@@ -25,7 +25,7 @@ const AddExercisePage = () => {
         if (session && session?.user?.role !== 'admin') {
             router.push('/dashboard')
         }
-        console.log('router', router)
+
     }, [session, loading])
     if (loading === 'loading') return null;
     return (

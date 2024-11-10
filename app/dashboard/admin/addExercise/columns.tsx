@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef, FilterFn } from "@tanstack/react-table"
 import { Link as LinkIcon, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -18,7 +18,7 @@ import Link from 'next/link'
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useDeleteExercise } from "@/server/mutations"
 import { toast } from "@/hooks/use-toast"
-
+import { ArrowUpDown } from "lucide-react"
 // Exercise 타입 정의
 export type Exercise = {
     _id: string
@@ -27,16 +27,42 @@ export type Exercise = {
     url: string
     tags: string[]
 }
+// const filterTags: FilterFn<Exercise> = (row, columnId, filterValue) => {
+//     const tags = row.getValue(columnId) as string[]
+//     return tags.some((tag) => tag.toLowerCase().includes(filterValue.toLowerCase()))
+// }
+const filterTags: FilterFn<Exercise> = (row, columnId, filterValues) => {
+    const tags = row.getValue(columnId) as string[]
+    // 선택된 태그 중 하나라도 포함되면 true 반환
+    console.log(tags)
+    console.log(filterValues)
+    const result = filterValues.length === 0 || filterValues.some((filterValue: string) => tags.includes(filterValue))
+    console.log(result)
+    console.log('-------------------------')
+
+    return result
+}
 
 // 컬럼 정의
 export const columns: ColumnDef<Exercise>[] = [
     {
         accessorKey: "title",
-        header: "Title",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Title
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
     },
     {
         accessorKey: "tags",
         header: "Tags",
+        filterFn: filterTags, // 커스텀 필터 함수 적용
         cell: ({ getValue }) => (getValue() as string[]).join(", "), // 배열을 콤마로 구분된 문자열로 표시
     },
     {
@@ -48,8 +74,6 @@ export const columns: ColumnDef<Exercise>[] = [
                 <Link href={exercise.url} target="_blank" rel="noopener noreferrer">
                     <LinkIcon />
                 </Link>
-
-
             );
         },
     },
