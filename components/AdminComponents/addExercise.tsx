@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input"
 import TagSelector from './addTag';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { addExercise } from '@/server/mutations';
 
 const formSchema = z.object({
     title: z.string().min(2).max(50),
@@ -26,6 +27,7 @@ const formSchema = z.object({
 
 export const AddExercise = () => {
     const [dbTags, setDbTags] = useState<string[]>([]);
+    const addExerciseMutation = addExercise();
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -45,25 +47,10 @@ export const AddExercise = () => {
                 url: values.url,
                 tags: dbTags
             }
-
-            const response = await fetch('/api/admin/exercise', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(postData)
-            });
-
-            if (!response.ok) {
-                toast({ variant: "destructive", title: `HTTP error! status: ${response.status}` })
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            toast({ variant: "default", title: data.message })
+            const state = await addExerciseMutation.mutateAsync(postData);
+            toast({ variant: "default", title: state.message })
             form.reset();
             // TODO: Add success handling (e.g., show success message, reset form)
-
         } catch (error) {
             toast({ variant: "destructive", title: "status 500" })
             console.error('Error submitting form:', error);
@@ -135,8 +122,6 @@ export const AddExercise = () => {
                     </Form>
                 </CardContent>
             </Card>
-
-
         </div>
     )
 }

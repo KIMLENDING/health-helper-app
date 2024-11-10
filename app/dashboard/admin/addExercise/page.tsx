@@ -3,7 +3,8 @@ import { AddExercise } from '@/components/AdminComponents/addExercise'
 import GetExercise from '@/components/AdminComponents/getExercise'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import React, { use, useEffect } from 'react'
+import React, { useEffect } from 'react'
+
 declare module "next-auth" {
     interface Session {
         user: {

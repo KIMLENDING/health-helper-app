@@ -1,36 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { DataTable } from '@/app/dashboard/admin/addExercise/data-table';
-import { Exercise, columns } from "@/app/dashboard/admin/addExercise/columns"
+import { columns } from "@/app/dashboard/admin/addExercise/columns"
+import { useQuery } from '@tanstack/react-query';
+import { useEexercises } from '@/server/queries';
+
+
 const GetExercise = () => {
-    const [data, setData] = useState<Exercise[]>([]);
+    const { data, error, isLoading } = useEexercises();
 
-    useEffect(() => {
-        const fetchExercises = async () => {
-            try {
-                const response = await fetch('/api/admin/exercise', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+    if (error) {
+        return <div>Error: {error.message}</div>;
+    }
 
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                console.error('error', error);
-                return null;
-            }
-        };
-
-        fetchExercises().then(setData).catch(console.error);
-    }, []);
-
-    console.log('data', data)
     return (
         <div className="mx-auto h-[50vh] min-h-min w-full max-w-3xl rounded-xl bg-muted/50" >
             <Card>
