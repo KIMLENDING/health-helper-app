@@ -411,8 +411,8 @@ export function SidebarLeft({
 
 
   return (
-    <Sidebar className="border-r-0" {...props}>
-      <SidebarHeader>
+    <Sidebar className="border-r-0 " {...props}>
+      <SidebarHeader className="bg-zinc-300 dark:bg-inherit">
 
         {sessionData ? <NavUser user={{
           name: sessionData.user?.name || "Unknown",
@@ -431,7 +431,7 @@ export function SidebarLeft({
         {sessionData?.user?.role === "admin" ? <NavMain items={AdminData.navMain} /> : <NavMain items={data.navMain} />}
 
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="bg-zinc-300 dark:bg-inherit">
         <NavFavorites favorites={data.favorites} />
         <NavWorkspaces workspaces={data.workspaces} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />

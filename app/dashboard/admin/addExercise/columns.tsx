@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ColumnDef, FilterFn } from "@tanstack/react-table"
 import { Link as LinkIcon, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -19,6 +19,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useDeleteExercise } from "@/server/mutations"
 import { toast } from "@/hooks/use-toast"
 import { ArrowUpDown } from "lucide-react"
+import TagSelector from "@/components/AdminComponents/addTag"
+import { Checkbox } from "@/components/ui/checkbox"
 // Exercise 타입 정의
 export type Exercise = {
     _id: string
@@ -34,17 +36,34 @@ export type Exercise = {
 const filterTags: FilterFn<Exercise> = (row, columnId, filterValues) => {
     const tags = row.getValue(columnId) as string[]
     // 선택된 태그 중 하나라도 포함되면 true 반환
-    console.log(tags)
-    console.log(filterValues)
     const result = filterValues.length === 0 || filterValues.some((filterValue: string) => tags.includes(filterValue))
-    console.log(result)
-    console.log('-------------------------')
-
     return result
 }
 
 // 컬럼 정의
 export const columns: ColumnDef<Exercise>[] = [
+    {
+        id: "select",
+        header: ({ table }) => (
+            <Checkbox
+                checked={
+                    table.getIsAllPageRowsSelected() ||
+                    (table.getIsSomePageRowsSelected() && "indeterminate")
+                }
+                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                aria-label="Select all"
+            />
+        ),
+        cell: ({ row }) => (
+            <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => row.toggleSelected(!!value)}
+                aria-label="Select row"
+            />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+    },
     {
         accessorKey: "title",
         header: ({ column }) => {
@@ -63,7 +82,7 @@ export const columns: ColumnDef<Exercise>[] = [
         accessorKey: "tags",
         header: "Tags",
         filterFn: filterTags, // 커스텀 필터 함수 적용
-        cell: ({ getValue }) => (getValue() as string[]).join(", "), // 배열을 콤마로 구분된 문자열로 표시
+        cell: ({ getValue }) => (getValue() as string[]).sort().join(", "), // 배열을 콤마로 구분된 문자열로 표시
     },
     {
         accessorKey: "url",
@@ -83,13 +102,13 @@ export const columns: ColumnDef<Exercise>[] = [
             const exercise = row.original
             const queryClient = useQueryClient()
             const [isDialogOpen, setDialogOpen] = useState(false)
+            const [dbTags, setDbTags] = useState<string[]>(exercise.tags)
             const [formData, setFormData] = useState({
                 title: exercise.title,
-                tags: exercise.tags.join(", "), // 폼에서 태그를 콤마로 구분된 문자열로 표시
+                tags: dbTags.join(", "), // 폼에서 태그를 콤마로 구분된 문자열로 표시
                 url: exercise.url,
             })
             const useDeleteMutation = useDeleteExercise();
-
             // 데이터 업데이트를 위한 useMutation 설정
             const { mutate: updateExercise } = useMutation(
                 {
@@ -114,7 +133,11 @@ export const columns: ColumnDef<Exercise>[] = [
             // 폼 데이터 변경 핸들러
             const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                 const { name, value } = e.target
+                console.log(name, value)
                 setFormData((prev) => ({ ...prev, [name]: value }))
+            }
+            const handleTagChanges = () => {
+                setFormData((prev) => ({ ...prev, tags: dbTags.join(", ") }))
             }
 
             // 수정 버튼 클릭 시 호출되는 핸들러
@@ -127,6 +150,9 @@ export const columns: ColumnDef<Exercise>[] = [
                 const state = await useDeleteMutation.mutateAsync(exercise._id)
                 toast({ variant: "default", title: state.message })
             }
+            useEffect(() => {
+                handleTagChanges()
+            }, [dbTags])
             return (
                 <>
                     {/* DropdownMenu */}
@@ -167,9 +193,10 @@ export const columns: ColumnDef<Exercise>[] = [
                                 <Input
                                     aria-label="Tags (comma separated)"
                                     name="tags"
-                                    value={formData.tags}
-                                    onChange={handleChange}
+                                    value={dbTags}
+                                    disabled
                                 />
+                                <TagSelector dbTags={dbTags} setDbTags={setDbTags} />
                                 <Input
                                     aria-label="URL (comma separated)"
                                     name="url"

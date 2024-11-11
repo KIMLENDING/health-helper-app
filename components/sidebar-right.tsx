@@ -52,12 +52,12 @@ export function SidebarRight({
   return (
     <Sidebar
       collapsible="none"
-      className="sticky hidden lg:flex top-0 h-svh border-l"
+      className="sticky hidden lg:flex top-0 h-svh border-l "
       {...props}
     >
       {/* <SidebarHeader className="h-16 border-b border-sidebar-border">
       </SidebarHeader> */}
-      <SidebarContent>
+      <SidebarContent className="bg-zinc-300 dark:bg-inherit">
         <DatePicker />
         <SidebarSeparator className="mx-0" />
         <Calendars calendars={data.calendars} />
