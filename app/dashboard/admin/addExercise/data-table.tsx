@@ -32,6 +32,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Settings2Icon } from "lucide-react"
 import { useSession } from "next-auth/react"
+import { useSelectedExercise } from "@/server/mutations"
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[] // 컬럼 정의
     data: TData[] // 데이터
@@ -55,6 +56,8 @@ export function DataTable<TData, TValue>({
                 : [...prevSelectedTags, tag] // 새 태그 추가
         )
     }
+    const useSelectedExerciseMutation = useSelectedExercise();
+
     useEffect(() => {
         if (session?.user?.role === "admin") {
             setColumnVisibility({ tags: true, url: true, title: true, actions: true }) // 관리자만 보이는 컬럼 추가
@@ -79,12 +82,17 @@ export function DataTable<TData, TValue>({
         },
     })
     const handleSelectedRows = () => { // 선택된 행 처리
-        const selectedRows = []
-        for (const key in rowSelection) { // 선택된 행의 key는 data의 인덱스임으로 
-            // key가 data의 인덱스임  
-            selectedRows.push(data[+key]) // 참고로 key는 string임으로 +를 붙여서 number로 변환
+        try {
+            const selectedRows = []
+            for (const key in rowSelection) { // 선택된 행의 key는 data의 인덱스임으로 
+                // key가 data의 인덱스임  
+                selectedRows.push(data[+key]) // 참고로 key는 string임으로 +를 붙여서 number로 변환
+            }
+            console.log(selectedRows)
+            useSelectedExerciseMutation.mutate(selectedRows) // 선택된 행을 서버로 전송
+        } catch (error) {
+            console.error("Error handling selected rows:", error)
         }
-        return selectedRows // 이 반환된 값으로 다중 삭제
     }
     useEffect(() => {
         { table.setPageSize(5) }
@@ -223,26 +231,29 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                    className="mr-1"
-                >
-                    이전
-                </Button >
+            <div className="flex items-center justify-between space-x-2 py-4">
+                <Button variant="outline" size="sm" onClick={handleSelectedRows}>선택한 운동 루틴에 추가하기</Button>
+                <div>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.previousPage()}
+                        disabled={!table.getCanPreviousPage()}
+                        className="mr-1"
+                    >
+                        이전
+                    </Button >
 
-                {table.getState().pagination.pageIndex + 1}{' '}/{' '}{table.getPageCount()}
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                >
-                    다음
-                </Button>
+                    {table.getState().pagination.pageIndex + 1}{' '}/{' '}{table.getPageCount()}
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.nextPage()}
+                        disabled={!table.getCanNextPage()}
+                    >
+                        다음
+                    </Button>
+                </div>
             </div>
         </div>
     )

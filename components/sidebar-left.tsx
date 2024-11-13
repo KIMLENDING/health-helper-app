@@ -66,6 +66,12 @@ const data = {
       icon: Home,
       // isActive: true,
     },
+    {
+      title: "운동 루틴 생성",
+      url: "/dashboard/user/createPlan",
+      icon: Home,
+      // isActive: true,
+    },
 
     {
       title: "Inbox",
