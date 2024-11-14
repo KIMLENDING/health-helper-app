@@ -1,6 +1,5 @@
 import { Exercise } from "@/app/dashboard/admin/addExercise/columns";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import exp from "constants";
 
 /**
  *  관리자 전용 운동 추가 Mutation

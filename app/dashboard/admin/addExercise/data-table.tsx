@@ -33,6 +33,7 @@ import { Button } from "@/components/ui/button"
 import { Settings2Icon } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useSelectedExercise } from "@/server/mutations"
+import { toast } from "@/hooks/use-toast"
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[] // 컬럼 정의
     data: TData[] // 데이터
@@ -81,7 +82,7 @@ export function DataTable<TData, TValue>({
             rowSelection, // 행 선택 적용
         },
     })
-    const handleSelectedRows = () => { // 선택된 행 처리
+    const handleSelectedRows = async () => { // 선택된 행 처리
         try {
             const selectedRows = []
             for (const key in rowSelection) { // 선택된 행의 key는 data의 인덱스임으로 
@@ -89,7 +90,11 @@ export function DataTable<TData, TValue>({
                 selectedRows.push(data[+key]) // 참고로 key는 string임으로 +를 붙여서 number로 변환
             }
             console.log(selectedRows)
-            useSelectedExerciseMutation.mutate(selectedRows) // 선택된 행을 서버로 전송
+            const res = await useSelectedExerciseMutation.mutateAsync(selectedRows) // 선택된 행을 서버로 전송
+            console.log(res)
+            toast({ variant: "default2", title: "운동이 추가 되었습니다." })
+
+
         } catch (error) {
             console.error("Error handling selected rows:", error)
         }
@@ -232,7 +237,7 @@ export function DataTable<TData, TValue>({
                 </Table>
             </div>
             <div className="flex items-center justify-between space-x-2 py-4">
-                <Button variant="outline" size="sm" onClick={handleSelectedRows}>선택한 운동 루틴에 추가하기</Button>
+                {session?.user?.role !== "admin" ? <Button variant="outline" size="sm" onClick={handleSelectedRows}>선택한 운동 루틴에 추가하기</Button> : <div></div>}
                 <div>
                     <Button
                         variant="outline"
@@ -250,6 +255,7 @@ export function DataTable<TData, TValue>({
                         size="sm"
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
+                        className="ml-1"
                     >
                         다음
                     </Button>

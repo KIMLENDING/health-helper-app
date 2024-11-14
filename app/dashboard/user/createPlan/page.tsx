@@ -1,18 +1,19 @@
-
 'use client'
-import GetExercise from '@/components/AdminComponents/getExercise'
-import { getSelectedExercises } from '@/server/queries'
-import React from 'react'
 
+import CreatPlanUser from '@/components/UserCpmponents/creatPlanUser'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import React, { useEffect } from 'react'
 const CreatPlan = () => {
-    const { data, isLoading, status } = getSelectedExercises();
-    console.log(data)
+    const router = useRouter();
+    const { data: session, status: loading } = useSession();
+    useEffect(() => {
+        if (loading === 'unauthenticated') router.push('/login') // 로그인 안되어있으면 로그인 페이지로 이동
+    }, [loading])
+
     return (
         <div className='flex flex-1 flex-col gap-4 p-4'>
-            <GetExercise />
-            <div className="mx-auto  min-h-min w-full max-w-3xl rounded-xl bg-muted/50" >
-                ㅇ
-            </div>
+            <CreatPlanUser />
         </div>
     )
 }

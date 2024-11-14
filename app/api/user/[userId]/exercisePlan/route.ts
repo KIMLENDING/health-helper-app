@@ -12,7 +12,7 @@ export const POST = async (request: NextRequest, { params }: { params: Promise<{
     const getSession = await getServerSession();
     if (!getSession) {
         // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect('/login');
+        return NextResponse.redirect('http://localhost:3000/login');
     }
     await connect();
 
@@ -43,7 +43,7 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
     const getSession = await getServerSession();
     if (!getSession) {
         // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect('/login');
+        return NextResponse.redirect('http://localhost:3000/login');
     }
     try {
         await connect();

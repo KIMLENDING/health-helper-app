@@ -9,7 +9,7 @@ export const POST = async (request: NextRequest) => {
     const getSession = await getServerSession();
     if (!getSession) {
         // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect('/login');
+        return NextResponse.redirect('http://localhost:3000/login');
     }
     await connect();
     // getSession.user.email 이 값으로 사용자를 찾아서 role을 확인해야함
@@ -39,7 +39,7 @@ export const GET = async (request: NextRequest) => {
     const getSession = await getServerSession();
     if (!getSession) {
         // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect('/login');
+        return NextResponse.redirect('http://localhost:3000/login');
     }
     try {
         await connect();

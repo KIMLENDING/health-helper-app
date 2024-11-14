@@ -92,6 +92,13 @@ export const authOptions: any = {
         // console.log("Token----", token);
         token.role = user.role; // user의 role을 token에 추가
         token.image = user.image; // user의 image를 token에 추가
+        if (!user._id) {
+          connect();
+          const userId = await User.findOne({ email: user.email });
+          token._id = userId?._id; // user의 _id를 token에 추가
+        } else {
+          token._id = user._id; // user의 _id를 token에 추가
+        }
         return token;
         // return { ...token, ...user }; //user를 굳이 추가 할 필요가 있나? _doc에 굳이 user정보를 넣을 필요가 없어 보임
       }

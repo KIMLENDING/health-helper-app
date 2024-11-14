@@ -16,12 +16,45 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 
+import { usePathname } from "next/navigation"
 
+const routers = [
+  {
+    url: "/dashboard",
+    name: "Home"
+  },
+  {
+    url: "/dashboard/user/createPlan",
+    name: "운동 루틴 생성"
+  },
+  {
+    url: "/dashboard/admin/addExercise",
+    name: "운동 추가"
+  },
+  {
+    url: "/dashboard/admin/exercise",
+    name: "운동 관리"
+  },
+  {
+    url: "/dashboard/admin/plan",
+    name: "운동 계획"
+  },
+  {
+    url: "/dashboard/admin/user",
+    name: "사용자 관리"
+  },
+  {
+    url: "/dashboard/admin/setting",
+    name: "설정"
+  },
+]
 export default function DachboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+
   return (
     <SidebarProvider>
       <SidebarLeft />
@@ -36,7 +69,8 @@ export default function DachboardLayout({
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbPage className="line-clamp-1">
-                    Project Management & Task Tracking
+                    {pathname === "/" ? "Home" : routers.find(route => route.url === pathname)?.name || "Page"}
+
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>

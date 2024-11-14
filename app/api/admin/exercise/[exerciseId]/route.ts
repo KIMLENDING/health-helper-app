@@ -16,7 +16,7 @@ export const PATCH = async (request: NextRequest, { params }: { params: Promise<
     // 관리자가 아니면 권한 없음 응답
     const session = await getServerSession(); // 사용자 정보를 가져오는 함수 (구현 필요)
     if (!session) { // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect('/login');
+        return NextResponse.redirect('http://localhost:3000/login');
     }
     const admin = await User.findOne({ email: session.user.email });
     if (!admin || admin.role !== "admin") { // 관리자가 아니면 권한 없음 응답
@@ -58,7 +58,7 @@ export const DELETE = async (request: NextRequest, { params }: { params: Promise
     // 관리자가 아니면 권한 없음 응답
     const session = await getServerSession(); // 사용자 정보를 가져오는 함수 (구현 필요)
     if (!session) { // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect('/login');
+        return NextResponse.redirect('http://localhost:3000/login');
     }
     const admin = await User.findOne({ email: session.user.email });
     if (!admin || admin.role !== "admin") { // 관리자가 아니면 권한 없음 응답

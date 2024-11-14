@@ -1,3 +1,4 @@
+import { Exercise } from "@/app/dashboard/admin/addExercise/columns";
 import { useQuery } from "@tanstack/react-query";
 
 export const useEexercises = () => {
@@ -20,7 +21,7 @@ export const useEexercises = () => {
 
 /**컴포넌트간 데이터를 받아오기 위한 기능 */
 export const getSelectedExercises = () => {
-    return useQuery(
+    return useQuery<Exercise[]>( // 타입을 지정합니다.
         {
             queryKey: ["selectedExercise"],
             // 캐싱된 데이터를 바로 가져오기 위해 기본적으로 undefined를 반환
