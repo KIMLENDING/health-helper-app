@@ -7,7 +7,7 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
-import { Exercise, exercises } from "@/utils/util";
+import { Exercise, ExerciseOption } from "@/utils/util";
 
 
 
@@ -17,13 +17,13 @@ const formSchema = z.object({
     min: z.preprocess((value) => Number(value), z.number().min(0).nonnegative("숫자를 입력해주세요")),
     sec: z.preprocess((value) => Number(value), z.number().min(0).nonnegative("숫자를 입력해주세요")),
 })
-const PlanDialogForm = ({ item, SetState, state }: { item: Exercise, SetState: React.Dispatch<React.SetStateAction<exercises[]>>, state?: exercises }) => {
+const PlanDialogForm = ({ item, SetState, state }: { item: Exercise, SetState: React.Dispatch<React.SetStateAction<ExerciseOption[]>>, state?: ExerciseOption }) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            sets: 0,
-            reps: 0,
-            min: 0,
+            sets: 4,
+            reps: 6,
+            min: 1,
             sec: 0
         },
     });
@@ -36,18 +36,18 @@ const PlanDialogForm = ({ item, SetState, state }: { item: Exercise, SetState: R
             reps: data.reps,
             rest: data.min * 60 + data.sec
         }
-        SetState(prevState => {
+        SetState(prevState => { // 옵션 데이터를 업데이트합니다.
             const existingExercise = prevState.find(exercise => exercise.exerciseId === item._id)
             if (existingExercise) {
                 return prevState.map(exercise => {
                     if (exercise.exerciseId === item._id) {
-                        return { exerciseId: exercise.exerciseId, ...newData } // 기존 데이터에 새로운 데이터를 덮어씌웁니다.
+                        return { exerciseId: exercise.exerciseId, title: exercise.title, ...newData } // 기존 데이터에 새로운 데이터를 덮어씌웁니다.
                     } else {
                         return exercise // 기존 데이터를 그대로 반환합니다.
                     }
                 })
             } else {
-                return [...prevState, { exerciseId: item._id, ...newData }] // 새로운 데이터를 추가합니다.
+                return [...prevState, { exerciseId: item._id, title: item.title, ...newData }] // 새로운 데이터를 추가합니다.
             }
         });
         console.log(item._id, newData);

@@ -32,20 +32,21 @@ export const getSelectedExercises = () => {
 };
 
 export const getExercisePlan = (userId?: string) => {
-    return useQuery<ExercisePlan[]>( // 타입을 지정합니다.
-        {
-            queryKey: ["exercisePlan", userId],
-            queryFn: async () => {
-                const response = await fetch(`/api/user/${userId}/exercisePlan`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+    return useQuery<ExercisePlan[]>({
+        queryKey: ["exercisePlan", userId],
+        queryFn: userId ? async () => {
+            const response = await fetch(`/api/user/${userId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
                 }
-                return response.json();
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        });
+
+            return response.json();
+        } : undefined,
+        enabled: !!userId, // userId가 있을 때만 데이터를 가져옵니다.
+    });
 }

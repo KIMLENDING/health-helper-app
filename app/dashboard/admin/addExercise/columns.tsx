@@ -40,27 +40,27 @@ export const columns: ColumnDef<Exercise>[] = [
     {
         id: "select",
         header: ({ table }) => (
-            // <Checkbox
-            //     checked={
-            //         table.getIsAllPageRowsSelected() || // 모든 페이지의 행이 선택되었는지 확인
-            //         (table.getIsSomePageRowsSelected() && "indeterminate") // 일부 페이지의 행이 선택되었는지 확인
-            //     }
-            //     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)} // 모든 페이지의 행 선택/해제
-            //     aria-label="Select all"
-            // />
             <Checkbox
-                checked={false} // 전체 선택 체크박스를 비활성화 상태로 설정
-                onCheckedChange={() => { }} // 전체 선택 기능을 비활성화
+                checked={
+                    table.getIsAllPageRowsSelected() || // 모든 페이지의 행이 선택되었는지 확인
+                    (table.getIsSomePageRowsSelected() && "indeterminate") // 일부 페이지의 행이 선택되었는지 확인
+                }
+                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)} // 모든 페이지의 행 선택/해제
                 aria-label="Select all"
-                disabled // 선택 비활성화를 위해 추가
             />
+            // <Checkbox
+            //     checked={false} // 전체 선택 체크박스를 비활성화 상태로 설정
+            //     onCheckedChange={() => { }} // 전체 선택 기능을 비활성화
+            //     aria-label="Select all"
+            //     disabled // 선택 비활성화를 위해 추가
+            // />
         ),
         cell: ({ row, table }) => (
-            // <Checkbox // 각 행의 선택 체크박스
-            //     checked={row.getIsSelected()} // 각 행이 선택되었는지 확인
-            //     onCheckedChange={(value) => row.toggleSelected(!!value)} //각 행 선택/해제
-            //     aria-label="Select row"
-            // />
+            <Checkbox // 각 행의 선택 체크박스
+                checked={row.getIsSelected()} // 각 행이 선택되었는지 확인
+                onCheckedChange={(value) => row.toggleSelected(!!value)} //각 행 선택/해제
+                aria-label="Select row"
+            />
             // <Checkbox // 패이지당 한개의 행만 선택 가능하도록 설정
             //     checked={row.getIsSelected()}
             //     onCheckedChange={(value) => {
@@ -72,22 +72,22 @@ export const columns: ColumnDef<Exercise>[] = [
             //     }}
             //     aria-label="Select row"
             // />
-            <Checkbox // 전체 table중 한개의 행만 선택 가능하도록 설정
-                checked={row.getIsSelected()}
-                onCheckedChange={(value) => {
-                    // 현재 선택된 행이 있는지 확인
-                    const selectedRows = table.getSelectedRowModel().rows; // 모든 선택된 행을 반환
+            // <Checkbox // 전체 table중 한개의 행만 선택 가능하도록 설정
+            //     checked={row.getIsSelected()}
+            //     onCheckedChange={(value) => {
+            //         // 현재 선택된 행이 있는지 확인
+            //         const selectedRows = table.getSelectedRowModel().rows; // 모든 선택된 행을 반환
 
-                    // 이미 선택된 행이 있으면 모든 선택을 해제
-                    if (selectedRows.length > 0) {
-                        selectedRows.forEach((selectedRow) => selectedRow.toggleSelected(false));
-                    }
+            //         // 이미 선택된 행이 있으면 모든 선택을 해제
+            //         if (selectedRows.length > 0) {
+            //             selectedRows.forEach((selectedRow) => selectedRow.toggleSelected(false));
+            //         }
 
-                    // 현재 선택한 행을 선택 상태로 설정
-                    row.toggleSelected(!!value);
-                }}
-                aria-label="Select row"
-            />
+            //         // 현재 선택한 행을 선택 상태로 설정
+            //         row.toggleSelected(!!value);
+            //     }}
+            //     aria-label="Select row"
+            // />
         ),
         enableSorting: false,
         enableHiding: false,

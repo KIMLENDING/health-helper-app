@@ -4,6 +4,22 @@ import connect from "@/utils/db"
 import { getServerSession } from "next-auth"
 import { NextRequest, NextResponse } from "next/server"
 
+export const GET = async (request: NextRequest, { params }: { params: Promise<{ exerciseId: string }> }) => {
+    // 운동 조회
+    const exerciseId = (await params).exerciseId; // 요청에서 운동 ID 가져오기
+    await connect();
+    try {
+        const exercise = await Exercise.findById(exerciseId);
+        if (!exercise) {
+            return NextResponse.json({ message: "Exercise not found" }, { status: 404 });
+        }
+        return NextResponse.json(exercise, { status: 200 });
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ message: "Failed to get exercise" }, { status: 500 });
+    }
+}
+
 export const PATCH = async (request: NextRequest, { params }: { params: Promise<{ exerciseId: string }> }) => {
     // 운동 수정
 

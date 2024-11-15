@@ -5,15 +5,14 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import User from "@/models/User"
 
-export const POST = async (request: NextRequest, { params }: { params: Promise<{ userId: string }> }) => {
+export const POST = async (request: NextRequest) => {
     // 운동 추가
-    const userId = (await params).userId; // 요청에서 사용자 ID 가져오기
+    // 요청에서 사용자 ID 가져오기
 
-    const { title, description, exercises } = await request.json();
-    console.log(userId);
-    console.log(title);
-    console.log(description);
-    console.log(exercises);
+    const { title, exercises, userId } = await request.json();
+    console.log('title', title);
+    console.log('exercises', exercises);
+    console.log('userId', userId);
     const getSession = await getServerSession();
     if (!getSession) {
         // 로그인 안되어있으면 로그인 페이지로 이동
@@ -28,14 +27,17 @@ export const POST = async (request: NextRequest, { params }: { params: Promise<{
     if (user._id.toString() !== userId) {
         return NextResponse.json({ message: 'Unauthorized access' }, { status: 403 });
     }
-
+    const existTitle = await ExercisePlan.findOne({ title: title, userId: userId });
+    console.log('ss', existTitle);
+    if (existTitle) {
+        return NextResponse.json({ message: '이미 추가된 플랜입니다.' }, { status: 400 });
+    }
     const newExercisePlan = new ExercisePlan({
         userId: userId,
         title,
-        description: description || '',
         exercises,
     });
-
+    console.log('newExercisePlan', newExercisePlan);
     try {
         await newExercisePlan.save();
         return NextResponse.json({ message: '플랜 추가 성공' }, { status: 201 });

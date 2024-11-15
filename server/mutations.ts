@@ -1,5 +1,6 @@
 
-import { Exercise } from "@/utils/util";
+import { toast } from "@/hooks/use-toast";
+import { Exercise, ExercisePlan } from "@/utils/util";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 /**
@@ -80,14 +81,17 @@ export const useDeleteExercise = () => {
 export const useCreatePlan = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async (postData: any) => {
-            console.log(postData);
-            const response = await fetch(`/api/user/${postData.userId}/exercisePlan`, {
+        mutationFn: async (exercisePlan: ExercisePlan) => {
+
+            const response = await fetch(`/api/user/exercisePlan`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', },
-                body: JSON.stringify(postData)
+                body: JSON.stringify(exercisePlan)
             });
             if (!response.ok) {
+                if (response.status === 400) {
+                    toast({ variant: 'destructive', title: '이미 추가된 플랜입니다.' });
+                }
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
@@ -95,7 +99,8 @@ export const useCreatePlan = () => {
         onSuccess: () => {
             console.log('onSuccess');
         },
-        onError: (error) => {
+        onError: (error, status) => {
+            console.log('onError', status);
             console.log('onError', error);
         },
         onSettled: async (data, error) => { // 성공, 실패 상관없이 마지막에 호출 variables

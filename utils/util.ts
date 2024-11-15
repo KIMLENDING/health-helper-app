@@ -42,12 +42,12 @@ export interface exercise {
 export interface ExercisePlan {
     userId: string,
     title: string,
-    description: string,
-    exercises: exercises[]
+    exercises: ExerciseOption[]
 }
 
-export interface exercises {
+export interface ExerciseOption {
     exerciseId: string,
+    title: string,
     sets: number,
     reps: number,
     rest: number
