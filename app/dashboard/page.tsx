@@ -1,3 +1,4 @@
+import ShowExercisePlan from "@/components/UserCpmponents/showExercisePlan";
 import Image from "next/image";
 
 export default function Dashboard() {
@@ -11,6 +12,7 @@ export default function Dashboard() {
       이번주 운동 시간 통계
       최근 성과 및 기록 갱신
       운동 알림 및 팁
+      <ShowExercisePlan />
       <div className="mx-auto h-24 w-full max-w-3xl rounded-xl bg-muted/50" />
       <div className="mx-auto h-[100vh] w-full max-w-3xl rounded-xl bg-muted/50" />
     </div>

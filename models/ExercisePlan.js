@@ -6,7 +6,6 @@ const exercisePlanSchema = new Schema(
     userId: { type: Schema.Types.ObjectId, ref: "User" },
     title: {
       type: String,
-      unique: true,
       required: true,
     },
     description: {

@@ -8,7 +8,12 @@ import User from "@/models/User"
 export const POST = async (request: NextRequest, { params }: { params: Promise<{ userId: string }> }) => {
     // 운동 추가
     const userId = (await params).userId; // 요청에서 사용자 ID 가져오기
+
     const { title, description, exercises } = await request.json();
+    console.log(userId);
+    console.log(title);
+    console.log(description);
+    console.log(exercises);
     const getSession = await getServerSession();
     if (!getSession) {
         // 로그인 안되어있으면 로그인 페이지로 이동
@@ -27,7 +32,7 @@ export const POST = async (request: NextRequest, { params }: { params: Promise<{
     const newExercisePlan = new ExercisePlan({
         userId: userId,
         title,
-        description,
+        description: description || '',
         exercises,
     });
 

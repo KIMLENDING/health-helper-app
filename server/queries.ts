@@ -1,4 +1,6 @@
-import { Exercise } from "@/app/dashboard/admin/addExercise/columns";
+
+import { Exercise, ExercisePlan } from "@/utils/util";
+
 import { useQuery } from "@tanstack/react-query";
 
 export const useEexercises = () => {
@@ -28,3 +30,22 @@ export const getSelectedExercises = () => {
             initialData: [],
         });
 };
+
+export const getExercisePlan = (userId?: string) => {
+    return useQuery<ExercisePlan[]>( // 타입을 지정합니다.
+        {
+            queryKey: ["exercisePlan", userId],
+            queryFn: async () => {
+                const response = await fetch(`/api/user/${userId}/exercisePlan`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            }
+        });
+}

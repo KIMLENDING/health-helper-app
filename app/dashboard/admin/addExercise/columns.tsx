@@ -21,14 +21,9 @@ import { toast } from "@/hooks/use-toast"
 import { ArrowUpDown } from "lucide-react"
 import TagSelector from "@/components/AdminComponents/addTag"
 import { Checkbox } from "@/components/ui/checkbox"
-// Exercise 타입 정의
-export type Exercise = {
-    _id: string
-    title: string
-    description: string
-    url: string
-    tags: string[]
-}
+import { Exercise } from "@/utils/util"
+
+
 // const filterTags: FilterFn<Exercise> = (row, columnId, filterValue) => {
 //     const tags = row.getValue(columnId) as string[]
 //     return tags.some((tag) => tag.toLowerCase().includes(filterValue.toLowerCase()))

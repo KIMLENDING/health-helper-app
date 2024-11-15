@@ -1,4 +1,5 @@
-import { Exercise } from "@/app/dashboard/admin/addExercise/columns";
+
+import { Exercise } from "@/utils/util";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 /**
@@ -72,11 +73,16 @@ export const useDeleteExercise = () => {
     })
 }
 
+/**
+ *  사용자 전용 운동 계획 생성 Mutation
+ * @returns 
+ */
 export const useCreatePlan = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (postData: any) => {
-            const response = await fetch('/api/admin/exercisePlan', {
+            console.log(postData);
+            const response = await fetch(`/api/user/${postData.userId}/exercisePlan`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', },
                 body: JSON.stringify(postData)

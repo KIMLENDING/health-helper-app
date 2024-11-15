@@ -26,9 +26,29 @@ export interface Tags {
         종아리: string[];
     };
 }
-
+export type Exercise = {
+    _id: string
+    title: string
+    description: string
+    url: string
+    tags: string[]
+}
 export interface exercise {
     title: string;
     url: string;
     tags: string[];
+}
+
+export interface ExercisePlan {
+    userId: string,
+    title: string,
+    description: string,
+    exercises: exercises[]
+}
+
+export interface exercises {
+    exerciseId: string,
+    sets: number,
+    reps: number,
+    rest: number
 }
