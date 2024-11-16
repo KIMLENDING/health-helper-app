@@ -2,9 +2,10 @@
 import { getExercisePlan, } from '@/server/queries';
 import { useSession } from 'next-auth/react';
 import React from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { ClockIcon, DumbbellIcon } from 'lucide-react';
+import { Card, CardHeader, CardTitle } from '../ui/card';
 import ExercisesWithPagination from './exercisesWithPagination';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { Button } from '../ui/button';
 
 const ShowExercisePlan = () => {
     const { data: sessions } = useSession();
@@ -21,8 +22,32 @@ const ShowExercisePlan = () => {
                         <Card key={plan.title} >
 
                             <CardHeader className='px-0'>
-                                <CardTitle className="text-xl px-6">{plan.title}</CardTitle>
-                                <ExercisesWithPagination plan={plan} />
+
+                                <Dialog >
+                                    <DialogTrigger asChild>
+                                        <CardTitle className="text-xl px-6">{plan.title}</CardTitle>
+                                    </DialogTrigger>
+                                    <DialogContent className='p-0 border-0 bg-transparent rounded-lg'>
+                                        <DialogHeader >
+                                            <DialogTitle className=' hidden'></DialogTitle>
+                                            <DialogDescription className='hidden'></DialogDescription>
+                                            <Card>
+                                                <CardHeader className='px-0'>
+                                                    <CardTitle className="text-xl px-6">{plan.title}</CardTitle>
+                                                    <ExercisesWithPagination plan={plan} />
+                                                </CardHeader>
+                                            </Card>
+                                        </DialogHeader>
+                                        {/* <DialogFooter className="sm:justify-start">
+                                            <DialogClose asChild>
+                                                <Button type="button" variant="secondary">
+                                                    Close
+                                                </Button>
+                                            </DialogClose>
+                                        </DialogFooter> */}
+                                    </DialogContent>
+                                </Dialog>
+
                             </CardHeader>
                         </Card>
                     ))

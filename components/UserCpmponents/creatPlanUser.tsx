@@ -118,13 +118,13 @@ const CreatPlanUser = () => {
                                 <DialogTrigger asChild>
                                     <Button >추가</Button>
                                 </DialogTrigger>
-                                <DialogContent>
+                                <DialogContent className='p-0 border-0 bg-transparent rounded-lg'>
                                     {/* <DialogHeader> */}
-                                    <DialogTitle></DialogTitle>
-                                    <DialogDescription></DialogDescription>
-                                    <div className="relative mb-4">
-                                        <GetExercise />
-                                    </div>
+                                    <DialogTitle className=' hidden'></DialogTitle>
+                                    <DialogDescription className='hidden'></DialogDescription>
+
+                                    <GetExercise />
+
                                     {/* </DialogHeader> */}
                                     <DialogFooter className="sm:justify-start">
                                         <DialogClose asChild>

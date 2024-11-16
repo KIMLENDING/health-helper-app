@@ -169,10 +169,10 @@ export default function TagSelector({ dbTags, setDbTags }: TagSelectorProps) {
             <DialogTrigger asChild>
                 <Button >운동 부위 태그 선택</Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className='p-0 border-0 bg-transparent rounded-lg'>
                 <DialogHeader>
-                    <DialogTitle></DialogTitle>
-                    <DialogDescription></DialogDescription>
+                    <DialogTitle className=' hidden'></DialogTitle>
+                    <DialogDescription className='hidden'></DialogDescription>
                     <Card className="w-full ">
                         <CardHeader>
                             <CardTitle>운동 부위 태그 선택</CardTitle>

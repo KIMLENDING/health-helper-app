@@ -45,10 +45,10 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
                         </div>
                         <div>
                             <span className="text-sm text-gray-500">Rest</span>
-                            <p className="font-medium flex items-center">
+                            <div className="font-medium flex items-center max-sm:justify-center">
                                 <ClockIcon className="w-4 h-4 mr-1" />
-                                {exercise.rest}s
-                            </p>
+                                <p>{exercise.rest}s</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -74,6 +74,7 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
                     다음
                 </button>
             </div>
+
         </CardContent>
     );
 };
