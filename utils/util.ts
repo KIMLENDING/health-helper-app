@@ -40,12 +40,14 @@ export interface exercise {
 }
 
 export interface ExercisePlan {
+    _id?: string,
     userId: string,
     title: string,
     exercises: ExerciseOption[]
 }
 
 export interface ExerciseOption {
+    _id?: string,
     exerciseId: string,
     title: string,
     sets: number,

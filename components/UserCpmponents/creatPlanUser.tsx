@@ -22,7 +22,7 @@ import { useRouter } from 'next/navigation';
 
 
 const formSchema2 = z.object({
-    title: z.string().min(1, '제목을 입력해주세요'),
+    title: z.string().min(1, '제목을 입력해주세요').max(10, '10자 이내로 입력해주세요'),
 })
 
 const CreatPlanUser = () => {

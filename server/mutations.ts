@@ -144,3 +144,40 @@ export const useSelectedExercise = () => {
         }
     })
 }
+
+
+/**
+ *  사용자 전용 운동 계획 수정 Mutation
+ * @returns 
+ */
+export const useUpdatePlan = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (exercisePlan: ExercisePlan) => {
+            const response = await fetch(`/api/user/exercisePlan`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json', },
+                body: JSON.stringify(exercisePlan)
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        },
+        onSuccess: () => {
+            console.log('onSuccess');
+        },
+        onError: (error) => {
+            console.log('onError', error);
+        },
+        onSettled: async (data, error) => { // 성공, 실패 상관없이 마지막에 호출 variables
+            console.log('onSettled');
+            if (error) {
+                console.log('error', error);
+            } else {
+                console.log('data', data);
+                await queryClient.invalidateQueries({ queryKey: ["exercisePlans"], }) // 데이터 갱신 후 자동으로 UI 업데이트
+            }
+        }
+    })
+};

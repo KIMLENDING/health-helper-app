@@ -33,7 +33,7 @@ export const getSelectedExercises = () => {
 
 export const getExercisePlan = (userId?: string) => {
     return useQuery<ExercisePlan[]>({
-        queryKey: ["exercisePlan", userId],
+        queryKey: ["exercisePlans"],
         queryFn: userId ? async () => {
             const response = await fetch(`/api/user/${userId}`, {
                 method: 'GET',
@@ -48,5 +48,6 @@ export const getExercisePlan = (userId?: string) => {
             return response.json();
         } : undefined,
         enabled: !!userId, // userId가 있을 때만 데이터를 가져옵니다.
+
     });
 }

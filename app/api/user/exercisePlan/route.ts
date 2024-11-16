@@ -58,10 +58,10 @@ export const POST = async (request: NextRequest) => {
  */
 export const PATCH = async (request: NextRequest) => {
     try {
-        const { userId, exercisePlanId, exercise } = await request.json();
+        const { userId, exercisePlanId, exercises } = await request.json();
         console.log('userId:', userId);
         console.log('exercisePlanId:', exercisePlanId);
-        console.log('exercise:', exercise);
+        console.log('exercise:', exercises);
 
         const getSession = await getServerSession();
         if (!getSession) {
@@ -81,21 +81,22 @@ export const PATCH = async (request: NextRequest) => {
         }
 
         // ExercisePlan 찾기
-        const exercisePlan = await ExercisePlan.findOne({ _id: exercisePlanId, userId });
+        const exercisePlan = await ExercisePlan.findOne({ _id: exercisePlanId });
+
         if (!exercisePlan) {
             return NextResponse.json({ message: 'Exercise Plan not found' }, { status: 404 });
         }
 
         // Exercise 업데이트
         const exerciseIndex = exercisePlan.exercises.findIndex(
-            (ex: any) => ex.exerciseId === exercise.exerciseId
-        );
+            (ex: any) => ex.exerciseId.toString() === exercises[0].exerciseId);
+
         if (exerciseIndex === -1) {
             return NextResponse.json({ message: 'Exercise not found' }, { status: 404 });
         }
 
         // 데이터 수정
-        exercisePlan.exercises[exerciseIndex] = { ...exercisePlan.exercises[exerciseIndex], ...exercise };
+        exercisePlan.exercises[exerciseIndex] = { ...exercisePlan.exercises[exerciseIndex], ...exercises[0] };
 
         // 변경 내용 저장
         await exercisePlan.save();

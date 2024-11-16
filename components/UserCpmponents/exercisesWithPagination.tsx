@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { CardContent } from "../ui/card";
-import { ClockIcon, DumbbellIcon } from "lucide-react";
-import { ExercisePlan } from "@/utils/util";
+import { ClockIcon, DumbbellIcon, HamIcon, MoreHorizontal } from "lucide-react";
+import { ExerciseOption, ExercisePlan } from "@/utils/util";
+import { Button } from "../ui/button";
+import ExerciseOptin from "./exerciseOptin";
+
 
 const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
@@ -26,13 +29,19 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
         }
     };
 
+
     return (
         <CardContent className="space-y-4">
             {currentExercises.map((exercise) => (
-                <div key={exercise.exerciseId} className="border rounded p-4">
-                    <div className="flex items-center gap-2 mb-3">
-                        <DumbbellIcon className="w-5 h-5" />
-                        <h3 className="font-semibold">{exercise.title}</h3>
+                <div key={exercise.exerciseId} className="border rounded p-4 ">
+                    <div className="flex items-center gap-2 mb-3 justify-between">
+                        <div className="flex flex-row gap-2">
+
+                            <DumbbellIcon className="w-5 h-5" />
+                            <h3 className="font-semibold">{exercise.title}</h3>
+                        </div>
+                        {/* <Button variant='outline' onClick={() => handleEditExercise(exercise)} className="border-0 h-6 ring-0 shadow-none "><MoreHorizontal /></Button> */}
+                        <ExerciseOptin plan={plan} exercise={exercise} />
                     </div>
                     <div className="grid grid-cols-3 gap-4">
                         <div>
