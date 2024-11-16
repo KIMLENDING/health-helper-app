@@ -22,14 +22,14 @@ export default function LoginPage() {
     const router = useRouter();
     const { toast } = useToast()
     const [error, setError] = useState("");
-    // const session = useSession();
+
     const { data: session, status: sessionStatus } = useSession();
 
     useEffect(() => {
         if (sessionStatus === "authenticated") {
             router.replace("/dashboard");
         }
-    }, [sessionStatus, router]);
+    }, [sessionStatus, router, session]);
 
     const isValidEmail = (email: string) => {
         const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;

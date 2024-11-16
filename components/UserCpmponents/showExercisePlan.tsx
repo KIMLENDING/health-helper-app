@@ -1,48 +1,29 @@
 'use client'
-import { getExercisePlan, useEexercises } from '@/server/queries';
-import { Exercise, ExerciseOption } from '@/utils/util';
+import { getExercisePlan, } from '@/server/queries';
 import { useSession } from 'next-auth/react';
-import React, { useEffect, useState } from 'react'
-import { Card, CardContent, CardHeader } from '../ui/card';
+import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { ClockIcon, DumbbellIcon } from 'lucide-react';
+import ExercisesWithPagination from './exercisesWithPagination';
 
-
-
-interface ExerciseOptionWithTitle extends ExerciseOption {
-    title: string;
-}
 const ShowExercisePlan = () => {
     const { data: sessions } = useSession();
     const { data, error, isLoading } = getExercisePlan(sessions?.user._id); // 필요한 운동 계획 데이터를 가져옵니다.
-    const { data: exercises, error: error2, isLoading: isLoading2 } = useEexercises();
+
     console.log(data)
-    console.log(exercises)
-    useEffect(() => {
-        if (!data || !exercises) return
-        data?.map((plan) => {
-            plan.exercises = plan.exercises.map((exercise) => {
-                const title = exercises?.find((v: Exercise) => v._id === exercise.exerciseId).title
-                return { ...exercise, title }
-            })
-        })
-        console.log(data)
-    }, [data, exercises])
-    if (isLoading || isLoading2) return <div>로딩중...</div>
+
+    if (isLoading) return <div>로딩중...</div>
     return (
-        <div>
-
+        <div className='mx-auto w-full max-w-3xl rounded-xl'>
             {data
-                ? <div>{
+                ? <div className='space-y-4'>{
                     data.map((plan) => (
-                        <Card key={plan.title}>
-                            <CardHeader>{plan.title}</CardHeader>
+                        <Card key={plan.title} >
 
-                            <CardContent>
-                                {plan.exercises.map((exercise) => (
-                                    <li key={exercise.exerciseId}>
-                                        {(exercise as ExerciseOptionWithTitle).title}
-                                    </li>
-                                ))}
-                            </CardContent>
+                            <CardHeader className='px-0'>
+                                <CardTitle className="text-xl px-6">{plan.title}</CardTitle>
+                                <ExercisesWithPagination plan={plan} />
+                            </CardHeader>
                         </Card>
                     ))
 
