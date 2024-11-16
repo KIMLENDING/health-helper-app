@@ -32,25 +32,25 @@ const ExerciseOptin = ({ plan, exercise }: { plan: ExercisePlan, exercise: Exerc
     })
 
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(exercise)
-        const newData = {
-            userId: plan.userId,
-            title: plan.title,
-            exercisePlanId: plan._id,
-            exercises: [{
-                _id: exercise._id,
-                exerciseId: exercise.exerciseId,
-                title: exercise.title,
-                sets: values.sets,
-                reps: values.reps,
-                rest: values.rest
-            }]
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        try {
+            const newData = {
+                userId: plan.userId,
+                title: plan.title,
+                exercisePlanId: plan._id,
+                exercises: [{
+                    _id: exercise._id,
+                    exerciseId: exercise.exerciseId,
+                    title: exercise.title,
+                    sets: values.sets,
+                    reps: values.reps,
+                    rest: values.rest
+                }]
+            }
+            await useUpdatePlanMutation.mutateAsync(newData)
+        } catch (error) {
+            console.error("Failed to update plan:", error)
         }
-        console.log(newData)
-        useUpdatePlanMutation.mutate(newData)
     }
 
     return (

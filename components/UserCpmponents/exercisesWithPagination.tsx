@@ -4,11 +4,13 @@ import { ClockIcon, DumbbellIcon, HamIcon, MoreHorizontal } from "lucide-react";
 import { ExerciseOption, ExercisePlan } from "@/utils/util";
 import { Button } from "../ui/button";
 import ExerciseOptin from "./exerciseOptin";
+import { useDeletePlan } from "@/server/mutations";
 
 
 const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
     const exercisesPerPage = 3; // 페이지당 보여줄 운동 개수
+    const useDeletePlanMutation = useDeletePlan();
 
     // 페이지네이션에 필요한 계산
     const totalPages = Math.ceil(plan.exercises.length / exercisesPerPage); // 전체 페이지 수
@@ -29,7 +31,15 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
         }
     };
 
+    const handleDelete = (exercise: ExerciseOption) => {
+        const deleteExercise = {
+            exercisePlanId: plan._id!,
+            exerciseId: exercise._id!,
+        }
+        useDeletePlanMutation.mutate(deleteExercise);
+        console.log(deleteExercise)
 
+    }
     return (
         <CardContent className="space-y-4">
             {currentExercises.map((exercise) => (
@@ -40,7 +50,8 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
                             <DumbbellIcon className="w-5 h-5" />
                             <h3 className="font-semibold">{exercise.title}</h3>
                         </div>
-                        {/* <Button variant='outline' onClick={() => handleEditExercise(exercise)} className="border-0 h-6 ring-0 shadow-none "><MoreHorizontal /></Button> */}
+                        <Button variant='outline' onClick={() => handleDelete(exercise)} className="border-0 h-6 ring-0 shadow-none "><MoreHorizontal /></Button>
+
                         <ExerciseOptin plan={plan} exercise={exercise} />
                     </div>
                     <div className="grid grid-cols-3 gap-4">

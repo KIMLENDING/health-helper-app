@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import User from "@/models/User"
 
+
 /**
  *  운동 계획 추가
  * @param request 
@@ -106,3 +107,4 @@ export const PATCH = async (request: NextRequest) => {
         return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
     }
 };
+
