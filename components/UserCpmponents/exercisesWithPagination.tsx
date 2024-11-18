@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CardContent } from "../ui/card";
 import { ClockIcon, DumbbellIcon, HamIcon, MoreHorizontal, Trash2Icon } from "lucide-react";
 import { ExerciseOption, ExercisePlan } from "@/utils/util";
 import { Button } from "../ui/button";
 import ExerciseOptin from "./exerciseOptin";
 import { useDeletePlan } from "@/server/mutations";
+import AddExercisesPlan from "./addExercisesPlan";
 
 
 const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
@@ -18,6 +19,13 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
         (currentPage - 1) * exercisesPerPage, // 시작 인덱스
         currentPage * exercisesPerPage // 끝 인덱스
     );
+    useEffect(() => {
+        // 첫 페이지 가 아닐 때 페이지가 총 페이지보다 크면 마지막 페이지로 이동
+        // (마지막페이지에서 운동 삭제시 페이지가 사라짐으로 ui업데이트) 
+        if (currentPage !== 1 && totalPages < currentPage) {
+            setCurrentPage(totalPages);
+        }
+    })
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {
@@ -74,6 +82,10 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
                 </div>
             ))}
 
+            {(currentPage === totalPages || plan.exercises.length === 0) && <div>
+
+                <AddExercisesPlan plan_id={plan._id!} />
+            </div>}
             {/* 페이지네이션 버튼 */}
             <div className="flex justify-between items-center mt-4">
                 <button

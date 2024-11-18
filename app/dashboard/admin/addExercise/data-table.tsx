@@ -34,6 +34,7 @@ import { Settings2Icon } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useSelectedExercise } from "@/server/mutations"
 import { toast } from "@/hooks/use-toast"
+import { DialogClose } from "@/components/ui/dialog"
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[] // 컬럼 정의
     data: TData[] // 데이터
@@ -94,7 +95,6 @@ export function DataTable<TData, TValue>({
             console.log(res)
             toast({ variant: "default2", title: "운동이 추가 되었습니다." })
 
-
         } catch (error) {
             console.error("Error handling selected rows:", error)
         }
@@ -112,7 +112,7 @@ export function DataTable<TData, TValue>({
         /**
       * setFilterValue(값)을 사용하면 columnFilters에 값이 들어가게 됨 이걸로 필터링을 적용함 
       * 즉 columnFilters가 모든 컬럼에 대한 필터링을 관리하는 변수임
-    
+     
       * 예시  이런식으로 columnFilters에 값이 들어가게 됨
       * columnFilters = [
          {
@@ -237,7 +237,7 @@ export function DataTable<TData, TValue>({
                 </Table>
             </div>
             <div className="flex items-center justify-between space-x-2 py-4">
-                {session?.user?.role !== "admin" ? <Button variant="outline" size="sm" onClick={handleSelectedRows}>선택한 운동 루틴에 추가하기</Button> : <div></div>}
+                {session?.user?.role !== "admin" ? <DialogClose asChild><Button variant="outline" size="sm" onClick={handleSelectedRows}>선택한 운동 루틴에 추가하기</Button></DialogClose> : <div></div>}
                 <div>
                     <Button
                         variant="outline"

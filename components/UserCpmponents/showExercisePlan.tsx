@@ -5,7 +5,8 @@ import React from 'react'
 import { Card, CardHeader, CardTitle } from '../ui/card';
 import ExercisesWithPagination from './exercisesWithPagination';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
-import { BicepsFlexed, Dumbbell, DumbbellIcon, RadicalIcon, SparklesIcon, VolleyballIcon } from 'lucide-react';
+import { BicepsFlexed, Dumbbell, DumbbellIcon, PencilIcon, RadicalIcon, SparklesIcon, Trash2Icon, VolleyballIcon } from 'lucide-react';
+import { Button } from '../ui/button';
 
 const ShowExercisePlan = () => {
     const { data: sessions } = useSession();
@@ -19,21 +20,21 @@ const ShowExercisePlan = () => {
         { name: 'VolleyballIcon', icon: <VolleyballIcon /> },
     ]
 
-
     if (isLoading) return <div>로딩중...</div>
     return (
         <div className='mx-auto w-full max-w-3xl rounded-xl'>
-            {data
-                ? <div className='grid gap-2 grid-cols-4 max-md:grid-cols-3 max-sm:grid-cols-2'>{
+            <CardTitle className='my-3 font-extrabold text-2xl'>플랜 목록</CardTitle>
+            {data ?
+                <div className='grid gap-2 grid-cols-4 max-md:grid-cols-3 max-sm:grid-cols-2 rounded-xl bg-muted/50 p-2'>{
                     data.map((plan) => {
                         const randomIndex = Math.floor(Math.random() * Icons.length);
                         const randomIcon = Icons[randomIndex]?.icon;
                         return (
-                            <Card key={plan.title} className='aspect-auto'>
+                            <Card key={plan.title} className='aspect-auto '>
                                 <CardHeader className='px-0'>
                                     <Dialog >
                                         <DialogTrigger asChild>
-                                            <CardTitle className="text-xl px-6">
+                                            <CardTitle className="text-xl px-6 cursor-pointer">
                                                 <div className='flex flex-row gap-2'>
                                                     {randomIcon}
                                                     <div className='whitespace-nowrap overflow-hidden text-ellipsis w-32'> {plan.title}</div>
@@ -45,8 +46,18 @@ const ShowExercisePlan = () => {
                                                 <DialogTitle className=' hidden'></DialogTitle>
                                                 <DialogDescription className='hidden'></DialogDescription>
                                                 <Card>
-                                                    <CardHeader className='px-0'>
-                                                        <CardTitle className="text-xl px-6">{plan.title}</CardTitle>
+                                                    <CardHeader className='px-0 mt-1'>
+                                                        <CardTitle className="text-xl px-8 flex flex-row items-center justify-between">
+                                                            {plan.title}
+                                                            <div className=' '>
+                                                                <Button variant='outline' className="border-0 h-6 ring-0 shadow-none ">
+                                                                    <PencilIcon />
+                                                                </Button>
+                                                                <Button variant='outline' className="border-0 h-6 ring-0 shadow-none ">
+                                                                    <Trash2Icon />
+                                                                </Button>
+                                                            </div>
+                                                        </CardTitle>
                                                         <ExercisesWithPagination plan={plan} />
                                                     </CardHeader>
                                                 </Card>

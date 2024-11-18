@@ -139,7 +139,7 @@ export const useSelectedExercise = () => {
                 console.log('error', error);
             } else {
                 console.log('data', data);
-                await queryClient.invalidateQueries({ queryKey: ["selectExercise"] }) // 데이터 갱신 후 자동으로 UI 업데이트
+                await queryClient.invalidateQueries({ queryKey: ["selectedExercise"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
     })
@@ -160,7 +160,8 @@ export const useUpdatePlan = () => {
                 body: JSON.stringify(exercisePlan)
             });
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json(); // 서버의 메시지 파싱
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             }
             return response.json();
         },
@@ -173,14 +174,17 @@ export const useUpdatePlan = () => {
         onSettled: async (data, error) => { // 성공, 실패 상관없이 마지막에 호출 variables
             console.log('onSettled');
             if (error) {
+                toast({ variant: 'destructive', title: `${error}` });
                 console.log('error', error);
             } else {
                 console.log('data', data);
+                toast({ variant: 'default2', title: '운동 계획에 운동이 추가되었습니다.' });
                 await queryClient.invalidateQueries({ queryKey: ["exercisePlans"], }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
     })
 };
+
 
 /**
  *  사용자 전용 운동 계획 삭제 Mutation
@@ -214,7 +218,7 @@ export const useDeletePlan = () => {
             if (error) {
                 console.log('error', error);
             } else {
-                console.log('data', data);
+                toast({ variant: 'default2', title: '운동 계획이 삭제되었습니다.' });
                 await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }

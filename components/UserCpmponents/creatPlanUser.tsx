@@ -152,14 +152,12 @@ const CreatPlanUser = () => {
                                             </FormItem>
                                         )}
                                     />
-
                                     <Button type="submit">Submit</Button>
                                 </form>
                             </Form>
                             <CardContent className='rounded-md shadow-inner bg-zinc-300 dark:bg-zinc-800 my-4'>
                                 <div className='rounded-md  '>
                                     <div className='flex flex-col   max-h-[45vh] scrollbar-none overflow-y-scroll'>
-
                                         {planData.length !== 0 ? planData?.map((item) => (
                                             <Card key={item._id} className='mt-5 '>
                                                 <CardHeader >

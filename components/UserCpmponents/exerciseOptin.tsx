@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
-import { Card, CardHeader, CardTitle } from "../ui/card"
+import { Card, CardHeader } from "../ui/card"
 import { DumbbellIcon, PencilIcon } from "lucide-react"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
@@ -49,7 +49,8 @@ const ExerciseOptin = ({ plan, exercise }: ExerciseOptinProps) => {
                     sets: values.sets,
                     reps: values.reps,
                     rest: values.rest
-                }]
+                }],
+                type: "edit"
             }
             await useUpdatePlanMutation.mutateAsync(newData)
         } catch (error) {

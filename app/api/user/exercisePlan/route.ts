@@ -16,9 +16,7 @@ export const POST = async (request: NextRequest) => {
     // 요청에서 사용자 ID 가져오기
 
     const { title, exercises, userId } = await request.json();
-    console.log('title', title);
-    console.log('exercises', exercises);
-    console.log('userId', userId);
+
     const getSession = await getServerSession();
     if (!getSession) {
         // 로그인 안되어있으면 로그인 페이지로 이동
@@ -53,17 +51,16 @@ export const POST = async (request: NextRequest) => {
 }
 /**
  *  운동 계획 수정 API
- * exercise에서 rest, sets, reps 수정
+ *  type이 수정 이면 exercise에서 rest, sets, reps 수정
+ *  type이 추가 이면 exercise 추가
  * @param request 
  * @returns 
  */
 export const PATCH = async (request: NextRequest) => {
     try {
-        const { userId, exercisePlanId, exercises } = await request.json();
-        console.log('userId:', userId);
-        console.log('exercisePlanId:', exercisePlanId);
-        console.log('exercise:', exercises);
+        const { userId, exercisePlanId, exercises, type } = await request.json();
 
+        console.log(type)
         const getSession = await getServerSession();
         if (!getSession) {
             // 로그인 안되어있으면 로그인 페이지로 이동
@@ -88,21 +85,39 @@ export const PATCH = async (request: NextRequest) => {
             return NextResponse.json({ message: 'Exercise Plan not found' }, { status: 404 });
         }
 
-        // Exercise 업데이트
-        const exerciseIndex = exercisePlan.exercises.findIndex(
-            (ex: any) => ex.exerciseId.toString() === exercises[0].exerciseId);
+        if (type === 'add') {
+            // Exercise 추가
+            // 기존 운동 ID 가져오기
+            const existingExerciseIds = exercisePlan.exercises.map((ex: any) => ex.exerciseId.toString());
+            // 기존 운동 ID와 새로운 운동 ID 비교 해서 중복 제거
+            const newExercises = exercises.filter((ex: any) => !existingExerciseIds.includes(ex.exerciseId));
+            if (newExercises.length === 0) {
+                console.log('이미 존재하는 운동입니다.');
+                return NextResponse.json({ message: '이미 존재하는 운동입니다.' }, { status: 400 });
+            }
+            // 운동 추가
+            exercisePlan.exercises.push(...newExercises);
+            await exercisePlan.save();
+            return NextResponse.json({ message: '운동 추가 성공', updatedExercise: newExercises }, { status: 200 });
+        }
+        if (type === 'edit') {
+            // Exercise 업데이트
+            const exerciseIndex = exercisePlan.exercises.findIndex(
+                (ex: any) => ex.exerciseId.toString() === exercises[0].exerciseId);
 
-        if (exerciseIndex === -1) {
-            return NextResponse.json({ message: 'Exercise not found' }, { status: 404 });
+            if (exerciseIndex === -1) {
+                return NextResponse.json({ message: 'Exercise not found' }, { status: 404 });
+            }
+
+            // 데이터 수정
+            exercisePlan.exercises[exerciseIndex] = { ...exercisePlan.exercises[exerciseIndex], ...exercises[0] };
+
+            // 변경 내용 저장
+            await exercisePlan.save();
+
+            return NextResponse.json({ message: '운동 수정 성공', updatedExercise: exercisePlan.exercises[exerciseIndex] }, { status: 200 });
         }
 
-        // 데이터 수정
-        exercisePlan.exercises[exerciseIndex] = { ...exercisePlan.exercises[exerciseIndex], ...exercises[0] };
-
-        // 변경 내용 저장
-        await exercisePlan.save();
-
-        return NextResponse.json({ message: '운동 수정 성공', updatedExercise: exercisePlan.exercises[exerciseIndex] }, { status: 200 });
     } catch (err: any) {
         return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
     }
