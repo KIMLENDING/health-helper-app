@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CardContent } from "../ui/card";
-import { ClockIcon, DumbbellIcon, HamIcon, MoreHorizontal } from "lucide-react";
+import { ClockIcon, DumbbellIcon, HamIcon, MoreHorizontal, Trash2Icon } from "lucide-react";
 import { ExerciseOption, ExercisePlan } from "@/utils/util";
 import { Button } from "../ui/button";
 import ExerciseOptin from "./exerciseOptin";
@@ -37,22 +37,22 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
             exerciseId: exercise._id!,
         }
         useDeletePlanMutation.mutate(deleteExercise);
-        console.log(deleteExercise)
-
     }
     return (
         <CardContent className="space-y-4">
             {currentExercises.map((exercise) => (
-                <div key={exercise.exerciseId} className="border rounded p-4 ">
-                    <div className="flex items-center gap-2 mb-3 justify-between">
+                <div key={exercise.exerciseId} className="border rounded p-4 group">
+                    <div className="flex items-center gap-2 mb-3 justify-between h-6">
                         <div className="flex flex-row gap-2">
-
-                            <DumbbellIcon className="w-5 h-5" />
+                            <DumbbellIcon className="w-6 h-6" />
                             <h3 className="font-semibold">{exercise.title}</h3>
                         </div>
-                        <Button variant='outline' onClick={() => handleDelete(exercise)} className="border-0 h-6 ring-0 shadow-none "><MoreHorizontal /></Button>
-
-                        <ExerciseOptin plan={plan} exercise={exercise} />
+                        <div className=" flex-row hidden group-hover:flex">
+                            <ExerciseOptin plan={plan} exercise={exercise} />
+                            <Button variant='outline' onClick={() => handleDelete(exercise)} className="border-0 h-6 ring-0 shadow-none ">
+                                <Trash2Icon />
+                            </Button>
+                        </div>
                     </div>
                     <div className="grid grid-cols-3 gap-4">
                         <div>

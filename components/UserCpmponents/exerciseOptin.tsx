@@ -6,12 +6,11 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { Card, CardHeader, CardTitle } from "../ui/card"
-import { DumbbellIcon } from "lucide-react"
+import { DumbbellIcon, PencilIcon } from "lucide-react"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { useUpdatePlan } from "@/server/mutations"
-import { title } from "process"
 
 
 const formSchema = z.object({
@@ -20,7 +19,12 @@ const formSchema = z.object({
     rest: z.preprocess((value) => Number(value), z.number().min(0).nonnegative("숫자를 입력해주세요")),
 })
 
-const ExerciseOptin = ({ plan, exercise }: { plan: ExercisePlan, exercise: ExerciseOption }) => {
+interface ExerciseOptinProps {
+
+    plan: ExercisePlan;
+    exercise: ExerciseOption;
+}
+const ExerciseOptin = ({ plan, exercise }: ExerciseOptinProps) => {
     const useUpdatePlanMutation = useUpdatePlan();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -57,7 +61,9 @@ const ExerciseOptin = ({ plan, exercise }: { plan: ExercisePlan, exercise: Exerc
         <div>
             <Dialog >
                 <DialogTrigger asChild>
-                    <CardTitle className="text-xl px-6">수정</CardTitle>
+                    <Button className="border-0 h-6 ring-0 shadow-none " variant='outline' >
+                        <PencilIcon />
+                    </Button>
                 </DialogTrigger>
                 <DialogContent className='p-0 border-0 bg-transparent rounded-lg'>
                     <DialogHeader >
@@ -114,7 +120,7 @@ const ExerciseOptin = ({ plan, exercise }: { plan: ExercisePlan, exercise: Exerc
                                                 )}
                                             />
                                             <DialogClose asChild>
-                                                <Button type="submit" variant="secondary">Submit</Button>
+                                                <Button type="submit" variant="secondary" >Submit</Button>
                                             </DialogClose>
                                         </form>
                                     </Form>
