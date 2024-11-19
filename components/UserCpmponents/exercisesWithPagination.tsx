@@ -55,7 +55,7 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
                             <DumbbellIcon className="w-6 h-6" />
                             <h3 className="font-semibold">{exercise.title}</h3>
                         </div>
-                        <div className=" flex-row hidden group-hover:flex">
+                        <div className=" flex-row transition-opacity duration-300 opacity-0 flex group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none">
                             <ExerciseOptin plan={plan} exercise={exercise} />
                             <Button variant='outline' onClick={() => handleDelete(exercise)} className="border-0 h-6 ring-0 shadow-none ">
                                 <Trash2Icon />

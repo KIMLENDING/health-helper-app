@@ -47,7 +47,7 @@ const ShowExercisePlan = () => {
                                                 <DialogDescription className='hidden'></DialogDescription>
                                                 <Card>
                                                     <CardHeader className='px-0 mt-1'>
-                                                        <CardTitle className="text-xl px-8 flex flex-row items-center justify-between">
+                                                        <CardTitle className="text-xl pl-8 pr-6 flex flex-row items-center justify-between">
                                                             {plan.title}
                                                             <div className=' '>
                                                                 <Button variant='outline' className="border-0 h-6 ring-0 shadow-none ">
