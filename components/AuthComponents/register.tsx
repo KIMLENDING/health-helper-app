@@ -31,7 +31,7 @@ const Register = ({ fetchUrl }: { fetchUrl?: string }) => {
         const email = e.target[0].value;
         const password = e.target[1].value;
         const confirmPassword = e.target[2].value;
-
+        console.log(email, password, confirmPassword);
         if (!isValidEmail(email)) {
             setError("이메일 형식이 유효하지 않습니다.");
             toast({ variant: "destructive", title: "이메일 형식이 유효하지 않습니다." })
