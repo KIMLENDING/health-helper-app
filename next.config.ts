@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   env: {
     NEXTAUTH_URL:
       process.env.NODE_ENV === 'production'
-        ? 'https://your-app.vercel.app'
+        ? 'https://health-helper-app.vercel.app'
         : 'http://localhost:3000',
   },
 };
