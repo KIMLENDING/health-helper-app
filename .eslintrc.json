@@ -2,6 +2,7 @@
   "extends": ["next/core-web-vitals", "next/typescript"],
   "rules": {
     "@typescript-eslint/no-explicit-any": "off", // no-explicit-any 비활성화
-     "@typescript-eslint/no-unused-vars": "off" // no-unused-vars 비활성화
+     "@typescript-eslint/no-unused-vars": "off", // no-unused-vars 비활성화
+     "@typescript-eslint/no-empty-object-type": "off" // no-empty-object-type 비활성화
   }
 }
