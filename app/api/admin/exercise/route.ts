@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 import Exercise from "@/models/Exercise"
 import connect from "@/utils/db"
 import { NextRequest, NextResponse } from "next/server"
