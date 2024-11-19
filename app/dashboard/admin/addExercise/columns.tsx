@@ -1,25 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { ColumnDef, FilterFn } from "@tanstack/react-table"
-import { Link as LinkIcon, MoreHorizontal } from "lucide-react"
+import { Link as LinkIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
 import Link from 'next/link'
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useDeleteExercise } from "@/server/mutations"
-import { toast } from "@/hooks/use-toast"
 import { ArrowUpDown } from "lucide-react"
-import TagSelector from "@/components/AdminComponents/addTag"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Exercise } from "@/utils/util"
 import ActionCell from "@/components/CellComponents/actionCell"
