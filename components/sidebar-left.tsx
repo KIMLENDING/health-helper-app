@@ -397,9 +397,9 @@ export function SidebarLeft({
   ...props
 }: any) {//
   const { data: session, status: sessionStatus } = useSession();
-  const { session: sessions } = useSessionContext();
-  const [datas, setData] = useState(data)
-  const [sessionData, setSession] = useState(sessions)
+  const { session: sessions } = useSessionContext(); // 서버컴포넌트에서 받은 세션 데이터
+  const [datas, setData] = useState(data) // 메뉴 데이터
+  const [sessionData, setSession] = useState(sessions) // 세션 데이터
 
 
   React.useLayoutEffect(() => {
@@ -407,7 +407,7 @@ export function SidebarLeft({
       setSession(session) // 
     }
   }
-    , [sessionStatus])
+    , [sessionStatus, session])
   React.useLayoutEffect(() => {
     console.log('sessionData', sessionData)
     if (sessionData?.user?.role === "user" && setData(data))
