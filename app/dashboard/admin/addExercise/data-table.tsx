@@ -101,7 +101,7 @@ export function DataTable<TData, TValue>({
     }
     useEffect(() => {
         { table.setPageSize(5) }
-    }, [])
+    }, [table])
     /**
      *     console.log(data)
      * console.log(rowSelection)

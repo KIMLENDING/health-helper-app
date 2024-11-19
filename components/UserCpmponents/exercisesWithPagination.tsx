@@ -25,7 +25,7 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
         if (currentPage !== 1 && totalPages < currentPage) {
             setCurrentPage(totalPages);
         }
-    })
+    }, [currentPage, totalPages]); // 페이지가 변경될 때마다 실행
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {

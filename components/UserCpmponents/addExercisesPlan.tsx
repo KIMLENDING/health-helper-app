@@ -1,5 +1,5 @@
 import { getSelectedExercises } from '@/server/queries';
-import React, { use, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { useSession } from 'next-auth/react';
 import { Button } from '../ui/button';
@@ -66,7 +66,7 @@ const AddExercisesPlan = ({ plan_id }: { plan_id: string }) => {
         }
         else if (session?.user._id) {
             const newUpdataData = {
-                userId: session?.user._id!,
+                userId: session?.user._id,
                 title: '', // 이건 인터페이스에 있지만 여기서는 사용하지 않기때문에 빈값으로 넣어줍니다.
                 exercisePlanId: plan_id,
                 exercises: exerciseOption,

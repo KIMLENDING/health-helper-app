@@ -1,5 +1,4 @@
 import ShowExercisePlan from "@/components/UserCpmponents/showExercisePlan";
-import Image from "next/image";
 
 export default function Dashboard() {
   return (

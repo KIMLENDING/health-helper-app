@@ -27,7 +27,7 @@ const AddExercisePage = () => {
             router.push('/dashboard')
         }
 
-    }, [session, loading])
+    }, [session, loading, router])
     if (loading === 'loading') return null;
     return (
         <div className="flex flex-1 flex-col gap-4 p-4">
