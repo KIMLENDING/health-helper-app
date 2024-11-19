@@ -7,7 +7,7 @@ export const useEexercises = () => {
     return useQuery({
         queryKey: ['exercises'],
         queryFn: async () => {
-            const response = await fetch('/api/admin/exercise', {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/admin/exercise`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export const getExercisePlan = (userId?: string) => {
     return useQuery<ExercisePlan[]>({
         queryKey: ["exercisePlans"],
         queryFn: userId ? async () => {
-            const response = await fetch(`/api/user/${userId}`, {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/${userId}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

@@ -34,7 +34,7 @@ const ActionCell = ({ row }: { row: any }) => {
     const { mutate: updateExercise } = useMutation(
         {
             mutationFn: async (updatedData: Partial<Exercise>) => {
-                const response = await fetch(`/api/admin/exercise/${exercise._id}`, {
+                const response = await fetch(`${process.env.NEXTAUTH_URL}/api/admin/exercise/${exercise._id}`, {
                     method: "PATCH",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(updatedData),

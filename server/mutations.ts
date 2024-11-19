@@ -11,7 +11,7 @@ export const addExercise = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (postData: Partial<Exercise>) => {
-            const response = await fetch('/api/admin/exercise', {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/admin/exercise`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', },
                 body: JSON.stringify(postData)
@@ -47,7 +47,7 @@ export const useDeleteExercise = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (exerciseId: string) => {
-            const response = await fetch(`/api/admin/exercise/${exerciseId}`, {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/admin/exercise/${exerciseId}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json', },
             });
@@ -83,7 +83,7 @@ export const useCreatePlan = () => {
     return useMutation({
         mutationFn: async (exercisePlan: ExercisePlan) => {
 
-            const response = await fetch(`/api/user/exercisePlan`, {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', },
                 body: JSON.stringify(exercisePlan)
@@ -154,7 +154,7 @@ export const useUpdatePlan = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (exercisePlan: ExercisePlan) => {
-            const response = await fetch(`/api/user/exercisePlan`, {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json', },
                 body: JSON.stringify(exercisePlan)
@@ -198,7 +198,7 @@ export const useDeletePlan = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (deleteExercise: DeletePlanProps) => {
-            const response = await fetch(`/api/user/exercisePlan/${deleteExercise.exercisePlanId}/${deleteExercise.exerciseId}`, {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan/${deleteExercise.exercisePlanId}/${deleteExercise.exerciseId}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json', },
             });

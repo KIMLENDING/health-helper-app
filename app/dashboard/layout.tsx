@@ -85,13 +85,3 @@ export default function DachboardLayout({
   )
 }
 
-// export const getServerSideProps: GetServerSideProps = async () => {
-//   const res = await fetch('/api/auth');
-//   const data = await res.json();
-//   console.log('data', data)
-//   return {
-//     props: {
-//       data,
-//     },
-//   };
-// };
