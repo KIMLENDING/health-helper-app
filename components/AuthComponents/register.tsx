@@ -53,7 +53,7 @@ const Register = ({ fetchUrl }: { fetchUrl?: string }) => {
         try {
             const newfetchUrl = fetchUrl || '/api/register';
             const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
-            const res = await fetch(fetchUrl || `${baseUrl}/${newfetchUrl}`, {
+            const res = await fetch(fetchUrl || `${baseUrl}${newfetchUrl}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
