@@ -51,7 +51,7 @@ const Register = ({ fetchUrl }: { fetchUrl?: string }) => {
         }
 
         try {
-            const res = await fetch(fetchUrl || "/api/register", {
+            const res = await fetch(fetchUrl || "https://health-helper-app.vercel.app/api/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

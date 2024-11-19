@@ -6,7 +6,7 @@ const page = () => {
   return (
     <div>
       {/* 보안을 위해선 otp 같은 걸로 fetch 주소가 털려도 가입을 할 수 없도록 하는 장치를 만들어야겠다. */}
-      <Register fetchUrl={'/api/registerAdmin'} />
+      <Register fetchUrl={'https://health-helper-app.vercel.app/api/registerAdmin'} />
     </div>
   )
 }
