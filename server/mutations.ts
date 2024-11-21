@@ -17,7 +17,8 @@ export const addExercise = () => {
                 body: JSON.stringify(postData)
             });
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json();
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             }
             return response.json();
         },
@@ -30,9 +31,11 @@ export const addExercise = () => {
         onSettled: async (data, error) => { // 성공, 실패 상관없이 마지막에 호출 variables
             console.log('onSettled');
             if (error) {
+                toast({ variant: 'destructive', title: `${error}` });
                 console.log('error', error);
             } else {
                 console.log('data', data);
+                toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exercises"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
@@ -52,7 +55,8 @@ export const useDeleteExercise = () => {
                 headers: { 'Content-Type': 'application/json', },
             });
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json();
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             }
             return response.json();
         },
@@ -65,9 +69,11 @@ export const useDeleteExercise = () => {
         onSettled: async (data, error) => { // 성공, 실패 상관없이 마지막에 호출 variables
             console.log('onSettled');
             if (error) {
+                toast({ variant: 'destructive', title: `${error}` });
                 console.log('error', error);
             } else {
                 console.log('data', data);
+                toast({ variant: 'destructive', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exercises"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
@@ -89,26 +95,25 @@ export const useCreatePlan = () => {
                 body: JSON.stringify(exercisePlan)
             });
             if (!response.ok) {
-                if (response.status === 400) {
-                    toast({ variant: 'destructive', title: '이미 추가된 플랜입니다.' });
-                }
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json();
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             }
             return response.json();
         },
         onSuccess: () => {
             console.log('onSuccess');
         },
-        onError: (error, status) => {
-            console.log('onError', status);
+        onError: (error) => {
             console.log('onError', error);
         },
         onSettled: async (data, error) => { // 성공, 실패 상관없이 마지막에 호출 variables
             console.log('onSettled');
             if (error) {
+                toast({ variant: 'destructive', title: `${error}` });
                 console.log('error', error);
             } else {
                 console.log('data', data);
+                toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
@@ -128,7 +133,7 @@ export const useSelectedExercise = () => {
         },
         onSuccess: (data) => {
             console.log('onSuccess');
-            queryClient.setQueryData(["selectedExercise"], data);
+            queryClient.setQueryData(["selectedExercise"], data); // 데이터 저장
         },
         onError: (error) => {
             console.log('onError', error);
@@ -139,6 +144,7 @@ export const useSelectedExercise = () => {
                 console.log('error', error);
             } else {
                 console.log('data', data);
+                toast({ variant: "default2", title: "운동이 임시 테이블에 추가 되었습니다." })
                 await queryClient.invalidateQueries({ queryKey: ["selectedExercise"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
@@ -178,8 +184,8 @@ export const useUpdatePlan = () => {
                 console.log('error', error);
             } else {
                 console.log('data', data);
-                toast({ variant: 'default2', title: '운동 계획에 운동이 추가되었습니다.' });
-                await queryClient.invalidateQueries({ queryKey: ["exercisePlans"], }) // 데이터 갱신 후 자동으로 UI 업데이트
+                toast({ variant: 'destructive', title: `${data.message}` });
+                await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
     })
@@ -203,7 +209,8 @@ export const useDeletePlan = () => {
                 headers: { 'Content-Type': 'application/json', },
             });
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json();
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             }
             return response.json();
         },
@@ -216,9 +223,10 @@ export const useDeletePlan = () => {
         onSettled: async (data, error) => { // 성공, 실패 상관없이 마지막에 호출 variables
             console.log('onSettled');
             if (error) {
+                toast({ variant: 'destructive', title: `${error}` });
                 console.log('error', error);
             } else {
-                toast({ variant: 'default2', title: '운동 계획이 삭제되었습니다.' });
+                toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }

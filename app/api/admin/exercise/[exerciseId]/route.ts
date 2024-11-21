@@ -57,10 +57,10 @@ export const PATCH = async (request: NextRequest, { params }: { params: Promise<
             { new: true }
         );
         if (!updatedExercise) {
-            return NextResponse.json({ message: "Exercise not found" }, { status: 404 });
+            return NextResponse.json({ message: "유저정보가 없습니다." }, { status: 404 });
         }
 
-        return NextResponse.json(updatedExercise, { status: 200 });// 업데이트된 운동 정보 반환
+        return NextResponse.json({ message: '데이터가 업데이트 성공' }, { status: 200 });// 업데이트된 운동 정보 반환
     } catch (error) {
         console.error(error);
         return NextResponse.json({ message: "Failed to update exercise" }, { status: 500 });

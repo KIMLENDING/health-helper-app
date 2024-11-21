@@ -7,10 +7,12 @@ import ExerciseOptin from "./exerciseOptin";
 import { useDeletePlan } from "@/server/mutations";
 import AddExercisesPlan from "./addExercisesPlan";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import LoadingOverlay from "../LayoutCompents/LoadingOverlay";
 
 
 const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
+    const [isLoading, setIsLoading] = useState(false); // 로딩 상태
     const exercisesPerPage = 3; // 페이지당 보여줄 운동 개수
     const useDeletePlanMutation = useDeletePlan();
 
@@ -40,15 +42,22 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
         }
     };
 
-    const handleDelete = (exercise: ExerciseOption) => {
+    const handleDelete = async (exercise: ExerciseOption) => {
         const deleteExercise = {
             exercisePlanId: plan._id!,
             exerciseId: exercise._id!,
         }
-        useDeletePlanMutation.mutate(deleteExercise);
+        setIsLoading(true);
+        try {
+            const a = await useDeletePlanMutation.mutateAsync(deleteExercise);
+        } finally {
+            setIsLoading(false);
+        }
+
     }
     return (
         <CardContent className="space-y-4">
+            <LoadingOverlay isLoading={isLoading} />
             {currentExercises.map((exercise) => (
                 <div key={exercise.exerciseId} className="border rounded p-4 group hover:bg-zinc-200 dark:hover:bg-zinc-900">
                     <div className="flex items-center gap-2 mb-3 justify-between h-6">

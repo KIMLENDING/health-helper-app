@@ -39,7 +39,7 @@ export const AddExercise = () => {
     })
 
     // 2. Define a submit handler.
-    async function onSubmit(values: z.infer<typeof formSchema>) {
+    function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             const postData = {
                 title: values.title,
@@ -47,12 +47,10 @@ export const AddExercise = () => {
                 url: values.url,
                 tags: dbTags
             }
-            const state = await addExerciseMutation.mutateAsync(postData);
-            toast({ variant: "default", title: state.message })
+            addExerciseMutation.mutate(postData);
             form.reset();
             // TODO: Add success handling (e.g., show success message, reset form)
         } catch (error) {
-            toast({ variant: "destructive", title: "status 500" })
             console.error('Error submitting form:', error);
             // TODO: Add error handling (e.g., show error message to user)
         }

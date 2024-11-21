@@ -33,7 +33,6 @@ import { Button } from "@/components/ui/button"
 import { Settings2Icon } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useSelectedExercise } from "@/server/mutations"
-import { toast } from "@/hooks/use-toast"
 import { DialogClose } from "@/components/ui/dialog"
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[] // 컬럼 정의
@@ -45,7 +44,7 @@ export function DataTable<TData, TValue>({
     data,
 }: DataTableProps<TData, TValue>) {
     const { data: session } = useSession();
-    const [sorting, setSorting] = useState<SortingState>([]) // 정렬 상태
+    const [sorting, setSorting] = useState<SortingState>([{ id: "title", desc: false }]) // 정렬 상태
     const [rowSelection, setRowSelection] = useState({}) // 행 선택 상태
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]) // 컬럼 필터 상태 이건     
     const [selectedTags, setSelectedTags] = useState<string[]>([]) // 체크된 태그만 모아둔 상태 이걸 columFilters로 넘겨줘야함 넘겨주는 방법은 setFilterValue(값)을 호출하면 됨
@@ -83,18 +82,14 @@ export function DataTable<TData, TValue>({
             rowSelection, // 행 선택 적용
         },
     })
-    const handleSelectedRows = async () => { // 선택된 행 처리
+    const handleSelectedRows = () => { // 선택된 행 처리
         try {
             const selectedRows = []
             for (const key in rowSelection) { // 선택된 행의 key는 data의 인덱스임으로 
                 // key가 data의 인덱스임  
                 selectedRows.push(data[+key]) // 참고로 key는 string임으로 +를 붙여서 number로 변환
             }
-            console.log(selectedRows)
-            const res = await useSelectedExerciseMutation.mutateAsync(selectedRows) // 선택된 행을 서버로 전송
-            console.log(res)
-            toast({ variant: "default2", title: "운동이 임시 테이블에 추가 되었습니다." })
-
+            useSelectedExerciseMutation.mutate(selectedRows) // 선택된 행을 서버로 전송
         } catch (error) {
             console.error("Error handling selected rows:", error)
         }

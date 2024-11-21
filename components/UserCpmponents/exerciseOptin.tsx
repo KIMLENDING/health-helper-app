@@ -36,7 +36,7 @@ const ExerciseOptin = ({ plan, exercise }: ExerciseOptinProps) => {
     })
 
     // 2. Define a submit handler.
-    async function onSubmit(values: z.infer<typeof formSchema>) {
+    function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             const newData = {
                 userId: plan.userId,
@@ -52,7 +52,7 @@ const ExerciseOptin = ({ plan, exercise }: ExerciseOptinProps) => {
                 }],
                 type: "edit"
             }
-            await useUpdatePlanMutation.mutateAsync(newData)
+            useUpdatePlanMutation.mutate(newData)
         } catch (error) {
             console.error("Failed to update plan:", error)
         }

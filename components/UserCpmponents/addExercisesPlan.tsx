@@ -23,7 +23,7 @@ const AddExercisesPlan = ({ plan_id }: { plan_id: string }) => {
     const { data, error, isLoading } = getSelectedExercises(); // 필요한 운동 종목 데이터를 가져옵니다.
     const useUpdatePlanMutation = useUpdatePlan();
     const queryClient = useQueryClient();
-    console.log(isOpen)
+
     useEffect(() => { // 데이터가 있으면 planData에 추가합니다.
         if (data) {
             setPlanData(prevState => { // 중복된 데이터를 제거합니다.

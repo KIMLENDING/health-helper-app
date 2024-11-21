@@ -40,14 +40,21 @@ const ActionCell = ({ row }: { row: any }) => {
                     body: JSON.stringify(updatedData),
                 })
                 if (!response.ok) {
-                    throw new Error("Failed to update exercise")
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
                 }
                 return response.json()
             },
-            onSuccess: () => {
+            onSuccess: (data) => {
+                console.log("onSuccess", data)
+                toast({ variant: "default2", title: `${data.message}` })
                 queryClient.invalidateQueries({ queryKey: ["exercises"] }) // 데이터 갱신 후 자동으로 UI 업데이트
                 setDialogOpen(false) // 모달 닫기
             },
+            onError: (error) => {
+                console.log("onError", error)
+                toast({ variant: "destructive", title: `${error}` })
+            }
         },
     )
 
@@ -67,9 +74,8 @@ const ActionCell = ({ row }: { row: any }) => {
         updateExercise({ _id: exercise._id, title: formData.title, tags: updatedTags, url: formData.url })
     }
 
-    const handleDelete = async () => {
-        const state = await useDeleteMutation.mutateAsync(exercise._id)
-        toast({ variant: "default", title: state.message })
+    const handleDelete = () => {
+        useDeleteMutation.mutate(exercise._id)
     }
     useEffect(() => {
         handleTagChanges()
