@@ -96,7 +96,13 @@ export const columns: ColumnDef<Exercise>[] = [
         accessorKey: "tags",
         header: "Tags",
         filterFn: filterTags, // 커스텀 필터 함수 적용
-        cell: ({ getValue }) => (getValue() as string[]).sort().join(", "), // 배열을 콤마로 구분된 문자열로 표시
+        cell: ({ getValue }) => {
+            const tags = getValue() as string[]
+            tags.join(", ")
+            return (
+                <div className="overflow-y-scroll text-ellipsis max-h-16">{tags.join(", ")}</div>
+            )
+        }
     },
     {
         accessorKey: "url",

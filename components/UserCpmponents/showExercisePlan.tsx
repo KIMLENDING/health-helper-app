@@ -7,6 +7,7 @@ import ExercisesWithPagination from './exercisesWithPagination';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { BicepsFlexed, Dumbbell, DumbbellIcon, PencilIcon, RadicalIcon, SparklesIcon, Trash2Icon, VolleyballIcon } from 'lucide-react';
 import { Button } from '../ui/button';
+import Link from 'next/link';
 
 const ShowExercisePlan = () => {
     const { data: sessions } = useSession();
@@ -23,7 +24,11 @@ const ShowExercisePlan = () => {
     if (isLoading) return <div>로딩중...</div>
     return (
         <div className='mx-auto w-full max-w-3xl rounded-xl'>
-            <CardTitle className='my-3 font-extrabold text-2xl'>플랜 목록</CardTitle>
+            <CardTitle className='my-3 font-extrabold text-2xl'>
+                <Link href={'/dashboard/exercisePlans'}>
+                    플랜 목록
+                </Link>
+            </CardTitle>
             {data ?
                 <div className='grid gap-2 grid-cols-4 max-md:grid-cols-3 max-sm:grid-cols-2 rounded-xl bg-muted/50 p-2'>{
                     data.map((plan) => {

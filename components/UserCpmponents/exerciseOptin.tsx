@@ -62,7 +62,7 @@ const ExerciseOptin = ({ plan, exercise }: ExerciseOptinProps) => {
         <div>
             <Dialog >
                 <DialogTrigger asChild>
-                    <Button className="border-0 h-6 ring-0 shadow-none " variant='outline' >
+                    <Button className="border-0 h-6 ring-0 shadow-none  " variant='outline' >
                         <PencilIcon />
                     </Button>
                 </DialogTrigger>

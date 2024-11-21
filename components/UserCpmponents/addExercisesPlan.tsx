@@ -16,8 +16,8 @@ import { useQueryClient } from '@tanstack/react-query';
 const AddExercisesPlan = ({ plan_id }: { plan_id: string }) => {
 
     const { data: session } = useSession();
-    const [isOpen, setIsOpen] = useState(false);
-    const [isSave, setIsSave] = useState(false);
+    const [isOpen, setIsOpen] = useState(false); // 다이얼로그 창 열기
+    const [isSave, setIsSave] = useState(false); // 저장 버튼 활성화 여부
     const [planData, setPlanData] = useState<Exercise[]>([]) // 가져온 운동 종목 데이터를 저장하는 변수
     const [exerciseOption, setExerciseOption] = useState<ExerciseOption[]>([]) // 이건 세트, 반복횟수, 휴식시간을 저장하는 변수
     const { data, error, isLoading } = getSelectedExercises(); // 필요한 운동 종목 데이터를 가져옵니다.
@@ -44,11 +44,10 @@ const AddExercisesPlan = ({ plan_id }: { plan_id: string }) => {
 
 
     useEffect(() => {
-        console.log('useEffect')
         if (planData.length !== 0 && exerciseOption.length !== 0) {
-            console.log('useEffect1')
             if (planData.length === exerciseOption.length) {
-                console.log('운동 추가')
+                // 선택한 운동 종목이 있고, 세트, 반복횟수, 휴식시간이 설정되어 있으면 저장 버튼 활성화
+                // exerciseOption은 세트, 반복횟수, 휴식시간이 설정되어 있는 데이터 옵션을 설정해야만 저장 버튼이 활성화 됩니다.
                 setIsSave(true)
             }
         }

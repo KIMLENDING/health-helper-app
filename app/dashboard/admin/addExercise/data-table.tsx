@@ -93,7 +93,7 @@ export function DataTable<TData, TValue>({
             console.log(selectedRows)
             const res = await useSelectedExerciseMutation.mutateAsync(selectedRows) // 선택된 행을 서버로 전송
             console.log(res)
-            toast({ variant: "default2", title: "운동이 추가 되었습니다." })
+            toast({ variant: "default2", title: "운동이 임시 테이블에 추가 되었습니다." })
 
         } catch (error) {
             console.error("Error handling selected rows:", error)

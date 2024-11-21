@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import ExerciseOptin from "./exerciseOptin";
 import { useDeletePlan } from "@/server/mutations";
 import AddExercisesPlan from "./addExercisesPlan";
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 
 
 const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
@@ -49,17 +50,43 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
     return (
         <CardContent className="space-y-4">
             {currentExercises.map((exercise) => (
-                <div key={exercise.exerciseId} className="border rounded p-4 group">
+                <div key={exercise.exerciseId} className="border rounded p-4 group hover:bg-zinc-200 dark:hover:bg-zinc-900">
                     <div className="flex items-center gap-2 mb-3 justify-between h-6">
                         <div className="flex flex-row gap-2">
                             <DumbbellIcon className="w-6 h-6" />
                             <h3 className="font-semibold">{exercise.title}</h3>
                         </div>
-                        <div className=" flex-row transition-opacity duration-300 opacity-0 flex group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none">
+                        <div className="gap-2 flex-row transition-opacity duration-300 opacity-0 flex group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none">
                             <ExerciseOptin plan={plan} exercise={exercise} />
-                            <Button variant='outline' onClick={() => handleDelete(exercise)} className="border-0 h-6 ring-0 shadow-none ">
+                            {/* <Button variant='outline' onClick={() => handleDelete(exercise)} className="border-0 h-6 ring-0 shadow-none ">
                                 <Trash2Icon />
-                            </Button>
+                            </Button> */}
+
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button variant='outline' className="border-0 h-6 ring-0 shadow-none ">
+                                        <Trash2Icon />
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>삭제하시겠습니까?</DialogTitle>
+                                    </DialogHeader>
+                                    <DialogFooter className="sm:justify-start">
+                                        <DialogClose asChild>
+                                            <div className="w-full flex gap-2">
+
+                                                <Button className="flex-1" type="button" variant="secondary">
+                                                    취소
+                                                </Button>
+                                                <Button className="flex-1 bg-red-600 text-white" type="button" variant="secondary" onClick={() => handleDelete(exercise)}>
+                                                    삭제
+                                                </Button>
+                                            </div>
+                                        </DialogClose>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
                         </div>
                     </div>
                     <div className="grid grid-cols-3 gap-4">
