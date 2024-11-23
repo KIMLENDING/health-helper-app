@@ -4,8 +4,8 @@ import { useSession } from 'next-auth/react';
 import React from 'react'
 import { Card, CardHeader, CardTitle } from '../ui/card';
 import ExercisesWithPagination from './exercisesWithPagination';
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
-import { BicepsFlexed, Dumbbell, DumbbellIcon, PencilIcon, RadicalIcon, SparklesIcon, Trash2Icon, VolleyballIcon } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { BicepsFlexed, DumbbellIcon, PencilIcon, RadicalIcon, SparklesIcon, Trash2Icon, VolleyballIcon } from 'lucide-react';
 import { Button } from '../ui/button';
 import Link from 'next/link';
 

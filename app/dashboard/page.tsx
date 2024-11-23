@@ -1,4 +1,5 @@
-import ShowExercisePlan from "@/components/UserCpmponents/showExercisePlan";
+
+import ShowPlans from "@/components/UserCpmponents/showPlans";
 
 export default function Dashboard() {
   return (
@@ -11,7 +12,8 @@ export default function Dashboard() {
       이번주 운동 시간 통계
       최근 성과 및 기록 갱신
       운동 알림 및 팁
-      <ShowExercisePlan />
+      <ShowPlans />
+
       <div className="mx-auto h-24 w-full max-w-3xl rounded-xl bg-muted/50" />
       <div className="mx-auto h-[100vh] w-full max-w-3xl rounded-xl bg-muted/50" />
     </div>

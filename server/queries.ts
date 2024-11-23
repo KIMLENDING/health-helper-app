@@ -44,10 +44,27 @@ export const getExercisePlan = (userId?: string) => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
             return response.json();
         } : undefined,
         enabled: !!userId, // userId가 있을 때만 데이터를 가져옵니다.
-
     });
 }
+
+export const getSpecificExercisePlan = (planId: string) => {
+    return useQuery<ExercisePlan>({
+        queryKey: ["exercisePlan", planId], // 개별 데이터를 식별할 수 있는 queryKey
+        queryFn: async () => {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan/${planId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        },
+        enabled: !!planId, // planId가 있을 때만 데이터를 가져옵니다.
+    });
+};

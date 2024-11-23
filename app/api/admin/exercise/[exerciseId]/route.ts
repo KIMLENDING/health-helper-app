@@ -12,12 +12,12 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
     try {
         const exercise = await Exercise.findById(exerciseId);
         if (!exercise) {
-            return NextResponse.json({ message: "Exercise not found" }, { status: 404 });
+            return NextResponse.json({ message: "운동이 존재하지 않습니다." }, { status: 404 });
         }
         return NextResponse.json(exercise, { status: 200 });
     } catch (error) {
         console.error(error);
-        return NextResponse.json({ message: "Failed to get exercise" }, { status: 500 });
+        return NextResponse.json({ message: "데이터 로딩 실패" }, { status: 500 });
     }
 }
 
@@ -26,8 +26,6 @@ export const PATCH = async (request: NextRequest, { params }: { params: Promise<
 
     const exerciseId = (await params).exerciseId
     const { title, tags, url } = await request.json();
-    console.log(title, tags, url)
-    console.log(exerciseId)
 
     // 로그인한 사용자가 관리자인지 확인
     // 관리자가 아니면 권한 없음 응답
@@ -63,7 +61,7 @@ export const PATCH = async (request: NextRequest, { params }: { params: Promise<
         return NextResponse.json({ message: '데이터가 업데이트 성공' }, { status: 200 });// 업데이트된 운동 정보 반환
     } catch (error) {
         console.error(error);
-        return NextResponse.json({ message: "Failed to update exercise" }, { status: 500 });
+        return NextResponse.json({ message: "업데이트 실패" }, { status: 500 });
     }
 
 }
