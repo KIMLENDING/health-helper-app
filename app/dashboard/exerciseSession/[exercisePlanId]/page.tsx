@@ -8,12 +8,10 @@ import { Card } from '@/components/ui/card';
 import { ExerciseSession } from '@/utils/util';
 
 const Page = () => {
-    const { exercisePlanId } = useParams();
+    const { exercisePlanId } = useParams() as { exercisePlanId: string };
     const [activeTab, setActiveTab] = useState("list");
     const [cData, setCData] = useState<ExerciseSession | undefined>(undefined);
-    if (typeof exercisePlanId !== 'string') {
-        return <div>유효하지 않은 세션 ID</div>;
-    }
+
     const { data, error, isLoading } = getSpecificExercisePlan(exercisePlanId);
     useEffect(() => {
         if (data && !cData) {
