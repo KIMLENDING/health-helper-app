@@ -95,3 +95,15 @@ body {
     display: none; /* Chrome, Safari, Edge */
   }
 }
+
+@media (max-width: 320px) {
+  .max-smc\:truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .max-smc\:w-32 {
+    width: 8rem; /* 32 * 0.25rem */
+  }
+}

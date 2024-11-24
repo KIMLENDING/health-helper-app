@@ -1,4 +1,3 @@
-import { Weight } from "lucide-react";
 import mongoose from "mongoose";
 
 const { Schema } = mongoose;
@@ -18,6 +17,7 @@ const exerciseSessionSchema = new Schema(
         reps: { type: Number, required: true }, // 반복횟수 (수정가능) default는 초기에 plan에서 설정한 값
       },
     ],
+    state: { type: String, default: "pending" }, // pending, inProgress, done
   },
   { timestamps: true }
 );

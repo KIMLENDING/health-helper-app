@@ -54,3 +54,11 @@ export interface ExerciseOption {
     reps: number,
     rest: number
 }
+
+export interface ExerciseSession {
+    _id?: string,
+    userId: string,
+    exercisePlanId: string,
+    exercises: ExerciseOption[]
+    state: 'pending' | 'inProgress' | 'done'
+}
