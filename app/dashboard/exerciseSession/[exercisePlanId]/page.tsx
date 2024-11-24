@@ -20,7 +20,7 @@ const Page = () => {
             const newData = { userId: data.userId, exercisePlanId: data._id, exercises: data.exercises, state: 'pending' } as ExerciseSession;
             setCData(newData);
         }
-    }, [data])
+    }, [data, cData])
     if (isLoading) return <div>로딩중...</div>
     if (error) return <div>에러 발생</div>
 
