@@ -2,19 +2,19 @@
 import { getSpecificExercisePlan } from '@/server/queries';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useParams } from 'next/navigation'
-import React, { use, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ExercisePlan, ExerciseSession } from '@/utils/util';
+import { ExerciseSession } from '@/utils/util';
 
 const Page = () => {
     const { exercisePlanId } = useParams();
     const [activeTab, setActiveTab] = useState("list");
+    const [cData, setCData] = useState<ExerciseSession | undefined>(undefined);
     if (typeof exercisePlanId !== 'string') {
         return <div>유효하지 않은 세션 ID</div>;
     }
     const { data, error, isLoading } = getSpecificExercisePlan(exercisePlanId);
-    const [cData, setCData] = useState<ExerciseSession | undefined>(undefined);
     useEffect(() => {
         if (data && !cData) {
             const newData = { userId: data.userId, exercisePlanId: data._id, exercises: data.exercises, state: 'pending' } as ExerciseSession;
