@@ -161,7 +161,6 @@ export function SidebarLeft({
   }
     , [sessionStatus, session])
   React.useLayoutEffect(() => {
-    console.log('sessionData', sessionData)
     if (sessionData?.user?.role === "user" && setData(data))
       sessionData?.user?.role === "admin" && setData(AdminData)
   }

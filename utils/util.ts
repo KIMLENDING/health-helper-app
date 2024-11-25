@@ -44,6 +44,7 @@ export interface ExercisePlan {
     userId: string,
     title: string,
     exercises: ExerciseOption[]
+
 }
 
 export interface ExerciseOption {
@@ -54,11 +55,20 @@ export interface ExerciseOption {
     reps: number,
     rest: number
 }
+export interface ExerciseOptionSession {
+    _id?: string,
+    exerciseId: string,
+    title: string,
+    sets: number,
+    reps: number,
+    rest: number
+    state: string // pending, inProgress, done
+}
 
 export interface ExerciseSession {
     _id?: string,
     userId: string,
     exercisePlanId: string,
-    exercises: ExerciseOption[]
-    state: 'pending' | 'inProgress' | 'done'
+    exercises: ExerciseOptionSession[]
+    state: string //'pending' | 'inProgress' | 'done'
 }
