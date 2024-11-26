@@ -17,59 +17,81 @@ const Page = () => {
     const useStateChangeExerciseSessionMutation = useStateChangeExerciseSession(); // 선택한 운동 상태 변경 후 운동 시작 mutation
     const [sessionData, setSessionData] = useState<ExercisesessionData | undefined>(); // 세션 데이터
     const [currentExercise, setCurrentExercise] = useState<string | undefined>(); // 현재 진행중인 운동의 id
-
+    const [loading, setLoading] = useState(false); // mutation loading 상태
     const handleUpdate = async (exercise: ExerciseOptionSession) => {
         // 운동 선택시 상태 변경
         // 진행중인 운동이 있으면 다른 운동을 시작하지 못하게 막음
-        if (!exercise._id) return;
-        const hasInProgress = data?.exercises.some((exercise) => exercise.state === 'inProgress');
-        if (hasInProgress) {
+        try {
+            setLoading(true); // 로딩 시작
+            if (!exercise._id) return;
+            const hasInProgress = data?.exercises.some((exercise) => exercise.state === 'inProgress');
+            if (hasInProgress) {
+                toast({
+                    title: "이미 진행중인 운동이 있습니다.",
+                    description: "다른 운동을 진행하기 전에 현재 운동을 완료해주세요.",
+                });
+                return;
+            }
+            // 진행중인 운동이 없으면 선택한 운동을 시작
+            // 현재 세트를 가져와서 새로운 세트 생성 
+            const set = data?.exercises.find((Exercise) => Exercise._id === exercise._id)?.session.length || 0; //기본적으로 0이 나올 것임 처음 시작하는 운동이기 때문
+            const newSessionData = { set: set + 1, reps: 8, weight: 25 }
+            // 서버에 운동의 상태를 변경하고 첫 세션을 생성
+            const res = await useStateChangeExerciseSessionMutation.mutateAsync({ sessionId, exerciseId: exercise._id, state: 'inProgress', sessionData: newSessionData }); // 운동 시작
+            if (res) {
+                toast({
+                    title: `${exercise.title} 시작`,
+                    description: "1 세트 시작",
+                });
+                setActiveTab('inProgress');
+            }
+        } catch (error) {
+            console.error(error); // 에러 로깅
             toast({
-                title: "이미 진행중인 운동이 있습니다.",
-                description: "다른 운동을 진행하기 전에 현재 운동을 완료해주세요.",
+                title: "오류 발생",
+                description: "운동 상태를 업데이트하는 중 문제가 발생했습니다.",
             });
-            return;
-        }
-        // 진행중인 운동이 없으면 선택한 운동을 시작
-        // 현재 세트를 가져와서 새로운 세트 생성 
-        const set = data?.exercises.find((Exercise) => Exercise._id === exercise._id)?.session.length || 0; //기본적으로 0이 나올 것임 처음 시작하는 운동이기 때문
-        const newSessionData = { set: set + 1, reps: 8, weight: 25 }
-        // 서버에 운동의 상태를 변경하고 첫 세션을 생성
-        const res = await useStateChangeExerciseSessionMutation.mutateAsync({ sessionId, exerciseId: exercise._id, state: 'inProgress', sessionData: newSessionData }); // 운동 시작
-        if (res) {
-            toast({
-                title: `${exercise.title} 시작`,
-                description: "1 세트 시작",
-            });
-            setActiveTab('inProgress');
+        } finally {
+            setLoading(false); // 로딩 종료
         }
     }
 
     const handleSessionData = async (exercise: ExerciseOptionSession) => {
         // 세트 완료시 세션 데이터 업데이트
-        if (!sessionData) return;
-        if (sessionData?.set >= exercise.sets) {
-            // 마지막 세트일 경우 운동 완료
-            const res = await useStateChangeExerciseSessionMutation.mutateAsync({ sessionId, exerciseId: exercise._id!, state: 'done', });
-            if (res) {
-                toast({
-                    title: `${exercise.title} 완료 `,
-                });
-                setSessionData(undefined); // 세션 데이터 초기화
-                setCurrentExercise(undefined); // 현재 운동 초기화
-                setActiveTab('list');
-                return;
+        try {
+            setLoading(true); // 로딩 시작
+            if (!sessionData) return;
+            if (sessionData?.set >= exercise.sets) {
+                // 마지막 세트일 경우 운동 완료
+                const res = await useStateChangeExerciseSessionMutation.mutateAsync({ sessionId, exerciseId: exercise._id!, state: 'done', });
+                if (res) {
+                    toast({
+                        title: `${exercise.title} 완료 `,
+                    });
+                    setSessionData(undefined); // 세션 데이터 초기화
+                    setCurrentExercise(undefined); // 현재 운동 초기화
+                    setActiveTab('list');
+                    return;
+                }
             }
-        }
-        // 마지막 세트가 아닐 경우 다음 세트 생성
-        //sessionData를 직접 사용하지 않는 이유는 새로고침시 초기화 되기 때문
-        const set = data?.exercises.find((Exercise) => Exercise._id === exercise._id)?.session.length || 0;
-        const newSessionData = { set: set + 1, reps: 8, weight: 25 } // 새 세트 생성
-        setSessionData(newSessionData); // 상태 업데이트
-        // 새 세트 생성
-        const res = await useStateChangeExerciseSessionMutation.mutateAsync({ sessionId, exerciseId: exercise._id!, state: 'inProgress', sessionData: newSessionData });
-        if (res) {
-            toast({ title: `${newSessionData?.set} 세트 시작` });
+            // 마지막 세트가 아닐 경우 다음 세트 생성
+            //sessionData를 직접 사용하지 않는 이유는 새로고침시 초기화 되기 때문
+            const set = data?.exercises.find((Exercise) => Exercise._id === exercise._id)?.session.length || 0;
+            const newSessionData = { set: set + 1, reps: 8, weight: 25 } // 새 세트 생성
+            setSessionData(newSessionData); // 상태 업데이트
+            // 새 세트 생성
+            const res = await useStateChangeExerciseSessionMutation.mutateAsync({ sessionId, exerciseId: exercise._id!, state: 'inProgress', sessionData: newSessionData });
+            if (res) {
+                toast({ title: `${newSessionData?.set} 세트 시작` });
+            }
+        } catch (error) {
+            console.error(error); // 에러 로깅
+            toast({
+                title: "오류 발생",
+                description: "운동 상태를 업데이트하는 중 문제가 발생했습니다.",
+            });
+        } finally {
+            setLoading(false); // 로딩 종료
         }
     }
 
@@ -125,7 +147,7 @@ const Page = () => {
                                         variant="outline"
                                         disabled={exercise.state !== 'pending'}
                                     >
-                                        {exercise.state}
+                                        {loading ? <LoadingSpinner /> : exercise.state}
                                     </Button>
                                 </Card>
                             )
@@ -156,8 +178,8 @@ const Page = () => {
                                                     ? "opacity-50 cursor-not-allowed"
                                                     : ""
                                             }
-                                        >
-                                            세트 완료
+                                        > {loading ? <LoadingSpinner /> : ' 세트 완료'}
+
                                         </Button>
                                     </Card>
                                 ))}
