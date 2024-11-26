@@ -31,7 +31,7 @@ const Page = () => {
             return;
         }
         // 진행중인 운동이 없으면 선택한 운동을 시작
-        // 현재 세트를 가져와서 새로운 세트 생성
+        // 현재 세트를 가져와서 새로운 세트 생성 
         const set = data?.exercises.find((Exercise) => Exercise._id === exercise._id)?.session.length || 0; //기본적으로 0이 나올 것임 처음 시작하는 운동이기 때문
         const newSessionData = { set: set + 1, reps: 8, weight: 25 }
         // 서버에 운동의 상태를 변경하고 첫 세션을 생성
@@ -47,20 +47,22 @@ const Page = () => {
 
     const handleSessionData = async (exercise: ExerciseOptionSession) => {
         // 세트 완료시 세션 데이터 업데이트
-        if (sessionData?.set! >= exercise.sets) {
+        if (!sessionData) return;
+        if (sessionData?.set >= exercise.sets) {
             // 마지막 세트일 경우 운동 완료
             const res = await useStateChangeExerciseSessionMutation.mutateAsync({ sessionId, exerciseId: exercise._id!, state: 'done', });
             if (res) {
                 toast({
                     title: `${exercise.title} 완료 `,
                 });
-                setSessionData(undefined);
-                setCurrentExercise(undefined);
+                setSessionData(undefined); // 세션 데이터 초기화
+                setCurrentExercise(undefined); // 현재 운동 초기화
                 setActiveTab('list');
                 return;
             }
         }
         // 마지막 세트가 아닐 경우 다음 세트 생성
+        //sessionData를 직접 사용하지 않는 이유는 새로고침시 초기화 되기 때문
         const set = data?.exercises.find((Exercise) => Exercise._id === exercise._id)?.session.length || 0;
         const newSessionData = { set: set + 1, reps: 8, weight: 25 } // 새 세트 생성
         setSessionData(newSessionData); // 상태 업데이트
@@ -82,7 +84,8 @@ const Page = () => {
                 setCurrentExercise(undefined);
             }
         }
-    }, [data])
+    }, [data]) // 새로고침시 데이터가 바뀔때마다 실행
+
     useEffect(() => {
         // 초기 세션 데이터 설정
         if (data) {
@@ -90,7 +93,7 @@ const Page = () => {
             const newSessionData = { set: set, reps: 8, weight: 25 }
             setSessionData(newSessionData);
         }
-    }, [currentExercise])
+    }, [currentExercise, data])  // 새로고침시 데이터가 바뀔때마다 실행
 
     if (isLoading) return <div className='flex-1 flex items-center justify-center'><LoadingSpinner /></div>
     if (error) return <div>에러 발생</div>
