@@ -55,20 +55,34 @@ export interface ExerciseOption {
     reps: number,
     rest: number
 }
+
+export interface ExercisesessionData {
+    set: number,
+    reps: number,
+    weight: number,
+}
 export interface ExerciseOptionSession {
     _id?: string,
     exerciseId: string,
     title: string,
+    repTime?: number, // 마지막에 운동시간 저장
     sets: number,
-    reps: number,
-    rest: number
-    state: string // pending, inProgress, done
+    rest: number,
+    state: string, //'pending' | 'inProgress' | 'done'
+    session: ExercisesessionData[]
+
 }
 
 export interface ExerciseSession {
     _id?: string,
     userId: string,
     exercisePlanId: string,
-    exercises: ExerciseOptionSession[]
-    state: string //'pending' | 'inProgress' | 'done'
+    exercises: ExerciseOptionSession[],
+    state: string // 'inProgress' | 'done' 초기 상태는 inProgress 
+}
+
+export interface PostExerciseSession {
+    sessionId: string,
+    exerciseId: string,
+    sessionData: ExercisesessionData
 }

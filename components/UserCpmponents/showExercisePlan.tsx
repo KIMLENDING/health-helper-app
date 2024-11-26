@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { BicepsFlexed, DumbbellIcon, PencilIcon, RadicalIcon, SparklesIcon, Trash2Icon, VolleyballIcon } from 'lucide-react';
 import { Button } from '../ui/button';
 import Link from 'next/link';
+import LoadingSpinner from '../LayoutCompents/LoadingSpinner';
 
 const ShowExercisePlan = () => {
     const { data: sessions } = useSession();
@@ -21,7 +22,7 @@ const ShowExercisePlan = () => {
         { name: 'VolleyballIcon', icon: <VolleyballIcon /> },
     ]
 
-    if (isLoading) return <div>로딩중...</div>
+    if (isLoading) return <LoadingSpinner />
     return (
         <div className='mx-auto w-full max-w-3xl rounded-xl'>
             <CardTitle className='my-3 font-extrabold text-2xl'>

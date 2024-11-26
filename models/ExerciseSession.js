@@ -5,19 +5,24 @@ const exerciseSessionSchema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User" },
     exercisePlanId: { type: Schema.Types.ObjectId, ref: "ExercisePlan" },
-    date: {
-      type: Date,
-      default: Date.now,
-    },
     exercises: [
       {
         exerciseId: { type: Schema.Types.ObjectId, ref: "Exercise" },
-        repTime: { type: Number, required: true }, // 운동 시간
-        weight: { type: Number, required: true }, // 중량
-        reps: { type: Number, required: true }, // 반복횟수 (수정가능) default는 초기에 plan에서 설정한 값
+        title: { type: String, required: true }, // 운동명
+        repTime: { type: Number, required: false }, // 운동 시간
+        sets: { type: Number, required: true }, // 총 세트 수
+        rest: { type: Number, required: true }, // 휴식시간
+        state: { type: String, default: "pending" }, // pending, inProgress, done
+        session: [
+          {
+            set: { type: Number, required: true }, //현재 세트
+            reps: { type: Number, required: true }, // 반복횟수 (수정가능)필드
+            weight: { type: Number, required: true }, // 중량
+          },
+        ],
       },
     ],
-    state: { type: String, default: "pending" }, // pending, inProgress, done
+    state: { type: String, default: "inProgress" }, // inProgress, done
   },
   { timestamps: true }
 );

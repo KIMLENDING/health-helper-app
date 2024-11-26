@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { title } from "process";
 
 const { Schema } = mongoose;
 const exercisePlanSchema = new Schema(

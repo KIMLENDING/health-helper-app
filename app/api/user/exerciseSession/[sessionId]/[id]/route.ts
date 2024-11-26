@@ -1,0 +1,68 @@
+// 생성
+import ExerciseSession from "@/models/ExerciseSession"
+import connect from "@/utils/db"
+import { NextRequest, NextResponse } from "next/server"
+import { getServerSession } from "next-auth"
+import User from "@/models/User"
+
+/**
+ *  운동 시작시 상태를 변경하는 API
+ * @param request 
+ * @returns 
+ */
+export const POST = async (request: NextRequest) => {
+    const { sessionId, exerciseId, state, sessionData } = await request.json();
+    console.log(sessionId, exerciseId, state, sessionData);
+    const getSession = await getServerSession();
+    if (!getSession) {
+        // 로그인 안되어있으면 로그인 페이지로 이동
+        return NextResponse.redirect('http://localhost:3000/login');
+    }
+    await connect();
+
+    const user = await User.findOne({ email: getSession.user.email });
+    if (!user) {
+        return NextResponse.json({ message: 'User not found' }, { status: 404 });
+    }
+    try {
+        // 특정 exerciseId의 state 업데이트
+        if (state === 'inProgress') {
+            console.log('inProgress');
+            const updatedSession = await ExerciseSession.findOneAndUpdate(
+                { _id: sessionId, "exercises._id": exerciseId },// 조건
+                {
+                    $set: { 'exercises.$.state': state, },  // 업데이트할 필드
+                    $push: { 'exercises.$.session': sessionData }// 업데이트할 내용
+                },
+                { new: true } // 업데이트 후 새로운 문서를 반환
+            );//$ 연산자는 배열의 요소에 접근하기 위해 사용
+            console.log(updatedSession.exercises[0].session);
+            if (!updatedSession) {
+                return NextResponse.json(
+                    { error: "Exercise session or exercise not found" },
+                    { status: 404 }
+                );
+            }
+            return NextResponse.json({ updatedSession, message: '상태 변경(선택한 운동시작)' }, { status: 201 });
+        }
+        if (state === 'done') {
+            console.log('done');
+            const updatedSession = await ExerciseSession.findOneAndUpdate(
+                { _id: sessionId, "exercises._id": exerciseId },// 조건
+                {
+                    $set: { 'exercises.$.state': state, },  // 업데이트할 필드
+                },
+                { new: true } // 업데이트 후 새로운 문서를 반환
+            );
+            if (!updatedSession) {
+                return NextResponse.json(
+                    { error: "Exercise session or exercise not found" },
+                    { status: 404 }
+                );
+            }
+            return NextResponse.json({ updatedSession, message: '상태 변경(선택한 운동완료)' }, { status: 201 });
+        }
+    } catch (err: any) {
+        return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
+    }
+}
