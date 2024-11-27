@@ -11,8 +11,8 @@ import User from "@/models/User"
  * @returns 
  */
 export const POST = async (request: NextRequest) => {
-    const { sessionId, exerciseId, state, sessionData } = await request.json();
-    console.log(sessionId, exerciseId, state, sessionData);
+    const { sessionId, exerciseId, state, sessionData, repTime } = await request.json();
+    console.log(sessionId, exerciseId, state, sessionData, repTime);
     const getSession = await getServerSession();
     if (!getSession) {
         // 로그인 안되어있으면 로그인 페이지로 이동
@@ -50,7 +50,7 @@ export const POST = async (request: NextRequest) => {
             const updatedSession = await ExerciseSession.findOneAndUpdate(
                 { _id: sessionId, "exercises._id": exerciseId },// 조건
                 {
-                    $set: { 'exercises.$.state': state, },  // 업데이트할 필드
+                    $set: { 'exercises.$.state': state, 'exercises.$.repTime': repTime },  // 업데이트할 필드
                 },
                 { new: true } // 업데이트 후 새로운 문서를 반환
             );

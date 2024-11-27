@@ -26,7 +26,7 @@ const Page = () => {
     const [sessionData, setSessionData] = useState<ExercisesessionData | undefined>(); // 세션 데이터
     const [currentExercise, setCurrentExercise] = useState<string | undefined>(); // 현재 진행중인 운동의 id
     const [loading, setLoading] = useState(false); // mutation loading 상태
-    const { formattedTime, isRunning, toggleRunning, reset } = useStopwatch(); // 타이머
+    const { time, formattedTime, isRunning, toggleRunning, reset } = useStopwatch(); // 타이머
     const [showCountdown, setShowCountdown] = useState(false);// 운동 시작 전 카운트 다운
     const [restTime, setRestTime] = useState(60); // 기본 휴식 시간
 
@@ -79,7 +79,7 @@ const Page = () => {
             if (!sessionData) return;
             if (sessionData?.set >= exercise.sets) {
                 // 마지막 세트일 경우 운동 완료
-                const res = await useStateChangeExerciseSessionMutation.mutateAsync({ sessionId, exerciseId: exercise._id!, state: 'done', });
+                const res = await useStateChangeExerciseSessionMutation.mutateAsync({ sessionId, exerciseId: exercise._id!, state: 'done', repTime: time });
                 if (res) {
                     toast({
                         title: `${exercise.title} 완료 `,
