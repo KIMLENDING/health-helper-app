@@ -4,11 +4,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button';
-import { Card, CardDescription, } from '@/components/ui/card';
+import { Card, CardDescription, CardTitle, } from '@/components/ui/card';
 import { ExerciseOptionSession, ExercisesessionData } from '@/utils/util';
 import { toast } from '@/hooks/use-toast';
 import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner';
 import { useStateChangeExerciseSession } from '@/server/mutations';
+import { useStopwatch } from '@/hooks/use-stopwatch';
+import CountdownOverlay from '@/components/LayoutCompents/CountdownOverlay';
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card"
+
 
 const Page = () => {
     const { sessionId } = useParams() as { sessionId: string };
@@ -18,6 +26,10 @@ const Page = () => {
     const [sessionData, setSessionData] = useState<ExercisesessionData | undefined>(); // 세션 데이터
     const [currentExercise, setCurrentExercise] = useState<string | undefined>(); // 현재 진행중인 운동의 id
     const [loading, setLoading] = useState(false); // mutation loading 상태
+    const { formattedTime, isRunning, toggleRunning, reset } = useStopwatch(); // 타이머
+    const [showCountdown, setShowCountdown] = useState(false);// 운동 시작 전 카운트 다운
+    const [restTime, setRestTime] = useState(60); // 기본 휴식 시간
+
     const handleUpdate = async (exercise: ExerciseOptionSession) => {
         // 운동 선택시 상태 변경
         // 진행중인 운동이 있으면 다른 운동을 시작하지 못하게 막음
@@ -27,6 +39,7 @@ const Page = () => {
             const hasInProgress = data?.exercises.some((exercise) => exercise.state === 'inProgress');
             if (hasInProgress) {
                 toast({
+                    variant: 'destructive',
                     title: "이미 진행중인 운동이 있습니다.",
                     description: "다른 운동을 진행하기 전에 현재 운동을 완료해주세요.",
                 });
@@ -38,12 +51,15 @@ const Page = () => {
             const newSessionData = { set: set + 1, reps: 8, weight: 25 }
             // 서버에 운동의 상태를 변경하고 첫 세션을 생성
             const res = await useStateChangeExerciseSessionMutation.mutateAsync({ sessionId, exerciseId: exercise._id, state: 'inProgress', sessionData: newSessionData }); // 운동 시작
+            const defaultRestTime = data?.exercises.find((Exercise) => Exercise._id === exercise._id)?.rest || 60;
+            setRestTime(defaultRestTime); // 기본 휴식 시간 설정
             if (res) {
                 toast({
-                    title: `${exercise.title} 시작`,
+                    title: `${exercise.title}이(가) 3초 후에 운동이 시작 됩니다. `,
                     description: "1 세트 시작",
                 });
                 setActiveTab('inProgress');
+                setShowCountdown(true); // 카운트 다운 시작 -> <CountdownOverlay /> 컴포넌트 실행 후 handleCountdownComplete가 실행됨 그럼 toggleRunning이 실행됨
             }
         } catch (error) {
             console.error(error); // 에러 로깅
@@ -68,6 +84,8 @@ const Page = () => {
                     toast({
                         title: `${exercise.title} 완료 `,
                     });
+                    toggleRunning(); // 타이머 종료
+                    reset(); // 타이머 초기화
                     setSessionData(undefined); // 세션 데이터 초기화
                     setCurrentExercise(undefined); // 현재 운동 초기화
                     setActiveTab('list');
@@ -95,6 +113,11 @@ const Page = () => {
         }
     }
 
+    const handleCountdownComplete = () => { // 카운트 다운이 끝나면 실행
+        setShowCountdown(false);
+        toggleRunning(); // 타이머 시작
+    };
+
 
     useEffect(() => {
         if (data) {
@@ -117,11 +140,16 @@ const Page = () => {
         }
     }, [currentExercise, data])  // 새로고침시 데이터가 바뀔때마다 실행
 
+
+
     if (isLoading) return <div className='flex-1 flex items-center justify-center'><LoadingSpinner /></div>
     if (error) return <div>에러 발생</div>
 
     return (
-        <div className='mx-auto w-full max-w-3xl rounded-xl p-4'>
+        <div className='mx-auto w-full h-full   flex-1 max-w-3xl rounded-xl p-4'>
+            {showCountdown && (
+                <CountdownOverlay onComplete={handleCountdownComplete} />
+            )}
             <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <TabsList className="w-full mb-4">
                     <TabsTrigger value="list" className="flex-1">
@@ -155,74 +183,76 @@ const Page = () => {
                     </div>
                 </TabsContent>
 
-                <TabsContent value="inProgress">
+                <TabsContent value="inProgress" className="space-y-2">
                     <div className="space-y-2">
                         {data?.exercises.map((exercise) => (
                             exercise._id === currentExercise && exercise.state === 'inProgress' &&
-                            <Card key={exercise._id} className="p-4 flex  flex-col gap-2">
-                                <div className='flex flex-col'>
+                            <Card key={exercise._id} className="p-4 flex  flex-col gap-2 ">
+                                <div className='flex flex-col pb-4'>
                                     <span className={` max-smc:truncate max-smc:w-32`}>{exercise.title}</span>
-                                    <CardDescription className={` max-smc:truncate max-smc:w-32`}> 총 {exercise.sets}세트, 세트 당 휴식시간: {exercise.rest}초</CardDescription>
+                                    <CardDescription className={`max-smc:truncate max-smc:w-32`}> 총 {exercise.sets}세트, 세트 당 휴식시간: {exercise.rest}초</CardDescription>
                                 </div>
-                                {exercise.session.map((session, index) => (
-                                    <Card key={session.set} className='flex justify-between items-center p-2 text-nowrap'>
-                                        <span >{session.set}세트</span>
-                                        <span>{session.reps}회</span>
-                                        <span>{session.weight}kg</span>
-                                        <Button
-                                            variant="outline"
-                                            disabled={index !== exercise.session.length - 1}
-                                            onClick={() => handleSessionData(exercise)}
-                                            className={
-                                                index !== exercise.session.length - 1
-                                                    ? "opacity-50 cursor-not-allowed"
-                                                    : ""
-                                            }
-                                        > {loading ? <LoadingSpinner /> : ' 세트 완료'}
 
-                                        </Button>
-                                    </Card>
-                                ))}
-
+                                <div className='flex  flex-col gap-2 h-[40vh] overflow-y-scroll'>
+                                    {exercise.session.map((session, index) => (
+                                        <Card key={session.set} className='flex justify-between items-center p-2 text-nowrap'>
+                                            <span >{session.set}세트</span>
+                                            <span>{session.reps}회</span>
+                                            <span>{session.weight}kg</span>
+                                            <Button
+                                                variant="outline"
+                                                disabled={index !== exercise.session.length - 1 || loading || !isRunning}
+                                                onClick={() => handleSessionData(exercise)}
+                                                className={
+                                                    index !== exercise.session.length - 1
+                                                        ? "opacity-50 cursor-not-allowed"
+                                                        : ""
+                                                }
+                                            > {loading ? <LoadingSpinner /> : index !== exercise.session.length - 1 ? '완료' : exercise.session.length - 1 === 0 ? (!isRunning ? '계속' : '운동 중') : (!isRunning ? '계속' : '운동 중')}
+                                            </Button>
+                                        </Card>
+                                    ))}
+                                </div>
                             </Card>
                         ))}
                     </div>
+
+                    <div className="text-center space-y-2 ">
+                        <Card className="text-2xl py-3 space-y-2 flex  flex-col">
+                            <CardDescription>
+                                <HoverCard>
+                                    <HoverCardTrigger asChild>
+                                        <Button variant="link">시간</Button>
+                                    </HoverCardTrigger>
+                                    <HoverCardContent>
+                                        휴식시간과 운동시간을 합산한 시간입니다.
+                                    </HoverCardContent>
+                                </HoverCard>
+                            </CardDescription>
+
+                            <CardTitle>{formattedTime}</CardTitle>
+                        </Card>
+                        <Card className="p-4 space-x-2 flex">
+                            <Button
+                                onClick={toggleRunning}
+                                disabled={!currentExercise}
+                                className={`${isRunning ? 'bg-red-600 hover:bg-red-600/80' : 'bg-green-500'} flex-1`}
+                            >
+                                {isRunning ? '일시정지' : '계속'}
+                            </Button>
+                            {/* <Button
+                                onClick={reset}
+                                disabled={!currentExercise}
+                                className="flex-1"
+                            >
+                                초기화
+                            </Button> */}
+                        </Card>
+                    </div>
                 </TabsContent>
             </Tabs>
-
-
         </div>
     )
 }
 
 export default Page
-
-// {
-//     "_id": "6745e3b13420bee28797a39b",
-//     "userId": "67345ef1455c5969e9cd4001",
-//     "exercisePlanId": "6737ce6afe6dba3f09bc2504",
-//     "exercises": [
-//         {
-//             "exerciseId": "672fc04c5052576f4db1b64a",
-//             "title": "운동",
-//             "sets": 4,
-//             "rest": 60,
-//             "state": "pending",
-//             "_id": "6745e3b13420bee28797a39c",
-//             "session": []
-//         },
-//         {
-//             "exerciseId": "672fc1d35052576f4db1b64e",
-//             "title": "밴치 프레스",
-//             "sets": 4,
-//             "rest": 60,
-//             "state": "pending",
-//             "_id": "6745e3b13420bee28797a39d",
-//             "session": []
-//         },
-//     ],
-//     "state": "pending",
-//     "createdAt": "2024-11-26T15:05:21.328Z",
-//     "updatedAt": "2024-11-26T15:05:21.328Z",
-//     "__v": 0
-// }

@@ -33,7 +33,7 @@ export const POST = async (request: NextRequest) => {
 
     try {
         await newExerciseSession.save();
-        return NextResponse.json({ newExerciseSession, message: '플랜 추가 성공' }, { status: 201 });
+        return NextResponse.json({ newExerciseSession, message: '세션 생성' }, { status: 201 });
     } catch (err: any) {
         return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
     }

@@ -9,14 +9,17 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb"
+import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { ArrowBigLeft, ChevronLeft, ChevronRight } from "lucide-react"
 
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { useState } from "react"
 
 const routers = [
   {
@@ -44,9 +47,17 @@ const routers = [
     name: "사용자 관리"
   },
   {
+    url: "/dashboard/exercisePlans",
+    name: "플랜 목록"
+  },
+  {
     url: "/dashboard/admin/setting",
     name: "설정"
   },
+  {
+    url: "/dashboard/exerciseSession",
+    name: "운동 세션"
+  }
 ]
 export default function DachboardLayout({
   children,
@@ -54,27 +65,47 @@ export default function DachboardLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  const router = useRouter();
+  const sortedRouters = [...routers].sort((a, b) => b.url.length - a.url.length);
+
+  const goForward = () => {
+    window.history.forward();
+  };
+  const getRouteName = () => {
+    return sortedRouters.find(route => pathname.startsWith(route.url))?.name || "Page";
+  }
 
   return (
     <SidebarProvider>
       <SidebarLeft />
       <SidebarInset>
         <header className="sticky top-0 flex h-14 shrink-0 items-center gap-2 bg-background z-50 shadow-md">
-          <div className="flex flex-1 items-center gap-2 px-3">
-            <SidebarTrigger />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <ModeToggle />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbPage className="line-clamp-1">
-                    {pathname === "/" ? "Home" : routers.find(route => route.url === pathname)?.name || "Page"}
+          <div className="flex flex-1 items-center gap-2 px-3 justify-between">
 
-                  </BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+            <div className="flex  items-center gap-2 px-3">
+              <SidebarTrigger />
+              <Separator orientation="vertical" className=" h-4" />
+              <ModeToggle />
+            </div>
+            <div className="flex items-center gap-2 px-3">
+              <Button onClick={() => router.back()} variant="outline" size="icon" className="shadow-none ring-0 border-0 focus-visible:ring-0 w-7 h-7">
+                <ChevronLeft className="h-[1.2rem] w-[1.2rem]" />
+              </Button>
+              <Separator orientation="vertical" className=" h-4" />
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbPage className="line-clamp-1">
+                      {getRouteName()}
+                    </BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+              <Separator orientation="vertical" className=" h-4" />
+              <Button onClick={goForward} variant="outline" size="icon" className="shadow-none ring-0 border-0 focus-visible:ring-0 w-7 h-7">
+                <ChevronRight className="h-[1.2rem] w-[1.2rem]" />
+              </Button>
+            </div>
           </div>
         </header>
         {children}

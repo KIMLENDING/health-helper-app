@@ -34,7 +34,7 @@ export const addExercise = () => {
                 toast({ variant: 'destructive', title: `${error}` });
                 console.log('error', error);
             } else {
-                console.log('data', data);
+                // console.log('data', data);
                 toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exercises"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
@@ -72,7 +72,7 @@ export const useDeleteExercise = () => {
                 toast({ variant: 'destructive', title: `${error}` });
                 console.log('error', error);
             } else {
-                console.log('data', data);
+                // console.log('data', data);
                 toast({ variant: 'destructive', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exercises"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
@@ -112,7 +112,7 @@ export const useCreatePlan = () => {
                 toast({ variant: 'destructive', title: `${error}` });
                 console.log('error', error);
             } else {
-                console.log('data', data);
+                // console.log('data', data);
                 toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
@@ -143,7 +143,7 @@ export const useSelectedExercise = () => {
             if (error) {
                 console.log('error', error);
             } else {
-                console.log('data', data);
+                // console.log('data', data);
                 toast({ variant: "default2", title: "운동이 임시 테이블에 추가 되었습니다." })
                 await queryClient.invalidateQueries({ queryKey: ["selectedExercise"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
@@ -183,7 +183,7 @@ export const useUpdatePlan = () => {
                 toast({ variant: 'destructive', title: `${error}` });
                 console.log('error', error);
             } else {
-                console.log('data', data);
+                // console.log('data', data);
                 toast({ variant: 'destructive', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
@@ -265,8 +265,8 @@ export const useCreateExerciseSession = () => {
                 toast({ variant: 'destructive', title: `${error}` });
                 console.log('error', error);
             } else {
-                console.log('data', data);
-                toast({ variant: 'default2', title: `${data.message}` });
+                // console.log('data', data);
+                // toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.newExerciseSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
@@ -306,8 +306,8 @@ export const useStateChangeExerciseSession = () => {
                 toast({ variant: 'destructive', title: `${error}` });
                 console.log('error', error);
             } else {
-                console.log('data', data);
-                toast({ variant: 'default2', title: `${data.message}` });
+                // console.log('data', data);
+                // toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.updatedSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }

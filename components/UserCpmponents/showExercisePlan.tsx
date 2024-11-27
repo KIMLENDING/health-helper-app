@@ -7,7 +7,6 @@ import ExercisesWithPagination from './exercisesWithPagination';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { BicepsFlexed, DumbbellIcon, PencilIcon, RadicalIcon, SparklesIcon, Trash2Icon, VolleyballIcon } from 'lucide-react';
 import { Button } from '../ui/button';
-import Link from 'next/link';
 import LoadingSpinner from '../LayoutCompents/LoadingSpinner';
 
 const ShowExercisePlan = () => {
@@ -26,12 +25,10 @@ const ShowExercisePlan = () => {
     return (
         <div className='mx-auto w-full max-w-3xl rounded-xl'>
             <CardTitle className='my-3 font-extrabold text-2xl'>
-                <Link href={'/dashboard/exercisePlans'}>
-                    플랜 목록
-                </Link>
+                플랜 목록
             </CardTitle>
             {data ?
-                <div className='grid gap-2 grid-cols-4 max-md:grid-cols-3 max-sm:grid-cols-2 rounded-xl bg-muted/50 p-2'>{
+                <div className='flex flex-col gap-3 rounded-xl bg-muted/50 p-2 max-h-[70vh] overflow-scroll'>{
                     data.map((plan) => {
                         const randomIndex = Math.floor(Math.random() * Icons.length);
                         const randomIcon = Icons[randomIndex]?.icon;

@@ -43,7 +43,7 @@ export const POST = async (request: NextRequest) => {
                     { status: 404 }
                 );
             }
-            return NextResponse.json({ updatedSession, message: '상태 변경(선택한 운동시작)' }, { status: 201 });
+            return NextResponse.json({ updatedSession, message: '세트 시작' }, { status: 201 });
         }
         if (state === 'done') {
             console.log('done');
@@ -60,7 +60,7 @@ export const POST = async (request: NextRequest) => {
                     { status: 404 }
                 );
             }
-            return NextResponse.json({ updatedSession, message: '상태 변경(선택한 운동완료)' }, { status: 201 });
+            return NextResponse.json({ updatedSession, message: '운동 완료' }, { status: 201 });
         }
     } catch (err: any) {
         return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
