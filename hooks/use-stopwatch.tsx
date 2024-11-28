@@ -1,3 +1,4 @@
+'use client'
 import { useState, useEffect } from 'react';
 
 export const useStopwatch = () => {
@@ -14,7 +15,6 @@ export const useStopwatch = () => {
 
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null;
-
         if (isRunning) {
             interval = setInterval(() => {
                 setTime(prevTime => {
@@ -25,15 +25,17 @@ export const useStopwatch = () => {
             }, 1000);
         }
 
-        return () => {
+        return () => { // 컴포넌트 언마운트 시 clearInterval
             if (interval) clearInterval(interval);
         };
     }, [isRunning]);
+
 
     useEffect(() => {
         // 실행 상태 변경 시 로컬 스토리지에 저장
         localStorage.setItem('stopwatch_running', isRunning.toString());
     }, [isRunning]);
+
 
     const formatTime = (totalSeconds: number) => {
         const minutes = Math.floor(totalSeconds / 60);
