@@ -73,6 +73,10 @@ const Page = () => {
                     title: `${exercise.title}이(가) 3초 후에 운동이 시작 됩니다. `,
                     description: "1 세트 시작",
                 });
+                localStorage.removeItem('rest_time'); // 로컬 스토리지 초기화
+                localStorage.removeItem('isResting'); // 로컬 스토리지 초기화
+                localStorage.removeItem('stopwatch_time'); // 로컬 스토리지 초기화
+                localStorage.removeItem('stopwatch_running'); // 로컬 스토리지 초기화
                 setActiveTab('inProgress');
                 setShowCountdown(true); // 카운트 다운 시작 -> <CountdownOverlay /> 컴포넌트 실행 후 handleCountdownComplete가 실행됨 그럼 toggleRunning이 실행됨
             }
@@ -162,7 +166,7 @@ const Page = () => {
             setLoading(false); // 로딩 종료
         }
     }
-    console.log(data?.exercises.find((Exercise) => Exercise._id === currentExercise)?.session.length)
+
     const handleCountdownComplete = () => { // 카운트 다운이 끝나면 실행
         setShowCountdown(false);
         toggleRunning(); // 타이머 시작
