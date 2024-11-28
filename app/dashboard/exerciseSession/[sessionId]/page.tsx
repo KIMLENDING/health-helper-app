@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/hover-card"
 import { DrawerDialogDone } from '@/components/LayoutCompents/ResponsiceDialog2';
 import { Progress } from '@/components/ui/progress';
+import { set } from 'mongoose';
 
 const Page = () => {
     const { sessionId } = useParams() as { sessionId: string };
@@ -99,6 +100,11 @@ const Page = () => {
                 });
                 toggleRunning(); // 타이머 종료
                 reset(); // 타이머 초기화
+                setRestTime(0); // 휴식 종료
+                setIsResting(false); // 휴식 상태 종료
+                localStorage.removeItem('rest_time'); // 로컬 스토리지 초기화
+                localStorage.removeItem('isResting'); // 로컬 스토리지 초기화
+
                 setSessionData(undefined); // 세션 데이터 초기화
                 setCurrentExercise(undefined); // 현재 운동 초기화
                 setActiveTab('list');
@@ -156,7 +162,7 @@ const Page = () => {
             setLoading(false); // 로딩 종료
         }
     }
-
+    console.log(data?.exercises.find((Exercise) => Exercise._id === currentExercise)?.session.length)
     const handleCountdownComplete = () => { // 카운트 다운이 끝나면 실행
         setShowCountdown(false);
         toggleRunning(); // 타이머 시작
@@ -245,7 +251,12 @@ const Page = () => {
                 clearInterval(timerRef.current);
                 timerRef.current = null;
             }
-            handleSessionData(data?.exercises.find((exercise) => exercise._id === currentExercise)!);
+            if (!isResting) { // 이렇게 해야 restTime이 0이 되었을때 한번만 실행됨
+                // 왜냐면 인터벌로 1에서 0으로 만들면 if문을 통과해서 한번 실행하고 0이 되었으니까 Effect가 다시 실행되서 한번 더 실행됨
+                const fetchedData = data?.exercises.find((exercise) => exercise._id === currentExercise);
+                if (fetchedData)
+                    handleSessionData(fetchedData);
+            }
             setIsResting(false);
             localStorage.removeItem('rest_time');
             localStorage.removeItem('isResting');
@@ -278,7 +289,7 @@ const Page = () => {
         return () => {
             cancelAnimationFrame(animationFrame);
         };
-    }, [progress])
+    }, [progress, currentExercise])
 
     useEffect(() => {
         // isResting 상태 변경 시 로컬 스토리지에 저장
