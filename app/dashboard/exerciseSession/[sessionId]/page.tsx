@@ -21,6 +21,7 @@ import CountdownOverlay from '@/components/LayoutCompents/CountdownOverlay';
 import { DrawerDialogDone } from '@/components/LayoutCompents/ResponsiceDialog2';
 
 import { useStopwatch } from '@/hooks/use-stopwatch';
+import { useRestTime } from '@/hooks/use-restTime';
 
 const Page = () => {
     const { sessionId } = useParams() as { sessionId: string };
@@ -32,23 +33,11 @@ const Page = () => {
     const [loading, setLoading] = useState(false); // mutation loading 상태
     const { time, formattedTime, isRunning, toggleRunning, reset } = useStopwatch(); // 타이머
     const [showCountdown, setShowCountdown] = useState(false);// 운동 시작 전 카운트 다운
-
-    const [progress, setProgress] = useState<number>(0); // 진행률
-    const [restTime, setRestTime] = useState<number>(() => {
-        // 초기 값으로 로컬 스토리지에서 시간 복원
-        const savedTime = localStorage.getItem('rest_time');
-        return savedTime ? parseInt(savedTime, 10) : 0;
-    }); // 기본 휴식 시간
-    const [isResting, setIsResting] = useState(() => {
-        // 초기 값으로 로컬 스토리지에서 실행 상태 복원
-        const savedRunningState = localStorage.getItem('isResting');
-        return savedRunningState === 'true';
-    }); // 휴식 상태 관리
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const [defaultRestTime, setDefaultRestTime] = useState<number>(5); // 기본 휴식 시간
+    const { progress, restTime, isResting, setRestTime, setIsResting, handleSkipRest, handleStartRest } = useRestTime({ isRunning, currentExercise, defaultRestTime }); // 휴식 시간
 
 
-
-    const handleUpdate = async (exercise: ExerciseOptionSession) => {
+    const handleExerciseStart = async (exercise: ExerciseOptionSession) => {
         // 운동 선택시 상태 변경
         // 진행중인 운동이 있으면 다른 운동을 시작하지 못하게 막음
         try {
@@ -79,7 +68,8 @@ const Page = () => {
                 localStorage.removeItem('isResting'); // 로컬 스토리지 초기화
                 localStorage.removeItem('stopwatch_time'); // 로컬 스토리지 초기화
                 localStorage.removeItem('stopwatch_running'); // 로컬 스토리지 초기화
-                setActiveTab('inProgress');
+                setActiveTab('inProgress'); // 탭 변경
+                reset(); // 타이머 초기화
                 setShowCountdown(true); // 카운트 다운 시작 -> <CountdownOverlay /> 컴포넌트 실행 후 handleCountdownComplete가 실행됨 그럼 toggleRunning이 실행됨
             }
         } catch (error) {
@@ -128,7 +118,6 @@ const Page = () => {
     }
 
     const handleSessionData = async (exercise: ExerciseOptionSession) => {
-
         // 세트 완료시 세션 데이터 업데이트
         try {
             setLoading(true); // 로딩 시작
@@ -170,33 +159,11 @@ const Page = () => {
     }
 
     const handleCountdownComplete = () => { // 카운트 다운이 끝나면 실행
+        console.log('카운트 다운 완료');
         setShowCountdown(false);
         toggleRunning(); // 타이머 시작
     };
 
-    const handleSkipRest = () => {
-        //isRunning이 false이면 스킵 버튼 비활성화 
-        if (!isRunning) return;
-        if (timerRef.current) {
-            clearInterval(timerRef.current);
-            timerRef.current = null;
-        }
-        setRestTime(0); // 즉시 휴식 종료
-        setIsResting(false);
-        localStorage.removeItem('rest_time');
-        localStorage.removeItem('isResting');
-    };
-
-    const handleStartRest = () => {
-        // 휴식 시작
-        if (!isRunning) return;
-        setIsResting(true);
-        if (timerRef.current) {
-            clearInterval(timerRef.current);
-            timerRef.current = null;
-        }
-        toast({ title: "휴식시간!!", });
-    }
 
     useEffect(() => {
         if (data) {
@@ -212,6 +179,7 @@ const Page = () => {
 
     useEffect(() => {
         // 초기 세션 데이터 설정
+        // 현재 운동이 바뀔때마다 세션 데이터를 설정 + 휴식 시간 설정
         if (data) {
             const set = data?.exercises.find((exercise) => exercise._id === currentExercise)?.session.length || 0;
             const newSessionData = { set: set, reps: 8, weight: 25 }
@@ -220,89 +188,22 @@ const Page = () => {
                 const savedTime = localStorage.getItem('rest_time');
                 setRestTime(savedTime ? parseInt(savedTime, 10) : 0);
             } else {
-                const defaultRestTime = data?.exercises.find((Exercise) => Exercise._id === currentExercise)?.rest || 60;
-                setRestTime(defaultRestTime); // 기본 휴식 시간 설정
+                const defaultRest = data?.exercises.find((Exercise) => Exercise._id === currentExercise)?.rest || 60;
+                setRestTime(defaultRest); // 기본 휴식 시간 설정
+                setDefaultRestTime(defaultRest); // 기본 휴식 시간 설정
             }
-
             setSessionData(newSessionData);
         }
     }, [currentExercise, data])  // 새로고침시 데이터가 바뀔때마다 실행
 
-
     useEffect(() => {
-        if (isRunning) {
-            // 타이머 실행
-            if (isResting && restTime > 0 && !timerRef.current) {
-                timerRef.current = setInterval(() => {
-
-                    setRestTime((prev) => {
-                        const updatedTime = Math.max(prev - 1, 0);
-                        localStorage.setItem('rest_time', updatedTime.toString()); // 시간 저장
-                        return updatedTime;
-                    });
-                }, 1000);
-            }
-        } else {
-            // 타이머 중지
-            if (timerRef.current) {
-                clearInterval(timerRef.current);
-                timerRef.current = null;
-            }
+        // 휴식 종료시 새로운 세트 생성을 위한 서버에 데이터 전송
+        if (!isResting && restTime === -999) {
+            const fetchedData = data?.exercises.find((exercise) => exercise._id === currentExercise);
+            if (fetchedData) handleSessionData(fetchedData);
         }
-        const defaultRestTime = data?.exercises.find((Exercise) => Exercise._id === currentExercise)?.rest || 60;
-        setProgress(Math.min((restTime / defaultRestTime) * 100, 100));
-        // 타이머 종료 시 정리
-        if (restTime === 0) {
-            if (timerRef.current) {
-                clearInterval(timerRef.current);
-                timerRef.current = null;
-            }
-            if (!isResting) { // 이렇게 해야 restTime이 0이 되었을때 한번만 실행됨
-                // 왜냐면 인터벌로 1에서 0으로 만들면 if문을 통과해서 한번 실행하고 0이 되었으니까 Effect가 다시 실행되서 한번 더 실행됨
-                const fetchedData = data?.exercises.find((exercise) => exercise._id === currentExercise);
-                if (fetchedData)
-                    handleSessionData(fetchedData);
-            }
-            setIsResting(false);
-            localStorage.removeItem('rest_time');
-            localStorage.removeItem('isResting');
-        }
+    }, [isResting, restTime])
 
-        return () => {
-            if (timerRef.current) {
-                clearInterval(timerRef.current);
-                timerRef.current = null;
-            }
-        };
-    }, [isRunning, restTime, isResting]);
-
-
-
-    useEffect(() => {
-        const defaultRestTime = data?.exercises.find((Exercise) => Exercise._id === currentExercise)?.rest || 60;
-        const calculateProgress = () => {
-            const newProgress = Math.min((restTime / defaultRestTime) * 100, 100);
-            setProgress(prevProgress => {
-                // 부드러운 전환을 위해 점진적 변화 적용
-                const smoothedProgress = prevProgress + (newProgress - prevProgress) * 0.3;
-                return Math.round(smoothedProgress);
-            });
-        };
-
-        // 애니메이션 프레임을 사용한 부드러운 업데이트
-        const animationFrame = requestAnimationFrame(calculateProgress);
-
-        return () => {
-            cancelAnimationFrame(animationFrame);
-        };
-    }, [progress, currentExercise])
-
-    useEffect(() => {
-        // isResting 상태 변경 시 로컬 스토리지에 저장
-        if (isResting) { // 휴식 중일때만 저장
-            localStorage.setItem('isResting', isResting.toString());
-        }
-    }, [isResting]);
 
     if (isLoading) return <div className='flex-1 flex items-center justify-center'><LoadingSpinner /></div>
     if (error) return <div>에러 발생</div>
@@ -333,7 +234,7 @@ const Page = () => {
                                     </div>
 
                                     <Button
-                                        onClick={() => handleUpdate(exercise!)}
+                                        onClick={() => handleExerciseStart(exercise!)}
                                         variant="outline"
                                         disabled={exercise.state !== 'pending'}
                                     >
