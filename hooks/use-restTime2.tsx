@@ -13,18 +13,23 @@ export const useRestTime = ({
     defaultRestTime,
 }: RestTimeHook) => {
     const [progress, setProgress] = useState<number>(0); // 진행률
-    const [restTime, setRestTime] = useState<number>(() => {
-        // 초기 값으로 로컬 스토리지에서 시간 복원
-        const savedTime = localStorage.getItem('rest_time');
-        return savedTime ? parseInt(savedTime, 10) : 0;
-    }); // 기본 휴식 시간
-    const [isResting, setIsResting] = useState(() => {
-        // 초기 값으로 로컬 스토리지에서 실행 상태 복원
-        const savedRunningState = localStorage.getItem('isResting');
-        return savedRunningState === 'true';
-    }); // 휴식 상태 관리
+    const [restTime, setRestTime] = useState<number>(60); // 기본 휴식 시간
+    const [isResting, setIsResting] = useState(false); // 휴식 상태 관리
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+    useEffect(() => {
+        // 초기 값으로 로컬 스토리지에서 시간 복원
+        const savedTime = localStorage.getItem('rest_time');
+        if (savedTime) {
+            setRestTime(parseInt(savedTime, 10));
+        }
+
+        // 초기 값으로 로컬 스토리지에서 실행 상태 복원
+        const savedRunningState = localStorage.getItem('isResting');
+        if (savedRunningState) {
+            setIsResting(savedRunningState === 'true');
+        }
+    }, []);
 
     useEffect(() => {
         if (isRunning) {

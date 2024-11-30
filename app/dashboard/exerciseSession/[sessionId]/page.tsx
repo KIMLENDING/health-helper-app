@@ -20,8 +20,8 @@ import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner';
 import CountdownOverlay from '@/components/LayoutCompents/CountdownOverlay';
 import { DrawerDialogDone } from '@/components/LayoutCompents/ResponsiceDialog2';
 
-import { useStopwatch } from '@/hooks/use-stopwatch';
-import { useRestTime } from '@/hooks/use-restTime';
+import { useStopwatch } from '@/hooks/use-stopwatch2';
+import { useRestTime } from '@/hooks/use-restTime2';
 
 const Page = () => {
     const { sessionId } = useParams() as { sessionId: string };
@@ -137,10 +137,8 @@ const Page = () => {
                     return;
                 }
             }
-            // 마지막 세트가 아닐 경우 다음 세트 생성
-            //sessionData를 직접 사용하지 않는 이유는 새로고침시 초기화 되기 때문
-            const set = data?.exercises.find((Exercise) => Exercise._id === exercise._id)?.session.length || 0;
-            const newSessionData = { set: set + 1, reps: 8, weight: 25 } // 새 세트 생성
+            // 마지막 세트가 아닐 경우 다음 세트 생성    
+            const newSessionData = { set: sessionData.set + 1, reps: 8, weight: 25 } // 새 세트 생성
             setSessionData(newSessionData); // 상태 업데이트
             // 새 세트 생성
             const res = await useStateChangeExerciseSessionMutation.mutateAsync({ sessionId, exerciseId: exercise._id!, state: 'inProgress', sessionData: newSessionData });
@@ -164,7 +162,6 @@ const Page = () => {
         toggleRunning(); // 타이머 시작
     };
 
-
     useEffect(() => {
         if (data) {
             // 진행중인 운동이 있으면 해당 운동의 id를 저장
@@ -175,26 +172,29 @@ const Page = () => {
                 setCurrentExercise(undefined);
             }
         }
-    }, [data]) // 새로고침시 데이터가 바뀔때마다 실행
+    }, [data])
 
     useEffect(() => {
-        // 초기 세션 데이터 설정
+        // 조건 currentExercise 또는 data가 바뀔때마다 실행
+        // 결과 restTime을 설정하고, sessionData를 설정
         // 현재 운동이 바뀔때마다 세션 데이터를 설정 + 휴식 시간 설정
-        if (data) {
-            const set = data?.exercises.find((exercise) => exercise._id === currentExercise)?.session.length || 0;
-            const newSessionData = { set: set, reps: 8, weight: 25 }
+        if (data && currentExercise) {
+            // restTime을 설정
             if (isResting) {
-                // 휴식 중이면 휴식 시간을 로컬 스토리지에서 가져와서 설정
+                // 로컬 스토리지에서 휴식 시간 복원
                 const savedTime = localStorage.getItem('rest_time');
                 setRestTime(savedTime ? parseInt(savedTime, 10) : 0);
             } else {
+                // 초기화 또는 새로운 운동 시작시 기본 휴식 시간 설정
                 const defaultRest = data?.exercises.find((Exercise) => Exercise._id === currentExercise)?.rest || 60;
-                setRestTime(defaultRest); // 기본 휴식 시간 설정
-                setDefaultRestTime(defaultRest); // 기본 휴식 시간 설정
+                setRestTime(defaultRest); //카운트 다운을 위한 기본 휴식 시간 설정
+                setDefaultRestTime(defaultRest); // progress를 계산하기위한 기본 휴식 시간 설정
             }
+            const set = data?.exercises.find((exercise) => exercise._id === currentExercise)?.session.length || 0;
+            const newSessionData = { set: set, reps: 8, weight: 25 }
             setSessionData(newSessionData);
         }
-    }, [currentExercise, data])  // 새로고침시 데이터가 바뀔때마다 실행
+    }, [currentExercise, data])
 
     useEffect(() => {
         // 휴식 종료시 새로운 세트 생성을 위한 서버에 데이터 전송
