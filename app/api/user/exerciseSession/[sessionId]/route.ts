@@ -49,10 +49,10 @@ export const PATCH = async (request: NextRequest, { params }: { params: Promise<
         if (!checkSession) {
             return NextResponse.json({ message: '존재하지 않는 세션입니다.' }, { status: 404 });
         }
-        const allDone: boolean = checkSession.exercises.every((exercise: { state: string }) => exercise.state === 'done');
-        if (!allDone) {
-            return NextResponse.json({ message: '운동이 모두 완료되지 않았습니다.' }, { status: 400 });
-        }
+        // const allDone: boolean = checkSession.exercises.every((exercise: { state: string }) => exercise.state === 'done');
+        // if (!allDone) {
+        //     return NextResponse.json({ message: '운동이 모두 완료되지 않았습니다.' }, { status: 400 });
+        // } // 모든 운동이 완료되지 않았을 때 state를 done 말고 다른 값으로 저장해야할듯
         const updatedSession = await ExerciseSession.findOneAndUpdate(
             { _id: sessionId, },// 조건
             {
