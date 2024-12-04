@@ -2,6 +2,7 @@
 import { toast } from "@/hooks/use-toast";
 import { Exercise, ExercisePlan, ExerciseSession, ExercisesessionData, PostExerciseSession } from "@/utils/util";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import exp from "constants";
 
 /**
  *  관리자 전용 운동 추가 Mutation
@@ -157,6 +158,45 @@ export const useDeletePlan = () => {
         }
     })
 }
+/** 
+ * 사용자 전용 운동 계획 제목 수정 Mutation
+ * @returns
+*/
+export const useEditPlanTitle = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ title, exercisePlanId }: { title: string, exercisePlanId: string }) => {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan/${exercisePlanId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json', },
+                body: JSON.stringify(title)
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        },
+        onSuccess: () => {
+            console.log('onSuccess');
+        },
+        onError: (error) => {
+            console.log('onError', error);
+        },
+        onSettled: async (data, error) => { // 성공, 실패 상관없이 마지막에 호출 variables
+            console.log('onSettled');
+            if (error) {
+                toast({ variant: 'destructive', title: `${error}` });
+                console.log('error', error);
+            } else {
+                // console.log('data', data);
+                toast({ variant: 'default2', title: `${data.message}` });
+                await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
+            }
+        }
+    })
+}
+
 
 
 /**

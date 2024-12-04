@@ -31,8 +31,8 @@ export const POST = async (request: NextRequest) => {
             const updatedSession = await ExerciseSession.findOneAndUpdate(
                 { _id: sessionId, "exercises._id": exerciseId },// 조건
                 {
-                    $set: { 'exercises.$.state': state, },  // 업데이트할 필드
-                    $push: { 'exercises.$.session': sessionData }// 업데이트할 내용
+                    $set: { 'exercises.$.state': state, },  //(수정) 업데이트할 필드
+                    $push: { 'exercises.$.session': sessionData }//(추가) 업데이트할 내용
                 },
                 { new: true } // 업데이트 후 새로운 문서를 반환
             );//$ 연산자는 배열의 요소에 접근하기 위해 사용

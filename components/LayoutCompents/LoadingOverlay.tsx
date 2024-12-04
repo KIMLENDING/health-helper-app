@@ -1,7 +1,7 @@
 import React from 'react';
 import { Loader2 } from 'lucide-react';
 
-const LoadingOverlay = ({ isLoading }: { isLoading: boolean }) => {
+const LoadingOverlay = ({ isLoading, text }: { isLoading: boolean, text?: string }) => {
     if (!isLoading) return null;
 
     return (
@@ -12,7 +12,7 @@ const LoadingOverlay = ({ isLoading }: { isLoading: boolean }) => {
                     size={64}
                     strokeWidth={2}
                 />
-                <p className="text-white text-lg">삭제 진행 중...</p>
+                <p className="text-white text-lg">{text ? text : '삭제 진행 중...'}</p>
             </div>
         </div>
     );

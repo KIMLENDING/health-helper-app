@@ -7,15 +7,22 @@ import ExercisesWithPagination from './exercisesWithPagination';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { BicepsFlexed, DumbbellIcon, FlagIcon, PencilIcon, RadicalIcon, SparklesIcon, Trash2Icon, VolleyballIcon } from 'lucide-react';
 import { Button } from '../ui/button';
-import { useDeletePlan } from '@/server/mutations';
+import { useDeletePlan, useEditPlanTitle } from '@/server/mutations';
 import LoadingSpinner from '../LayoutCompents/LoadingSpinner';
 import LoadingOverlay from '../LayoutCompents/LoadingOverlay';
+import { ExercisePlan } from '@/utils/util';
+import { Input } from '../ui/input';
+import { set } from 'mongoose';
 
 const ShowExercisePlan = () => {
     const { data: sessions } = useSession();
     const { data, error, isLoading } = getExercisePlan(sessions?.user._id); // 필요한 운동 계획 데이터를 가져옵니다.
+    const [editingPlanId, setEditingPlanId] = useState<string | undefined>(undefined);
+    const [editTitle, setEditTitle] = useState('');
     const useDeletePlanMutation = useDeletePlan();
+    const useEditPlanTitleMutation = useEditPlanTitle();
     const [loading, setLoading] = useState(false);
+    const [loadingText, setLoadingText] = useState('삭제 진행 중...');
     const Icons = [
         { name: 'BicepsFlexed', icon: <BicepsFlexed /> },
         { name: 'DumbbellIcon', icon: <DumbbellIcon /> },
@@ -23,22 +30,45 @@ const ShowExercisePlan = () => {
         { name: 'RadicalIcon', icon: <RadicalIcon /> },
         { name: 'VolleyballIcon', icon: <VolleyballIcon /> },
     ]
+    const startEditing = (plan: ExercisePlan) => {
+        if (!plan) return;
+        if (!plan._id) return;
+        setEditingPlanId(plan._id);
+        setEditTitle(plan.title);
+    };
+    const saveTitle = async (planId: string | undefined) => {
+        if (!planId) return;
+        try {
+            setLoading(true);
+            setLoadingText('제목 수정 중...');
+            await useEditPlanTitleMutation.mutateAsync({ exercisePlanId: planId, title: editTitle });
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+            setEditingPlanId(undefined);
+            setEditTitle('');
+            setLoadingText('');
+        }
+
+    };
+
     const handleDelete = async (planId: string) => {
         if (!planId) return;
         try {
-            await useDeletePlanMutation.mutateAsync(planId);
             setLoading(true);
+            await useDeletePlanMutation.mutateAsync(planId);
         } catch (err) {
             console.error(err);
         } finally {
             setLoading(false);
         }
     }
-
+    console.log(data)
     if (isLoading) return <LoadingSpinner />
     return (
         <div className='mx-auto w-full max-w-3xl rounded-xl'>
-            {loading && <LoadingOverlay isLoading={loading} />}
+            {loading && <LoadingOverlay isLoading={loading} text={loadingText} />}
             <CardTitle className='my-3 font-extrabold text-2xl flex'>
 
                 <div className='flex flex-row gap-2 items-center'>
@@ -69,16 +99,41 @@ const ShowExercisePlan = () => {
                                                 <DialogDescription className='hidden'></DialogDescription>
                                                 <Card>
                                                     <CardHeader className='px-0 mt-1'>
-                                                        <CardTitle className="text-xl pl-8 pr-6 flex flex-row items-center justify-between">
-                                                            {plan.title}
-                                                            <div className=' '>
-                                                                {/* <Button variant='outline' className="border-0 h-6 ring-0 shadow-none ">
-                                                                    <PencilIcon />
-                                                                </Button> */}
-                                                                <Button variant='outline' className="border-0 h-6 ring-0 shadow-none " onClick={() => handleDelete(plan._id!)}>
-                                                                    <Trash2Icon />
-                                                                </Button>
-                                                            </div>
+                                                        <CardTitle className="text-xl pl-6 pr-6 flex flex-row items-center justify-between">
+                                                            {editingPlanId === plan._id ? (
+                                                                <div className="flex flex-1 items-center space-x-2">
+                                                                    <Input
+                                                                        value={editTitle}
+                                                                        onChange={(e) => setEditTitle(e.target.value)}
+                                                                        className="w-full"
+                                                                    />
+                                                                    <Button
+                                                                        onClick={() => saveTitle(plan._id!)}
+                                                                        className="border-0 h-6 ring-0 shadow-none ">
+                                                                        Save
+                                                                    </Button>
+                                                                    <Button
+                                                                        className="border-0 h-6 ring-0 shadow-none "
+                                                                        variant="outline"
+                                                                        onClick={() => setEditingPlanId(undefined)}
+                                                                    >
+                                                                        Cancel
+                                                                    </Button>
+                                                                </div>
+                                                            ) : (
+                                                                <>
+                                                                    <CardTitle>{plan.title}</CardTitle>
+
+                                                                    <div className=' '>
+                                                                        <Button variant='outline' className="border-0 h-6 ring-0 shadow-none " onClick={() => startEditing(plan)}>
+                                                                            <PencilIcon />
+                                                                        </Button>
+                                                                        <Button variant='outline' className="border-0 h-6 ring-0 shadow-none " onClick={() => handleDelete(plan._id!)}>
+                                                                            <Trash2Icon />
+                                                                        </Button>
+                                                                    </div>
+                                                                </>
+                                                            )}
                                                         </CardTitle>
                                                         <ExercisesWithPagination plan={plan} />
                                                     </CardHeader>
