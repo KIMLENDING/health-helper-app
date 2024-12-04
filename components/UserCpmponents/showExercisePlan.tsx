@@ -1,18 +1,21 @@
 'use client'
 import { getExercisePlan, } from '@/server/queries';
 import { useSession } from 'next-auth/react';
-import React from 'react'
+import React, { useState } from 'react'
 import { Card, CardHeader, CardTitle } from '../ui/card';
 import ExercisesWithPagination from './exercisesWithPagination';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
-import { BicepsFlexed, DumbbellIcon, PencilIcon, RadicalIcon, SparklesIcon, Trash2Icon, VolleyballIcon } from 'lucide-react';
+import { BicepsFlexed, DumbbellIcon, FlagIcon, PencilIcon, RadicalIcon, SparklesIcon, Trash2Icon, VolleyballIcon } from 'lucide-react';
 import { Button } from '../ui/button';
+import { useDeletePlan } from '@/server/mutations';
 import LoadingSpinner from '../LayoutCompents/LoadingSpinner';
+import LoadingOverlay from '../LayoutCompents/LoadingOverlay';
 
 const ShowExercisePlan = () => {
     const { data: sessions } = useSession();
     const { data, error, isLoading } = getExercisePlan(sessions?.user._id); // 필요한 운동 계획 데이터를 가져옵니다.
-
+    const useDeletePlanMutation = useDeletePlan();
+    const [loading, setLoading] = useState(false);
     const Icons = [
         { name: 'BicepsFlexed', icon: <BicepsFlexed /> },
         { name: 'DumbbellIcon', icon: <DumbbellIcon /> },
@@ -20,12 +23,28 @@ const ShowExercisePlan = () => {
         { name: 'RadicalIcon', icon: <RadicalIcon /> },
         { name: 'VolleyballIcon', icon: <VolleyballIcon /> },
     ]
+    const handleDelete = async (planId: string) => {
+        if (!planId) return;
+        try {
+            await useDeletePlanMutation.mutateAsync(planId);
+            setLoading(true);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     if (isLoading) return <LoadingSpinner />
     return (
         <div className='mx-auto w-full max-w-3xl rounded-xl'>
-            <CardTitle className='my-3 font-extrabold text-2xl'>
-                플랜 목록
+            {loading && <LoadingOverlay isLoading={loading} />}
+            <CardTitle className='my-3 font-extrabold text-2xl flex'>
+
+                <div className='flex flex-row gap-2 items-center'>
+                    <FlagIcon className='text-red-400' />
+                    플랜 목록
+                </div>
             </CardTitle>
             {data ?
                 <div className='flex flex-col gap-3 rounded-xl bg-muted/50 p-2 max-h-[70vh] overflow-scroll'>{
@@ -37,7 +56,7 @@ const ShowExercisePlan = () => {
                                 <CardHeader className='px-0'>
                                     <Dialog >
                                         <DialogTrigger asChild>
-                                            <CardTitle className="text-xl px-6 cursor-pointer">
+                                            <CardTitle className="text-xl px-6 cursor-pointer  hover:underline">
                                                 <div className='flex flex-row gap-2'>
                                                     {randomIcon}
                                                     <div className='whitespace-nowrap overflow-hidden text-ellipsis w-32'> {plan.title}</div>
@@ -53,10 +72,10 @@ const ShowExercisePlan = () => {
                                                         <CardTitle className="text-xl pl-8 pr-6 flex flex-row items-center justify-between">
                                                             {plan.title}
                                                             <div className=' '>
-                                                                <Button variant='outline' className="border-0 h-6 ring-0 shadow-none ">
+                                                                {/* <Button variant='outline' className="border-0 h-6 ring-0 shadow-none ">
                                                                     <PencilIcon />
-                                                                </Button>
-                                                                <Button variant='outline' className="border-0 h-6 ring-0 shadow-none ">
+                                                                </Button> */}
+                                                                <Button variant='outline' className="border-0 h-6 ring-0 shadow-none " onClick={() => handleDelete(plan._id!)}>
                                                                     <Trash2Icon />
                                                                 </Button>
                                                             </div>

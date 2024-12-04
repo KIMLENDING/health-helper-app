@@ -3,12 +3,10 @@ import { getExercisePlan, } from '@/server/queries';
 import { useSession } from 'next-auth/react';
 import React from 'react'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
-import { BicepsFlexed, DumbbellIcon, RadicalIcon, SparklesIcon, VolleyballIcon } from 'lucide-react';
+import { BicepsFlexed, DumbbellIcon, FlagIcon, RadicalIcon, SparklesIcon, SquareArrowOutUpRightIcon, VolleyballIcon } from 'lucide-react';
 import Link from 'next/link';
 import LoadingSpinner from '../LayoutCompents/LoadingSpinner';
-import { ExercisePlan } from '@/utils/util';
-import { useCreateExerciseSession } from '@/server/mutations';
-import { useRouter } from 'next/navigation';
+
 import { DrawerDialogDemo } from '../LayoutCompents/ResponsiveDialog';
 
 const ShowPlans = () => {
@@ -30,7 +28,10 @@ const ShowPlans = () => {
         <div className='mx-auto w-full max-w-3xl rounded-xl'>
             <CardTitle className='my-3 font-extrabold text-2xl'>
                 <Link href={'/dashboard/exercisePlans'}>
-                    플랜 목록
+                    <div className='flex flex-row gap-2 items-center hover:underline'>
+                        플랜 목록
+                        <SquareArrowOutUpRightIcon className='text-red-400' />
+                    </div>
                 </Link>
             </CardTitle>
 
@@ -42,7 +43,7 @@ const ShowPlans = () => {
                         return (
                             <Card key={plan.title} className='aspect-auto '>
                                 <CardHeader className='px-0'>
-                                    <CardTitle className="text-xl px-6 cursor-pointer">
+                                    <CardTitle className="text-xl px-6 cursor-pointer hover:underline">
                                         <DrawerDialogDemo plan={plan}>
                                             {randomIcon}
                                             <div className='whitespace-nowrap overflow-hidden text-ellipsis w-32'> {plan.title}</div>

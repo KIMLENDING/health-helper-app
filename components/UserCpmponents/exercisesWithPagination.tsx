@@ -4,7 +4,7 @@ import { ClockIcon, DumbbellIcon, HamIcon, MoreHorizontal, Trash2Icon } from "lu
 import { ExerciseOption, ExercisePlan } from "@/utils/util";
 import { Button } from "../ui/button";
 import ExerciseOptin from "./exerciseOptin";
-import { useDeletePlan } from "@/server/mutations";
+import { useDetailDeletePlan } from "@/server/mutations";
 import AddExercisesPlan from "./addExercisesPlan";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import LoadingOverlay from "../LayoutCompents/LoadingOverlay";
@@ -14,7 +14,7 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
     const [isLoading, setIsLoading] = useState(false); // 로딩 상태
     const exercisesPerPage = 3; // 페이지당 보여줄 운동 개수
-    const useDeletePlanMutation = useDeletePlan();
+    const useDeletePlanMutation = useDetailDeletePlan();
 
     // 페이지네이션에 필요한 계산
     const totalPages = Math.ceil(plan.exercises.length / exercisesPerPage); // 전체 페이지 수

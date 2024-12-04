@@ -120,6 +120,45 @@ export const useCreatePlan = () => {
     })
 }
 
+/** 
+ * 사용자 전용 운동 계획 삭제 Mutation
+ * @returns
+*/
+export const useDeletePlan = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (exercisePlanId: string) => {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan/${exercisePlanId}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json', },
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        },
+        onSuccess: () => {
+            console.log('onSuccess');
+        },
+        onError: (error) => {
+            console.log('onError', error);
+        },
+        onSettled: async (data, error) => { // 성공, 실패 상관없이 마지막에 호출 variables
+            console.log('onSettled');
+            if (error) {
+                toast({ variant: 'destructive', title: `${error}` });
+                console.log('error', error);
+            } else {
+                // console.log('data', data);
+                toast({ variant: 'destructive', title: `${data.message}` });
+                await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
+            }
+        }
+    })
+}
+
+
 /**
  * 컴포넌트간 데이터 전달을 위한 Mutation
  * @returns 
@@ -200,7 +239,7 @@ interface DeletePlanProps {
     exercisePlanId: string;
     exerciseId: string;
 }
-export const useDeletePlan = () => {
+export const useDetailDeletePlan = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (deleteExercise: DeletePlanProps) => {

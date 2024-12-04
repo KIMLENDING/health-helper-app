@@ -26,3 +26,23 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
     }
 
 }
+
+export const DELETE = async (request: NextRequest, { params }: { params: Promise<{ planId: string }> }) => {
+    const planId = (await params).planId; // 요청에서 플랜 ID 가져오기
+    const getSession = await getServerSession();
+    if (!getSession) {
+        // 로그인 안되어있으면 로그인 페이지로 이동
+        return NextResponse.redirect('http://localhost:3000/login');
+    }
+    try {
+        await connect();
+        const user = await User.findOne({ email: getSession.user.email });
+        if (!user) {
+            return NextResponse.json({ message: 'User not found' }, { status: 404 });
+        }
+        const exercisePlan = await ExercisePlan.findOneAndDelete({ _id: planId });
+        return NextResponse.json({ exercisePlan, message: '삭제 성공' }, { status: 200 });
+    } catch (err: any) {
+        return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
+    }
+}
