@@ -12,7 +12,6 @@ import LoadingSpinner from '../LayoutCompents/LoadingSpinner';
 import LoadingOverlay from '../LayoutCompents/LoadingOverlay';
 import { ExercisePlan } from '@/utils/util';
 import { Input } from '../ui/input';
-import { set } from 'mongoose';
 
 const ShowExercisePlan = () => {
     const { data: sessions } = useSession();

@@ -65,7 +65,7 @@ const CreatPlanUser = () => {
         // 상세 데이터 삭제 - 세트, 반복횟수, 휴식시간 , exerciseId
         setExerciseOption(prevState => prevState.filter(exercise => exercise.exerciseId !== id)) // 삭제할 데이터를 제외한 나머지 데이터를 반환합니다.
     }
-    function onSubmit2(values: z.infer<typeof formSchema2>) {
+    async function onSubmit2(values: z.infer<typeof formSchema2>) {
 
         // 루틴 제출 로직
         if (session?.user._id === undefined) {
@@ -87,17 +87,26 @@ const CreatPlanUser = () => {
                 return;
             }
         }
-        console.log(exerciseOption)
+
         const exercisePlan: ExercisePlan = {
             userId: session?.user._id,
             title: values.title,
             exercises: exerciseOption
         }
-        useCreatePlanMutation.mutate(exercisePlan);
-        form.reset(); // 폼 초기화
-        setPlanData([]); // 데이터 초기화
-        setExerciseOption([]); // 데이터 초기화
-        router.push('/dashboard'); // 페이지 이동
+
+        const res = await useCreatePlanMutation.mutateAsync(exercisePlan);
+
+        if (res) {
+            form.reset(); // 폼 초기화
+            setPlanData([]); // 데이터 초기화
+            setExerciseOption([]); // 데이터 초기화
+            router.push('/dashboard'); // 페이지 이동
+        }
+
+
+
+
+
     }
 
 

@@ -106,9 +106,9 @@ export const authOptions: any = {
     },
     async session({ session, token }: { session: any; token: any, }) { //사용자가 로그인 후 세션을  처음 요청 할 떄 , 페이지를 새로고침 할 때, 세션을 확인 할 때, getSession을 호출 할 때
 
-      console.log("Session----session", session);
+      // console.log("Session----session", session);
       session.user = { ...token };
-      console.log("Session----session", session);
+      // console.log("Session----session", session);
       // console.log("Token----", token);
       // const newSession = { ...session, ...token };
       // console.log("Session----", newSession);

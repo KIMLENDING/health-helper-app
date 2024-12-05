@@ -4,12 +4,7 @@ const { Schema } = mongoose;
 const exercisePlanSchema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User" },
-    title: {
-      type: String,
-      unique: true,
-      required: true,
-    },
-
+    title: { type: String, required: true },
     exercises: [
       {
         exerciseId: { type: Schema.Types.ObjectId, ref: "Exercise" },

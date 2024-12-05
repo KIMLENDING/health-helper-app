@@ -14,7 +14,7 @@ import User from "@/models/User"
 export const POST = async (request: NextRequest) => {
     // 운동 추가
     // 요청에서 사용자 ID 가져오기
-
+    console.log('post요청')
     const { title, exercises, userId } = await request.json();
 
     const getSession = await getServerSession();
@@ -32,9 +32,9 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ message: 'Unauthorized access' }, { status: 403 });
     }
     const existTitle = await ExercisePlan.findOne({ title: title, userId: userId });
-    console.log('ss', existTitle);
+
     if (existTitle) {
-        return NextResponse.json({ message: '이미 추가된 플랜입니다.' }, { status: 400 });
+        return NextResponse.json({ message: '플랜 이름 중복' }, { status: 400 });
     }
     const newExercisePlan = new ExercisePlan({
         userId: userId,
@@ -56,6 +56,7 @@ export const POST = async (request: NextRequest) => {
  * @param request 
  * @returns 
  */
+
 export const PATCH = async (request: NextRequest) => {
     try {
         const { userId, exercisePlanId, exercises, type } = await request.json();
