@@ -21,7 +21,8 @@ const ShowPlans = () => {
         { name: 'RadicalIcon', icon: <RadicalIcon /> },
         { name: 'VolleyballIcon', icon: <VolleyballIcon /> },
     ]
-
+    const columnCount = data && Math.min(data.length, 4);
+    const columnCount2 = data && Math.min(data.length, 3);
 
 
     return (
@@ -36,7 +37,7 @@ const ShowPlans = () => {
             </CardTitle>
 
             {data ?
-                <div className='grid gap-2 grid-cols-4 max-md:grid-cols-3 max-sm:grid-cols-2 rounded-xl bg-muted/50 p-2'>{
+                <div className={`grid gap-2 grid-cols-${columnCount} max-md:grid-cols-${columnCount2} max-sm:grid-cols-1   rounded-xl bg-muted/50 p-2`}>{
                     data.map((plan) => {
                         const randomIndex = Math.floor(Math.random() * Icons.length);
                         const randomIcon = Icons[randomIndex]?.icon;

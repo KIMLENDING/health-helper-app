@@ -102,11 +102,6 @@ const CreatPlanUser = () => {
             setExerciseOption([]); // 데이터 초기화
             router.push('/dashboard'); // 페이지 이동
         }
-
-
-
-
-
     }
 
 
