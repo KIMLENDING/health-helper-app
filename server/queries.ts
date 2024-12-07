@@ -88,3 +88,23 @@ export const useGetExerciseSession = (sessionId?: string) => {
         enabled: !!sessionId, // planId가 있을 때만 데이터를 가져옵니다.
     });
 };
+
+export const useInProgress = () => {
+    return useQuery<ExerciseSession>({
+        queryKey: ["inProgress",], // 개별 데이터를 식별할 수 있는 queryKey
+        queryFn: async () => {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exerciseSession`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json().then((data) => {
+                return data.latestSession;
+            });
+        }
+    });
+}

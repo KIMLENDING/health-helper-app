@@ -45,7 +45,7 @@ export function DrawerDialogDemo({ children,
         const newSession = { // 세션 생성
             userId: userId,
             exercisePlanId: _id,
-            state: 'pending',
+            state: 'inProgress',
             exercises: exercises.map((exercise: { _id: string;[key: string]: any }) => {
                 const { _id, ...rest } = exercise;
                 return { ...rest, state: 'pending' };

@@ -6,6 +6,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/h
 import { Progress } from '@/components/ui/progress'
 import { TabsContent } from '@/components/ui/tabs'
 import { ExerciseSession } from '@/utils/util'
+import { Pause, Play } from 'lucide-react'
 import React from 'react'
 interface InProgressTapProps {
     data: ExerciseSession | undefined;
@@ -111,7 +112,12 @@ const InProgressTap = ({
                             disabled={!currentExercise}
                             className={`${isRunning ? 'bg-red-600 hover:bg-red-600/80' : 'bg-green-500'} flex-1`}
                         >
-                            {isRunning ? '일시정지' : '계속'}
+                            {isRunning ? <>
+                                <Pause />
+                                일시정지</> : <>
+                                <Play />
+                                계속</>}
+
                         </Button>
                         <DrawerDialogDone onComplete={handleDone}>
                             <Button

@@ -3,7 +3,7 @@ import { getExercisePlan, } from '@/server/queries';
 import { useSession } from 'next-auth/react';
 import React from 'react'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
-import { BicepsFlexed, DumbbellIcon, FlagIcon, RadicalIcon, SparklesIcon, SquareArrowOutUpRightIcon, VolleyballIcon } from 'lucide-react';
+import { BicepsFlexed, DumbbellIcon, RadicalIcon, SparklesIcon, SquareArrowOutUpRightIcon, VolleyballIcon } from 'lucide-react';
 import Link from 'next/link';
 import LoadingSpinner from '../LayoutCompents/LoadingSpinner';
 
@@ -11,8 +11,6 @@ import { DrawerDialogDemo } from '../LayoutCompents/ResponsiveDialog';
 
 const ShowPlans = () => {
     const { data: sessions } = useSession();
-
-
     const { data, error, isLoading } = getExercisePlan(sessions?.user._id); // 필요한 운동 계획 데이터를 가져옵니다.
     const Icons = [
         { name: 'BicepsFlexed', icon: <BicepsFlexed /> },
@@ -37,7 +35,7 @@ const ShowPlans = () => {
             </CardTitle>
 
             {data ?
-                <div className={`grid gap-2 grid-cols-${columnCount} max-md:grid-cols-${columnCount2} max-sm:grid-cols-1   rounded-xl bg-muted/50 p-2`}>{
+                <div className={`grid gap-2 grid-cols-${columnCount} max-md:grid-cols-${columnCount2} max-sm:grid-cols-1 rounded-xl bg-muted/50 p-2`}>{
                     data.map((plan) => {
                         const randomIndex = Math.floor(Math.random() * Icons.length);
                         const randomIcon = Icons[randomIndex]?.icon;

@@ -28,6 +28,18 @@ export const POST = async (request: NextRequest) => {
     if (user._id.toString() !== sessionData.userId.toString()) {
         return NextResponse.json({ message: 'Unauthorized access' }, { status: 403 });
     }
+    console.log(user._id)
+    // 사용자 ID와 일치하며 state가 'inProgress'인 가장 최근의 데이터를 찾음
+    const latestSession = await ExerciseSession.findOne({
+        userId: user._id,
+        state: "inProgress",
+    })
+        .sort({ createdAt: -1 }) // 최신 순으로 정렬
+        .populate("exercises.exerciseId"); // 운동 정보 연결 populate를 첨 알 았음  findOne()으로 찾은 데이터에 연결된 데이터를 가져올 때 사용
+    console.log(latestSession)
+    if (latestSession) {
+        return NextResponse.json({ message: "이미 진행 중인 운동이 있습니다." }, { status: 400 });
+    }
 
     const newExerciseSession = new ExerciseSession(sessionData);
 
@@ -72,7 +84,7 @@ export const GET = async (request: NextRequest) => {
             return NextResponse.json({ message: "진행 중인 운동이 없습니다." }, { status: 404 });
         }
 
-        return NextResponse.json({ latestSession, message: "현재 진행 중니 운동이 있습니다." }, { status: 201 });
+        return NextResponse.json({ latestSession, message: "현재 진행 중인 운동이 있습니다." }, { status: 201 });
     } catch (error) {
         console.error("Error fetching exercise session:", error);
         return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });

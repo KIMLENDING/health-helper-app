@@ -250,8 +250,8 @@ const Page = () => {
                     </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="list">
-                    <div className="space-y-2 max-h-[60vh]">
+                <TabsContent value="list" className='space-y-2'>
+                    <div className="space-y-2 max-h-[64vh] overflow-y-scroll">
                         {data?.exercises.map((exercise) => {
                             return (
                                 <Card key={exercise._id} className="p-4 flex justify-between items-center">
@@ -271,7 +271,7 @@ const Page = () => {
                             )
                         })}
                     </div>
-                    <div className='flex-1 flex justify-center py-2  bg-red-400 '>
+                    <div className='flex-1 flex justify-center py-2   '>
                         <Button variant='default' onClick={handleAllDone} >{allDone ? '완료하기' : '루틴 그만두기'}</Button>
                     </div>
                 </TabsContent>
