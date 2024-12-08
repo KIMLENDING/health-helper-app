@@ -66,3 +66,47 @@ export const POST = async (request: NextRequest) => {
         return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
     }
 }
+
+
+export const PATCH = async (request: NextRequest) => {
+    const { sessionId, exerciseId, detailSessionId, reps, weight } = await request.json();
+    console.log(sessionId, exerciseId);
+    const getSession = await getServerSession();
+    if (!getSession) {
+        // 로그인 안되어있으면 로그인 페이지로 이동
+        return NextResponse.redirect('http://localhost:3000/login');
+    }
+    await connect();
+
+    const user = await User.findOne({ email: getSession.user.email });
+    if (!user) {
+        return NextResponse.json({ message: 'User not found' }, { status: 404 });
+    }
+    try {
+        const updatedSession = await ExerciseSession.findOneAndUpdate(
+            { _id: sessionId, "exercises._id": exerciseId, "exercises.session._id": detailSessionId },// 조건
+            {
+                $set: {
+                    'exercises.$[exercise].session.$[session].reps': reps,
+                    'exercises.$[exercise].session.$[session].weight': weight
+                },  // 업데이트할 필드
+            },
+            {
+                new: true,
+                arrayFilters: [
+                    { "exercise._id": exerciseId },
+                    { "session._id": detailSessionId }
+                ]
+            } // 업데이트 후 새로운 문서를 반환
+        );
+        if (!updatedSession) {
+            return NextResponse.json(
+                { error: "Exercise session or exercise not found" },
+                { status: 404 }
+            );
+        }
+        return NextResponse.json({ updatedSession, message: '횟수 및 중량 수정 완료' }, { status: 201 });
+    } catch (err: any) {
+        return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
+    }
+};

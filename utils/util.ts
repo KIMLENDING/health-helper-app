@@ -57,6 +57,7 @@ export interface ExerciseOption {
 }
 
 export interface ExercisesessionData {
+    _id?: string
     set: number,
     reps: number,
     weight: number,

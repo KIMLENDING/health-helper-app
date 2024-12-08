@@ -388,6 +388,7 @@ export const useStateChangeExerciseSession = () => {
                 // console.log('data', data);
                 // toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.updatedSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
+                await queryClient.invalidateQueries({ queryKey: ["inProgress"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
     })
@@ -428,7 +429,39 @@ export const useAllDoneExerciseSession = () => {
                 // console.log('data', data);
                 toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.updatedSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
+                await queryClient.invalidateQueries({ queryKey: ["inProgress"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
     })
-}
+};
+
+
+export const useEditExerciseSession = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (data: any) => {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exerciseSession/${data.sessionId}/${data.exerciseId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json', },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        },
+        onSettled: async (data, error) => { // 성공, 실패 상관없이 마지막에 호출 variables
+            console.log('onSettled');
+            if (error) {
+                toast({ variant: 'destructive', title: `${error}` });
+                console.log('error', error);
+            } else {
+                console.log('data', data);
+                toast({ variant: 'default2', title: `${data.message}` });
+                await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.updatedSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
+
+            }
+        }
+    })
+};

@@ -5,9 +5,10 @@ import { Card, CardDescription, CardTitle } from '@/components/ui/card'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
 import { Progress } from '@/components/ui/progress'
 import { TabsContent } from '@/components/ui/tabs'
+import { useEditExerciseSession } from '@/server/mutations'
 import { ExerciseSession } from '@/utils/util'
 import { Pause, Play } from 'lucide-react'
-import React from 'react'
+import React, { useState } from 'react'
 interface InProgressTapProps {
     data: ExerciseSession | undefined;
     currentExercise: string | undefined;
@@ -37,6 +38,35 @@ const InProgressTap = ({
     handleDone,
     toggleRunning
 }: InProgressTapProps) => {
+    const [editingIndex, setEditingIndex] = useState<string | undefined>(undefined);
+    const [editedReps, setEditedReps] = useState<number>(0);
+    const [editedWeight, setEditedWeight] = useState<number>(0);
+    const useEditExerciseSessionMutation = useEditExerciseSession();
+    const handleEdit = (index: string | undefined) => {
+        if (!index) return;
+        const session = data?.exercises.find((exercise) => exercise._id === currentExercise)?.session.find((session) => session._id === index);
+        console.log(session);
+        if (session?._id === index) {
+            console.log('edit')
+            setEditingIndex(index);
+            setEditedReps(session.reps);
+            setEditedWeight(session.weight);
+        }
+
+    };
+
+    const handleSave = () => {
+        console.log('save')
+        if (!currentExercise || !editingIndex) return;
+        useEditExerciseSessionMutation.mutate({
+            sessionId: data?._id,
+            exerciseId: currentExercise,
+            detailSessionId: editingIndex,
+            reps: editedReps,
+            weight: editedWeight
+        });
+        setEditingIndex(undefined);
+    };
 
     return (
         <div>
@@ -51,29 +81,60 @@ const InProgressTap = ({
                             </div>
                             <div className='flex  flex-col gap-2 h-[40vh] overflow-y-scroll'>
                                 {exercise.session.map((session, index) => (
-                                    <Card key={index} className='flex justify-between items-center p-2 text-nowrap'>
-                                        <span >{session.set}세트</span>
-                                        <span>{session.reps}회</span>
-                                        <span>{session.weight}kg</span>
-                                        <Button
-                                            variant="outline"
-                                            disabled={index !== exercise.session.length - 1 || loading || !isRunning || isResting}
-                                            onClick={handleStartRest}
-                                            className={
-                                                index !== exercise.session.length - 1
-                                                    ? "opacity-50 cursor-not-allowed"
-                                                    : ""
-                                            }
-                                        > {
-                                                loading
-                                                    ? <LoadingSpinner />
-                                                    : (index !== exercise.session.length - 1)
-                                                        ? '완료'
-                                                        : (exercise.session.length === 1)
-                                                            ? (!isRunning ? '계속' : isResting ? '휴식 중' : '운동 중')
-                                                            : (!isRunning ? '계속' : isResting ? '휴식 중' : '운동 중')
-                                            }
-                                        </Button>
+                                    <Card key={session._id} className='flex justify-between items-center p-2 text-nowrap'>
+                                        {editingIndex === session._id ? (<>
+                                            <div className='w-full flex justify-between items-center gap-2'>
+                                                <div>
+                                                    {session.set}세트
+                                                </div>
+                                                <div>
+                                                    <input
+                                                        type="number"
+                                                        value={editedReps}
+                                                        onChange={(e) => setEditedReps(Number(e.target.value))}
+                                                        className="text-right w-fit min-w-[1ch] max-w-[5ch]"
+                                                    />
+                                                    회
+                                                </div>
+                                                <div>
+
+                                                    <input
+                                                        type="number"
+                                                        value={editedWeight}
+                                                        onChange={(e) => setEditedWeight(Number(e.target.value))}
+                                                        className="text-right w-fit min-w-[1ch] max-w-[5ch]"
+                                                    />
+                                                    kg
+                                                </div>
+                                                <Button variant='outline' onClick={handleSave} >저장</Button>
+                                            </div>
+                                        </>) : (<>
+
+                                            <span >{session.set}세트</span>
+
+                                            <Button variant='outline' onClick={() => handleEdit(session._id)}>{session.reps}회</Button>
+                                            <Button variant='outline' onClick={() => handleEdit(session._id)}>{session.weight}kg</Button>
+                                            <Button
+                                                variant="outline"
+                                                disabled={index !== exercise.session.length - 1 || loading || !isRunning || isResting}
+                                                onClick={handleStartRest}
+                                                className={
+                                                    index !== exercise.session.length - 1
+                                                        ? "opacity-50 cursor-not-allowed"
+                                                        : ""
+                                                }
+                                            > {
+                                                    loading
+                                                        ? <LoadingSpinner />
+                                                        : (index !== exercise.session.length - 1)
+                                                            ? '완료'
+                                                            : (exercise.session.length === 1)
+                                                                ? (!isRunning ? '계속' : isResting ? '휴식 중' : '운동 중')
+                                                                : (!isRunning ? '계속' : isResting ? '휴식 중' : '운동 중')
+                                                }
+                                            </Button>
+                                        </>)}
+
                                     </Card>
                                 ))}
                             </div>

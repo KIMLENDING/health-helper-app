@@ -91,7 +91,7 @@ export const useGetExerciseSession = (sessionId?: string) => {
 
 export const useInProgress = () => {
     return useQuery<ExerciseSession>({
-        queryKey: ["inProgress",], // 개별 데이터를 식별할 수 있는 queryKey
+        queryKey: ["inProgress"], // 개별 데이터를 식별할 수 있는 queryKey
         queryFn: async () => {
             const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exerciseSession`, {
                 method: 'GET',
@@ -103,6 +103,10 @@ export const useInProgress = () => {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json().then((data) => {
+                console.log(data);
+                if (!data.latestSession) {
+                    return null;
+                }
                 return data.latestSession;
             });
         }
