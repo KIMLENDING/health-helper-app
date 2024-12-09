@@ -155,7 +155,7 @@ const Page = () => {
                 }
             }
             // 마지막 세트가 아닐 경우 다음 세트 생성    
-            const newSessionData = { set: sessionData.set + 1, reps: 8, weight: 25 } // 새 세트 생성
+            const newSessionData = { set: sessionData.set + 1, reps: sessionData.reps, weight: sessionData.weight } // 새 세트 생성
             setSessionData(newSessionData); // 상태 업데이트
             // 새 세트 생성
             const res = await useStateChangeExerciseSessionMutation.mutateAsync({ sessionId, exerciseId: exercise._id!, state: 'inProgress', sessionData: newSessionData });
@@ -217,7 +217,9 @@ const Page = () => {
                 setDefaultRestTime(defaultRest); // progress를 계산하기위한 기본 휴식 시간 설정
             }
             const set = data?.exercises.find((exercise) => exercise._id === currentExercise)?.session.length || 0;
-            const newSessionData = { set: set, reps: 8, weight: 25 }
+            const lastSession = data?.exercises.find((exercise) => exercise._id === currentExercise)?.session.slice(-1)[0];
+            if (!lastSession) return setSessionData({ set: set, reps: 8, weight: 25 });
+            const newSessionData = { set: lastSession?.set, reps: lastSession?.reps, weight: lastSession?.weight }
             setSessionData(newSessionData);
         }
     }, [currentExercise, data])
