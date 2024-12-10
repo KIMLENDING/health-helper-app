@@ -4,6 +4,10 @@ import { useState, useEffect } from 'react';
 export const useStopwatch = () => {
     const [time, setTime] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
+    const [isInitialized, setIsInitialized] = useState(false); // 초기화 상태
+    // 초기화 상태가 true가 되면 로컬 스토리지에 저장 이걸 안하면 초기화가 끝나기 전에 저장이 되어버림
+    // 예를 들면 다른페이지에서 돌아올 때 localStorage에 true로 되어 있지만 useEffect가 false가로 localStorage에 저장해버림
+    // useEffect가 
 
     useEffect(() => {
         // 초기 값으로 로컬 스토리지에서 시간 복원
@@ -15,8 +19,12 @@ export const useStopwatch = () => {
         // 초기 값으로 로컬 스토리지에서 실행 상태 복원
         const savedRunningState = localStorage.getItem('stopwatch_running');
         if (savedRunningState) {
+            console.log('savedRunningState:', savedRunningState);
             setIsRunning(savedRunningState === 'true');
         }
+        console.log('isRunning:2', isRunning);
+        // 초기화 완료
+        setIsInitialized(true);
     }, []);
 
     useEffect(() => {
@@ -31,15 +39,17 @@ export const useStopwatch = () => {
             }, 1000);
         }
 
-        return () => { // 컴포넌트 언마운트 시 clearInterval
+        return () => {// 클린업 함수: isRunning 값이 변경되거나 컴포넌트가 언마운트될 때 clearInterval 호출
             if (interval) clearInterval(interval);
         };
     }, [isRunning]);
 
     useEffect(() => {
-        // 실행 상태 변경 시 로컬 스토리지에 저장
-        localStorage.setItem('stopwatch_running', isRunning.toString());
-    }, [isRunning]);
+        // 초기화 완료 후에만 실행 상태 저장
+        if (isInitialized) {
+            localStorage.setItem('stopwatch_running', isRunning.toString());
+        }
+    }, [isRunning, isInitialized]);
 
     const formatTime = (totalSeconds: number) => {
         const minutes = Math.floor(totalSeconds / 60);

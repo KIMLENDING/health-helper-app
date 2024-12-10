@@ -1,6 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react';
 
+// 2와 다른게 stopwatch_running이 true일 때 페이지가 로드되면 즉시 반영되는데 
+// 2는 페이지가 로드되면 true에서 false로 바뀜
 export const useStopwatch = () => {
     const [time, setTime] = useState(() => {
         // 초기 값으로 로컬 스토리지에서 시간 복원
