@@ -73,6 +73,7 @@ const Page = () => {
             // 진행중인 운동이 없으면 선택한 운동을 시작
             // 현재 세트를 가져와서 새로운 세트 생성 
             const set = data?.exercises.find((Exercise) => Exercise._id === exercise._id)?.session.length || 0; //기본적으로 0이 나올 것임 처음 시작하는 운동이기 때문
+
             const newSessionData = { set: set + 1, reps: 8, weight: 25 }
             // 서버에 운동의 상태를 변경하고 첫 세션을 생성
             const res = await useStateChangeExerciseSessionMutation.mutateAsync({ sessionId, exerciseId: exercise._id, state: 'inProgress', sessionData: newSessionData }); // 운동 시작
@@ -156,7 +157,7 @@ const Page = () => {
             }
             // 마지막 세트가 아닐 경우 다음 세트 생성    
             const newSessionData = { set: sessionData.set + 1, reps: sessionData.reps, weight: sessionData.weight } // 새 세트 생성
-            setSessionData(newSessionData); // 상태 업데이트
+            setSessionData(newSessionData); // 상태 업데이트 -> useEffect에서 따로 서버에서 query로 가져온 데이터를 업데이트 하는데 여기서 업데이트를 해주면 더 빠르긴 한데 중복할 필요가 있나?
             // 새 세트 생성
             const res = await useStateChangeExerciseSessionMutation.mutateAsync({ sessionId, exerciseId: exercise._id!, state: 'inProgress', sessionData: newSessionData });
             if (res) {
@@ -216,10 +217,15 @@ const Page = () => {
                 setRestTime(defaultRest); //카운트 다운을 위한 기본 휴식 시간 설정
                 setDefaultRestTime(defaultRest); // progress를 계산하기위한 기본 휴식 시간 설정
             }
-            const set = data?.exercises.find((exercise) => exercise._id === currentExercise)?.session.length || 0;
+            // sessionData를 설정
+            // sessionData는 처음 운동을 시작하면 handleExerciseStart에서 설정됨
+            // 그럼 서버에 값이 저장되고 그걸 query로 가져와서
+            // 여기 useEffect에서 sessionData를 설정함
+            // 그럼 다음 세트를 시작할때 handleSessionData에서 sessionData를 업데이트함
+            const set = data?.exercises.find((exercise) => exercise._id === currentExercise)?.session.length || 0; //기본적으로 0이 나올 것임 처음 시작하는 운동이기 때문
             const lastSession = data?.exercises.find((exercise) => exercise._id === currentExercise)?.session.slice(-1)[0];
-            if (!lastSession) return setSessionData({ set: set, reps: 8, weight: 25 });
-            const newSessionData = { set: lastSession?.set, reps: lastSession?.reps, weight: lastSession?.weight }
+            if (!lastSession) return setSessionData({ set: set, reps: 8, weight: 25 });// 처음 시작하는 운동일 경우
+            const newSessionData = { set: lastSession?.set, reps: lastSession?.reps, weight: lastSession?.weight } // 서버에서 가져온 마지막 세션 데이터
             setSessionData(newSessionData);
         }
     }, [currentExercise, data])

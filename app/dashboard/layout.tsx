@@ -85,8 +85,6 @@ export default function DachboardLayout({
   return (
     <SidebarProvider >
       <SidebarLeft />
-
-
       <SidebarInset>
         <header className="sticky top-0 flex h-14 shrink-0 items-center gap-2 bg-background z-50 shadow-md">
           <div className="flex flex-1 items-center gap-2 px-3 justify-between">
@@ -118,8 +116,8 @@ export default function DachboardLayout({
         </header>
         {children}
 
-        <header className="sticky bottom-5 flex h-24 shrink-0 items-center gap-2 mx-8 bg-zinc-100 dark:bg-zinc-800  z-50 shadow-md rounded-3xl border-2 border-neutral-400 dark:border-neutral-700">
-          {data &&
+        {data &&
+          <header className="sticky bottom-5 flex h-24 shrink-0 items-center gap-2 mx-8 bg-zinc-100 dark:bg-zinc-800  z-50 shadow-md rounded-3xl border-2 border-neutral-400 dark:border-neutral-700">
             <div className="px-2 flex flex-row gap-2 flex-1 items-center ">
               진행중인 운동:
               <Button onClick={handleClick} variant="default" className="flex-1"  >
@@ -129,10 +127,9 @@ export default function DachboardLayout({
                 ))}
                 </div>
               </Button>
-
             </div>
-          }
-        </header>
+          </header>
+        }
       </SidebarInset>
 
 
