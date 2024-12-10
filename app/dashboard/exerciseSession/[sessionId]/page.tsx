@@ -38,9 +38,15 @@ const Page = () => {
         // 모든 운동 완료시 실행
         try {
             setLoading(true); // 로딩 시작
+
             const res = await useAllDoneExerciseSessionMutation.mutateAsync({ sessionId });
-            if (res) {
+            console.log(res);
+            if (res.delete) {
                 router.push('/dashboard');
+                return;
+            }
+            if (res) {
+                router.push(`/dashboard/detail/${sessionId}`); // 세션 완료 후 세션 상세 페이지로 이동  
                 return;
             }
         } catch (error) {

@@ -13,11 +13,11 @@ const ShowPlans = () => {
     const { data: sessions } = useSession();
     const { data, error, isLoading } = getExercisePlan(sessions?.user._id); // 필요한 운동 계획 데이터를 가져옵니다.
     const Icons = [
-        { name: 'BicepsFlexed', icon: <BicepsFlexed /> },
-        { name: 'DumbbellIcon', icon: <DumbbellIcon /> },
-        { name: 'SparklesIcon', icon: <SparklesIcon /> },
-        { name: 'RadicalIcon', icon: <RadicalIcon /> },
-        { name: 'VolleyballIcon', icon: <VolleyballIcon /> },
+        { name: 'BicepsFlexed', icon: <BicepsFlexed className='text-green-400' /> },
+        { name: 'DumbbellIcon', icon: <DumbbellIcon className='text-green-400' /> },
+        { name: 'SparklesIcon', icon: <SparklesIcon className='text-green-400' /> },
+        { name: 'RadicalIcon', icon: <RadicalIcon className='text-green-400' /> },
+        { name: 'VolleyballIcon', icon: <VolleyballIcon className='text-green-400' /> },
     ]
     const columnCount = data && Math.min(data.length, 4);
     const columnCount2 = data && Math.min(data.length, 3);
