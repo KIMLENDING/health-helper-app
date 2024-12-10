@@ -29,7 +29,7 @@ const Page = () => {
     const [loading, setLoading] = useState(false); // mutation loading 상태
     const { time, formattedTime, isRunning, toggleRunning, reset } = useStopwatch(); // 타이머
     const [showCountdown, setShowCountdown] = useState(false);// 운동 시작 전 카운트 다운
-    const [defaultRestTime, setDefaultRestTime] = useState<number>(5); // 기본 휴식 시간
+    const [defaultRestTime, setDefaultRestTime] = useState<number>(10000); // 기본 휴식 시간
     const [allDone, setAllDone] = useState(false); // 모든 운동이 완료되었는지 확인
     const { progress, restTime, isResting, setRestTime, setIsResting, handleSkipRest, handleStartRest } = useRestTime({ isRunning, currentExercise, defaultRestTime }); // 휴식 시간
     const useAllDoneExerciseSessionMutation = useAllDoneExerciseSession(); // 모든 운동 완료 mutation
@@ -211,6 +211,8 @@ const Page = () => {
                 // 로컬 스토리지에서 휴식 시간 복원
                 const savedTime = localStorage.getItem('rest_time');
                 setRestTime(savedTime ? parseInt(savedTime, 10) : 0);
+                // 만약 isResting이 true인 상태에서  새로고침을 할 경우 defaultRestTime을 설정 해야함
+                if (defaultRestTime === 10000) setDefaultRestTime(data?.exercises.find((Exercise) => Exercise._id === currentExercise)?.rest || 60);
             } else {
                 // 초기화 또는 새로운 운동 시작시 기본 휴식 시간 설정
                 const defaultRest = data?.exercises.find((Exercise) => Exercise._id === currentExercise)?.rest || 60;

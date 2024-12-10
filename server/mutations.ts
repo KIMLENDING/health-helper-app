@@ -344,8 +344,6 @@ export const useCreateExerciseSession = () => {
                 toast({ variant: 'destructive', title: `${error}` });
                 console.log('error', error);
             } else {
-                // console.log('data', data);
-                // toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.newExerciseSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
@@ -435,7 +433,10 @@ export const useAllDoneExerciseSession = () => {
     })
 };
 
-
+/**
+ * 무게나 횟수 변경 Mutation
+ * @returns 
+ */
 export const useEditExerciseSession = () => {
     const queryClient = useQueryClient();
     return useMutation({
@@ -460,7 +461,7 @@ export const useEditExerciseSession = () => {
                 console.log('data', data);
                 toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.updatedSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
-
+                await queryClient.invalidateQueries({ queryKey: ["inProgress"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
     })

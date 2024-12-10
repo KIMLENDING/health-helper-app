@@ -65,7 +65,7 @@ export default function LoginPage() {
             if (res?.url) router.replace(res?.url); // 로그인 실패시 로그인 페이지로 이동
         } else {
             setError("");
-            toast({ variant: "destructive", title: "로그인 성공" })
+            toast({ variant: "default", title: "로그인 성공" })
             router.replace("/"); // 홈으로 이동
         }
     };

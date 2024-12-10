@@ -82,7 +82,7 @@ export const POST = async (request: NextRequest) => {
     })
         .sort({ createdAt: -1 }) // 최신 순으로 정렬
         .populate("exercises.exerciseId"); // 운동 정보 연결 populate를 첨 알 았음  findOne()으로 찾은 데이터에 연결된 데이터를 가져올 때 사용
-
+    console.log(latestSession)
     if (latestSession) {
         return NextResponse.json({ message: "이미 진행 중인 운동이 있습니다." }, { status: 201 });
     }
@@ -93,6 +93,7 @@ export const POST = async (request: NextRequest) => {
         await newExerciseSession.save();
         return NextResponse.json({ newExerciseSession, message: '세션 생성' }, { status: 201 });
     } catch (err: any) {
+
         return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
     }
 }

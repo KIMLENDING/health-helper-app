@@ -10,6 +10,7 @@ import {
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
+import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
@@ -17,7 +18,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { useInProgress } from "@/server/queries"
-import { ChevronLeft, ChevronRight, Divide, Dumbbell } from "lucide-react"
+import { ChevronLeft, ChevronRight, Divide, Dumbbell, SquareArrowOutUpRightIcon } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect } from "react"
@@ -116,17 +117,43 @@ export default function DachboardLayout({
         </header>
         {children}
 
-        {data &&
+        {data && !pathname.startsWith('/dashboard/exerciseSession') &&
           <header className="sticky bottom-5 flex h-24 shrink-0 items-center gap-2 mx-8 bg-zinc-100 dark:bg-zinc-800  z-50 shadow-md rounded-3xl border-2 border-neutral-400 dark:border-neutral-700">
-            <div className="px-2 flex flex-row gap-2 flex-1 items-center ">
-              진행중인 운동:
-              <Button onClick={handleClick} variant="default" className="flex-1"  >
-                <Dumbbell className="h-7 w-7" />
-                <div>{data.exercises?.map((items, index) => (
-                  <div key={index}>{items.state === 'inProgress' && items.title}</div>
+            <div className="p-4 flex-1">
+              <div className="w-full ">
+                {data && !data.exercises.some(item => item.state === 'inProgress') && (
+                  <Link className="flex flex-row gap-2" href={`/dashboard/exerciseSession/${data._id}`} >운동 페이지로 이동 <SquareArrowOutUpRightIcon className='text-red-400' /></Link>
+                )}
+                {data.exercises?.map((items, index) => (
+                  <div key={index}>
+                    {items.state === 'inProgress' &&
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 justify-between">
+                          <div className="flex items-center gap-2">
+                            진행중인 운동:
+                            <Button onClick={handleClick} variant="default" className="py-1 h-fit">
+                              <Dumbbell className="h-7 w-7" />
+                              {items.title}
+                            </Button>
+                          </div>
+                          <div className="text-nowrap">
+                            {items.session.at(-1)?.reps}회 x {items.session.at(-1)?.weight}kg
+                          </div>
+                        </div>
+
+                        <div className="flex flex-row gap-2 items-center justify-between">
+                          <Progress className=" max-w-md" value={items.session.length * 100 / items.sets} />
+                          <div className="text-nowrap">
+                            {items.session.length} / {items.sets} 세트
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </div>
                 ))}
-                </div>
-              </Button>
+
+              </div>
+
             </div>
           </header>
         }
