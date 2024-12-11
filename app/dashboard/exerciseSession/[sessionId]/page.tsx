@@ -41,7 +41,7 @@ const Page = () => {
 
             const res = await useAllDoneExerciseSessionMutation.mutateAsync({ sessionId });
             console.log(res);
-            if (res.delete) {
+            if (res.delete) { // 완료한 운동이 없어 세션을 제거했을 경우
                 router.push('/dashboard');
                 return;
             }
