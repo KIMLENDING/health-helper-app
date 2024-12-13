@@ -23,11 +23,11 @@ const ShowExercisePlan = () => {
     const [loading, setLoading] = useState(false);
     const [loadingText, setLoadingText] = useState('삭제 진행 중...');
     const Icons = [
-        { name: 'BicepsFlexed', icon: <BicepsFlexed /> },
-        { name: 'DumbbellIcon', icon: <DumbbellIcon /> },
-        { name: 'SparklesIcon', icon: <SparklesIcon /> },
-        { name: 'RadicalIcon', icon: <RadicalIcon /> },
-        { name: 'VolleyballIcon', icon: <VolleyballIcon /> },
+        { name: 'BicepsFlexed', icon: <BicepsFlexed className='text-green-400' /> },
+        { name: 'DumbbellIcon', icon: <DumbbellIcon className='text-green-400' /> },
+        { name: 'SparklesIcon', icon: <SparklesIcon className='text-green-400' /> },
+        { name: 'RadicalIcon', icon: <RadicalIcon className='text-green-400' /> },
+        { name: 'VolleyballIcon', icon: <VolleyballIcon className='text-green-400' /> },
     ]
     const startEditing = (plan: ExercisePlan) => {
         if (!plan) return;

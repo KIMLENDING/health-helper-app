@@ -6,3 +6,4 @@ export const AdminRouteList = [
     },
 ];
 export const UserRouteList = [];
+
