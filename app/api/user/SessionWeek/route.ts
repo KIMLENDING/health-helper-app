@@ -4,18 +4,17 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import User from "@/models/User"
 function getWeekRange() {
-    const today = new Date(); // 오늘 날짜
+    const today = new Date(new Date().toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })); // 오늘 날짜 (한국 시간 기준)
     const dayOfWeek = today.getDay(); // 요일 (0: 일요일 ~ 6: 토요일)
 
-    // 한국 시간대 설정
-    const KST_OFFSET = 9 * 60; // 한국 시간대는 UTC+9
+    // 일요일 00:00:00 계산
     const startOfWeek = new Date(today);
-    startOfWeek.setUTCMinutes(startOfWeek.getUTCMinutes() + KST_OFFSET);
-    startOfWeek.setDate(startOfWeek.getDate() - dayOfWeek); // 일요일로 설정
+    startOfWeek.setDate(today.getDate() - dayOfWeek);
     startOfWeek.setHours(0, 0, 0, 0);
 
+    // 토요일 23:59:59 계산
     const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6); // 토요일로 설정
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
     endOfWeek.setHours(23, 59, 59, 999);
 
     return { startOfWeek, endOfWeek };
