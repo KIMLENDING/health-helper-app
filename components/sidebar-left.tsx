@@ -51,6 +51,12 @@ const data = {
       icon: Home,
       // isActive: true,
     },
+    {
+      title: "운동 기록",
+      url: "/dashboard/detail",
+      icon: Home,
+      // isActive: true,
+    },
 
     {
       title: "Inbox",

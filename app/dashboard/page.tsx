@@ -1,7 +1,8 @@
-
+'use client';
 import ShowPlans from "@/components/UserCpmponents/showPlans";
 
 export default function Dashboard() {
+
   return (
     <section className="flex flex-1 flex-col gap-4 p-4">
       루틴 생성 기능

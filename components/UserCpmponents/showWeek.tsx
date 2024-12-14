@@ -1,6 +1,10 @@
+'use client';
+import { useWeekSessions } from '@/server/queries';
 import React from 'react'
 
 const ShowWeek = () => {
+    const { data, isLoading, isError } = useWeekSessions();
+    // console.log(data.sessions.map((session: any) => session.createdAt));
     const exerciseData = {
         completedWorkouts: [
             {
@@ -50,6 +54,7 @@ const ShowWeek = () => {
             );
         });
     };
+    if (isLoading) return <div>Loading...</div>;
     return (
         <div className="mx-auto w-full max-w-3xl rounded-xl">
             <div className="flex justify-between items-center gap-2 sm:gap-4 ">

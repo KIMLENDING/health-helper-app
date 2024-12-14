@@ -1,5 +1,4 @@
 import ExerciseSession from "@/models/ExerciseSession"
-
 import connect from "@/utils/db"
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"

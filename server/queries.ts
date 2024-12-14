@@ -112,3 +112,26 @@ export const useInProgress = () => {
         }
     });
 }
+
+
+/**
+ * 일주일 운동 세션 조회
+ */
+
+export const useWeekSessions = () => {
+    return useQuery({
+        queryKey: ['weekSessions'],
+        queryFn: async () => {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/SessionWeek`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        }
+    });
+}
