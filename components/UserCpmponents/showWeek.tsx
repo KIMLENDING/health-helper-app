@@ -1,6 +1,8 @@
 'use client';
 import { useWeekSessions } from '@/server/queries';
 import React from 'react'
+import LoadingSpinner from '../LayoutCompents/LoadingSpinner';
+import { Card } from '../ui/card';
 
 const ShowWeek = () => {
     const { data, isLoading, isError } = useWeekSessions();
@@ -25,30 +27,32 @@ const ShowWeek = () => {
         ],
     };
     const getCurrentWeekDates = () => {
-        // 오늘 날짜를 기준으로 이번주 월요일부터 일요일까지의 날짜를 배열로 반환
+        // 오늘 날짜를 기준으로 이번주 일요일부터 토요일까지의 날짜를 배열로 반환
         const today = new Date();
-        const monday = new Date(today);
-        monday.setDate(monday.getDate() - monday.getDay() + 1); // 월요일 날짜 구하기
+        const sunday = new Date(today);
+        sunday.setDate(sunday.getDate() - sunday.getDay()); // 일요일 날짜 구하기
         return Array(7)
             .fill(null)
             .map((_, i) => {
-                const date = new Date(monday);
-                date.setDate(monday.getDate() + i);
+                const date = new Date(sunday);
+                date.setDate(sunday.getDate() + i);
                 return date;
             });
     };
     const weekDates = getCurrentWeekDates();
     const days = weekDates.map((date, index) => ({
-        label: ["월", "화", "수", "목", "금", "토", "일"][index],
+        label: ["일", "월", "화", "수", "목", "금", "토"][index],
         name: date.toLocaleString("ko-KR", {
             weekday: "long",
         }),
         date: date,
     }));
 
+
     const getExerciseStatusForDay = (dayName: any) => {
         return data.sessions.some((session: any) => {
             const date = new Date(session.createdAt);
+
             return (
                 date.toLocaleString("ko-KR", {
                     weekday: "long",
@@ -57,10 +61,10 @@ const ShowWeek = () => {
         });
     };
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <div className='w-full flex justify-center items-center'><LoadingSpinner /></div>;
     return (
-        <div className="mx-auto w-full max-w-3xl rounded-xl">
-            <div className="flex justify-between items-center gap-2 sm:gap-4 ">
+        <section className="mx-auto w-full max-w-3xl rounded-xl">
+            <Card className="flex justify-between items-center gap-2 sm:gap-4 p-4">
                 {days.map((day, index) => (
                     <div key={index} className="flex flex-col items-center">
                         <div
@@ -70,7 +74,7 @@ const ShowWeek = () => {
                     border-2
                     flex flex-col items-center justify-center
                     transition-colors duration-200
-                    ${getExerciseStatusForDay(day.name) ? "bg-green-500 border-green-500 text-white" : "border-gray-300 bg-white text-gray-600"}
+                    ${getExerciseStatusForDay(day.name) ? "bg-green-500 border-green-700 text-white" : "border-gray-300 bg-white text-gray-600"}
                   `}
                             role="status"
                             aria-label={`Exercise status for ${day.name}`}
@@ -84,8 +88,8 @@ const ShowWeek = () => {
                         </span>
                     </div>
                 ))}
-            </div>
-        </div>
+            </Card>
+        </section>
     );
 }
 
