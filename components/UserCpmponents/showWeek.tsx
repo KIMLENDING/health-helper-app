@@ -72,12 +72,12 @@ const ShowWeek = () => {
 
             </CardTitle>
             <div className=' bg-muted/50 p-2 rounded-xl'>
-                <Card className="flex justify-between items-center gap-2 sm:gap-4 p-4">
+                <Card className="aspect-auto flex justify-between items-center gap-2 sm:gap-4 p-4">
                     {days.map((day, index) => (
                         <div key={index} className="flex flex-col items-center">
                             <div
                                 className={`
-                                w-10 h-10 sm:w-14 sm:h-14 
+                                w-8 h-8 sm:w-14 sm:h-14 
                                 rounded-full 
                                 border-2
                                 flex flex-col items-center justify-center
