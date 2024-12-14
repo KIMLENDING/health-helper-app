@@ -1,0 +1,21 @@
+{
+    "name": "Health helper",
+    "short_name": "Health helper",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#1DA1F2",
+    "icons": [
+      {
+        "src": "/icons/icon-512.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/icons/icon-512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  
