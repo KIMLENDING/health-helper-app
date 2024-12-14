@@ -5,15 +5,14 @@ import { getServerSession } from "next-auth"
 import User from "@/models/User"
 function getWeekRange() {
     const today = new Date(); // 오늘 날짜 (한국 시간 기준)
-    const utc = today.getTime() + (today.getTimezoneOffset() * 60 * 1000); // UTC 기준 시간
+    const utc = today.getTime() + (today.getTimezoneOffset() * 60 * 1000); //해당지역 시간 + 보정값(utc-지역시간) =  UTC 기준 시간
     const koreaTimeDiff = 9 * 60 * 60 * 1000; // 한국 시간과 UTC 시간의 차이
     const koreaTime = new Date(utc + koreaTimeDiff); // 한국 시간
+
     const sunday = new Date(koreaTime);
-    console.log(sunday.getDay())
     sunday.setDate(sunday.getDate() - sunday.getDay()); // 일요일 날짜 구하기
     sunday.setHours(0, 0, 0, 0);
 
-    console.log(sunday)
 
     // 토요일 23:59:59 계산
     const saturday = new Date(sunday);
