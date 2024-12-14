@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import User from "@/models/User"
 function getWeekRange() {
-    const today = new Date(new Date()); // 오늘 날짜 (한국 시간 기준)
+    const today = new Date(); // 오늘 날짜 (한국 시간 기준)
     const sunday = new Date(today);
     sunday.setDate(sunday.getDate() - sunday.getDay()); // 일요일 날짜 구하기
     sunday.setHours(0, 0, 0, 0);
