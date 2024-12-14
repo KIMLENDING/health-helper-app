@@ -1,5 +1,6 @@
 'use client';
 import ShowPlans from "@/components/UserCpmponents/showPlans";
+import ShowWeek from "@/components/UserCpmponents/showWeek";
 
 export default function Dashboard() {
 
@@ -14,6 +15,7 @@ export default function Dashboard() {
       최근 성과 및 기록 갱신
       운동 알림 및 팁
 
+      <ShowWeek />
       <ShowPlans />
 
       <div className="mx-auto h-24 w-full max-w-3xl rounded-xl bg-muted/50" />

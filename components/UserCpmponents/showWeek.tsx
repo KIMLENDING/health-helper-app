@@ -2,7 +2,7 @@
 import { useWeekSessions } from '@/server/queries';
 import React from 'react'
 import LoadingSpinner from '../LayoutCompents/LoadingSpinner';
-import { Card } from '../ui/card';
+import { Card, CardTitle } from '../ui/card';
 
 const ShowWeek = () => {
     const { data, isLoading, isError } = useWeekSessions();
@@ -63,32 +63,41 @@ const ShowWeek = () => {
 
     if (isLoading) return <div className='w-full flex justify-center items-center'><LoadingSpinner /></div>;
     return (
-        <section className="mx-auto w-full max-w-3xl rounded-xl">
-            <Card className="flex justify-between items-center gap-2 sm:gap-4 p-4">
-                {days.map((day, index) => (
-                    <div key={index} className="flex flex-col items-center">
-                        <div
-                            className={`
-                    w-10 h-10 sm:w-14 sm:h-14 
-                    rounded-full 
-                    border-2
-                    flex flex-col items-center justify-center
-                    transition-colors duration-200
-                    ${getExerciseStatusForDay(day.name) ? "bg-green-500 border-green-700 text-white" : "border-gray-300 bg-white text-gray-600"}
-                  `}
-                            role="status"
-                            aria-label={`Exercise status for ${day.name}`}
-                        >
-                            <span className="text-xs sm:text-sm font-medium">
-                                {day.date.getDate()}
+        <section className="mx-auto w-full max-w-3xl rounded-xl ">
+            <CardTitle className='my-3 font-extrabold text-2xl'>
+
+                <div className='flex flex-row gap-2 items-center hover:underline'>
+                    주간 히스토리
+                </div>
+
+            </CardTitle>
+            <div className=' bg-muted/50 p-2 rounded-xl'>
+                <Card className="flex justify-between items-center gap-2 sm:gap-4 p-4">
+                    {days.map((day, index) => (
+                        <div key={index} className="flex flex-col items-center">
+                            <div
+                                className={`
+                                w-10 h-10 sm:w-14 sm:h-14 
+                                rounded-full 
+                                border-2
+                                flex flex-col items-center justify-center
+                                transition-colors duration-200
+                                ${getExerciseStatusForDay(day.name) ? "bg-green-500 border-green-700 text-white" : "border-gray-300 bg-white text-gray-600"}
+                                `}
+                                role="status"
+                                aria-label={`Exercise status for ${day.name}`}
+                            >
+                                <span className="text-sm sm:text-base font-semibold">
+                                    {day.date.getDate()}
+                                </span>
+                            </div>
+                            <span className="mt-2 text-sm sm:text-base font-semibold ">
+                                {day.label}
                             </span>
                         </div>
-                        <span className="mt-2 text-sm sm:text-base font-medium ">
-                            {day.label}
-                        </span>
-                    </div>
-                ))}
-            </Card>
+                    ))}
+                </Card>
+            </div>
         </section>
     );
 }
