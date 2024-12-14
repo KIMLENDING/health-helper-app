@@ -25,9 +25,10 @@ const ShowWeek = () => {
         ],
     };
     const getCurrentWeekDates = () => {
+        // 오늘 날짜를 기준으로 이번주 월요일부터 일요일까지의 날짜를 배열로 반환
         const today = new Date();
         const monday = new Date(today);
-        monday.setDate(monday.getDate() - monday.getDay() + 1);
+        monday.setDate(monday.getDate() - monday.getDay() + 1); // 월요일 날짜 구하기
         return Array(7)
             .fill(null)
             .map((_, i) => {
@@ -44,9 +45,10 @@ const ShowWeek = () => {
         }),
         date: date,
     }));
+
     const getExerciseStatusForDay = (dayName: any) => {
-        return exerciseData.completedWorkouts.some((workout) => {
-            const date = new Date(workout.date.$date);
+        return data.sessions.some((session: any) => {
+            const date = new Date(session.createdAt);
             return (
                 date.toLocaleString("ko-KR", {
                     weekday: "long",
@@ -54,6 +56,7 @@ const ShowWeek = () => {
             );
         });
     };
+
     if (isLoading) return <div>Loading...</div>;
     return (
         <div className="mx-auto w-full max-w-3xl rounded-xl">
