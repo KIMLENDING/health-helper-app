@@ -40,10 +40,10 @@ export const PATCH = async (request: NextRequest, { params }: { params: Promise<
         if (!user) {
             return NextResponse.json({ message: 'User not found' }, { status: 404 });
         }
-        console.log(title);
+        // console.log(title);
         const updatedPlan = await ExercisePlan.findOneAndUpdate(
             { _id: planId }, { $set: { title } }, { new: true });
-        console.log(updatedPlan);
+        // console.log(updatedPlan);
         if (!updatedPlan) {
             return NextResponse.json({ message: '수정할 플랜이 존재하지 않습니다.' }, { status: 404 });
         }

@@ -50,7 +50,7 @@ const PlanDialogForm = ({ item, SetState, state }: { item: Exercise, SetState: R
                 return [...prevState, { exerciseId: item._id, title: item.title, ...newData }] // 새로운 데이터를 추가합니다.
             }
         });
-        console.log(item._id, newData);
+
         // 상위 컴포넌트에 데이터를 반환하는 로직
     };
 

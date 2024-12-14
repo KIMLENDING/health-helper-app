@@ -103,7 +103,7 @@ export const useInProgress = () => {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json().then((data) => {
-                console.log(data);
+
                 if (!data.latestSession) {
                     return null;
                 }

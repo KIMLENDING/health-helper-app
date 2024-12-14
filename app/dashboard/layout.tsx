@@ -82,7 +82,7 @@ export default function DachboardLayout({
   const getRouteName = () => {
     return sortedRouters.find(route => pathname.startsWith(route.url))?.name || "Page";
   }
-  console.log(data?.exercises)
+
   return (
     <SidebarProvider >
       <SidebarLeft />

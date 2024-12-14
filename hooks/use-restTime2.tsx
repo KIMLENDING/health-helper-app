@@ -51,9 +51,7 @@ export const useRestTime = ({
                 timerRef.current = null;
             }
         }
-        console.log('restTime:', restTime);
-        console.log('progress--:', progress);
-        console.log("defaultRestTime", defaultRestTime)
+
         setProgress(Math.min((restTime / defaultRestTime) * 100, 100));
         // 타이머 종료 시 정리
         if (restTime === 0) {
@@ -85,7 +83,7 @@ export const useRestTime = ({
 
     useEffect(() => {
         // 휴식 중일 때만 진행률 계산
-        console.log('progress:', progress);
+
         const calculateProgress = () => {
             const newProgress = Math.min((restTime / defaultRestTime) * 100, 100);
             setProgress(prevProgress => {

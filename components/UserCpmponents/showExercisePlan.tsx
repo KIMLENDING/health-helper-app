@@ -63,7 +63,7 @@ const ShowExercisePlan = () => {
             setLoading(false);
         }
     }
-    console.log(data)
+
     if (isLoading) return <LoadingSpinner />
     return (
         <div className='mx-auto w-full max-w-3xl rounded-xl'>

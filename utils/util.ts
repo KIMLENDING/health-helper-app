@@ -56,11 +56,12 @@ export interface ExerciseOption {
     rest: number
 }
 
-export interface ExercisesessionData {
-    _id?: string
-    set: number,
-    reps: number,
-    weight: number,
+export interface ExerciseSession {
+    _id?: string,
+    userId: string,
+    exercisePlanId: string,
+    exercises: ExerciseOptionSession[],
+    state: string // 'inProgress' | 'done' 초기 상태는 inProgress 
 }
 export interface ExerciseOptionSession {
     _id?: string,
@@ -73,14 +74,13 @@ export interface ExerciseOptionSession {
     session: ExercisesessionData[]
 
 }
-
-export interface ExerciseSession {
-    _id?: string,
-    userId: string,
-    exercisePlanId: string,
-    exercises: ExerciseOptionSession[],
-    state: string // 'inProgress' | 'done' 초기 상태는 inProgress 
+export interface ExercisesessionData {
+    _id?: string
+    set: number,
+    reps: number,
+    weight: number,
 }
+
 
 export interface PostExerciseSession {
     sessionId: string,

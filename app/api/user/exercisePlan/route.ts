@@ -14,7 +14,7 @@ import User from "@/models/User"
 export const POST = async (request: NextRequest) => {
     // 운동 추가
     // 요청에서 사용자 ID 가져오기
-    console.log('post요청')
+    // console.log('post요청')
     const { title, exercises, userId } = await request.json();
 
     const getSession = await getServerSession();
@@ -41,7 +41,7 @@ export const POST = async (request: NextRequest) => {
         title,
         exercises,
     });
-    console.log('newExercisePlan', newExercisePlan);
+    // console.log('newExercisePlan', newExercisePlan);
     try {
         await newExercisePlan.save();
         return NextResponse.json({ message: '플랜 추가 성공' }, { status: 201 });
@@ -61,7 +61,7 @@ export const PATCH = async (request: NextRequest) => {
     try {
         const { userId, exercisePlanId, exercises, type } = await request.json();
 
-        console.log(type)
+        // console.log(type)
         const getSession = await getServerSession();
         if (!getSession) {
             // 로그인 안되어있으면 로그인 페이지로 이동
@@ -93,7 +93,7 @@ export const PATCH = async (request: NextRequest) => {
             // 기존 운동 ID와 새로운 운동 ID 비교 해서 중복 제거
             const newExercises = exercises.filter((ex: any) => !existingExerciseIds.includes(ex.exerciseId));
             if (newExercises.length === 0) {
-                console.log('이미 존재하는 운동입니다.');
+                // console.log('이미 존재하는 운동입니다.');
                 return NextResponse.json({ message: '이미 존재하는 운동입니다.' }, { status: 400 });
             }
             // 운동 추가

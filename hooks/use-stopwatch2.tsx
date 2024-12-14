@@ -19,10 +19,10 @@ export const useStopwatch = () => {
         // 초기 값으로 로컬 스토리지에서 실행 상태 복원
         const savedRunningState = localStorage.getItem('stopwatch_running');
         if (savedRunningState) {
-            console.log('savedRunningState:', savedRunningState);
+
             setIsRunning(savedRunningState === 'true');
         }
-        console.log('isRunning:2', isRunning);
+
         // 초기화 완료
         setIsInitialized(true);
     }, []);

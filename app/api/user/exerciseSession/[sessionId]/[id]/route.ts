@@ -12,7 +12,7 @@ import User from "@/models/User"
  */
 export const POST = async (request: NextRequest) => {
     const { sessionId, exerciseId, state, sessionData, repTime } = await request.json();
-    console.log(sessionId, exerciseId, state, sessionData, repTime);
+    // console.log(sessionId, exerciseId, state, sessionData, repTime);
     const getSession = await getServerSession();
     if (!getSession) {
         // 로그인 안되어있으면 로그인 페이지로 이동
@@ -27,7 +27,7 @@ export const POST = async (request: NextRequest) => {
     try {
         // 특정 exerciseId의 state 업데이트
         if (state === 'inProgress') {
-            console.log('inProgress');
+            // console.log('inProgress');
             const updatedSession = await ExerciseSession.findOneAndUpdate(
                 { _id: sessionId, "exercises._id": exerciseId },// 조건
                 {
@@ -36,7 +36,7 @@ export const POST = async (request: NextRequest) => {
                 },
                 { new: true } // 업데이트 후 새로운 문서를 반환
             );//$ 연산자는 배열의 요소에 접근하기 위해 사용
-            console.log(updatedSession.exercises[0].session);
+            // console.log(updatedSession.exercises[0].session);
             if (!updatedSession) {
                 return NextResponse.json(
                     { error: "Exercise session or exercise not found" },
@@ -46,7 +46,7 @@ export const POST = async (request: NextRequest) => {
             return NextResponse.json({ updatedSession, message: '세트 시작' }, { status: 201 });
         }
         if (state === 'done') {
-            console.log('done');
+            // console.log('done');
             const updatedSession = await ExerciseSession.findOneAndUpdate(
                 { _id: sessionId, "exercises._id": exerciseId },// 조건
                 {
@@ -70,7 +70,7 @@ export const POST = async (request: NextRequest) => {
 
 export const PATCH = async (request: NextRequest) => {
     const { sessionId, exerciseId, detailSessionId, reps, weight } = await request.json();
-    console.log(sessionId, exerciseId);
+    // console.log(sessionId, exerciseId);
     const getSession = await getServerSession();
     if (!getSession) {
         // 로그인 안되어있으면 로그인 페이지로 이동

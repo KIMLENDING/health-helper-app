@@ -58,7 +58,7 @@ export default function LoginPage() {
             email,
             password,
         });
-        console.log(res)
+
         if (res?.error) {
             setError("이메일 또는 비밀번호가 유효하지 않습니다.");
             toast({ variant: "destructive", title: "이메일 또는 비밀번호가 유효하지 않습니다." })

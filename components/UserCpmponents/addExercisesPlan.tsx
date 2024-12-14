@@ -60,7 +60,7 @@ const AddExercisesPlan = ({ plan_id }: { plan_id: string }) => {
             return toast({ variant: 'default2', title: 'sets, reps, rest를 설정해주세요' });
         }
         else if (planData.length !== exerciseOption.length) {
-            console.log(planData.length, exerciseOption.length)
+
             return toast({ variant: 'default2', title: '추가 할 운동 중 sets, reps, rest가 설정되지 않는 운동이 있습니다.' });
         }
         else if (session?.user._id) {

@@ -40,7 +40,7 @@ const Page = () => {
             setLoading(true); // 로딩 시작
 
             const res = await useAllDoneExerciseSessionMutation.mutateAsync({ sessionId });
-            console.log(res);
+
             if (res.delete) { // 완료한 운동이 없어 세션을 제거했을 경우
                 router.push('/dashboard');
                 return;
@@ -181,7 +181,7 @@ const Page = () => {
     }
 
     const handleCountdownComplete = () => { // 카운트 다운이 끝나면 실행
-        console.log('카운트 다운 완료');
+        // console.log('카운트 다운 완료');
         setShowCountdown(false);
         toggleRunning(); // 타이머 시작
     };

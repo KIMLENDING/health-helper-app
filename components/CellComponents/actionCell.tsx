@@ -46,13 +46,13 @@ const ActionCell = ({ row }: { row: any }) => {
                 return response.json()
             },
             onSuccess: (data) => {
-                console.log("onSuccess", data)
+
                 toast({ variant: "default2", title: `${data.message}` })
                 queryClient.invalidateQueries({ queryKey: ["exercises"] }) // 데이터 갱신 후 자동으로 UI 업데이트
                 setDialogOpen(false) // 모달 닫기
             },
             onError: (error) => {
-                console.log("onError", error)
+
                 toast({ variant: "destructive", title: `${error}` })
             }
         },
@@ -61,7 +61,7 @@ const ActionCell = ({ row }: { row: any }) => {
     // 폼 데이터 변경 핸들러
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
-        console.log(name, value)
+
         setFormData((prev) => ({ ...prev, [name]: value }))
     }
     const handleTagChanges = useCallback(() => {

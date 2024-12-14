@@ -88,7 +88,7 @@ export const authOptions: any = {
         return { ...token, ...session.user };
       }
       if (user) { // 로그인할 때마다 실행
-        console.log("User----jwt", user);
+        // console.log("User----jwt", user);
         // console.log("Token----", token);
         token.role = user.role; // user의 role을 token에 추가
         token.image = user.image; // user의 image를 token에 추가

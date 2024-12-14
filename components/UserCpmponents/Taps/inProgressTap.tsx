@@ -45,7 +45,7 @@ const InProgressTap = ({
     const handleEdit = (index: string | undefined) => {
         if (!index) return;
         const session = data?.exercises.find((exercise) => exercise._id === currentExercise)?.session.find((session) => session._id === index);
-        console.log(session);
+        // console.log(session);
         if (session?._id === index) {
             console.log('edit')
             setEditingIndex(index);
