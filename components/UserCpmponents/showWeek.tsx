@@ -11,8 +11,8 @@ interface ShowWeekProps {
 }
 
 const ShowWeek = ({ data, isLoading, isError }: ShowWeekProps) => {
-    // const { data, isLoading, isError } = useWeekSessions();
 
+    console.log(data)
     const getCurrentWeekDates = () => {
         // 오늘 날짜를 기준으로 이번주 일요일부터 토요일까지의 날짜를 배열로 반환
         const today = new Date();
