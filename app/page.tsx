@@ -8,13 +8,13 @@ const page = () => {
             {/* <Link href={'login'}>
                 <Link2Icon />
             </Link>
-            <Link href={'register'}>
+            <Link href={'register'}> 
                 <GiftIcon />
             </Link> */}
             <div className="min-h-screen w-full">
                 <nav className="flex items-center justify-between px-6 py-4 border-b">
                     <div className="flex items-center gap-2">
-                        <DumbbellIcon className="h-8 w-8" />
+                        <DumbbellIcon className="h-8 w-8 text-green-400" />
                         <span className="text-xl font-bold">FitHelper</span>
                     </div>
                     <div className="flex gap-4">
