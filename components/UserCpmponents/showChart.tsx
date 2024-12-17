@@ -100,7 +100,9 @@ const ShowChart = ({ data, isLoading, isError }: ShowChartProps) => {
                     <ChartTooltip content={<ChartTooltipContent />}
 
                         formatter={(value, name, props) => {
-                            return [<div className='flex flex-row gap-1 items-center'>
+                            return [<div
+                                key="totalTime"
+                                className='flex flex-row gap-1 items-center'>
                                 <div className='h-2.5 w-2.5 bg-blue-400 border-blue-400 rounded-[2px]'></div>
                                 {props.payload.formetTime}
                             </div>];
