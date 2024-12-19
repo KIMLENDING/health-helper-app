@@ -1,10 +1,12 @@
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+import { useSidebar } from '@/components/ui/sidebar'
 import { chartConfig } from '@/lib/utils'
 import { ExerciseOptionSession, ExerciseSession, ExercisesessionData } from '@/utils/util'
 import React from 'react'
 import { CartesianGrid, LabelList, Line, LineChart, XAxis } from 'recharts'
 
 const WeightByDay = ({ data }: { data: any }) => {
+
     const totalWeightByDay = data?.sessions.flatMap((session: ExerciseSession) => {
         if (!session.createdAt) return;
         const day = new Date(session.createdAt).toLocaleString("ko-KR", {
@@ -19,7 +21,7 @@ const WeightByDay = ({ data }: { data: any }) => {
         };
     });
     return (
-        <ChartContainer config={chartConfig}>
+        <ChartContainer config={chartConfig} className="aspect-auto min-h-[200px] w-full">
             <LineChart
                 accessibilityLayer
                 data={totalWeightByDay}

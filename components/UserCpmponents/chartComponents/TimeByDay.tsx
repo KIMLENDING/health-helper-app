@@ -1,10 +1,13 @@
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { useSidebar } from '@/components/ui/sidebar';
 import { chartConfig } from '@/lib/utils';
 import { ExerciseOptionSession, ExerciseSession } from '@/utils/util';
 import React from 'react'
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
-const TimeByDay = ({ data, isMobile }: { data: any, isMobile: boolean }) => {
+const TimeByDay = ({ data }: { data: any }) => {
+
+
     const totalTimeByDay = data?.sessions.flatMap((session: ExerciseSession) => {
         const totalTime = session.exercises.map((exercise: ExerciseOptionSession) => {
             return exercise.repTime || 0;
@@ -19,13 +22,16 @@ const TimeByDay = ({ data, isMobile }: { data: any, isMobile: boolean }) => {
         return { day, formetTime, totalTime };
     });
     return (
-        <ChartContainer config={chartConfig} className={` min-h-[200px] ${isMobile}&&min-w-[300px]`}>
+        <ChartContainer config={chartConfig} className={`min-h-[200px] aspect-auto w-full`}>
             <BarChart accessibilityLayer data={totalTimeByDay}
                 margin={{
                     top: 20,
                     left: 12,
                     right: 12,
-                }}>
+                }}
+
+            >
+
                 <CartesianGrid vertical={false} />
                 <XAxis
                     dataKey="day"

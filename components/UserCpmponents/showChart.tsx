@@ -19,8 +19,8 @@ interface ShowChartProps {
 const ShowChart = ({ data, isLoading, isError }: ShowChartProps) => {
 
     const { isMobile } = useSidebar();
-    console.log(isMobile)
-    useEffect(() => { }, [isMobile])
+
+
     return (
         <section className="mx-auto w-full max-w-3xl rounded-xl ">
             {isMobile && <h1 className='text-2xl font-bold text-center mb-3'>주간 히스토리</h1>}
@@ -33,16 +33,16 @@ const ShowChart = ({ data, isLoading, isError }: ShowChartProps) => {
                 <CarouselContent className={` ${isMobile ? 'p-2  h-96 flex ' : 'p-2 ml-0 mr-2'}`} >
                     <CarouselItem className={`${isMobile && ' flex-1  '}`}>
                         <CardContainer title='주간 운동 종목'  >
-                            <TitlebyDay data={data} isMobile />
+                            <TitlebyDay data={data} />
                         </CardContainer>
                     </CarouselItem>
-                    {/* <CarouselItem className={`${isMobile && '  flex-1 '}`}>
+                    <CarouselItem className={`${isMobile && '  flex-1 '}`}>
                         <CardContainer title='주간 운동 시간' >
-                            <TimeByDay data={data} isMobile />
+                            <TimeByDay data={data} />
                         </CardContainer>
-                    </CarouselItem> */}
+                    </CarouselItem>
 
-                    <CarouselItem className={`${isMobile && '  flex-1 w-full h-full'}`}>
+                    <CarouselItem className={`${isMobile && '  flex-1 '}`}>
                         <CardContainer title='주간 운동량' >
                             <WeightByDay data={data} />
                         </CardContainer>

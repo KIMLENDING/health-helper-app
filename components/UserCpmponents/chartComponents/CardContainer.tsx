@@ -13,11 +13,11 @@ const CardContainer = ({
 }>) => {
 
     return (
-        <Card >
+        <Card className='basis-full'>
             <CardHeader className='pb-0 px-0 flex items-center'>
                 <CardTitle>{title}</CardTitle>
             </CardHeader>
-            <CardContent className='px-0'>
+            <CardContent className='flex'>
                 {children}
             </CardContent>
         </Card>

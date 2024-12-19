@@ -1,11 +1,13 @@
 
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { useSidebar } from '@/components/ui/sidebar';
 import { chartConfig } from '@/lib/utils';
 import { ExerciseOptionSession, ExerciseSession, ExercisesessionData } from '@/utils/util';
 import React from 'react'
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
-const TitlebyDay = ({ data, isMobile }: { data: any, isMobile: boolean }) => {
+const TitlebyDay = ({ data, }: { data: any }) => {
+    const { isMobile } = useSidebar();
 
     const totalWeightsByTitle = data?.sessions.flatMap((session: ExerciseSession) => {
         return session.exercises.map((exercise: ExerciseOptionSession) => {
@@ -23,13 +25,14 @@ const TitlebyDay = ({ data, isMobile }: { data: any, isMobile: boolean }) => {
         }
         return acc;
     }, []);
+
     return (
-        <ChartContainer config={chartConfig} className="min-h-[200px] ">
+        <ChartContainer config={chartConfig} className="min-h-[200px] aspect-auto w-full">
             <BarChart accessibilityLayer data={totalWeightsByTitle}
                 margin={{
                     top: 20,
                 }}
-                barSize={isMobile ? 20 : 30}
+                barSize={isMobile ? 20 : 50}
             >
 
                 <CartesianGrid vertical={false} />
