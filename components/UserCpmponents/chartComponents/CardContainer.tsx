@@ -9,7 +9,7 @@ const CardContainer = ({
     title: string;
 }>) => {
     return (
-        <Card>
+        <Card >
             <CardHeader className='pb-0'>
                 <CardTitle>{title}</CardTitle>
             </CardHeader>

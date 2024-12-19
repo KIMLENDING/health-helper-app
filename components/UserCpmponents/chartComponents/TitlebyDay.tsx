@@ -25,7 +25,7 @@ const TitlebyDay = ({ data }: { data: any }) => {
     }, []);
     return (
 
-        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+        <ChartContainer config={chartConfig} className="min-h-[200px] ">
             <BarChart accessibilityLayer data={totalWeightsByTitle}
                 margin={{
                     top: 20,
@@ -51,7 +51,7 @@ const TitlebyDay = ({ data }: { data: any }) => {
                     }}
                 />
                 <ChartLegend content={<ChartLegendContent />} />
-                <Bar dataKey="totalWeight" fill="var(--color-mobile)" radius={4} >
+                <Bar dataKey="totalWeight" fill="var(--color-mobile)" radius={4}  >
                 </Bar>
             </BarChart>
         </ChartContainer>

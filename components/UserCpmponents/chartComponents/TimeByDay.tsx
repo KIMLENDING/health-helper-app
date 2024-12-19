@@ -19,7 +19,7 @@ const TimeByDay = ({ data }: { data: any }) => {
         return { day, formetTime, totalTime };
     });
     return (
-        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+        <ChartContainer config={chartConfig} className=" min-h-[200px]">
             <BarChart accessibilityLayer data={totalTimeByDay}
                 margin={{
                     top: 20,
