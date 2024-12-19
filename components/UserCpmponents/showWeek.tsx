@@ -3,6 +3,7 @@
 import React from 'react'
 import LoadingSpinner from '../LayoutCompents/LoadingSpinner';
 import { Card, CardTitle } from '../ui/card';
+import { useSession } from 'next-auth/react';
 
 interface ShowWeekProps {
     data: any; // message, session:ExerciseSession[]
@@ -12,7 +13,7 @@ interface ShowWeekProps {
 
 const ShowWeek = ({ data, isLoading, isError }: ShowWeekProps) => {
 
-
+    const { data: sessions } = useSession();
     const getCurrentWeekDates = () => {
         // 오늘 날짜를 기준으로 이번주 일요일부터 토요일까지의 날짜를 배열로 반환
         const today = new Date();
@@ -63,13 +64,13 @@ const ShowWeek = ({ data, isLoading, isError }: ShowWeekProps) => {
                             <div key={index} className="flex flex-col items-center">
                                 <div
                                     className={`
-                                w-8 h-8 sm:w-14 sm:h-14 
-                                rounded-full 
-                                border-2
-                                flex flex-col items-center justify-center
-                                transition-colors duration-200
-                                ${getExerciseStatusForDay(day.name) ? "bg-green-500 border-green-700 text-white" : "border-gray-300 bg-white text-gray-600"}
-                                `}
+                    w-8 h-8 sm:w-14 sm:h-14 
+                    rounded-full 
+                    border-2
+                    flex flex-col items-center justify-center
+                    transition-colors duration-200
+                    ${getExerciseStatusForDay(day.name) ? "bg-green-500 border-green-700 text-white" : "border-gray-300 bg-white text-gray-600"}
+                    `}
                                     role="status"
                                     aria-label={`Exercise status for ${day.name}`}
                                 >
@@ -85,8 +86,10 @@ const ShowWeek = ({ data, isLoading, isError }: ShowWeekProps) => {
                     </Card>
                 }
             </div>
-
-            <div>{isError && '새로고침해 보세요'}</div>
+            <div>
+                {!sessions && '로그인 해주세요'}
+                {sessions && isError && '새로고침해 보세요'}
+            </div>
         </section>
     );
 }
