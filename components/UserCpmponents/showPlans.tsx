@@ -12,6 +12,10 @@ import { DrawerDialogDemo } from '../LayoutCompents/ResponsiveDialog';
 const ShowPlans = () => {
     const { data: sessions } = useSession();
     const { data, isError, isLoading } = getExercisePlan(sessions?.user._id); // 필요한 운동 계획 데이터를 가져옵니다.
+    console.log('data', data)
+    console.log('isError', isError)
+    console.log('isLoading', isLoading)
+    console.log('sessions', sessions)
     const Icons = [
         { name: 'BicepsFlexed', icon: <BicepsFlexed className='text-green-400' /> },
         { name: 'DumbbellIcon', icon: <DumbbellIcon className='text-green-400' /> },
@@ -33,8 +37,7 @@ const ShowPlans = () => {
                 </Link>
             </CardTitle>
             <div className='rounded-xl bg-muted/50 p-2'>
-
-                {isLoading || !sessions ? <LoadingSpinner className="w-full flex justify-center items-center h-8 " /> : data ?
+                {!isLoading && !sessions ? <div>로그인이 필요합니다.</div> : <> {isLoading || !sessions ? <LoadingSpinner className="w-full flex justify-center items-center h-8 " /> : data ?
                     <div className={`grid gap-2 grid-cols-${columnCount} max-md:grid-cols-${columnCount2} max-sm:grid-cols-1 `}>{
                         data.map((plan) => {
                             const randomIndex = Math.floor(Math.random() * Icons.length);
@@ -54,7 +57,8 @@ const ShowPlans = () => {
                         })
                     }</div>
                     : <div>운동 계획이 없습니다.</div>
-                }
+                }</>}
+
                 <div>{isError && '새로고침해 보세요'}</div>
             </div>
         </div>

@@ -12,7 +12,7 @@ interface ShowWeekProps {
 
 const ShowWeek = ({ data, isLoading, isError }: ShowWeekProps) => {
 
-    console.log(data)
+
     const getCurrentWeekDates = () => {
         // 오늘 날짜를 기준으로 이번주 일요일부터 토요일까지의 날짜를 배열로 반환
         const today = new Date();
@@ -37,7 +37,8 @@ const ShowWeek = ({ data, isLoading, isError }: ShowWeekProps) => {
 
 
     const getExerciseStatusForDay = (dayName: any) => {
-        return data.sessions.some((session: any) => {
+        if (!data?.sessions) return false;
+        return data?.sessions.some((session: any) => {
             const date = new Date(session.createdAt);
             return (
                 date.toLocaleString("ko-KR", {
