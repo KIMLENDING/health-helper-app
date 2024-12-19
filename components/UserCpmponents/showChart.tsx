@@ -19,11 +19,11 @@ interface ShowChartProps {
 const ShowChart = ({ data, isLoading, isError }: ShowChartProps) => {
 
     const { isMobile } = useSidebar();
-
+    console.log(isMobile)
     return (
         <section className="mx-auto w-full max-w-3xl rounded-xl ">
             {isMobile && <h1 className='text-2xl font-bold text-center mb-3'>주간 히스토리</h1>}
-            <Carousel opts={{
+            {/* <Carousel opts={{
                 align: "start",
                 slidesToScroll: 1,
 
@@ -52,7 +52,7 @@ const ShowChart = ({ data, isLoading, isError }: ShowChartProps) => {
                         <CarouselNext />
                     </>
                 }
-            </Carousel>
+            </Carousel> */}
 
         </section>
     )
