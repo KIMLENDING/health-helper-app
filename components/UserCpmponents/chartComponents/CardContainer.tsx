@@ -1,19 +1,23 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 import React from 'react'
 
 const CardContainer = ({
     children,
-    title
+    title,
+
 }: Readonly<{
     children: React.ReactNode;
     title: string;
+
 }>) => {
+
     return (
         <Card >
-            <CardHeader className='pb-0'>
+            <CardHeader className='pb-0 px-0 flex items-center'>
                 <CardTitle>{title}</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className='px-0'>
                 {children}
             </CardContent>
         </Card>

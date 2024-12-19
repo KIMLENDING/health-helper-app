@@ -1,4 +1,4 @@
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
+import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
 import { chartConfig } from '@/lib/utils'
 import { ExerciseOptionSession, ExerciseSession, ExercisesessionData } from '@/utils/util'
 import React from 'react'
@@ -27,6 +27,7 @@ const WeightByDay = ({ data }: { data: any }) => {
                     top: 20,
                     left: 25,
                     right: 20,
+
                 }}
             >
                 <CartesianGrid vertical={false} />
@@ -41,6 +42,7 @@ const WeightByDay = ({ data }: { data: any }) => {
                     cursor={false}
                     content={<ChartTooltipContent indicator="line" />}
                 />
+                <ChartLegend content={<ChartLegendContent />} />
                 <Line
                     dataKey="totalWeight"
                     type="natural"

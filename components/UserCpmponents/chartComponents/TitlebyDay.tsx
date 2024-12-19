@@ -5,7 +5,7 @@ import { ExerciseOptionSession, ExerciseSession, ExercisesessionData } from '@/u
 import React from 'react'
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
-const TitlebyDay = ({ data }: { data: any }) => {
+const TitlebyDay = ({ data, isMobile }: { data: any, isMobile: boolean }) => {
 
     const totalWeightsByTitle = data?.sessions.flatMap((session: ExerciseSession) => {
         return session.exercises.map((exercise: ExerciseOptionSession) => {
@@ -28,16 +28,17 @@ const TitlebyDay = ({ data }: { data: any }) => {
             <BarChart accessibilityLayer data={totalWeightsByTitle}
                 margin={{
                     top: 20,
-                    left: 12,
-                    right: 12,
-                }}>
+                }}
+                barSize={isMobile ? 20 : 30}
+            >
+
                 <CartesianGrid vertical={false} />
                 <XAxis
                     dataKey="title"
                     tickLine={false}
                     tickMargin={10}
                     axisLine={false}
-                    tickFormatter={(value) => value.slice(0, 10)}
+                    tickFormatter={(value) => value.slice(0, 5)}
                 />
                 <ChartTooltip content={<ChartTooltipContent />}
                     formatter={(value, name, props) => {
