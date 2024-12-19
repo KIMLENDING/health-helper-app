@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { chartConfig } from '@/lib/utils';
 import { ExerciseOptionSession, ExerciseSession, ExercisesessionData } from '@/utils/util';
@@ -24,7 +24,6 @@ const TitlebyDay = ({ data }: { data: any }) => {
         return acc;
     }, []);
     return (
-
         <ChartContainer config={chartConfig} className="min-h-[200px] ">
             <BarChart accessibilityLayer data={totalWeightsByTitle}
                 margin={{

@@ -27,7 +27,7 @@ const ShowChart = ({ data, isLoading, isError }: ShowChartProps) => {
                 align: "start",
             }}
                 orientation={isMobile ? "vertical" : 'horizontal'} className='bg-muted/50 p-2 rounded-xl  w-full' >
-                <CarouselContent className={isMobile ? 'p-2 max-h-[400px]' : 'p-5'} >
+                <CarouselContent className={isMobile ? 'p-2 max-h-[320px]' : 'p-5'} >
                     <CarouselItem >
                         <CardContainer title='주간 운동 종목' >
                             <TitlebyDay data={data} />
@@ -51,13 +51,6 @@ const ShowChart = ({ data, isLoading, isError }: ShowChartProps) => {
                     </>
                 }
             </Carousel>
-
-
-
-
-
-
-
         </section>
     )
 }
