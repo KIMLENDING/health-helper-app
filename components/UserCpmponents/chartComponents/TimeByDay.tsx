@@ -4,7 +4,7 @@ import { ExerciseOptionSession, ExerciseSession } from '@/utils/util';
 import React from 'react'
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
-const TimeByDay = ({ data }: { data: any }) => {
+const TimeByDay = ({ data, isMobile }: { data: any, isMobile: boolean }) => {
     const totalTimeByDay = data?.sessions.flatMap((session: ExerciseSession) => {
         const totalTime = session.exercises.map((exercise: ExerciseOptionSession) => {
             return exercise.repTime || 0;
@@ -19,7 +19,7 @@ const TimeByDay = ({ data }: { data: any }) => {
         return { day, formetTime, totalTime };
     });
     return (
-        <ChartContainer config={chartConfig} className=" min-h-[200px]">
+        <ChartContainer config={chartConfig} className={` min-h-[200px] ${isMobile}&&min-w-[300px]`}>
             <BarChart accessibilityLayer data={totalTimeByDay}
                 margin={{
                     top: 20,
