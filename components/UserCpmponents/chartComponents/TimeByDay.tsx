@@ -52,7 +52,7 @@ const TimeByDay = ({ data }: { data: any }) => {
                     }}
                 />
                 <ChartLegend content={<ChartLegendContent />} />
-                <Bar dataKey="totalTime" fill="var(--color-mobile)" radius={4} />
+                <Bar dataKey="totalTime" fill="var(--color-totalTime)" radius={4} />
             </BarChart>
         </ChartContainer>
 

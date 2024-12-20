@@ -54,7 +54,7 @@ const TitlebyDay = ({ data, }: { data: any }) => {
                     }}
                 />
                 <ChartLegend content={<ChartLegendContent />} />
-                <Bar dataKey="totalWeight" fill="var(--color-mobile)" radius={4}  >
+                <Bar dataKey="totalWeight" fill="var(--color-title)" radius={4}  >
                 </Bar>
             </BarChart>
         </ChartContainer>

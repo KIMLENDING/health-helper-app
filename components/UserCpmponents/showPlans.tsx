@@ -29,12 +29,16 @@ const ShowPlans = () => {
     return (
         <div className='mx-auto w-full max-w-3xl rounded-xl'>
             <CardTitle className='my-3 font-extrabold text-2xl'>
-                <Link href={'/dashboard/exercisePlans'}>
-                    <div className='flex flex-row gap-2 items-center hover:underline'>
+                {sessions ?
+                    <Link href={'/dashboard/exercisePlans'}>
+                        <div className='flex flex-row gap-2 items-center hover:underline'>
+                            플랜 목록
+                            <SquareArrowOutUpRightIcon className='text-red-400' />
+                        </div>
+                    </Link> : <div className='flex flex-row gap-2 items-center hover:underline'>
                         플랜 목록
                         <SquareArrowOutUpRightIcon className='text-red-400' />
-                    </div>
-                </Link>
+                    </div>}
             </CardTitle>
             <div className='rounded-xl bg-muted/50 p-2'>
                 {!isLoading && !sessions ? <div>로그인이 필요합니다.</div> : <> {isLoading || !sessions ? <LoadingSpinner className="w-full flex justify-center items-center h-8 " /> : data ?

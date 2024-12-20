@@ -17,7 +17,7 @@ export const chartConfig = {
   },
   title: {
     label: "Title",
-    color: "#60a5fa",
+    color: "#2563eb",
   },
   totalWeight: {
     label: "횟수 x 무게(kg)",

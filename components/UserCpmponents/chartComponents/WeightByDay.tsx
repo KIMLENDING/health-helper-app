@@ -48,10 +48,10 @@ const WeightByDay = ({ data }: { data: any }) => {
                 <Line
                     dataKey="totalWeight"
                     type="natural"
-                    stroke="var(--color-desktop)"
+                    stroke="var(--color-totalWeight)"
                     strokeWidth={2}
                     dot={{
-                        fill: "var(--color-desktop)",
+                        fill: "var(--color-totalWeight)",
                     }}
                     activeDot={{
                         r: 6,
