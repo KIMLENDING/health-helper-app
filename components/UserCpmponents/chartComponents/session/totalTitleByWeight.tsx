@@ -75,13 +75,19 @@ const TotalTitleByWeight = ({ data }: { data: any }) => {
                             className='w-full h-full'
                         >
                             <ChartTooltip cursor={false}
-                                content={<ChartTooltipContent formatter={(value, name, props) => {
-                                    const originalValue = name === "log_totalTitleByWeight" ? props.payload.totalTitleByWeight : props.payload.totalTitleByReps;
-                                    return (<div className='flex flex-row gap-1 items-center'>
-                                        <div className={`h-2.5 w-2.5 ${name === "log_totalTitleByWeight" ? 'bg-blue-400 border-blue-400' : 'bg-red-400 border-red-400'} rounded-[2px] `} />
-                                        {name === "log_totalTitleByWeight" ? `${originalValue} kg` : `${originalValue} 회`}
-                                    </div>)
-                                }} />}
+                                content={<ChartTooltipContent
+                                    indicator='line'
+
+                                    formatter={(value, name, props,) => {
+                                        const originalValue = name === "log_totalTitleByWeight" ? props.payload.totalTitleByWeight : props.payload.totalTitleByReps;
+                                        return (<div className='flex flex-row gap-1 items-center'>
+                                            <div className={`h-2.5 w-2.5 ${name === "log_totalTitleByWeight" ? 'bg-blue-400 border-blue-400' : 'bg-red-400 border-red-400'} rounded-[2px] `} />
+
+                                            {name === "log_totalTitleByWeight" ? `${originalValue} kg` : `${originalValue} 회`}
+                                        </div>)
+                                    }}
+                                />
+                                }
 
                             />
                             <PolarAngleAxis dataKey="title" />
