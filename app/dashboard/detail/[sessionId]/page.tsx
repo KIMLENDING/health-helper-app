@@ -1,12 +1,34 @@
+'use client';
+import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import TotalTitleByWeight from '@/components/UserCpmponents/chartComponents/session/totalTitleByWeight';
+
+import { useGetExerciseSession } from '@/server/queries';
+import { ExerciseOptionSession, ExercisesessionData } from '@/utils/util';
+import { TrendingUp } from 'lucide-react';
+
+import { useParams } from 'next/navigation';
 import React from 'react'
+import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from 'recharts';
+
+
 
 const Page = () => {
+    const params = useParams();
+    const { data, isLoading, isError } = useGetExerciseSession(params.sessionId as string);
+
+
+    if (isLoading) return <LoadingSpinner />;
     return (
         <div>
-            운동에 대한 상세한 정보를 보여주는 페이지
-            ex ) 운동을 수행한 날짜, 운동 종류, 운동 중량, 세트, 횟수, 운동 시간 등을 보여주는 컴포넌트
-            차트로 운동 중량, 세트, 횟수, 운동 시간 등을 보여주는 컴포넌트
-        </div>
+            운동 분석 페이지 입니다.
+
+
+            <TotalTitleByWeight data={data} />
+
+
+        </div >
     )
 }
 

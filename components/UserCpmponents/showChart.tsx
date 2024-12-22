@@ -43,7 +43,7 @@ const ShowChart = ({ data, isLoading, isError }: ShowChartProps) => {
                     </CarouselItem>
 
                     <CarouselItem className={`${isMobile && '  flex-1 '}`}>
-                        <CardContainer title='주간 운동량' >
+                        <CardContainer title='주간 운동량(kg)' >
                             <WeightByDay data={data} />
                         </CardContainer>
                     </CarouselItem>

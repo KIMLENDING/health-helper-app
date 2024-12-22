@@ -30,5 +30,7 @@ export const chartConfig = {
   totalTime: {
     label: "운동시간(s)",
     color: "#2563eb",
-  }
+  },
+
+
 } satisfies ChartConfig;

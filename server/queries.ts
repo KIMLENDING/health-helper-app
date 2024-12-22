@@ -31,6 +31,12 @@ export const getSelectedExercises = () => {
         });
 };
 
+
+/**
+ *  userId로 해당 유저의 운동 계획 조회
+ * @param userId 
+ * @returns 
+ */
 export const getExercisePlan = (userId?: string) => {
     return useQuery<ExercisePlan[]>({
         queryKey: ["exercisePlans"],
@@ -50,6 +56,12 @@ export const getExercisePlan = (userId?: string) => {
     });
 }
 
+
+/**
+ * 특정 운동 계획 조회
+ * @param planId 
+ * @returns 
+ */
 export const getSpecificExercisePlan = (planId?: string) => {
     return useQuery<ExercisePlan>({
         queryKey: ["exercisePlan", planId], // 개별 데이터를 식별할 수 있는 queryKey
@@ -70,9 +82,14 @@ export const getSpecificExercisePlan = (planId?: string) => {
 };
 
 
+/**
+ * sessionId로 운동 세션 조회
+ * @param sessionId 
+ * @returns 
+ */
 export const useGetExerciseSession = (sessionId?: string) => {
     return useQuery<ExerciseSession>({
-        queryKey: ["exerciseSession", sessionId], // 개별 데이터를 식별할 수 있는 queryKey
+        queryKey: ["exerciseSession", sessionId],
         queryFn: sessionId ? async () => {
             const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exerciseSession/${sessionId}`, {
                 method: 'GET',
@@ -89,9 +106,13 @@ export const useGetExerciseSession = (sessionId?: string) => {
     });
 };
 
+/**
+ * inProgress 상태인 가장 최근 세션조회회
+ * @returns 
+ */
 export const useInProgress = () => {
     return useQuery<ExerciseSession>({
-        queryKey: ["inProgress"], // 개별 데이터를 식별할 수 있는 queryKey
+        queryKey: ["inProgress"],
         queryFn: async () => {
             const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exerciseSession`, {
                 method: 'GET',
