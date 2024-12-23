@@ -19,11 +19,8 @@ const Page = () => {
     return (
         <div>
             운동 분석 페이지 입니다.
-
-
             <TotalTitleByWeight data={data} />
             <TotalTitleBySession data={data} />
-
         </div >
     )
 }

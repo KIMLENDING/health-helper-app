@@ -12,10 +12,7 @@ import { DrawerDialogDemo } from '../LayoutCompents/ResponsiveDialog';
 const ShowPlans = () => {
     const { data: sessions } = useSession();
     const { data, isError, isLoading } = getExercisePlan(sessions?.user._id); // 필요한 운동 계획 데이터를 가져옵니다.
-    console.log('data', data)
-    console.log('isError', isError)
-    console.log('isLoading', isLoading)
-    console.log('sessions', sessions)
+
     const Icons = [
         { name: 'BicepsFlexed', icon: <BicepsFlexed className='text-green-400' /> },
         { name: 'DumbbellIcon', icon: <DumbbellIcon className='text-green-400' /> },
