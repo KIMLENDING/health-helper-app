@@ -1,71 +1,79 @@
-'use client'
-import { useState, useEffect } from 'react';
+'use client';
+import { useState, useEffect, useRef } from 'react';
 
 export const useStopwatch = () => {
     const [time, setTime] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
-    const [isInitialized, setIsInitialized] = useState(false); // 초기화 상태
-    // 초기화 상태가 true가 되면 로컬 스토리지에 저장 이걸 안하면 초기화가 끝나기 전에 저장이 되어버림
-    // 예를 들면 다른페이지에서 돌아올 때 localStorage에 true로 되어 있지만 useEffect가 false가로 localStorage에 저장해버림
-    // useEffect가 
+    const [isInitialized, setIsInitialized] = useState(false); // 초기 상태 확인
+    const lastTimeRef = useRef<number | null>(null); // 마지막 실행 시간을 저장
 
+    // 초기화 상태 복원
     useEffect(() => {
-        // 초기 값으로 로컬 스토리지에서 시간 복원
         const savedTime = localStorage.getItem('stopwatch_time');
         if (savedTime) {
             setTime(parseInt(savedTime, 10));
         }
 
-        // 초기 값으로 로컬 스토리지에서 실행 상태 복원
         const savedRunningState = localStorage.getItem('stopwatch_running');
         if (savedRunningState) {
-
             setIsRunning(savedRunningState === 'true');
         }
 
-        // 초기화 완료
         setIsInitialized(true);
     }, []);
 
+    // 타이머 실행
     useEffect(() => {
-        let interval: NodeJS.Timeout | null = null;
         if (isRunning) {
-            interval = setInterval(() => {
-                setTime(prevTime => {
-                    const updatedTime = prevTime + 1;
-                    localStorage.setItem('stopwatch_time', updatedTime.toString()); // 시간 저장
-                    return updatedTime;
-                });
-            }, 1000);
+            lastTimeRef.current = Date.now(); // 시작 시 현재 시간을 기록
         }
 
-        return () => {// 클린업 함수: isRunning 값이 변경되거나 컴포넌트가 언마운트될 때 clearInterval 호출
-            if (interval) clearInterval(interval);
+        const updateTimer = () => {
+            if (isRunning && lastTimeRef.current !== null) {
+                const now = Date.now();
+                const elapsedSeconds = Math.floor((now - lastTimeRef.current) / 1000); // 경과 시간 계산
+                if (elapsedSeconds > 0) {
+                    setTime((prevTime) => {
+                        const updatedTime = prevTime + elapsedSeconds;
+                        localStorage.setItem('stopwatch_time', updatedTime.toString()); // 시간 저장
+                        return updatedTime;
+                    });
+                    lastTimeRef.current = now; // 마지막 실행 시간 업데이트
+                }
+            }
         };
+
+        const interval = setInterval(updateTimer, 100); // 100ms 간격으로 경과 시간 확인
+
+        return () => clearInterval(interval); // 클린업
     }, [isRunning]);
 
+    // 실행 상태 저장
     useEffect(() => {
-        // 초기화 완료 후에만 실행 상태 저장
         if (isInitialized) {
             localStorage.setItem('stopwatch_running', isRunning.toString());
         }
     }, [isRunning, isInitialized]);
 
+    // 시간 포맷팅
     const formatTime = (totalSeconds: number) => {
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = totalSeconds % 60;
         return `${minutes}분:${seconds.toString().padStart(2, '0')}초`;
     };
 
+    // 실행 상태 토글
     const toggleRunning = () => {
-        setIsRunning(prev => !prev);
+        setIsRunning((prev) => !prev);
     };
 
+    // 초기화
     const reset = () => {
         setTime(0);
         setIsRunning(false);
-        localStorage.removeItem('stopwatch_time'); // 로컬 스토리지 초기화
+        localStorage.removeItem('stopwatch_time');
         localStorage.removeItem('stopwatch_running');
+        lastTimeRef.current = null;
     };
 
     return {
