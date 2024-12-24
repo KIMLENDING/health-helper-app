@@ -31,7 +31,7 @@ const Page = () => {
     const [showCountdown, setShowCountdown] = useState(false);// 운동 시작 전 카운트 다운
     const [defaultRestTime, setDefaultRestTime] = useState<number>(10000); // 기본 휴식 시간
     const [allDone, setAllDone] = useState(false); // 모든 운동이 완료되었는지 확인
-    const { progress, restTime, isResting, setRestTime, setIsResting, handleSkipRest, handleStartRest } = useRestTime({ isRunning, currentExercise, defaultRestTime }); // 휴식 시간
+    const { progress, restTime, isResting, setRestTime, setIsResting, handleSkipRest, handleStartRest } = useRestTime({ isRunning, defaultRestTime }); // 휴식 시간
     const useAllDoneExerciseSessionMutation = useAllDoneExerciseSession(); // 모든 운동 완료 mutation
 
     const handleAllDone = async () => {

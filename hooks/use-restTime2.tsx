@@ -4,7 +4,6 @@ import { toast } from './use-toast';
 
 interface RestTimeHook {
     isRunning: boolean;
-    currentExercise: string | undefined;
     defaultRestTime: number;
 }
 
