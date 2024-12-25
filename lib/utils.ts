@@ -31,6 +31,11 @@ export const chartConfig = {
     label: "운동시간(s)",
     color: "#2563eb",
   },
+  part: {
+    label: "운동부위",
+    color: "#2563eb",
+  }
+
 
 
 } satisfies ChartConfig;

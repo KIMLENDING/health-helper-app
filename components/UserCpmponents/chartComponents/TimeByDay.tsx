@@ -1,5 +1,4 @@
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { useSidebar } from '@/components/ui/sidebar';
 import { chartConfig } from '@/lib/utils';
 import { ExerciseOptionSession, ExerciseSession } from '@/utils/util';
 import React from 'react'

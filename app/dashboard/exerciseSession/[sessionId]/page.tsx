@@ -121,10 +121,12 @@ const Page = () => {
                 });
                 toggleRunning(); // 타이머 종료
                 reset(); // 타이머 초기화
+
                 setRestTime(0); // 휴식 종료
                 setIsResting(false); // 휴식 상태 종료
                 localStorage.removeItem('rest_time'); // 로컬 스토리지 초기화
                 localStorage.removeItem('isResting'); // 로컬 스토리지 초기화
+
                 setSessionData(undefined); // 세션 데이터 초기화
                 setCurrentExercise(undefined); // 현재 운동 초기화
                 setActiveTab('list');

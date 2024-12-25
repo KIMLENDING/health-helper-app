@@ -5,6 +5,8 @@ import {
   Blocks,
   Calendar,
   Home,
+  ClipboardPlus,
+  History,
   Inbox,
   MessageCircleQuestion,
   Settings2,
@@ -40,7 +42,7 @@ const data = {
     //   icon: Search,
     // },
     {
-      title: "Home",
+      title: "홈",
       url: "/dashboard",
       icon: Home,
       // isActive: true,
@@ -48,43 +50,28 @@ const data = {
     {
       title: "운동 루틴 생성",
       url: "/dashboard/user/createPlan",
-      icon: Home,
+      icon: ClipboardPlus,
       // isActive: true,
     },
     {
       title: "운동 기록",
       url: "/dashboard/detail",
-      icon: Home,
+      icon: History,
       // isActive: true,
     },
 
-    {
-      title: "Inbox",
-      url: "#",
-      icon: Inbox,
-      badge: "100",
-    },
+
   ],
   navSecondary: [
     {
-      title: "Calendar",
+      title: "캘린더",
       url: "#",
       icon: Calendar,
     },
     {
-      title: "Settings",
+      title: "설정",
       url: "#",
       icon: Settings2,
-    },
-    {
-      title: "Templates",
-      url: "#",
-      icon: Blocks,
-    },
-    {
-      title: "Trash",
-      url: "#",
-      icon: Trash2,
     },
     {
       title: "Help",

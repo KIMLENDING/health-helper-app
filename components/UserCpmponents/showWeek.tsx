@@ -13,7 +13,7 @@ interface ShowWeekProps {
 }
 
 const ShowWeek = ({ data, isLoading, isError }: ShowWeekProps) => {
-
+    console.log(data)
     const { data: sessions } = useSession();
     const getCurrentWeekDates = () => {
         // 오늘 날짜를 기준으로 이번주 일요일부터 토요일까지의 날짜를 배열로 반환
@@ -40,19 +40,7 @@ const ShowWeek = ({ data, isLoading, isError }: ShowWeekProps) => {
     }));
 
 
-    // 해당 요일에 운동 기록이 있는지 확인
-    const getExerciseStatusForDay = (dayName: any) => {
-        if (!data?.sessions) return false;
-        return data?.sessions.some((session: any) => {
-            const date = new Date(session.createdAt);
-            return (
-                date.toLocaleString("ko-KR", {
-                    weekday: "long",
-                }) === dayName
-            );
-        });
-    };
-
+    // 해당 요일에 운동 기록이 있는지 확인 및 id값 추가
     const a = days.map((day) => {
         const matchedSession = data?.sessions.find((session: any) => {
             const sessionDate = new Date(session.createdAt).toLocaleDateString("ko-KR");
@@ -68,17 +56,14 @@ const ShowWeek = ({ data, isLoading, isError }: ShowWeekProps) => {
     });
 
 
-
-    console.log(a);
-
     return (
         <section className="mx-auto w-full max-w-3xl rounded-xl ">
             <CardTitle className='my-3 font-extrabold text-2xl'>
-                <Link href={`/dashboard/detail`}>
-                    <div className='flex flex-row gap-2 items-center hover:underline'>
-                        주간 히스토리
-                    </div>
-                </Link>
+
+                <div className='flex flex-row gap-2 items-center hover:underline'>
+                    주간 히스토리
+                </div>
+
             </CardTitle>
             <div className=' bg-muted/50 p-2 rounded-xl'>
                 {isLoading ? <div className='w-full flex justify-center items-center h-8'><LoadingSpinner /></div> :
