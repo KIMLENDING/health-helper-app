@@ -156,3 +156,25 @@ export const useWeekSessions = () => {
         }
     });
 }
+
+
+/**
+ * 전체 운동 세션 조회(운동기록)
+ */
+export const useAllSessions = () => {
+    return useQuery({
+        queryKey: ['allSessions'],
+        queryFn: async () => {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exerciseSession/all`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        }
+    });
+}

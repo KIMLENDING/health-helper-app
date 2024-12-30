@@ -173,7 +173,7 @@ export function SidebarLeft({
               </Link>
             </Button>
         }
-        <SearchForm />
+        {/* <SearchForm /> */}
         {sessionData?.user?.role === "admin" ? <NavMain items={AdminData.navMain} /> : <NavMain items={data.navMain} />}
 
       </SidebarHeader>
