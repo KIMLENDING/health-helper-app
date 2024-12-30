@@ -81,13 +81,15 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                {user.role === 'admin' ? '관리자' : 'Upgrade to Pro'}
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
+            {user.role === 'admin' &&
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <Sparkles />
+                  관리자
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            }
+            {/* <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
@@ -99,7 +101,7 @@ export function NavUser({
                 알림
               </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator /> */}
             <DropdownMenuItem onClick={() => {
               signOut();
             }}>

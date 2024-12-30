@@ -178,7 +178,7 @@ export function SidebarLeft({
 
       </SidebarHeader>
       <SidebarContent className="bg-zinc-300 dark:bg-inherit">
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
