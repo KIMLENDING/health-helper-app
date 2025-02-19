@@ -51,7 +51,7 @@ const TotalTitleByWeight = ({ data }: { data: any }) => {
         }));
     };
     const applyLogData = applyLogScale(applyLogScale(totalTitleByWeight, "totalTitleByWeight"), "totalTitleByReps");
-
+    console.log(applyLogData)
 
 
     return (
@@ -64,47 +64,47 @@ const TotalTitleByWeight = ({ data }: { data: any }) => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="pb-4">
-                    <ChartContainer
-                        config={chartConfig}
-                        className="mx-auto aspect-[1/1] max-h-[300px]"
-                    >
-                        <RadarChart data={applyLogData} margin={{
-                            top: -40,
-                            bottom: -10,
-                        }}
-                            className='w-full h-full'
+                    {applyLogData.length > 1 ? (
+                        <ChartContainer
+                            config={chartConfig}
+                            className="mx-auto aspect-[1/1] max-h-[300px]"
                         >
-                            <ChartTooltip cursor={false}
-                                content={<ChartTooltipContent
-                                    indicator='line'
-
-                                    formatter={(value, name, props,) => {
-                                        const originalValue = name === "log_totalTitleByWeight" ? props.payload.totalTitleByWeight : props.payload.totalTitleByReps;
-                                        return (<div className='flex flex-row gap-1 items-center'>
-                                            <div className={`h-2.5 w-2.5 ${name === "log_totalTitleByWeight" ? 'bg-blue-400 border-blue-400' : 'bg-red-400 border-red-400'} rounded-[2px] `} />
-
-                                            {name === "log_totalTitleByWeight" ? `${originalValue} kg` : `${originalValue} 회`}
-                                        </div>)
-                                    }}
+                            <RadarChart data={applyLogData} margin={{
+                                top: -40,
+                                bottom: -10,
+                            }}
+                                className='w-full h-full'
+                            >
+                                <ChartTooltip cursor={false}
+                                    content={<ChartTooltipContent
+                                        indicator='line'
+                                        formatter={(value, name, props,) => {
+                                            const originalValue = name === "log_totalTitleByWeight" ? props.payload.totalTitleByWeight : props.payload.totalTitleByReps;
+                                            return (<div className='flex flex-row gap-1 items-center'>
+                                                <div className={`h-2.5 w-2.5 ${name === "log_totalTitleByWeight" ? 'bg-blue-400 border-blue-400' : 'bg-red-400 border-red-400'} rounded-[2px] `} />
+                                                {name === "log_totalTitleByWeight" ? `${originalValue} kg` : `${originalValue} 회`}
+                                            </div>)
+                                        }}
+                                    />}
                                 />
-                                }
-
-                            />
-                            <PolarAngleAxis dataKey="title" />
-                            <PolarGrid />
-                            <Radar
-                                dataKey="log_totalTitleByWeight"
-                                fill="var(--color-log_totalTitleByWeight)"
-                                fillOpacity={0.6}
-                            />
-                            <Radar
-                                dataKey="log_totalTitleByReps"
-                                fill="var(--color-log_totalTitleByReps)"
-                                fillOpacity={1}
-                            />
-                            <ChartLegend className="mt-8" content={<ChartLegendContent />} />
-                        </RadarChart>
-                    </ChartContainer>
+                                <PolarAngleAxis dataKey="title" />
+                                <PolarGrid />
+                                <Radar
+                                    dataKey="log_totalTitleByWeight"
+                                    fill="var(--color-log_totalTitleByWeight)"
+                                    fillOpacity={0.6}
+                                />
+                                <Radar
+                                    dataKey="log_totalTitleByReps"
+                                    fill="var(--color-log_totalTitleByReps)"
+                                    fillOpacity={1}
+                                />
+                                <ChartLegend className="mt-8" content={<ChartLegendContent />} />
+                            </RadarChart>
+                        </ChartContainer>
+                    ) : (
+                        <div className='text-center'>운동 종목이 1개일 경우 차트를 표시할 수 없습니다.</div>
+                    )}
                 </CardContent>
                 <CardFooter className="flex-col gap-2 text-sm">
                     <div className="flex items-center gap-2 font-medium leading-none text-muted-foreground">

@@ -35,7 +35,7 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
         <div>
 
             {
-                titleBySession.map((item: any) => {
+                titleBySession?.map((item: any) => {
                     return (
                         <Accordion type="single" collapsible key={item.title}>
                             <AccordionItem value={item.title} >
