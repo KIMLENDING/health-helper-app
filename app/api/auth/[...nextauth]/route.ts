@@ -55,9 +55,9 @@ export const authOptions: any = {
   },
   callbacks: {
     async signIn({ user, account, profile }: { profile: any, user: AuthUser; account: Account }) {
-      // console.log("User----", user);
-      // console.log("Account----", account);
-      // console.log("Profile----", profile);
+      console.log("User----", user);
+      console.log("Account----", account);
+      console.log("Profile----", profile);
       if (account?.provider == "credentials") {
         return true;
       }
@@ -82,7 +82,8 @@ export const authOptions: any = {
       return false;
 
     },
-    async jwt({ token, user, trigger, session }: { token: any; user?: any; trigger: string; session: any }) {
+    async jwt({ token, user, trigger, session, profile }: { token: any; user?: any; trigger: string; session: any, profile: any }) {
+
       if (trigger === 'update' && session?.user) {  // 세션이 업데이트 될 때마다 실행
         // console.log("Session User----", session.user);
         return { ...token, ...session.user };
@@ -90,8 +91,8 @@ export const authOptions: any = {
       if (user) { // 로그인할 때마다 실행
         // console.log("User----jwt", user);
         // console.log("Token----", token);
-        token.role = user.role; // user의 role을 token에 추가
-        token.image = user.image; // user의 image를 token에 추가
+        token.role = user.role || 'user'; // user의 role을 token에 추가
+        token.image = user.image || profile?.avatar_url; // user의 image를 token에 추가
         if (!user._id) {
           connect();
           const userId = await User.findOne({ email: user.email });
@@ -99,25 +100,16 @@ export const authOptions: any = {
         } else {
           token._id = user._id; // user의 _id를 token에 추가
         }
+        // console.log("Token----jwt", token);
+        token.qwe = "qwe";
         return token;
         // return { ...token, ...user }; //user를 굳이 추가 할 필요가 있나? _doc에 굳이 user정보를 넣을 필요가 없어 보임
       }
       return token; //  페이지를 새로고침할 때마다 실행
     },
     async session({ session, token }: { session: any; token: any, }) { //사용자가 로그인 후 세션을  처음 요청 할 떄 , 페이지를 새로고침 할 때, 세션을 확인 할 때, getSession을 호출 할 때
-
-      // console.log("Session----session", session);
       session.user = { ...token };
-      // console.log("Session----session", session);
-      // console.log("Token----", token);
-      // const newSession = { ...session, ...token };
-      // console.log("Session----", newSession);
-      // session.user.name = token.name;
-      // session.user.email = token.email;
-      // session.user.image = token.image || "/img/defaultUserImage.png";
-      // session.user.role = token.role;
-      // console.log("Token----", token);
-      // console.log("Session----", session);
+
       return session;
     },
 

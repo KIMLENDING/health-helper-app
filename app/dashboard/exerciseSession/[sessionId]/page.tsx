@@ -14,7 +14,7 @@ import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner';
 import CountdownOverlay from '@/components/LayoutCompents/CountdownOverlay';
 import InProgressTap from '@/components/UserCpmponents/Taps/inProgressTap';
 
-import { useStopwatch } from '@/hooks/use-stopwatch2';
+import { useStopwatch } from '@/hooks/use-stopwatch3';
 import { useRestTime } from '@/hooks/use-restTime2';
 import LoadingOverlay from '@/components/LayoutCompents/LoadingOverlay';
 
@@ -89,10 +89,11 @@ const Page = () => {
                     title: `${exercise.title}이(가) 3초 후에 운동이 시작 됩니다. `,
                     description: "1 세트 시작",
                 });
-                localStorage.removeItem('rest_time'); // 로컬 스토리지 초기화
-                localStorage.removeItem('isResting'); // 로컬 스토리지 초기화
-                localStorage.removeItem('stopwatch_time'); // 로컬 스토리지 초기화
-                localStorage.removeItem('stopwatch_running'); // 로컬 스토리지 초기화
+                localStorage.removeItem('rest_time'); // 로컬 스토리지 초기화 (휴식 시간간)
+                localStorage.removeItem('isResting'); // 로컬 스토리지 초기화 (휴식 상태)
+                localStorage.removeItem('stopwatch_running'); // 로컬 스토리지 초기화 (운동 상태)
+                localStorage.removeItem("elapsed_time");  // 로컬 스토리지 초기화 (경과 시간)
+                localStorage.removeItem("start_time");  // 로컬 스토리지 초기화 (시작 시간)
                 setActiveTab('inProgress'); // 탭 변경
                 reset(); // 타이머 초기화
                 setShowCountdown(true); // 카운트 다운 시작 -> <CountdownOverlay /> 컴포넌트 실행 후 handleCountdownComplete가 실행됨 그럼 toggleRunning이 실행됨

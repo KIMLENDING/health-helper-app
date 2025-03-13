@@ -8,8 +8,10 @@ import Link from 'next/link';
 import LoadingSpinner from '../LayoutCompents/LoadingSpinner';
 
 import { DrawerDialogDemo } from '../LayoutCompents/ResponsiveDialog';
+import { useSessionContext } from '@/providers/SessionContext';
 
 const ShowPlans = () => {
+    const { session: serverSessions } = useSessionContext(); // 서버컴포넌트에서 받은 세션 데이터
     const { data: sessions } = useSession();
     const { data, isError, isLoading } = getExercisePlan(sessions?.user._id); // 필요한 운동 계획 데이터를 가져옵니다.
 
@@ -38,7 +40,7 @@ const ShowPlans = () => {
                     </div>}
             </CardTitle>
             <div className='rounded-xl bg-muted/50 p-2'>
-                {!isLoading && !sessions ? <div>로그인이 필요합니다.</div> : <> {isLoading || !sessions ? <LoadingSpinner className="w-full flex justify-center items-center h-8 " /> : data ?
+                {!isLoading && !serverSessions ? <div className='text-center'>로그인이 필요합니다.</div> : <> {isLoading || !sessions ? <LoadingSpinner className="w-full flex justify-center items-center h-8 " /> : data ?
                     <div className={`grid gap-2 grid-cols-${columnCount} max-md:grid-cols-${columnCount2} max-sm:grid-cols-1 `}>{
                         data.map((plan) => {
                             const randomIndex = Math.floor(Math.random() * Icons.length);

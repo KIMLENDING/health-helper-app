@@ -14,7 +14,6 @@ import {
   Trash2,
 } from "lucide-react"
 
-import { NavSecondary } from "@/components/nav-secondary"
 import {
   Sidebar,
   SidebarContent,
@@ -27,7 +26,7 @@ import { DefaultUser } from "next-auth"
 import Link from "next/link"
 import { NavUser } from "./nav-user"
 import { NavMain } from "./nav-main"
-import { SearchForm } from "./search-form"
+
 import LoadingSpinner from "./LayoutCompents/LoadingSpinner"
 import { useState } from "react"
 import { useSessionContext } from "@/providers/SessionContext"

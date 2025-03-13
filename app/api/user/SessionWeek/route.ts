@@ -42,7 +42,7 @@ export const GET = async (request: NextRequest) => {
         const sessions = await ExerciseSession.find({
             userId: user._id,
             createdAt: { $gte: sunday, $lte: saturday },
-        }).sort({ createdAt: 1 }).populate("exercises.exerciseId");;
+        }).sort({ createdAt: 1 }).populate("exercises.exerciseId"); // 해당 주간 데이터 조회 populate를 통해 exerciseId를 통해 운동 데이터를 가져옵니다.
         if (!sessions) {
             return NextResponse.json({ message: "주간 데이터가 없습니다." }, { status: 200 });
         }

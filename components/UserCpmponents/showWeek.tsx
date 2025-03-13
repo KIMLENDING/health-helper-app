@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react'
-import LoadingSpinner from '../LayoutCompents/LoadingSpinner';
 import { Card, CardTitle } from '../ui/card';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -12,9 +11,8 @@ interface ShowWeekProps {
     isError: boolean;
 }
 
-const ShowWeek = ({ data, isLoading, isError }: ShowWeekProps) => {
-    console.log(data)
-    const { data: sessions } = useSession();
+const ShowWeek = ({ data }: ShowWeekProps) => {
+
     const getCurrentWeekDates = () => {
         // 오늘 날짜를 기준으로 이번주 일요일부터 토요일까지의 날짜를 배열로 반환
         const today = new Date();
@@ -59,20 +57,18 @@ const ShowWeek = ({ data, isLoading, isError }: ShowWeekProps) => {
     return (
         <section className="mx-auto w-full max-w-3xl rounded-xl ">
             <CardTitle className='my-3 font-extrabold text-2xl'>
-
                 <div className='flex flex-row gap-2 items-center hover:underline'>
                     주간 히스토리
                 </div>
-
             </CardTitle>
             <div className=' bg-muted/50 p-2 rounded-xl'>
-                {isLoading ? <div className='w-full flex justify-center items-center h-8'><LoadingSpinner /></div> :
-                    <Card className="aspect-auto flex justify-between items-center gap-2 sm:gap-4 p-4">
-                        {a.map((day, index) => (
-                            <div key={index} className="flex flex-col items-center">
 
-                                <div
-                                    className={`
+                <Card className="aspect-auto flex justify-between items-center gap-2 sm:gap-4 p-4">
+                    {a.map((day, index) => (
+                        <div key={index} className="flex flex-col items-center">
+
+                            <div
+                                className={`
                     w-8 h-8 sm:w-14 sm:h-14 
                     rounded-full 
                     border-2
@@ -80,30 +76,30 @@ const ShowWeek = ({ data, isLoading, isError }: ShowWeekProps) => {
                     transition-colors duration-200
                     ${day.status ? "bg-green-500 border-green-700 text-white" : "border-gray-300 bg-white text-gray-600"}
                     `}
-                                    role="status"
-                                    aria-label={`Exercise status for ${day.name}`}
-                                >
-                                    {day.id ? <Link href={`/dashboard/detail/${day.id}`}>
-                                        <span className="text-sm sm:text-base font-semibold">
-                                            {day.date.getDate()}
-                                        </span>
-                                    </Link> : <span className="text-sm sm:text-base font-semibold">
+                                role="status"
+                                aria-label={`Exercise status for ${day.name}`}
+                            >
+                                {day.id ? <Link href={`/dashboard/detail/${day.id}`}>
+                                    <span className="text-sm sm:text-base font-semibold">
                                         {day.date.getDate()}
-                                    </span>}
-                                </div>
-
-                                <span className="mt-2 text-sm sm:text-base font-semibold ">
-                                    {day.label}
-                                </span>
+                                    </span>
+                                </Link> : <span className="text-sm sm:text-base font-semibold">
+                                    {day.date.getDate()}
+                                </span>}
                             </div>
-                        ))}
-                    </Card>
-                }
+
+                            <span className="mt-2 text-sm sm:text-base font-semibold ">
+                                {day.label}
+                            </span>
+                        </div>
+                    ))}
+                </Card>
+
             </div>
-            <div>
+            {/* <div>
                 {!sessions && '로그인 해주세요'}
                 {sessions && isError && '새로고침해 보세요'}
-            </div>
+            </div> */}
         </section>
     );
 }

@@ -30,7 +30,7 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
         }
     });
 
-    console.log(titleBySession);
+
     return (
         <div>
 

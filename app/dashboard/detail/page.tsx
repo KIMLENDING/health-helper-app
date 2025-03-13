@@ -14,7 +14,7 @@ const Page = () => {
     const a = data?.allSession.map((sessionData: ExerciseSession) => {
         return { ...sessionData, exercises: sessionData.exercises = sessionData.exercises.filter(exercise => exercise.session.length > 0) }
     });
-    console.log(a)
+
     if (isLoading) return <div>Loading...</div>
     return (
         <div className="container mx-auto p-4">

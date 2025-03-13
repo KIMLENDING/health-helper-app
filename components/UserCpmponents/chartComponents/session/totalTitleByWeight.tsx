@@ -51,7 +51,6 @@ const TotalTitleByWeight = ({ data }: { data: any }) => {
         }));
     };
     const applyLogData = applyLogScale(applyLogScale(totalTitleByWeight, "totalTitleByWeight"), "totalTitleByReps");
-    console.log(applyLogData)
 
 
     return (

@@ -51,7 +51,7 @@ const WeightByPart = ({ data }: { data: any }) => {
     const b = Object.entries(result).map(([key, value]) => {
         return { part: key, weight: value }
     });
-    console.log(result)
+
 
     return (
         <ChartContainer config={chartConfig} className={`min-h-[200px] aspect-auto w-full`}>
