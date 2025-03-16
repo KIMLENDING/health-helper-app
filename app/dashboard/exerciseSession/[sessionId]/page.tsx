@@ -33,12 +33,22 @@ const Page = () => {
     const [allDone, setAllDone] = useState(false); // 모든 운동이 완료되었는지 확인
     const { progress, restTime, isResting, setRestTime, setIsResting, handleSkipRest, handleStartRest } = useRestTime({ isRunning, defaultRestTime }); // 휴식 시간
     const useAllDoneExerciseSessionMutation = useAllDoneExerciseSession(); // 모든 운동 완료 mutation
-
+    console.log(data?.state);
+    useEffect(() => {
+        if (data?.state === 'done') {
+            window.history.replaceState(null, "", "/dashboard");
+            router.push('/dashboard');
+        }
+    }, [data?.state]);
     const handleAllDone = async () => {
         // 모든 운동 완료시 실행
         try {
             setLoading(true); // 로딩 시작
-
+            localStorage.removeItem('rest_time'); // 로컬 스토리지 초기화 (휴식 시간간)
+            localStorage.removeItem('isResting'); // 로컬 스토리지 초기화 (휴식 상태)
+            localStorage.removeItem('stopwatch_running'); // 로컬 스토리지 초기화 (운동 상태)
+            localStorage.removeItem("elapsed_time");  // 로컬 스토리지 초기화 (경과 시간)
+            localStorage.removeItem("start_time");  // 로컬 스토리지 초기화 (시작 시간)
             const res = await useAllDoneExerciseSessionMutation.mutateAsync({ sessionId });
 
             if (res.delete) { // 완료한 운동이 없어 세션을 제거했을 경우

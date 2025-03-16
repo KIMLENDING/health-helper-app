@@ -29,30 +29,30 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
             }),
         }
     });
-
+    console.log(data)
 
     return (
-        <div>
+        <Card>
 
             {
                 titleBySession?.map((item: any) => {
                     return (
                         <Accordion type="single" collapsible key={item.title}>
                             <AccordionItem value={item.title} >
-                                <AccordionTrigger><CardHeader>
-                                    <CardTitle>{item.title}</CardTitle>
+                                <AccordionTrigger className='py-0 pr-4'>
+                                    <CardHeader>
+                                        <CardTitle>{item.title}</CardTitle>
+                                    </CardHeader>
+                                </AccordionTrigger>
 
-                                </CardHeader></AccordionTrigger>
                                 <AccordionContent>
-
-
                                     <CardContent>
                                         <ChartContainer config={chartConfig}>
                                             <BarChart accessibilityLayer data={item.session}>
                                                 <XAxis
                                                     dataKey="sessionSet"
                                                     tickLine={false}
-                                                    tickMargin={10}
+                                                    tickMargin={4}
                                                     axisLine={false}
                                                 />
                                                 <Bar
@@ -62,7 +62,7 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
                                                 >
                                                     <LabelList
                                                         position="top"
-                                                        offset={12}
+                                                        offset={4}
                                                         className="fill-foreground"
                                                         fontSize={12}
                                                     />
@@ -74,7 +74,7 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
                                                 >
                                                     <LabelList
                                                         position="top"
-                                                        offset={12}
+                                                        offset={4}
                                                         className="fill-foreground"
                                                         fontSize={12}
                                                     />
@@ -102,7 +102,7 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
                 })
             }
 
-        </div>
+        </Card>
     )
 }
 

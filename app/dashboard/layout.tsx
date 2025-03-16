@@ -69,7 +69,7 @@ export default function DachboardLayout({
 }>) {
   const pathname = usePathname();
   const router = useRouter();
-  const { data, isLoading, isError } = useInProgress();
+  const { data } = useInProgress();
   const sortedRouters = [...routers].sort((a, b) => b.url.length - a.url.length);
   useEffect(() => { }, [data])
   const handleClick = () => {

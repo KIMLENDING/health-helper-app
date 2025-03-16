@@ -30,7 +30,9 @@ const Page = () => {
         <div>
 
             <TotalTitleByWeight data={filter} />
-            <TotalTitleBySession data={filter} />
+            <div className='px-4'>
+                <TotalTitleBySession data={filter} />
+            </div>
         </div >
     )
 }

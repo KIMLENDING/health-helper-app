@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { ExerciseOptionSession, ExercisesessionData } from '@/utils/util';
 import { TrendingUp } from 'lucide-react';
-import React from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from 'recharts';
 
 const chartConfig = {
@@ -17,7 +17,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const TotalTitleByWeight = ({ data }: { data: any }) => {
-
+    const [applyLogData, setApplyLogData] = useState([]);
     const totalTime = data?.exercises.flatMap((exercise: ExerciseOptionSession) => {
         return exercise.repTime || 0;
     }).reduce((acc: any, cur: any) => acc + cur, 0);
@@ -39,22 +39,29 @@ const TotalTitleByWeight = ({ data }: { data: any }) => {
         if (!time) return '0분 0초';
         const formetTimeH = Math.floor(time / 3600);
         const formetTimeM = Math.floor((time % 3600) / 60);
-        const formetTimeS = time % 60;
+        const formetTimeS = Math.floor(time % 60);
         return `${formetTimeH}시간 ${formetTimeM}분 ${formetTimeS}초`;
     }
 
 
-    const applyLogScale = (data: any, key: string) => {
-        return data.map((item: any) => ({
-            ...item,
-            [`log_${key}`]: Math.log(item[key]),
-        }));
-    };
-    const applyLogData = applyLogScale(applyLogScale(totalTitleByWeight, "totalTitleByWeight"), "totalTitleByReps");
+    useEffect(() => {
+        const applyLogScale = (data: any, key: string) => {
+            if (!data) return [];
+            console.log(data)
+
+            return data.map((item: any) => ({
+                ...item,
+                [`log_${key}`]: Math.log(item[key]),
+            }));
+        };
+        const totalTitleByWeightLog = applyLogScale(totalTitleByWeight, "totalTitleByWeight");
+        const totalTitleByRepsLog = applyLogScale(totalTitleByWeightLog, "totalTitleByReps");
+        setApplyLogData(totalTitleByRepsLog)
+    }, [data]);
 
 
     return (
-        <section>
+        <section className='px-4 py-4'>
             <Card>
                 <CardHeader className="items-center pb-4">
                     <CardTitle>운동 분석</CardTitle>

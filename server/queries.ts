@@ -161,11 +161,28 @@ export const useWeekSessions = () => {
 /**
  * 전체 운동 세션 조회(운동기록)
  */
-export const useAllSessions = () => {
+// export const useAllSessions = () => {
+//     return useQuery({
+//         queryKey: ['allSessions'],
+//         queryFn: async () => {
+//             const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exerciseSession/all`, {
+//                 method: 'GET',
+//                 headers: {
+//                     'Content-Type': 'application/json',
+//                 }
+//             });
+//             if (!response.ok) {
+//                 throw new Error(`HTTP error! status: ${response.status}`);
+//             }
+//             return response.json();
+//         }
+//     });
+// }
+export const useAllSessions = (year: number, month: number, page: number, limit: number = 10) => {
     return useQuery({
-        queryKey: ['allSessions'],
+        queryKey: ['allSessions', year, month, page],
         queryFn: async () => {
-            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exerciseSession/all`, {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exerciseSession/all?year=${year}&month=${month}&page=${page}&limit=${limit}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -175,6 +192,8 @@ export const useAllSessions = () => {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
-        }
+        },
+        gcTime: 1000 * 60 * 60 * 24, // 캐시 유지 시간
+        staleTime: Infinity
     });
-}
+};
