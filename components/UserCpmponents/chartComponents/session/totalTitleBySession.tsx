@@ -47,7 +47,8 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
 
                                 <AccordionContent>
                                     <CardContent>
-                                        <ChartContainer config={chartConfig}>
+                                        <ChartContainer config={chartConfig} className='min-h-fit'>
+
                                             <BarChart accessibilityLayer data={item.session}>
                                                 <XAxis
                                                     dataKey="sessionSet"
@@ -59,11 +60,12 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
                                                     dataKey="sessionRep"
                                                     fill="var(--color-sessionRep)"
                                                     radius={4}
+
                                                 >
                                                     <LabelList
                                                         position="top"
-                                                        offset={4}
-                                                        className="fill-foreground"
+                                                        offset={-24}
+                                                        className="fill-red-50"
                                                         fontSize={12}
                                                     />
                                                 </Bar>
@@ -74,8 +76,8 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
                                                 >
                                                     <LabelList
                                                         position="top"
-                                                        offset={4}
-                                                        className="fill-foreground"
+                                                        offset={-24}
+                                                        className="fill-red-50"
                                                         fontSize={12}
                                                     />
                                                 </Bar>
