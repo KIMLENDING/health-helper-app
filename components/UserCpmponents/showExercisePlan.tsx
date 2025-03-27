@@ -119,14 +119,14 @@ const ShowExercisePlan = () => {
                                                                             <Button
                                                                                 onClick={() => saveTitle(plan._id!)}
                                                                                 className="border-0 h-6 ring-0 shadow-none ">
-                                                                                Save
+                                                                                저장
                                                                             </Button>
                                                                             <Button
                                                                                 className="border-0 h-6 ring-0 shadow-none "
                                                                                 variant="outline"
                                                                                 onClick={() => setEditingPlanId(undefined)}
                                                                             >
-                                                                                Cancel
+                                                                                취소
                                                                             </Button>
                                                                         </div>
                                                                     ) : (

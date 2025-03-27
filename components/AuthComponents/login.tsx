@@ -78,7 +78,7 @@ export default function LoginPage() {
     return (
 
         <div className="flex h-screen w-full items-center justify-center px-4 ">
-            {sessionStatus === "unauthenticated" &&
+            {sessionStatus === "unauthenticated" ?
 
                 <Card className="mx-auto max-w-sm  ">
                     <CardHeader>
@@ -96,9 +96,7 @@ export default function LoginPage() {
                                         id="email"
                                         type="email"
                                         placeholder="m@example.com"
-
                                         required
-
                                     />
                                 </div>
                                 <div className="grid gap-2">
@@ -166,6 +164,7 @@ export default function LoginPage() {
                         </div>
                     </CardContent>
                 </Card>
+                : <LoadingSpinner className="w-[5vh] h-[5vh]  " />
             }
         </div>
     )

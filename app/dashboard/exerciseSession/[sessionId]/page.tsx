@@ -22,7 +22,7 @@ const Page = () => {
     const { sessionId } = useParams() as { sessionId: string };
     const router = useRouter();
     const [activeTab, setActiveTab] = useState("list");
-    const { data, error, isLoading } = useGetExerciseSession(sessionId);
+    const { data, error, isLoading } = useGetExerciseSession(sessionId); // 세션 데이터 가져오기
     const useStateChangeExerciseSessionMutation = useStateChangeExerciseSession(); // 선택한 운동 상태 변경 후 운동 시작 mutation
     const [sessionData, setSessionData] = useState<ExercisesessionData | undefined>(); // 진행 중인 세트의 세션 데이터를 관리하는 상태 {set, reps, weight}
     const [currentExercise, setCurrentExercise] = useState<string | undefined>(); // 현재 진행중인 운동의 id
@@ -33,7 +33,7 @@ const Page = () => {
     const [allDone, setAllDone] = useState(false); // 모든 운동이 완료되었는지 확인
     const { progress, restTime, isResting, setRestTime, setIsResting, handleSkipRest, handleStartRest } = useRestTime({ isRunning, defaultRestTime }); // 휴식 시간
     const useAllDoneExerciseSessionMutation = useAllDoneExerciseSession(); // 모든 운동 완료 mutation
-    console.log(data?.state);
+
     useEffect(() => {
         if (data?.state === 'done') {
             window.history.replaceState(null, "", "/dashboard");
@@ -260,8 +260,8 @@ const Page = () => {
     }, [isResting, restTime])
 
 
-    if (isLoading) return
-    if (isLoading) return <div className='w-full h-full flex items-center justify-center '><LoadingSpinner className='w-[5vh] h-[5vh]' /></div>;
+
+    if (isLoading || !sessionId) return <div className='w-full h-full flex items-center justify-center '><LoadingSpinner className='w-[5vh] h-[5vh]' /></div>;
     if (error) return <div>에러 발생</div>
 
     return (
