@@ -6,9 +6,6 @@ import { useGetExerciseSession } from '@/server/queries';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
-
-
-
 const Page = () => {
     const params = useParams();
     const { data, isLoading, isError } = useGetExerciseSession(params.sessionId as string);
@@ -24,16 +21,13 @@ const Page = () => {
         }
     }, [data])
 
-    if (isLoading) return <LoadingSpinner />;
+    if (isLoading) return <div className='w-full h-full flex items-center justify-center '><LoadingSpinner className='w-[5vh] h-[5vh]' /></div>;
     if (isError) return <div>Error loading data</div>;
     return (
-        <div>
-
+        <div className='px-4'>
             <TotalTitleByWeight data={filter} />
-            <div className='px-4'>
-                <TotalTitleBySession data={filter} />
-            </div>
-        </div >
+            <TotalTitleBySession data={filter} />
+        </div>
     )
 }
 

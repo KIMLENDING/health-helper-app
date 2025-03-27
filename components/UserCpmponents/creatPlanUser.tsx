@@ -66,7 +66,7 @@ const CreatPlanUser = () => {
         setExerciseOption(prevState => prevState.filter(exercise => exercise.exerciseId !== id)) // 삭제할 데이터를 제외한 나머지 데이터를 반환합니다.
     }
     async function onSubmit2(values: z.infer<typeof formSchema2>) {
-
+        console.log('submit', planData)
         // 루틴 제출 로직
         if (session?.user._id === undefined) {
             toast({ variant: 'destructive', title: 'id가 존재하지 않습니다. ' });
@@ -116,7 +116,7 @@ const CreatPlanUser = () => {
                         <div className='flex justify-between'>
                             <div className='flex flex-col gap-2'>
                                 <CardTitle>루틴에 운동 추가</CardTitle>
-                                <CardDescription>순서는 나중에 설정할 수 있습니다.</CardDescription>
+                                <CardDescription></CardDescription>
                             </div>
                             <Dialog>
                                 <DialogTrigger asChild>
@@ -142,7 +142,7 @@ const CreatPlanUser = () => {
                         </div>
                         <div>
                             <Form {...form}>
-                                <form ref={formRef} onSubmit={form.handleSubmit(onSubmit2)} className="space-y-4">
+                                <form ref={formRef} onSubmit={form.handleSubmit(onSubmit2)} className="flex flex-col gap-4">
                                     <FormField
                                         control={form.control}
                                         name="title"
@@ -156,7 +156,9 @@ const CreatPlanUser = () => {
                                             </FormItem>
                                         )}
                                     />
-                                    <Button type="submit">Submit</Button>
+                                    <div className='flex justify-end'>
+                                        <Button className='' type="submit">루틴 저장하기</Button>
+                                    </div>
                                 </form>
                             </Form>
                             <CardContent className='rounded-md shadow-inner bg-zinc-300 dark:bg-zinc-800 my-4'>
@@ -183,10 +185,10 @@ const CreatPlanUser = () => {
                             </CardContent>
                             {/* <Button onClick={() => {
                                 formRef.current?.requestSubmit(); // 폼 제출
-                            }}>Submit</Button> */}
+                            }}>루틴 저장하기</Button> */}
                         </div>
                     </div>
-                    {/* <CardDescription></CardDescription> */}
+
                 </CardHeader>
 
             </Card>

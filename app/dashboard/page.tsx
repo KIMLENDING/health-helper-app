@@ -1,4 +1,4 @@
-'use client';
+
 import SessionData from "@/components/UserCpmponents/sessionData";
 import ShowPlans from "@/components/UserCpmponents/showPlans";
 
@@ -18,8 +18,6 @@ export default function Dashboard() {
 
       <SessionData />
       <ShowPlans />
-
-
 
     </section>
   );

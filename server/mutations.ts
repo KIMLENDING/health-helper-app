@@ -2,7 +2,6 @@
 import { toast } from "@/hooks/use-toast";
 import { Exercise, ExercisePlan, ExerciseSession, ExercisesessionData, PostExerciseSession } from "@/utils/util";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import exp from "constants";
 
 /**
  *  관리자 전용 운동 추가 Mutation
@@ -383,8 +382,6 @@ export const useStateChangeExerciseSession = () => {
                 toast({ variant: 'destructive', title: `${error}` });
                 console.log('error', error);
             } else {
-                // console.log('data', data);
-                // toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.updatedSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
                 await queryClient.invalidateQueries({ queryKey: ["inProgress"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
@@ -430,8 +427,6 @@ export const useAllDoneExerciseSession = () => {
                     await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.updatedSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
                     await queryClient.invalidateQueries({ queryKey: ["inProgress"] }) // 데이터 갱신 후 자동으로 UI 업데이트
                 }
-                // await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.updatedSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
-                // await queryClient.invalidateQueries({ queryKey: ["inProgress"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
     })

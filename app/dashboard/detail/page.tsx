@@ -9,13 +9,14 @@ import {
 } from "@/components/ui/accordion"
 import TotalTitleBySession from "@/components/UserCpmponents/chartComponents/session/totalTitleBySession";
 import { useEffect, useState } from "react";
+import TotalTitleByWeight from "@/components/UserCpmponents/chartComponents/session/totalTitleByWeight";
 
 const Page = () => {
     const [year, setYear] = useState(new Date().getFullYear());
     const [month, setMonth] = useState(new Date().getMonth() + 1);
     const [page, setPage] = useState(1);
     const { data, isLoading, isError } = useAllSessions(year, month, page, 5);
-
+    console.log(data, isLoading, isError)
     // 운동 세션 데이터 필터링 (빈 세션 제거)
     const filteredSessions = data?.allSession?.map((sessionData: ExerciseSession) => ({
         ...sessionData,
@@ -64,6 +65,7 @@ const Page = () => {
                                         {session.createdAt?.split('T')[0].replaceAll('-', ' / ')}
                                     </AccordionTrigger>
                                     <AccordionContent>
+                                        <TotalTitleByWeight data={session} />
                                         <TotalTitleBySession data={session} />
                                     </AccordionContent>
                                 </div>

@@ -22,11 +22,10 @@ const AddExercisePage = () => {
     const router = useRouter();
     const { data: session, status: loading } = useSession();
     useEffect(() => {
-        if (loading === 'unauthenticated') router.push('/login')
+
         if (session && session?.user?.role !== 'admin') {
             router.push('/dashboard')
         }
-
     }, [session, loading, router])
     if (loading === 'loading') return null;
     return (

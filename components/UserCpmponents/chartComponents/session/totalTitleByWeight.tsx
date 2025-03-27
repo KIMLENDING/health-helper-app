@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { ExerciseOptionSession, ExercisesessionData } from '@/utils/util';
 import { TrendingUp } from 'lucide-react';
-import React, { use, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from 'recharts';
 
 const chartConfig = {
@@ -61,7 +61,7 @@ const TotalTitleByWeight = ({ data }: { data: any }) => {
 
 
     return (
-        <section className='px-4 py-4'>
+        <section className=' py-4'>
             <Card>
                 <CardHeader className="items-center pb-4">
                     <CardTitle>운동 분석</CardTitle>
@@ -70,7 +70,7 @@ const TotalTitleByWeight = ({ data }: { data: any }) => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="pb-4">
-                    {applyLogData.length > 1 ? (
+                    {applyLogData.length > 2 ? (
                         <ChartContainer
                             config={chartConfig}
                             className="mx-auto aspect-[1/1] max-h-[300px]"
@@ -109,7 +109,7 @@ const TotalTitleByWeight = ({ data }: { data: any }) => {
                             </RadarChart>
                         </ChartContainer>
                     ) : (
-                        <div className='text-center'>운동 종목이 1개일 경우 차트를 표시할 수 없습니다.</div>
+                        <div className='text-center'>운동 종목이 2개 이하일 경우 차트를 표시할 수 없습니다.</div>
                     )}
                 </CardContent>
                 <CardFooter className="flex-col gap-2 text-sm">

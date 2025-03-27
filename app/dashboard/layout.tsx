@@ -18,7 +18,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { useInProgress } from "@/server/queries"
-import { ChevronLeft, ChevronRight, Divide, Dumbbell, SquareArrowOutUpRightIcon } from "lucide-react"
+import { ChevronLeft, ChevronRight, Dumbbell, SquareArrowOutUpRightIcon } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect } from "react"
@@ -158,10 +158,7 @@ export default function DachboardLayout({
           </header>
         }
       </SidebarInset>
-
-
       <SidebarRight />
-
     </SidebarProvider>
   )
 }

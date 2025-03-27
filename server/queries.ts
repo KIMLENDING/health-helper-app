@@ -37,11 +37,11 @@ export const getSelectedExercises = () => {
  * @param userId 
  * @returns 
  */
-export const getExercisePlan = (userId?: string) => {
+export const getExercisePlan = () => {
     return useQuery<ExercisePlan[]>({
         queryKey: ["exercisePlans"],
-        queryFn: userId ? async () => {
-            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/${userId}`, {
+        queryFn: async () => {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -51,8 +51,7 @@ export const getExercisePlan = (userId?: string) => {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
-        } : undefined,
-        enabled: !!userId, // userId가 있을 때만 데이터를 가져옵니다.
+        }
     });
 }
 
@@ -107,7 +106,7 @@ export const useGetExerciseSession = (sessionId?: string) => {
 };
 
 /**
- * inProgress 상태인 가장 최근 세션조회회
+ * inProgress 상태인 가장 최근 세션조회
  * @returns 
  */
 export const useInProgress = () => {

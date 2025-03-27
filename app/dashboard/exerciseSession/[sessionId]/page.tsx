@@ -260,7 +260,8 @@ const Page = () => {
     }, [isResting, restTime])
 
 
-    if (isLoading) return <div className='flex-1 flex items-center justify-center'><LoadingSpinner /></div>
+    if (isLoading) return
+    if (isLoading) return <div className='w-full h-full flex items-center justify-center '><LoadingSpinner className='w-[5vh] h-[5vh]' /></div>;
     if (error) return <div>에러 발생</div>
 
     return (

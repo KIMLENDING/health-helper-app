@@ -1,16 +1,11 @@
-import { DumbbellIcon, GiftIcon, Link2Icon } from 'lucide-react'
+import { DumbbellIcon } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
 const page = () => {
     return (
         <div>
-            {/* <Link href={'login'}>
-                <Link2Icon />
-            </Link>
-            <Link href={'register'}> 
-                <GiftIcon />
-            </Link> */}
+
             <div className="min-h-screen w-full">
                 <nav className="flex items-center justify-between px-6 py-4 border-b">
                     <div className="flex items-center gap-2">

@@ -5,7 +5,6 @@ import React from 'react'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { BicepsFlexed, DumbbellIcon, RadicalIcon, SparklesIcon, SquareArrowOutUpRightIcon, VolleyballIcon } from 'lucide-react';
 import Link from 'next/link';
-import LoadingSpinner from '../LayoutCompents/LoadingSpinner';
 
 import { DrawerDialogDemo } from '../LayoutCompents/ResponsiveDialog';
 import { useSessionContext } from '@/providers/SessionContext';
@@ -13,7 +12,7 @@ import { useSessionContext } from '@/providers/SessionContext';
 const ShowPlans = () => {
     const { session: serverSessions } = useSessionContext(); // 서버컴포넌트에서 받은 세션 데이터
     const { data: sessions } = useSession();
-    const { data, isError, isLoading } = getExercisePlan(sessions?.user._id); // 필요한 운동 계획 데이터를 가져옵니다.
+    const { data, isError, isLoading } = getExercisePlan(); // 필요한 운동 계획 데이터를 가져옵니다.
 
     const Icons = [
         { name: 'BicepsFlexed', icon: <BicepsFlexed className='text-green-400' /> },
@@ -40,28 +39,37 @@ const ShowPlans = () => {
                     </div>}
             </CardTitle>
             <div className='rounded-xl bg-muted/50 p-2'>
-                {!isLoading && !serverSessions ? <div className='text-center'>로그인이 필요합니다.</div> : <> {isLoading || !sessions ? <LoadingSpinner className="w-full flex justify-center items-center h-8 " /> : data ?
-                    <div className={`grid gap-2 grid-cols-${columnCount} max-md:grid-cols-${columnCount2} max-sm:grid-cols-1 `}>{
-                        data.map((plan) => {
-                            const randomIndex = Math.floor(Math.random() * Icons.length);
-                            const randomIcon = Icons[randomIndex]?.icon;
-                            return (
-                                <Card key={plan.title} className='aspect-auto '>
-                                    <CardHeader className='px-0'>
-                                        <CardTitle className="text-xl px-6 cursor-pointer hover:underline">
-                                            <DrawerDialogDemo plan={plan}>
-                                                {randomIcon}
-                                                <div className='whitespace-nowrap overflow-hidden text-ellipsis w-32'> {plan.title}</div>
-                                            </DrawerDialogDemo>
-                                        </CardTitle>
-                                    </CardHeader>
-                                </Card>
-                            )
-                        })
-                    }</div>
-                    : <div>운동 계획이 없습니다.</div>
-                }</>}
+                {isLoading ? (
+                    <div className="flex flex-col gap-4">
+                        {[1, 2, 3].map((index) => (
+                            <div key={index} className="h-16 bg-gray-200 dark:bg-zinc-700 animate-pulse rounded-lg" />
+                        ))}
+                    </div>
+                ) : (
+                    <>
+                        {data && data.length > 0 ? (
+                            <div className={`grid gap-2 grid-cols-${columnCount} max-md:grid-cols-${columnCount2} max-sm:grid-cols-1 `}>
 
+                                {data.map((plan) => {
+                                    const randomIndex = Math.floor(Math.random() * Icons.length);
+                                    const randomIcon = Icons[randomIndex]?.icon;
+                                    return (
+                                        <Card key={plan.title} className='aspect-auto '>
+                                            <CardHeader className='px-0'>
+                                                <CardTitle className="text-xl px-6 cursor-pointer hover:underline">
+                                                    <DrawerDialogDemo plan={plan}>
+                                                        {randomIcon}
+                                                        <div className='whitespace-nowrap overflow-hidden text-ellipsis w-32'> {plan.title}</div>
+                                                    </DrawerDialogDemo>
+                                                </CardTitle>
+                                            </CardHeader>
+                                        </Card>
+                                    )
+                                }
+                                )}
+                            </div>) : <div>운동 계획이 없습니다.</div>}
+                    </>
+                )}
                 <div>{isError && '새로고침해 보세요'}</div>
             </div>
         </div>

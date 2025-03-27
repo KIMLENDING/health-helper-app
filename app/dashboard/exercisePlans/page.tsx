@@ -1,4 +1,4 @@
-'use client'
+
 import ShowExercisePlan from '@/components/UserCpmponents/showExercisePlan'
 import React from 'react'
 
