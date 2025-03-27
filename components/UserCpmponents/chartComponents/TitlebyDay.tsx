@@ -24,7 +24,7 @@ const TitlebyDay = ({ data, }: { data: any }) => {
             acc.push(cur);
         }
         return acc;
-    }, []);
+    }, []).sort((a: any, b: any) => b.totalWeight - a.totalWeight).slice(0, 5);
 
     return (
         <ChartContainer config={chartConfig} className="min-h-[200px] aspect-auto w-full">
