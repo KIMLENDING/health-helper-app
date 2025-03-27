@@ -6,7 +6,6 @@ const userSchema = new Schema(
   {
     email: {
       type: String,
-      unique: true,
       required: true,
     },
     password: {
@@ -28,10 +27,11 @@ const userSchema = new Schema(
     },
     provider: {
       type: String,
-      required: false,
+      required: true,
     },
   },
   { timestamps: true }
 );
-
+// ✅ email + provider 복합 unique 인덱스 추가
+userSchema.index({ email: 1, provider: 1 }, { unique: true });
 export default mongoose.models.User || mongoose.model("User", userSchema);

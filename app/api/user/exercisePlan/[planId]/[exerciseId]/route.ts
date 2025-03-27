@@ -4,29 +4,31 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import User from "@/models/User"
 import { ExerciseOption } from "@/utils/util"
+import { getToken } from "next-auth/jwt"
 /**
  *  운동 계획의 선택한 운동항목 삭제 API
- * @param request 
+ * @param req
  * @returns 
  */
 
-export const DELETE = async (request: Request, { params }: { params: Promise<{ planId: string, exerciseId: string }> }) => {
+export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ planId: string, exerciseId: string }> }) => {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    const getSession = await getServerSession();
+
+    if (!getSession || !token) {
+        // 로그인 안되어있으면 로그인 페이지로 이동
+        return NextResponse.redirect('http://localhost:3000/login');
+    }
     try {
         const exercisePlanId = (await params).planId; // 요청에서 exercisePlanId 가져오기
         const exerciseId = (await params).exerciseId; // 요청에서 exerciseId 가져오기
 
-        const session = await getServerSession();
-        if (!session) {
-            return NextResponse.json(
-                { message: "로그인 해주세요." },
-                { status: 401 }
-            );
-        }
+
 
         await connect(); // MongoDB 연결
 
         // 해당 유저 확인
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
         if (!user) {
             return NextResponse.json({ message: "유저를 찾을 수 없습니다." }, { status: 404 });
         }

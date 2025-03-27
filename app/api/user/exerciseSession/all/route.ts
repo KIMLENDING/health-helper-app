@@ -4,6 +4,7 @@ import connect from "@/utils/db"
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import User from "@/models/User"
+import { getToken } from "next-auth/jwt"
 
 // /**
 //  *  isProgress 상태인 가장 최근의 운동 세션을 가져오는 API
@@ -46,25 +47,28 @@ import User from "@/models/User"
 
 /**
  * 특정 월의 운동 세션을 페이지네이션과 함께 가져오는 API
- * @param request
+ * @param req
  */
-export const GET = async (request: NextRequest) => {
+export const GET = async (req: NextRequest) => {
     try {
-        const session = await getServerSession();
-        if (!session) {
-            return NextResponse.redirect("http://localhost:3000/login");
+        const getSession = await getServerSession();
+        const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+        if (!getSession || !token) {
+            // 로그인 안되어있으면 로그인 페이지로 이동
+            return NextResponse.redirect('http://localhost:3000/login');
         }
 
         // 데이터베이스 연결
         await connect();
 
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
         if (!user) {
             return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
 
         // URL에서 `year`, `month`, `page`, `limit` 가져오기
-        const { searchParams } = new URL(request.url);
+        const { searchParams } = new URL(req.url);
         const year = parseInt(searchParams.get("year") || new Date().getFullYear().toString()); // 기본값: 올해
         const month = parseInt(searchParams.get("month") || (new Date().getMonth() + 1).toString()); // 기본값: 이번 달
         const page = parseInt(searchParams.get("page") || "1"); // 기본값: 1페이지

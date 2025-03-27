@@ -9,7 +9,7 @@ export const POST = async (request: any) => {
 
   await connect();
 
-  const existingUser = await User.findOne({ email });
+  const existingUser = await User.findOne({ email, provider: "credentials" });
 
   if (existingUser) {
     return new NextResponse("Email is already in use", { status: 400 });
@@ -21,6 +21,7 @@ export const POST = async (request: any) => {
     password: hashedPassword,
     name: "Admin",
     role: "admin",
+    provider: "credentials",
   });
 
   try {

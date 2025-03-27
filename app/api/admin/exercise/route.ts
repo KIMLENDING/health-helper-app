@@ -4,19 +4,20 @@ import connect from "@/utils/db"
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import User from "@/models/User"
-export const POST = async (request: NextRequest) => {
+import { getToken } from "next-auth/jwt"
+export const POST = async (req: NextRequest) => {
     // 운동 추가
-    const { title, description, url, tags } = await request.json();
+    const { title, description, url, tags } = await req.json();
     const getSession = await getServerSession();
-    if (!getSession) {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
         return NextResponse.redirect('http://localhost:3000/login');
     }
     await connect();
-    // getSession.user.email 이 값으로 사용자를 찾아서 role을 확인해야함
-    // role이 admin이 아니면 return
-    // role이 admin이면 운동 추가
-    const user = await User.findOne({ email: getSession.user.email });
+
+    const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
     if (!user) {
         return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }

@@ -4,7 +4,7 @@ import connect from "@/utils/db"
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import User from "@/models/User"
-
+import { getToken } from 'next-auth/jwt';
 /**
  * 
  * 사용자의 운동 계획을 가져오는 API
@@ -12,15 +12,18 @@ import User from "@/models/User"
  * @param param1 
  * @returns 
  */
-export const GET = async (request: NextRequest) => {
+export const GET = async (req: NextRequest) => {
     const getSession = await getServerSession();
-    if (!getSession) {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
         return NextResponse.redirect('http://localhost:3000/login');
     }
     try {
         await connect();
-        const user = await User.findOne({ email: getSession.user.email });
+        const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
+        console.log('user', user);
         if (!user) {
             return NextResponse.json({ message: 'User not found' }, { status: 404 });
         }
@@ -33,23 +36,24 @@ export const GET = async (request: NextRequest) => {
 
 /**
  *  운동 계획 추가
- * @param request 
+ * @param req 
  * @returns 
  */
-export const POST = async (request: NextRequest) => {
+export const POST = async (req: NextRequest) => {
     // 운동 추가
     // 요청에서 사용자 ID 가져오기
     // console.log('post요청')
-    const { title, exercises, userId } = await request.json();
+    const { title, exercises, userId } = await req.json();
 
     const getSession = await getServerSession();
-    if (!getSession) {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
         return NextResponse.redirect('http://localhost:3000/login');
     }
     await connect();
-
-    const user = await User.findOne({ email: getSession.user.email });
+    const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
     if (!user) {
         return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
@@ -78,17 +82,19 @@ export const POST = async (request: NextRequest) => {
  *  운동 계획 수정 API
  *  type이 수정 이면 exercise에서 rest, sets, reps 수정
  *  type이 추가 이면 exercise 추가
- * @param request 
+ * @param req
  * @returns 
  */
 
-export const PATCH = async (request: NextRequest) => {
+export const PATCH = async (req: NextRequest) => {
     try {
-        const { userId, exercisePlanId, exercises, type } = await request.json();
+        const { userId, exercisePlanId, exercises, type } = await req.json();
 
-        // console.log(type)
+
         const getSession = await getServerSession();
-        if (!getSession) {
+        const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+        if (!getSession || !token) {
             // 로그인 안되어있으면 로그인 페이지로 이동
             return NextResponse.redirect('http://localhost:3000/login');
         }
@@ -96,7 +102,7 @@ export const PATCH = async (request: NextRequest) => {
         await connect();
 
         // 로그인된 사용자가 요청 사용자와 일치하는지 확인
-        const user = await User.findOne({ email: getSession.user.email });
+        const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
         if (!user) {
             return NextResponse.json({ message: 'User not found' }, { status: 404 });
         }

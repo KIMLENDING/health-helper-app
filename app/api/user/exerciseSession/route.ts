@@ -5,26 +5,29 @@ import connect from "@/utils/db"
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import User from "@/models/User"
+import { getToken } from "next-auth/jwt"
 
 
 
 /**
  *  isProgress 상태인 가장 최근의 운동 세션을 가져오는 API
- * @param request 
+ * @param req
  */
-export const GET = async (request: NextRequest) => {
+export const GET = async (req: NextRequest) => {
     try {
         const session = await getServerSession();
-        if (!session) {
-            // 로그인하지 않았으면 로그인 페이지로 리다이렉트
-            return NextResponse.redirect("http://localhost:3000/login");
+        const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+        if (!session || !token) {
+            // 로그인 안되어있으면 로그인 페이지로 이동
+            return NextResponse.redirect('http://localhost:3000/login');
         }
 
         // 데이터베이스 연결
         await connect();
 
         // 로그인한 사용자의 정보를 찾음
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email, provider: token.provider });
         if (!user) {
             return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
@@ -50,20 +53,22 @@ export const GET = async (request: NextRequest) => {
 
 /**
  *  초기 운동 세션 생성
- * @param request 
+ * @param req 
  * @returns 
  */
-export const POST = async (request: NextRequest) => {
-    const sessionData = await request.json();
+export const POST = async (req: NextRequest) => {
+    const sessionData = await req.json();
 
     const getSession = await getServerSession();
-    if (!getSession) {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
         return NextResponse.redirect('http://localhost:3000/login');
     }
     await connect();
 
-    const user = await User.findOne({ email: getSession.user.email });
+    const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
     if (!user) {
         return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }

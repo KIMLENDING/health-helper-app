@@ -23,7 +23,7 @@ export const authOptions: any = {
       async authorize(credentials: any) {
         await connect();
         try {
-          const user = await User.findOne({ email: credentials.email });
+          const user = await User.findOne({ email: credentials.email, provider: "credentials" });
           if (user) {
             const isPasswordCorrect = await bcrypt.compare(
               credentials.password,
@@ -63,6 +63,7 @@ export const authOptions: any = {
       if (account.provider === "github" || account.provider === "google") {
         await connect(); // db연결
         try {
+          console.log("--------", account.provider);
           const existingUser = await User.findOne({ email: user.email, provider: account.provider });
           if (!existingUser) { // user가 없으면
             const newUser = new User({
@@ -83,7 +84,7 @@ export const authOptions: any = {
       return false;
 
     },
-    async jwt({ token, user, trigger, session, profile }: { token: any; user?: any; trigger: string; session: any, profile: any }) {
+    async jwt({ token, user, trigger, session, profile, account }: { token: any; user?: any; trigger: string; session: any, profile: any, account: any }) {
 
       if (trigger === 'update' && session?.user) {  // 세션이 업데이트 될 때마다 실행
         // console.log("Session User----", session.user);
@@ -92,9 +93,10 @@ export const authOptions: any = {
       if (user) { // 로그인할 때마다 실행
         token.role = user.role || 'user'; // user의 role을 token에 추가
         token.image = user.image || profile?.avatar_url; // user의 image를 token에 추가
+        token.provider = account?.provider; // user의 provider를 token에 추가
         if (!user._id) {
           connect();
-          const userId = await User.findOne({ email: user.email });
+          const userId = await User.findOne({ email: user.email, provider: account.provider });
           token._id = userId?._id; // user의 _id를 token에 추가
         } else {
           token._id = user._id; // user의 _id를 token에 추가
@@ -104,7 +106,10 @@ export const authOptions: any = {
       return token; //  페이지를 새로고침할 때마다 실행
     },
     async session({ session, token }: { session: any; token: any, }) { //사용자가 로그인 후 세션을  처음 요청 할 떄 , 페이지를 새로고침 할 때, 세션을 확인 할 때, getSession을 호출 할 때
-      session.user = { ...token };
+      session.user = {
+        ...session.user,
+        provider: token.provider, // ✅ 여기 꼭 넣기
+      };
       return session;
     },
   },

@@ -3,6 +3,7 @@ import Exercise from "@/models/Exercise"
 import User from "@/models/User"
 import connect from "@/utils/db"
 import { getServerSession } from "next-auth"
+import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
 
 export const GET = async (request: NextRequest, { params }: { params: Promise<{ exerciseId: string }> }) => {
@@ -21,19 +22,22 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
     }
 }
 
-export const PATCH = async (request: NextRequest, { params }: { params: Promise<{ exerciseId: string }> }) => {
+export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ exerciseId: string }> }) => {
     // 운동 수정
 
     const exerciseId = (await params).exerciseId
-    const { title, tags, url } = await request.json();
+    const { title, tags, url } = await req.json();
 
     // 로그인한 사용자가 관리자인지 확인
     // 관리자가 아니면 권한 없음 응답
-    const session = await getServerSession(); // 사용자 정보를 가져오는 함수 (구현 필요)
-    if (!session) { // 로그인 안되어있으면 로그인 페이지로 이동
+    const getSession = await getServerSession();
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!getSession || !token) {
+        // 로그인 안되어있으면 로그인 페이지로 이동
         return NextResponse.redirect('http://localhost:3000/login');
     }
-    const admin = await User.findOne({ email: session.user.email });
+    const admin = await User.findOne({ email: getSession.user.email, provider: token.provider });
     if (!admin || admin.role !== "admin") { // 관리자가 아니면 권한 없음 응답
         return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
     }
@@ -66,16 +70,19 @@ export const PATCH = async (request: NextRequest, { params }: { params: Promise<
 
 }
 
-export const DELETE = async (request: NextRequest, { params }: { params: Promise<{ exerciseId: string }> }) => {
+export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ exerciseId: string }> }) => {
     // 운동 삭제
     const exerciseId = (await params).exerciseId; // 요청에서 운동 ID 가져오기
     // 로그인한 사용자가 관리자인지 확인
     // 관리자가 아니면 권한 없음 응답
-    const session = await getServerSession(); // 사용자 정보를 가져오는 함수 (구현 필요)
-    if (!session) { // 로그인 안되어있으면 로그인 페이지로 이동
+    const getSession = await getServerSession();
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!getSession || !token) {
+        // 로그인 안되어있으면 로그인 페이지로 이동
         return NextResponse.redirect('http://localhost:3000/login');
     }
-    const admin = await User.findOne({ email: session.user.email });
+    const admin = await User.findOne({ email: getSession.user.email, provider: token.provider });
     if (!admin || admin.role !== "admin") { // 관리자가 아니면 권한 없음 응답
         return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
     }

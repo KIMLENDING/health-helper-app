@@ -3,6 +3,7 @@ import connect from "@/utils/db"
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import User from "@/models/User"
+import { getToken } from "next-auth/jwt"
 
 /**
  *  운동 세션 id로 조회
@@ -10,16 +11,18 @@ import User from "@/models/User"
  * @returns 
  */
 
-export const GET = async (request: NextRequest, { params }: { params: Promise<{ sessionId: string }> }) => {
+export const GET = async (req: NextRequest, { params }: { params: Promise<{ sessionId: string }> }) => {
     const sessionId = (await params).sessionId; // 요청에서 사용자 ID 가져오기
     const getSession = await getServerSession();
-    if (!getSession) {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
         return NextResponse.redirect('http://localhost:3000/login');
     }
     try {
         await connect();
-        const user = await User.findOne({ email: getSession.user.email });
+        const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
         if (!user) {
             return NextResponse.json({ message: 'User not found' }, { status: 404 });
         }
@@ -31,17 +34,19 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
 }
 
 
-export const PATCH = async (request: NextRequest, { params }: { params: Promise<{ sessionId: string }> }) => {
+export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ sessionId: string }> }) => {
     const sessionId = (await params).sessionId; // 요청에서 사용자 ID 가져오기
 
     const getSession = await getServerSession();
-    if (!getSession) {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+    if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
         return NextResponse.redirect('http://localhost:3000/login');
     }
     try {
         await connect();
-        const user = await User.findOne({ email: getSession.user.email });
+        const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
         if (!user) {
             return NextResponse.json({ message: 'User not found' }, { status: 404 });
         }
