@@ -1,6 +1,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import { ExerciseOptionSession, ExercisesessionData } from '@/utils/util';
 import React from 'react'
 import { Bar, BarChart, LabelList, XAxis } from 'recharts';
@@ -21,6 +22,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const TotalTitleBySession = ({ data }: { data: any }) => {
+    const isDesktop = useMediaQuery("(min-width: 768px)")
     const titleBySession = data?.exercises.flatMap((exercise: ExerciseOptionSession) => {
         return {
             title: exercise.title,
@@ -64,9 +66,9 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
                                                 >
                                                     <LabelList
                                                         position="top"
-                                                        offset={-24}
+                                                        offset={isDesktop ? -24 : -8}
                                                         className="fill-red-50"
-                                                        fontSize={12}
+                                                        fontSize={isDesktop ? 12 : 10}
                                                     />
                                                 </Bar>
                                                 <Bar
@@ -76,9 +78,9 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
                                                 >
                                                     <LabelList
                                                         position="top"
-                                                        offset={-24}
+                                                        offset={isDesktop ? -24 : -8}
                                                         className="fill-red-50"
-                                                        fontSize={12}
+                                                        fontSize={isDesktop ? 12 : 10}
                                                     />
                                                 </Bar>
                                                 <ChartTooltip
