@@ -12,7 +12,7 @@ const TimeByDay = ({ data }: { data: any }) => {
             return exercise.repTime || 0;
         }).reduce((acc, cur) => acc + cur, 0);
         const formetTimeM = Math.floor(totalTime / 60);
-        const formetTimeS = totalTime % 60;
+        const formetTimeS = Math.floor(totalTime % 60);
         const formetTime = `${formetTimeM}분 ${formetTimeS}초`
         if (!session.createdAt) return { day: '?요일', formetTime, totalTime };;
         const day = new Date(session.createdAt).toLocaleString("ko-KR", {
