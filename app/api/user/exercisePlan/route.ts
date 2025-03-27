@@ -15,7 +15,7 @@ import { getToken } from 'next-auth/jwt';
 export const GET = async (req: NextRequest) => {
     const getSession = await getServerSession();
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-
+    console.log('token---------', token)
     if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
         return NextResponse.redirect('http://localhost:3000/login');
@@ -93,7 +93,7 @@ export const PATCH = async (req: NextRequest) => {
 
         const getSession = await getServerSession();
         const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-
+        console.log('token---------', token)
         if (!getSession || !token) {
             // 로그인 안되어있으면 로그인 페이지로 이동
             return NextResponse.redirect('http://localhost:3000/login');

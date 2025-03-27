@@ -32,8 +32,9 @@ import { useState } from "react"
 import { useSessionContext } from "@/providers/SessionContext"
 
 
+
 // This is sample data.
-const data = {
+const menuItems = {
   navMain: [
     // {
     //   title: "Search",
@@ -138,9 +139,8 @@ export function SidebarLeft({
 }: any) {//
   const { data: session, status: sessionStatus } = useSession();
   const { session: sessions } = useSessionContext(); // 서버컴포넌트에서 받은 세션 데이터
-  const [datas, setData] = useState(data) // 메뉴 데이터
+  const [datas, setData] = useState(menuItems) // 메뉴 데이터
   const [sessionData, setSession] = useState(sessions) // 세션 데이터
-
 
   React.useLayoutEffect(() => {
     if (sessionStatus === "authenticated") { // 인증된 상태일 때
@@ -149,7 +149,7 @@ export function SidebarLeft({
   }
     , [sessionStatus, session])
   React.useLayoutEffect(() => {
-    if (sessionData?.user?.role === "user" && setData(data))
+    if (sessionData?.user?.role === "user" && setData(menuItems))
       sessionData?.user?.role === "admin" && setData(AdminData)
   }
     , [sessionData])
@@ -173,7 +173,7 @@ export function SidebarLeft({
             </Button>
         }
         {/* <SearchForm /> */}
-        {sessionData?.user?.role === "admin" ? <NavMain items={AdminData.navMain} /> : <NavMain items={data.navMain} />}
+        {sessionData?.user?.role === "admin" ? <NavMain items={AdminData.navMain} /> : <NavMain items={menuItems.navMain} />}
 
       </SidebarHeader>
       <SidebarContent className="bg-zinc-300 dark:bg-inherit">
