@@ -27,7 +27,7 @@ export default function LoginPage() {
     const { data: session, status: sessionStatus } = useSession();
 
     useEffect(() => {
-        console.log(sessionStatus)
+
         if (sessionStatus === "authenticated") {
             router.replace("/dashboard");
         }

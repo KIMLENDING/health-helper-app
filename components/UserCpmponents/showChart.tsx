@@ -31,7 +31,7 @@ const ShowChart = ({ data, isLoading, isError }: ShowChartProps) => {
 
             }}
                 orientation={isMobile ? "vertical" : 'horizontal'} className='bg-muted/50  rounded-xl ' >
-                <CarouselContent className={` ${isMobile ? 'p-2  h-[19rem] flex ' : 'p-2 ml-0 mr-2'}`} >
+                <CarouselContent className={` ${isMobile ? 'p-2  h-[19rem] flex ' : 'p-2 ml-0 mr-2'} select-none`} >
                     <CarouselItem className={`${isMobile && ' flex-1  '}`}>
                         <CardContainer title='주간 운동 종목 Top 5'  >
                             <TitlebyDay data={data} />

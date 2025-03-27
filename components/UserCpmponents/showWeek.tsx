@@ -57,16 +57,15 @@ const ShowWeek = ({ data }: ShowWeekProps) => {
     return (
         <section className="mx-auto w-full max-w-3xl rounded-xl ">
             <CardTitle className='my-3 font-extrabold text-2xl'>
-                <div className='flex flex-row gap-2 items-center hover:underline'>
+                <div className='flex flex-row gap-2 items-center hover:underline select-none'>
                     주간 히스토리
                 </div>
             </CardTitle>
-            <div className=' bg-muted/50 p-2 rounded-xl'>
+            <div className=' bg-muted/50 p-2 rounded-xl '>
 
-                <Card className="aspect-auto flex justify-between items-center gap-2 sm:gap-4 p-4">
+                <Card className="aspect-auto flex justify-between items-center gap-2 sm:gap-4 p-4 select-none ">
                     {a.map((day, index) => (
                         <div key={index} className="flex flex-col items-center">
-
                             <div
                                 className={`
                     w-8 h-8 sm:w-14 sm:h-14 
@@ -88,7 +87,7 @@ const ShowWeek = ({ data }: ShowWeekProps) => {
                                 </span>}
                             </div>
 
-                            <span className="mt-2 text-sm sm:text-base font-semibold ">
+                            <span className="mt-2 text-sm sm:text-base font-semibold  ">
                                 {day.label}
                             </span>
                         </div>

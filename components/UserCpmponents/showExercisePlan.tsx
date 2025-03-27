@@ -22,7 +22,7 @@ const ShowExercisePlan = () => {
     const useEditPlanTitleMutation = useEditPlanTitle();
     const [loading, setLoading] = useState(false);
     const [loadingText, setLoadingText] = useState('삭제 진행 중...');
-    console.log(data, isLoading)
+
     const Icons = [
         { name: 'BicepsFlexed', icon: <BicepsFlexed className='text-green-400' /> },
         { name: 'DumbbellIcon', icon: <DumbbellIcon className='text-green-400' /> },

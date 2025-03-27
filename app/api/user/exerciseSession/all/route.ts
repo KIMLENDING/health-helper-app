@@ -69,7 +69,7 @@ export const GET = async (request: NextRequest) => {
         const month = parseInt(searchParams.get("month") || (new Date().getMonth() + 1).toString()); // 기본값: 이번 달
         const page = parseInt(searchParams.get("page") || "1"); // 기본값: 1페이지
         const limit = parseInt(searchParams.get("limit") || "10"); // 기본값: 10개씩 가져오기
-        console.log(year, month, page, limit)
+
 
         // 선택한 월의 시작 날짜와 끝 날짜 계산
         const startDate = new Date(year, month - 1, 1); // 해당 월의 첫째 날

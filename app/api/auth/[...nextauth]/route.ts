@@ -53,26 +53,27 @@ export const authOptions: any = {
   pages: {
     signIn: '/login',
   },
+
   callbacks: {
     async signIn({ user, account, profile }: { profile: any, user: AuthUser; account: Account }) {
-      console.log("User----", user);
-      console.log("Account----", account);
-      console.log("Profile----", profile);
+
       if (account?.provider == "credentials") {
         return true;
       }
       if (account.provider === "github" || account.provider === "google") {
         await connect(); // db연결
         try {
-          const existingUser = await User.findOne({ email: user.email });
+          const existingUser = await User.findOne({ email: user.email, provider: account.provider });
           if (!existingUser) { // user가 없으면
             const newUser = new User({
               email: user.email,
               name: user.name,
               image: user.image,
+              provider: account.provider,
             });
             await newUser.save(); // user 생성
           }
+
           return true;
         } catch (err) {
           console.log("Error saving user", err);
@@ -89,8 +90,6 @@ export const authOptions: any = {
         return { ...token, ...session.user };
       }
       if (user) { // 로그인할 때마다 실행
-        // console.log("User----jwt", user);
-        // console.log("Token----", token);
         token.role = user.role || 'user'; // user의 role을 token에 추가
         token.image = user.image || profile?.avatar_url; // user의 image를 token에 추가
         if (!user._id) {
@@ -100,19 +99,14 @@ export const authOptions: any = {
         } else {
           token._id = user._id; // user의 _id를 token에 추가
         }
-        // console.log("Token----jwt", token);
-        token.qwe = "qwe";
         return token;
-        // return { ...token, ...user }; //user를 굳이 추가 할 필요가 있나? _doc에 굳이 user정보를 넣을 필요가 없어 보임
       }
       return token; //  페이지를 새로고침할 때마다 실행
     },
     async session({ session, token }: { session: any; token: any, }) { //사용자가 로그인 후 세션을  처음 요청 할 떄 , 페이지를 새로고침 할 때, 세션을 확인 할 때, getSession을 호출 할 때
       session.user = { ...token };
-
       return session;
     },
-
   },
 };
 

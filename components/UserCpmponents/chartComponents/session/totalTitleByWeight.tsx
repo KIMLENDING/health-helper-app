@@ -47,7 +47,6 @@ const TotalTitleByWeight = ({ data }: { data: any }) => {
     useEffect(() => {
         const applyLogScale = (data: any, key: string) => {
             if (!data) return [];
-            console.log(data)
 
             return data.map((item: any) => ({
                 ...item,

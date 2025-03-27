@@ -25,7 +25,7 @@ const ShowPlans = () => {
     const columnCount2 = data && Math.min(data.length, 3);
 
     return (
-        <div className='mx-auto w-full max-w-3xl rounded-xl'>
+        <div className='mx-auto w-full max-w-3xl rounded-xl select-none'>
             <CardTitle className='my-3 font-extrabold text-2xl'>
                 {sessions ?
                     <Link href={'/dashboard/exercisePlans'}>

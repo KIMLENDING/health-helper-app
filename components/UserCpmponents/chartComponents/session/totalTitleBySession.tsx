@@ -31,7 +31,7 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
             }),
         }
     });
-    console.log(data)
+
 
     return (
         <Card>

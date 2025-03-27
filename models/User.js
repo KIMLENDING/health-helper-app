@@ -26,6 +26,10 @@ const userSchema = new Schema(
       required: true,
       default: "user",
     },
+    provider: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );

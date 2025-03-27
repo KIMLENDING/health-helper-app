@@ -66,7 +66,7 @@ const CreatPlanUser = () => {
         setExerciseOption(prevState => prevState.filter(exercise => exercise.exerciseId !== id)) // 삭제할 데이터를 제외한 나머지 데이터를 반환합니다.
     }
     async function onSubmit2(values: z.infer<typeof formSchema2>) {
-        console.log('submit', planData)
+
         // 루틴 제출 로직
         if (session?.user._id === undefined) {
             toast({ variant: 'destructive', title: 'id가 존재하지 않습니다. ' });
