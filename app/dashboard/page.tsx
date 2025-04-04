@@ -12,8 +12,13 @@ const fetchData = async () => {
       ? "__Secure-next-auth.session-token"
       : "next-auth.session-token";
   const cookie = cookieHeader.get(cookieName);
+  console.log(cookieHeader);
+  console.log(cookieName);
+  console.log(cookie);
+  console.log(process.env.NODE_ENV);
+  console.log(process.env.NEXTAUTH_URL);
   const getSessionData = async () => {
-    const response = await fetch(`/api/user/SessionWeek`, {
+    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/SessionWeek`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -27,7 +32,7 @@ const fetchData = async () => {
     return response.json();
   }
   const getExercisePlan = async () => {
-    const response = await fetch(`/api/user/exercisePlan`, {
+    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -56,13 +61,13 @@ export default async function Dashboard() {
 
   return (
     <section className="flex flex-1 flex-col gap-4 p-4 ">
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <div className='flex  flex-col gap-4'>
-          <ShowWeek />
-          <ShowChart />
-        </div>
-        <ShowPlans />
-      </HydrationBoundary>
+      {/* <HydrationBoundary state={dehydrate(queryClient)}> */}
+      <div className='flex  flex-col gap-4'>
+        <ShowWeek />
+        <ShowChart />
+      </div>
+      <ShowPlans />
+      {/* </HydrationBoundary> */}
     </section>
   );
 }
