@@ -52,7 +52,7 @@ const fetchData = async () => {
 
 
 export default async function Dashboard() {
-  // const { sessionData, exercisePlans } = await fetchData();
+  const { sessionData, exercisePlans } = await fetchData();
   // const queryClient = new QueryClient();
   // await Promise.all([
   //   queryClient.prefetchQuery({ queryKey: ['weekSessions'], queryFn: async () => sessionData }),
