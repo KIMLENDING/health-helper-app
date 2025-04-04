@@ -13,7 +13,7 @@ const fetchData = async () => {
       : "next-auth.session-token";
   const cookie = cookieHeader.get(cookieName);
   const getSessionData = async () => {
-    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/SessionWeek`, {
+    const response = await fetch(`/api/user/SessionWeek`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -27,13 +27,13 @@ const fetchData = async () => {
     return response.json();
   }
   const getExercisePlan = async () => {
-    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan`, {
+    const response = await fetch(`/api/user/exercisePlan`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Cookie': cookie ? `next-auth.session-token=${cookie.value}` : '',
       },
-      //쿠키를 포함 
+
       credentials: 'include',
     });
     if (!response.ok) {
@@ -47,23 +47,22 @@ const fetchData = async () => {
 
 
 export default async function Dashboard() {
-  console.log(process.env.NEXTAUTH_URL)
-  // const { sessionData, exercisePlans } = await fetchData();
-  // const queryClient = new QueryClient();
-  // await Promise.all([
-  //   queryClient.prefetchQuery({ queryKey: ['weekSessions'], queryFn: () => sessionData }),
-  //   queryClient.prefetchQuery({ queryKey: ['exercisePlans'], queryFn: () => exercisePlans }),
-  // ])
+  const { sessionData, exercisePlans } = await fetchData();
+  const queryClient = new QueryClient();
+  await Promise.all([
+    queryClient.prefetchQuery({ queryKey: ['weekSessions'], queryFn: async () => sessionData }),
+    queryClient.prefetchQuery({ queryKey: ['exercisePlans'], queryFn: async () => exercisePlans }),
+  ])
 
   return (
     <section className="flex flex-1 flex-col gap-4 p-4 ">
-      {/* <HydrationBoundary state={dehydrate(queryClient)}> */}
-      <div className='flex  flex-col gap-4'>
-        <ShowWeek />
-        <ShowChart />
-      </div>
-      <ShowPlans />
-      {/* </HydrationBoundary> */}
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <div className='flex  flex-col gap-4'>
+          <ShowWeek />
+          <ShowChart />
+        </div>
+        <ShowPlans />
+      </HydrationBoundary>
     </section>
   );
 }
