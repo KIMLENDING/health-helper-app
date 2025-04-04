@@ -8,7 +8,7 @@ export const metadata = {
     openGraph: {
         title: "H-Helper | 당신만의 운동 도우미",
         description: "H-Helper와 함께 건강한 라이프스타일을 만들어보세요.",
-        url: "https://yourwebsite.com",
+        url: "https://health-helper-app.vercel.app/",
         siteName: "H-Helper",
         images: [
             {
