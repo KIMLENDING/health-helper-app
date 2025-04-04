@@ -35,7 +35,7 @@ export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ ex
 
     if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect('http://localhost:3000/login');
+        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
     }
     const admin = await User.findOne({ email: getSession.user.email, provider: token.provider });
     if (!admin || admin.role !== "admin") { // 관리자가 아니면 권한 없음 응답
@@ -80,7 +80,7 @@ export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ e
 
     if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect('http://localhost:3000/login');
+        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
     }
     const admin = await User.findOne({ email: getSession.user.email, provider: token.provider });
     if (!admin || admin.role !== "admin") { // 관리자가 아니면 권한 없음 응답

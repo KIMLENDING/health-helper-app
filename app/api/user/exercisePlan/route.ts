@@ -15,10 +15,10 @@ import { getToken } from 'next-auth/jwt';
 export const GET = async (req: NextRequest) => {
     const getSession = await getServerSession();
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-
+    console.log(getSession, token);
     if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect('http://localhost:3000/login');
+        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
     }
     try {
         await connect();
@@ -50,7 +50,7 @@ export const POST = async (req: NextRequest) => {
 
     if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect('http://localhost:3000/login');
+        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
     }
     await connect();
     const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
@@ -93,10 +93,10 @@ export const PATCH = async (req: NextRequest) => {
 
         const getSession = await getServerSession();
         const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-        console.log('token---------', token)
+
         if (!getSession || !token) {
             // 로그인 안되어있으면 로그인 페이지로 이동
-            return NextResponse.redirect('http://localhost:3000/login');
+            return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
         }
 
         await connect();

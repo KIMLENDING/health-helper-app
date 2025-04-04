@@ -14,7 +14,7 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ plan
 
     if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect('http://localhost:3000/login');
+        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
     }
     try {
         await connect();
@@ -37,7 +37,7 @@ export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ pl
 
     if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect('http://localhost:3000/login');
+        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
     }
     try {
         await connect();
@@ -67,7 +67,7 @@ export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ p
 
     if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect('http://localhost:3000/login');
+        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
     }
     try {
         await connect();

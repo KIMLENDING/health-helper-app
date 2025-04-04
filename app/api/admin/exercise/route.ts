@@ -13,7 +13,7 @@ export const POST = async (req: NextRequest) => {
 
     if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect('http://localhost:3000/login');
+        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
     }
     await connect();
 
@@ -41,7 +41,7 @@ export const GET = async (request: NextRequest) => {
     const getSession = await getServerSession();
     if (!getSession) {
         // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect('http://localhost:3000/login');
+        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
     }
     try {
         await connect();
