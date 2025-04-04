@@ -3,17 +3,17 @@ import ShowChart from "@/components/UserCpmponents/showChart";
 import ShowPlans from "@/components/UserCpmponents/showPlans";
 import ShowWeek from "@/components/UserCpmponents/showWeek";
 import { HydrationBoundary, dehydrate, QueryClient } from "@tanstack/react-query";
-// import { cookies } from "next/headers";
+import { cookies } from "next/headers";
 
 const fetchData = async () => {
-  // const cookieHeader = await cookies();
-  // const cookie = cookieHeader.get('next-auth.session-token');
+  const cookieHeader = await cookies();
+  const cookie = cookieHeader.get('next-auth.session-token');
   const getSessionData = async () => {
     const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/SessionWeek`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        // 'Cookie': cookie ? `next-auth.session-token=${cookie.value}` : '',
+        'Cookie': cookie ? `next-auth.session-token=${cookie.value}` : '',
       },
     });
     if (!response.ok) {
@@ -26,7 +26,7 @@ const fetchData = async () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        // 'Cookie': cookie ? `next-auth.session-token=${cookie.value}` : '',
+        'Cookie': cookie ? `next-auth.session-token=${cookie.value}` : '',
       }
     });
     if (!response.ok) {
