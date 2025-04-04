@@ -1,5 +1,5 @@
 'use client'
-import { getExercisePlan, } from '@/server/queries';
+import { useExercisePlan, } from '@/server/queries';
 import { useSession } from 'next-auth/react';
 import React, { useState } from 'react'
 import { Card, CardHeader, CardTitle } from '../ui/card';
@@ -15,7 +15,7 @@ import { Input } from '../ui/input';
 
 const ShowExercisePlan = () => {
 
-    const { data, error, isLoading } = getExercisePlan(); // 필요한 운동 계획 데이터를 가져옵니다.
+    const { data, error, isLoading } = useExercisePlan(); // 필요한 운동 계획 데이터를 가져옵니다.
     const [editingPlanId, setEditingPlanId] = useState<string | undefined>(undefined);
     const [editTitle, setEditTitle] = useState('');
     const useDeletePlanMutation = useDeletePlan();

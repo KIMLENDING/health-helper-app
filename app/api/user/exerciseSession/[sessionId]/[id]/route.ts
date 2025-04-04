@@ -30,7 +30,7 @@ export const POST = async (req: NextRequest) => {
     try {
         // 특정 exerciseId의 state 업데이트
         if (state === 'inProgress') {
-            // console.log('inProgress');
+
             const updatedSession = await ExerciseSession.findOneAndUpdate(
                 { _id: sessionId, "exercises._id": exerciseId },// 조건
                 {
@@ -39,7 +39,7 @@ export const POST = async (req: NextRequest) => {
                 },
                 { new: true } // 업데이트 후 새로운 문서를 반환
             );//$ 연산자는 배열의 요소에 접근하기 위해 사용
-            // console.log(updatedSession.exercises[0].session);
+
             if (!updatedSession) {
                 return NextResponse.json(
                     { error: "Exercise session or exercise not found" },

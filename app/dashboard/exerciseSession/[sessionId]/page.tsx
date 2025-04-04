@@ -23,7 +23,6 @@ const Page = () => {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState("list");
     const { data, error, isLoading } = useGetExerciseSession(sessionId); // 세션 데이터 가져오기
-    const useStateChangeExerciseSessionMutation = useStateChangeExerciseSession(); // 선택한 운동 상태 변경 후 운동 시작 mutation
     const [sessionData, setSessionData] = useState<ExercisesessionData | undefined>(); // 진행 중인 세트의 세션 데이터를 관리하는 상태 {set, reps, weight}
     const [currentExercise, setCurrentExercise] = useState<string | undefined>(); // 현재 진행중인 운동의 id
     const [loading, setLoading] = useState(false); // mutation loading 상태
@@ -32,6 +31,7 @@ const Page = () => {
     const [defaultRestTime, setDefaultRestTime] = useState<number>(10000); // 기본 휴식 시간
     const [allDone, setAllDone] = useState(false); // 모든 운동이 완료되었는지 확인
     const { progress, restTime, isResting, setRestTime, setIsResting, handleSkipRest, handleStartRest } = useRestTime({ isRunning, defaultRestTime }); // 휴식 시간
+    const useStateChangeExerciseSessionMutation = useStateChangeExerciseSession(); // 선택한 운동 상태 변경 후 운동 시작 mutation
     const useAllDoneExerciseSessionMutation = useAllDoneExerciseSession(); // 모든 운동 완료 mutation
 
     useEffect(() => {
@@ -44,7 +44,7 @@ const Page = () => {
         // 모든 운동 완료시 실행
         try {
             setLoading(true); // 로딩 시작
-            localStorage.removeItem('rest_time'); // 로컬 스토리지 초기화 (휴식 시간간)
+            localStorage.removeItem('rest_time'); // 로컬 스토리지 초기화 (휴식 시간)
             localStorage.removeItem('isResting'); // 로컬 스토리지 초기화 (휴식 상태)
             localStorage.removeItem('stopwatch_running'); // 로컬 스토리지 초기화 (운동 상태)
             localStorage.removeItem("elapsed_time");  // 로컬 스토리지 초기화 (경과 시간)
@@ -269,7 +269,7 @@ const Page = () => {
             {showCountdown && (
                 <CountdownOverlay onComplete={handleCountdownComplete} />
             )}
-            {allDone && loading && <LoadingOverlay isLoading={loading} />}
+            {allDone && loading && <LoadingOverlay isLoading={loading} text={'업데이트 중'} />}
             <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <TabsList className="w-full mb-4">
                     <TabsTrigger value="list" className="flex-1">
@@ -289,7 +289,6 @@ const Page = () => {
                                         <span className={` max-smc:truncate max-smc:w-32`}>{exercise.title}</span>
                                         <CardDescription className={` max-smc:truncate max-smc:w-32`}> {exercise.sets}세트, 휴식시간: {exercise.rest}초</CardDescription>
                                     </div>
-
                                     <Button
                                         onClick={() => handleExerciseStart(exercise!)}
                                         variant="outline"
@@ -302,7 +301,7 @@ const Page = () => {
                         })}
                     </div>
                     <div className='flex-1 flex justify-center py-2   '>
-                        <Button variant='default' onClick={handleAllDone} >{allDone ? '완료하기' : '루틴 그만두기'}</Button>
+                        <Button variant='default' onClick={handleAllDone} >{allDone ? '운동 완료' : '운동 종료'}</Button>
                     </div>
                 </TabsContent>
 

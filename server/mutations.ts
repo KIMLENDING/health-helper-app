@@ -344,6 +344,7 @@ export const useCreateExerciseSession = () => {
                 console.log('error', error);
             } else {
                 await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.newExerciseSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
+                await queryClient.invalidateQueries({ queryKey: ["inProgress"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
     })
@@ -395,6 +396,7 @@ export const useStateChangeExerciseSession = () => {
  */
 
 export const useAllDoneExerciseSession = () => {
+
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (data: any) => {
@@ -421,11 +423,13 @@ export const useAllDoneExerciseSession = () => {
                 toast({ variant: 'destructive', title: `${error}` });
                 console.log('error', error);
             } else {
-                // console.log('data', data);
+
                 toast({ variant: 'default2', title: `${data.message}` });
-                if (data.updatedSession) {
+                queryClient.invalidateQueries({ queryKey: ["inProgress"] })
+                if (data.updatedSession) { // 데이터가 있을 경우에만 invalidateQueries 호출
+
+
                     await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.updatedSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
-                    await queryClient.invalidateQueries({ queryKey: ["inProgress"] }) // 데이터 갱신 후 자동으로 UI 업데이트
                 }
             }
         }

@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+'use client'
+import React from 'react'
 import CardContainer from './chartComponents/CardContainer';
 import TitlebyDay from './chartComponents/TitlebyDay';
 import TimeByDay from './chartComponents/TimeByDay';
@@ -6,29 +7,17 @@ import WeightByDay from './chartComponents/WeightByDay';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../ui/carousel';
 import { useSidebar } from '../ui/sidebar';
 import WeightByPart from './chartComponents/WeightByPart';
-
-interface ShowChartProps {
-    data: any; // message, session:ExerciseSession[]
-    isLoading: boolean;
-    isError: boolean;
-}
+import { useWeekSessions } from '@/server/queries';
 
 
-
-
-
-const ShowChart = ({ data, isLoading, isError }: ShowChartProps) => {
-
+const ShowChart = () => {
+    const { data, isError, isLoading } = useWeekSessions(); // 필요한 운동 계획 데이터를 가져옵니다.
     const { isMobile } = useSidebar();
-
-
     return (
         <section className="mx-auto w-full max-w-3xl rounded-xl ">
-
             <Carousel opts={{
                 align: "start",
                 slidesToScroll: 1,
-
             }}
                 orientation={isMobile ? "vertical" : 'horizontal'} className='bg-muted/50  rounded-xl ' >
                 <CarouselContent className={` ${isMobile ? 'p-2  h-[19rem] flex ' : 'p-2 ml-0 mr-2'} select-none`} >

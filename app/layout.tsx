@@ -23,10 +23,11 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "H-Helper | 당신만의 운동 도우미",
   description: "H-Helper와 함께 건강한 라이프스타일을 만들어보세요.",
+  metadataBase: new URL(`${process.env.NEXTAUTH_URL}`), // 동적으로 생성된 URL
   openGraph: {
     title: "H-Helper | 당신만의 운동 도우미",
     description: "H-Helper와 함께 건강한 라이프스타일을 만들어보세요.",
-    url: "https://health-helper-app.vercel.app/",
+    url: new URL(`${process.env.NEXTAUTH_URL}`),
     siteName: "H-Helper",
     images: [
       {

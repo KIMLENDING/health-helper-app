@@ -22,7 +22,7 @@ export const useEexercises = () => {
 }
 
 /**컴포넌트간 데이터를 받아오기 위한 기능 */
-export const getSelectedExercises = () => {
+export const useSelectedExercises = () => {
     return useQuery<Exercise[]>( // 타입을 지정합니다.
         {
             queryKey: ["selectedExercise"],
@@ -37,7 +37,7 @@ export const getSelectedExercises = () => {
  * @param userId 
  * @returns 
  */
-export const getExercisePlan = () => {
+export const useExercisePlan = () => {
     return useQuery<ExercisePlan[]>({
         queryKey: ["exercisePlans"],
         queryFn: async () => {
@@ -61,7 +61,7 @@ export const getExercisePlan = () => {
  * @param planId 
  * @returns 
  */
-export const getSpecificExercisePlan = (planId?: string) => {
+export const useSpecificExercisePlan = (planId?: string) => {
     return useQuery<ExercisePlan>({
         queryKey: ["exercisePlan", planId], // 개별 데이터를 식별할 수 있는 queryKey
         queryFn: planId ? async () => {

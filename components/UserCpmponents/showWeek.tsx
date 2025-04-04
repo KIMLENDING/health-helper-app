@@ -2,17 +2,11 @@
 
 import React from 'react'
 import { Card, CardTitle } from '../ui/card';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useWeekSessions } from '@/server/queries';
 
-interface ShowWeekProps {
-    data: any; // message, session:ExerciseSession[]
-    isLoading: boolean;
-    isError: boolean;
-}
-
-const ShowWeek = ({ data }: ShowWeekProps) => {
-
+const ShowWeek = () => {
+    const { data, isError, isLoading } = useWeekSessions(); // 필요한 운동 계획 데이터를 가져옵니다.
     const getCurrentWeekDates = () => {
         // 오늘 날짜를 기준으로 이번주 일요일부터 토요일까지의 날짜를 배열로 반환
         const today = new Date();
@@ -39,7 +33,7 @@ const ShowWeek = ({ data }: ShowWeekProps) => {
 
 
     // 해당 요일에 운동 기록이 있는지 확인 및 id값 추가
-    const a = days.map((day) => {
+    const weekSessionMapping = days.map((day) => {
         const matchedSession = data?.sessions.find((session: any) => {
             const sessionDate = new Date(session.createdAt).toLocaleDateString("ko-KR");
             const dayDate = day.date.toLocaleDateString("ko-KR");
@@ -64,7 +58,7 @@ const ShowWeek = ({ data }: ShowWeekProps) => {
             <div className=' bg-muted/50 p-2 rounded-xl '>
 
                 <Card className="aspect-auto flex justify-between items-center gap-2 sm:gap-4 p-4 select-none ">
-                    {a.map((day, index) => (
+                    {weekSessionMapping.map((day, index) => (
                         <div key={index} className="flex flex-col items-center">
                             <div
                                 className={`
@@ -93,12 +87,8 @@ const ShowWeek = ({ data }: ShowWeekProps) => {
                         </div>
                     ))}
                 </Card>
-
             </div>
-            {/* <div>
-                {!sessions && '로그인 해주세요'}
-                {sessions && isError && '새로고침해 보세요'}
-            </div> */}
+
         </section>
     );
 }

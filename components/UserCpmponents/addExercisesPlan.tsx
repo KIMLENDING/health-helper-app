@@ -1,4 +1,4 @@
-import { getSelectedExercises } from '@/server/queries';
+import { useSelectedExercises } from '@/server/queries';
 import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { useSession } from 'next-auth/react';
@@ -20,7 +20,7 @@ const AddExercisesPlan = ({ plan_id }: { plan_id: string }) => {
     const [isSave, setIsSave] = useState(false); // 저장 버튼 활성화 여부
     const [planData, setPlanData] = useState<Exercise[]>([]) // 가져온 운동 종목 데이터를 저장하는 변수
     const [exerciseOption, setExerciseOption] = useState<ExerciseOption[]>([]) // 이건 세트, 반복횟수, 휴식시간을 저장하는 변수
-    const { data, error, isLoading } = getSelectedExercises(); // 필요한 운동 종목 데이터를 가져옵니다.
+    const { data, error, isLoading } = useSelectedExercises(); // 필요한 운동 종목 데이터를 가져옵니다.
     const useUpdatePlanMutation = useUpdatePlan();
     const queryClient = useQueryClient();
 

@@ -1,5 +1,5 @@
 'use client'
-import { getExercisePlan, } from '@/server/queries';
+import { useExercisePlan, } from '@/server/queries';
 import { useSession } from 'next-auth/react';
 import React from 'react'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +10,7 @@ import { DrawerDialogDemo } from '../LayoutCompents/ResponsiveDialog';
 
 const ShowPlans = () => {
     const { data: sessions } = useSession();
-    const { data, isError, isLoading } = getExercisePlan(); // 필요한 운동 계획 데이터를 가져옵니다.
+    const { data, isError, isLoading } = useExercisePlan(); // 필요한 운동 계획 데이터를 가져옵니다.
 
     const Icons = [
         { name: 'BicepsFlexed', icon: <BicepsFlexed className='text-green-400' /> },
@@ -19,8 +19,7 @@ const ShowPlans = () => {
         { name: 'RadicalIcon', icon: <RadicalIcon className='text-green-400' /> },
         { name: 'VolleyballIcon', icon: <VolleyballIcon className='text-green-400' /> },
     ]
-    const columnCount = data && Math.min(data.length, 4);
-    const columnCount2 = data && Math.min(data.length, 3);
+
 
     return (
         <div className='mx-auto w-full max-w-3xl rounded-xl select-none'>
@@ -36,9 +35,10 @@ const ShowPlans = () => {
                         <SquareArrowOutUpRightIcon className='text-red-400' />
                     </div>}
             </CardTitle>
-            <div className='rounded-xl bg-muted/50 p-2'>
+            {/** 플랜 내용 표시 */}
+            <div className='rounded-xl bg-muted/50 p-2 h-72 overflow-y-scroll '>
                 {isLoading ? (
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2">
                         {[1, 2, 3].map((index) => (
                             <div key={index} className="h-16 bg-gray-200 dark:bg-zinc-700 animate-pulse rounded-lg" />
                         ))}
@@ -46,11 +46,10 @@ const ShowPlans = () => {
                 ) : (
                     <>
                         {data && data.length > 0 ? (
-                            <div className={`grid gap-2 grid-cols-${columnCount} max-md:grid-cols-${columnCount2} max-sm:grid-cols-1 `}>
-
+                            <div className={`grid grid-cols-1 md:grid-cols-2 gap-2`}>
                                 {data.map((plan) => {
-                                    const randomIndex = Math.floor(Math.random() * Icons.length);
-                                    const randomIcon = Icons[randomIndex]?.icon;
+
+                                    const randomIcon = Icons[1].icon;
                                     return (
                                         <Card key={plan.title} className='aspect-auto '>
                                             <CardHeader className='px-0'>
