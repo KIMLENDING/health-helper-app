@@ -13,6 +13,15 @@ import { getToken } from 'next-auth/jwt';
  * @returns 
  */
 export const GET = async (req: NextRequest) => {
+    const cookieHeader = req.cookies.get("next-auth.session-token");
+    const cookie = req.cookies.get("__Secure-next-auth.session-token");
+    if (!cookieHeader || !cookie) {
+        // 쿠키가 없으면 로그인 페이지로 이동
+        console.log("쿠키가 없습니다.");
+        // return NextResponse.json({ message: "쿠키가 없습니다." }, { status: 401 });
+    }
+    console.log("🔍 서버에서 받은 쿠키:", cookieHeader);
+    console.log("🔍 서버에서 받은 쿠키:", cookie);
     const getSession = await getServerSession();
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
     console.log(getSession, token);
