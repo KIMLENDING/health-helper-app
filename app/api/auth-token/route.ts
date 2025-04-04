@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
     if (!token) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    console.log('token', token);
+    // console.log('token', token);
     return NextResponse.json({
 
         name: token.name,

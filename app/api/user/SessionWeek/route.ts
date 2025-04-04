@@ -31,7 +31,7 @@ export const GET = async (req: NextRequest) => {
         // 요청에서 사용자 ID 가져오기
         const getSession = await getServerSession();
         const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-        console.log(getSession, token);
+        // console.log(getSession, token);
         if (!getSession || !token) {
             // 로그인 안되어있으면 로그인 페이지로 이동
             return NextResponse.json({ message: "로그인 해주세요." }, { status: 401 });

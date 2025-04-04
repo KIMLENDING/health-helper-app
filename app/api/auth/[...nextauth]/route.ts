@@ -63,7 +63,7 @@ export const authOptions: any = {
       if (account.provider === "github" || account.provider === "google") {
         await connect(); // db연결
         try {
-          console.log("--------", account.provider);
+          // console.log("--------", account.provider);
           const existingUser = await User.findOne({ email: user.email, provider: account.provider });
           if (!existingUser) { // user가 없으면
             const newUser = new User({

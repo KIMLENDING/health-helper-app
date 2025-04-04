@@ -47,7 +47,7 @@ const InProgressTap = ({
         const session = data?.exercises.find((exercise) => exercise._id === currentExercise)?.session.find((session) => session._id === index);
         // console.log(session);
         if (session?._id === index) {
-            console.log('edit')
+            // console.log('edit')
             setEditingIndex(index);
             setEditedReps(session.reps);
             setEditedWeight(session.weight);
@@ -56,7 +56,7 @@ const InProgressTap = ({
     };
 
     const handleSave = () => {
-        console.log('save')
+        // console.log('save')
         if (!currentExercise || !editingIndex) return;
         useEditExerciseSessionMutation.mutate({
             sessionId: data?._id,
