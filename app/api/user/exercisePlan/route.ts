@@ -27,7 +27,8 @@ export const GET = async (req: NextRequest) => {
     console.log(getSession, token);
     if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
+        return NextResponse.json({ message: "로그인 해주세요." }, { status: 401 });
+        // return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
     }
     try {
         await connect();

@@ -13,8 +13,9 @@ const fetchData = async () => {
       : "next-auth.session-token";
   const cookie = cookieHeader.get(cookieName);
   console.log("🔍 서버에서 받은 쿠키: next-auth.session-token", cookie);
-  console.log("🔍 서버에서 받은 쿠키: next-auth.session-token", cookieHeader);
   console.log("🔍 서버에서 받은 쿠키:", cookieHeader);
+  console.log(' 쿠키 이름:', cookieName)
+  console.log(' 쿠키 값:', cookie?.value)
   if (!cookie) {
     return { sessionData: 0, exercisePlans: 0 };
   }
@@ -23,7 +24,7 @@ const fetchData = async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        // 'Cookie': cookie ? `next-auth.session-token=${cookie.value}` : '',
+        'Cookie': cookie ? `next-auth.session-token=${cookie.value}` : '',
       },
       credentials: 'include',
     });
@@ -38,7 +39,7 @@ const fetchData = async () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        // 'Cookie': cookie ? `next-auth.session-token=${cookie.value}` : '',
+        'Cookie': cookie ? `next-auth.session-token=${cookie.value}` : '',
       },
 
       credentials: 'include',
