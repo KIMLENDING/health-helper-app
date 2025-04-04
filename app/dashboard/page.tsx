@@ -1,9 +1,25 @@
-
 import ShowChart from "@/components/UserCpmponents/showChart";
 import ShowPlans from "@/components/UserCpmponents/showPlans";
 import ShowWeek from "@/components/UserCpmponents/showWeek";
 import { HydrationBoundary, dehydrate, QueryClient } from "@tanstack/react-query";
 import { cookies } from "next/headers";
+
+const fetchWithCookie = async (url: string, cookieName: string, cookieValue: string | undefined) => {
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Cookie": cookieValue ? `${cookieName}=${cookieValue}` : "",
+    },
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+};
 
 const fetchData = async () => {
   const cookieHeader = await cookies();
@@ -13,54 +29,27 @@ const fetchData = async () => {
       : "next-auth.session-token";
   const cookie = cookieHeader.get(cookieName);
 
-  const getSessionData = async () => {
-    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/SessionWeek`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        'Cookie': cookie ? `${cookieName}=${cookie.value}` : '',
-      },
-      credentials: 'include',
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+  const [sessionData, exercisePlans] = await Promise.all([
+    fetchWithCookie(`${process.env.NEXTAUTH_URL}/api/user/SessionWeek`, cookieName, cookie?.value),
+    fetchWithCookie(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan`, cookieName, cookie?.value),
+  ]);
 
-    return response.json();
-  }
-  const getExercisePlan = async () => {
-    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Cookie': cookie ? `${cookieName}=${cookie.value}` : '',
-      },
-
-      credentials: 'include',
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return response.json();
-  }
-  const [sessionData, exercisePlans] = await Promise.all([getSessionData(), getExercisePlan()]);
   return { sessionData, exercisePlans };
-}
-
+};
 
 export default async function Dashboard() {
   const { sessionData, exercisePlans } = await fetchData();
   const queryClient = new QueryClient();
+
   await Promise.all([
-    queryClient.prefetchQuery({ queryKey: ['weekSessions'], queryFn: async () => sessionData }),
-    queryClient.prefetchQuery({ queryKey: ['exercisePlans'], queryFn: async () => exercisePlans }),
-  ])
+    queryClient.prefetchQuery({ queryKey: ["weekSessions"], queryFn: () => sessionData }),
+    queryClient.prefetchQuery({ queryKey: ["exercisePlans"], queryFn: () => exercisePlans }),
+  ]);
 
   return (
-    <section className="flex flex-1 flex-col gap-4 p-4 ">
+    <section className="flex flex-1 flex-col gap-4 p-4">
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <div className='flex  flex-col gap-4'>
+        <div className="flex flex-col gap-4">
           <ShowWeek />
           <ShowChart />
         </div>

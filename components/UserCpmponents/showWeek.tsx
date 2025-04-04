@@ -56,7 +56,6 @@ const ShowWeek = () => {
                 </div>
             </CardTitle>
             <div className=' bg-muted/50 p-2 rounded-xl '>
-
                 <Card className="aspect-auto flex justify-between items-center gap-2 sm:gap-4 p-4 select-none ">
                     {weekSessionMapping.map((day, index) => (
                         <div key={index} className="flex flex-col items-center">
@@ -88,7 +87,6 @@ const ShowWeek = () => {
                     ))}
                 </Card>
             </div>
-
         </section>
     );
 }

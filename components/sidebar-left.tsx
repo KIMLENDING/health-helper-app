@@ -1,5 +1,5 @@
 'use client'
-import * as React from "react"
+
 import {
   Blocks,
   Calendar,
@@ -17,18 +17,13 @@ import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
-  SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar"
-import { Button } from "./ui/button"
-import { useSession } from "next-auth/react"
-import { DefaultUser } from "next-auth"
-import Link from "next/link"
+
 import { NavUser } from "./nav-user"
 import { NavMain } from "./nav-main"
+import { useMediaQuery } from "@/hooks/use-media-query"
 
-import LoadingSpinner from "./LayoutCompents/LoadingSpinner"
-import { useState } from "react"
-import { useSessionContext } from "@/providers/SessionContext"
 
 
 
@@ -129,47 +124,25 @@ const AdminData = {
   ],
 
 }
-interface CustomSession extends DefaultUser {
+interface CustomSession {
+  name: string
+  email: string
+  image: string
   role: string
 }
-export function SidebarLeft({
+export function SidebarLeft({ sessionData }: any) {
+  // const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
 
-  ...props
-}: any) {//
-  const { data: session, status: sessionStatus } = useSession();
-  const { session: sessions } = useSessionContext(); // 서버컴포넌트에서 받은 세션 데이터
-  const [datas, setData] = useState(menuItems) // 메뉴 데이터
-  const [sessionData, setSession] = useState(sessions) // 세션 데이터
-
-  React.useLayoutEffect(() => {
-    if (sessionStatus === "authenticated") { // 인증된 상태일 때
-      setSession(session) // 
-    }
-  }
-    , [sessionStatus, session])
-  React.useLayoutEffect(() => {
-    if (sessionData?.user?.role === "user" && setData(menuItems))
-      sessionData?.user?.role === "admin" && setData(AdminData)
-  }
-    , [sessionData])
-
-
+  // if (isMobile && !openMobile) return null
   return (
-    <Sidebar className="border-r-0 " {...props}>
+    <Sidebar className="border-r-0 " >
       <SidebarHeader className="bg-zinc-300 dark:bg-inherit">
-
-        {sessionData ? <NavUser user={{
-          name: sessionData.user?.name || "Unknown",
-          email: sessionData.user?.email || "unknown@example.com",
-          image: sessionData.user?.image || "/img/defaultUserImage.png",
-          role: (sessionData.user as CustomSession)?.role || "user",
-        }} /> :
-          sessionStatus === "loading" ? <div className="flex justify-center"><LoadingSpinner className="w-8 h-8 " /></div> :
-            <Button className="p-0">
-              <Link href={'/login'} className=" flex-1 h-full pt-2 ">
-                로그인
-              </Link>
-            </Button>
+        {sessionData && <NavUser user={{
+          name: (sessionData as CustomSession)?.name || "Unknown",
+          email: (sessionData as CustomSession)?.email || "unknown@example.com",
+          image: (sessionData as CustomSession)?.image || "/img/defaultUserImage.png",
+          role: (sessionData as CustomSession)?.role || "user",
+        }} />
         }
         {/* <SearchForm /> */}
         {sessionData?.user?.role === "admin" ? <NavMain items={AdminData.navMain} /> : <NavMain items={menuItems.navMain} />}
@@ -178,7 +151,6 @@ export function SidebarLeft({
       <SidebarContent className="bg-zinc-300 dark:bg-inherit">
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
       </SidebarContent>
-      <SidebarRail />
     </Sidebar>
   )
 }

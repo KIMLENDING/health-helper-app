@@ -38,7 +38,7 @@ export const GET = async (req: NextRequest) => {
         })
             .sort({ createdAt: -1 })
             .populate("exercises.exerciseId"); // populate로 Exercise 정보 가져오기
-        console.log(latestSession)
+
         if (!latestSession) {
             return NextResponse.json({ message: "진행 중인 운동이 없습니다." }, { status: 201 });
         }
