@@ -22,7 +22,7 @@ import {
 
 import { NavUser } from "./nav-user"
 import { NavMain } from "./nav-main"
-import { useMediaQuery } from "@/hooks/use-media-query"
+import { useSession } from "next-auth/react"
 
 
 
@@ -130,22 +130,21 @@ interface CustomSession {
   image: string
   role: string
 }
-export function SidebarLeft({ sessionData }: any) {
-  // const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+export function SidebarLeft() {
+  const { data: session } = useSession()
 
-  // if (isMobile && !openMobile) return null
   return (
-    <Sidebar className="border-r-0 " >
+    <Sidebar className="border-r-0 " variant='floating'  >
       <SidebarHeader className="bg-zinc-300 dark:bg-inherit">
-        {sessionData && <NavUser user={{
-          name: (sessionData as CustomSession)?.name || "Unknown",
-          email: (sessionData as CustomSession)?.email || "unknown@example.com",
-          image: (sessionData as CustomSession)?.image || "/img/defaultUserImage.png",
-          role: (sessionData as CustomSession)?.role || "user",
+        {session && <NavUser user={{
+          name: (session.user as CustomSession)?.name || "Unknown",
+          email: (session.user as CustomSession)?.email || "unknown@example.com",
+          image: (session.user as CustomSession)?.image || "/img/defaultUserImage.png",
+          role: (session.user as CustomSession)?.role || "user",
         }} />
         }
         {/* <SearchForm /> */}
-        {sessionData?.user?.role === "admin" ? <NavMain items={AdminData.navMain} /> : <NavMain items={menuItems.navMain} />}
+        {session?.user?.role === "admin" ? <NavMain items={AdminData.navMain} /> : <NavMain items={menuItems.navMain} />}
 
       </SidebarHeader>
       <SidebarContent className="bg-zinc-300 dark:bg-inherit">

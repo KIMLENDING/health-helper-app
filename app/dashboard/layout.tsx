@@ -7,46 +7,47 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { cookies } from "next/headers";
 import { SidebarLeft } from "@/components/sidebar-left";
+// import { cookies } from "next/headers";
 
-const fetchWithCookie = async (url: string, cookieName: string, cookieValue: string | undefined) => {
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Cookie": cookieValue ? `${cookieName}=${cookieValue}` : "",
-    },
-    credentials: "include",
-  });
+// const fetchWithCookie = async (url: string, cookieName: string, cookieValue: string | undefined) => {
+//   const response = await fetch(url, {
+//     method: "GET",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "Cookie": cookieValue ? `${cookieName}=${cookieValue}` : "",
+//     },
+//     credentials: "include",
+//   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+//   if (!response.ok) {
+//     throw new Error(`HTTP error! status: ${response.status}`);
+//   }
 
-  return response.json();
-};
+//   return response.json();
+// };
 
-async function getSessionData() {
-  const cookieHeader = await cookies();
-  const cookieName =
-    process.env.NODE_ENV === "production"
-      ? "__Secure-next-auth.session-token"
-      : "next-auth.session-token";
-  const cookie = cookieHeader.get(cookieName);
-  return fetchWithCookie(`${process.env.NEXTAUTH_URL}/api/auth-token`, cookieName, cookie?.value);
-}
+// async function getSessionData() {
+//   const cookieHeader = await cookies();
+//   const cookieName =
+//     process.env.NODE_ENV === "production"
+//       ? "__Secure-next-auth.session-token"
+//       : "next-auth.session-token";
+//   const cookie = cookieHeader.get(cookieName);
+//   return fetchWithCookie(`${process.env.NEXTAUTH_URL}/api/auth-token`, cookieName, cookie?.value);
+// }
 
 export default async function DachboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const sessionData = await getSessionData();
+  // const sessionData = await getSessionData();
 
   return (
     <SidebarProvider>
-      <SidebarLeft sessionData={sessionData} />
+      {/* <SidebarLeft sessionData={sessionData} /> */}
+      <SidebarLeft />
       <SidebarInset>
         <main>
           <header className="sticky top-0 flex justify-between h-14 shrink-0 items-center gap-2 bg-background z-50 shadow-md px-4">

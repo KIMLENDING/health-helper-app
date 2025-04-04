@@ -57,7 +57,7 @@ const SidebarProvider = React.forwardRef<
 >(
   (
     {
-      defaultOpen = true,
+      defaultOpen = false, // 초기 상태를 true로 할거면 layout.tsx에서 서버 사이드에서 쿠키로 세션 받아와서 사용해야 ui랜더링에 깜빡임이 없음
       open: openProp,
       onOpenChange: setOpenProp,
       className,
