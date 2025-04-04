@@ -12,7 +12,9 @@ const fetchData = async () => {
       ? "__Secure-next-auth.session-token"
       : "next-auth.session-token";
   const cookie = cookieHeader.get(cookieName);
-
+  if (!cookie) {
+    return { sessionData: 0, exercisePlans: 0 };
+  }
   const getSessionData = async () => {
     const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/SessionWeek`, {
       method: "GET",
@@ -25,18 +27,8 @@ const fetchData = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    console.log("🔍 응답 상태 코드:", response.status);
-    console.log("🔍 응답 Content-Type:", response.headers.get("content-type"));
 
-    const text = await response.text();
-    console.log("🔍 응답 데이터:", text);
-
-    try {
-      return JSON.parse(text);
-    } catch (error) {
-      throw new Error(`🚨 JSON 파싱 실패! 반환된 데이터가 JSON이 아닙니다.\n${text}`);
-    }
-    // return response.json();
+    return response.json();
   }
   const getExercisePlan = async () => {
     const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan`, {
@@ -51,18 +43,8 @@ const fetchData = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    console.log("🔍 응답 상태 코드:", response.status);
-    console.log("🔍 응답 Content-Type:", response.headers.get("content-type"));
 
-    const text = await response.text();
-    console.log("🔍 응답 데이터:", text);
-
-    try {
-      return JSON.parse(text);
-    } catch (error) {
-      throw new Error(`🚨 JSON 파싱 실패! 반환된 데이터가 JSON이 아닙니다.\n${text}`);
-    }
-    // return response.json();
+    return response.json();
   }
   const [sessionData, exercisePlans] = await Promise.all([getSessionData(), getExercisePlan()]);
   return { sessionData, exercisePlans };

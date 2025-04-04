@@ -20,8 +20,8 @@ export const GET = async (req: NextRequest) => {
         console.log("쿠키가 없습니다.");
         // return NextResponse.json({ message: "쿠키가 없습니다." }, { status: 401 });
     }
-    console.log("🔍 서버에서 받은 쿠키:", cookieHeader);
-    console.log("🔍 서버에서 받은 쿠키:", cookie);
+    console.log("🔍 서버에서 받은 쿠키: next-auth.session-token", cookieHeader);
+    console.log("🔍 서버에서 받은 쿠키:__Secure-next-auth.session-token", cookie);
     const getSession = await getServerSession();
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
     console.log(getSession, token);
