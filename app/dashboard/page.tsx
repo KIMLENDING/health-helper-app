@@ -14,7 +14,7 @@ const getSessionData = async () => {
   return response.json();
 }
 const getExercisePlans = async () => {
-  const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlans`, {
+  const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -27,6 +27,7 @@ const getExercisePlans = async () => {
 }
 
 export default async function Dashboard() {
+
   const queryClient = new QueryClient();
   await Promise.all([
     queryClient.prefetchQuery({ queryKey: ['weekSessions'], queryFn: getSessionData }),
@@ -37,8 +38,7 @@ export default async function Dashboard() {
 
   return (
     <section className="flex flex-1 flex-col gap-4 p-4 ">
-      <HydrationBoundary>
-
+      <HydrationBoundary state={dehydrate(queryClient)}>
         <SessionData />
         <ShowPlans />
       </HydrationBoundary>

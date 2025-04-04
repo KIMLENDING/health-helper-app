@@ -15,7 +15,7 @@ import { getToken } from 'next-auth/jwt';
 export const GET = async (req: NextRequest) => {
     const getSession = await getServerSession();
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-    console.log('token---------', token)
+
     if (!getSession || !token) {
         // 로그인 안되어있으면 로그인 페이지로 이동
         return NextResponse.redirect('http://localhost:3000/login');
@@ -23,7 +23,7 @@ export const GET = async (req: NextRequest) => {
     try {
         await connect();
         const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
-        console.log('user', user);
+
         if (!user) {
             return NextResponse.json({ message: 'User not found' }, { status: 404 });
         }
