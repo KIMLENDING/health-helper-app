@@ -1,7 +1,8 @@
 import { ImageResponse } from "@vercel/og";
 
-export const runtime = "edge"; // Edge Runtime 사용
-
+export const config = {
+    runtime: 'edge',
+};
 export async function GET() {
     return new ImageResponse(
         (

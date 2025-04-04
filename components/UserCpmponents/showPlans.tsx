@@ -5,12 +5,10 @@ import React from 'react'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { BicepsFlexed, DumbbellIcon, RadicalIcon, SparklesIcon, SquareArrowOutUpRightIcon, VolleyballIcon } from 'lucide-react';
 import Link from 'next/link';
-
 import { DrawerDialogDemo } from '../LayoutCompents/ResponsiveDialog';
-import { useSessionContext } from '@/providers/SessionContext';
+
 
 const ShowPlans = () => {
-    const { session: serverSessions } = useSessionContext(); // 서버컴포넌트에서 받은 세션 데이터
     const { data: sessions } = useSession();
     const { data, isError, isLoading } = getExercisePlan(); // 필요한 운동 계획 데이터를 가져옵니다.
 

@@ -1,5 +1,53 @@
 import SessionData from "@/components/UserCpmponents/sessionData";
 import ShowPlans from "@/components/UserCpmponents/showPlans";
+import { HydrationBoundary, dehydrate, QueryClient } from "@tanstack/react-query";
+const getSessionData = async () => {
+  const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/SessionWeek`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  return response.json();
+}
+const getExercisePlans = async () => {
+  const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlans`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  return response.json();
+}
+
+export default async function Dashboard() {
+  const queryClient = new QueryClient();
+  await Promise.all([
+    queryClient.prefetchQuery({ queryKey: ['weekSessions'], queryFn: getSessionData }),
+    queryClient.prefetchQuery({ queryKey: ['exercisePlans'], queryFn: getExercisePlans }),
+  ])
+
+
+
+  return (
+    <section className="flex flex-1 flex-col gap-4 p-4 ">
+      <HydrationBoundary>
+
+        <SessionData />
+        <ShowPlans />
+      </HydrationBoundary>
+    </section>
+  );
+}
+
+
+
 
 // import { cookies } from "next/headers";
 //
@@ -18,14 +66,3 @@ import ShowPlans from "@/components/UserCpmponents/showPlans";
 //   }).then((res) => res.json());
 //   return res;
 // }
-
-export default async function Dashboard() {
-  // const a = await useGetSession();
-  // console.log(a);
-  return (
-    <section className="flex flex-1 flex-col gap-4 p-4 ">
-      <SessionData />
-      <ShowPlans />
-    </section>
-  );
-}
