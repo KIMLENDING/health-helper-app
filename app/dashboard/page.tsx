@@ -7,7 +7,11 @@ import { cookies } from "next/headers";
 
 const fetchData = async () => {
   const cookieHeader = await cookies();
-  const cookie = cookieHeader.get('next-auth.session-token');
+  const cookieName =
+    process.env.NODE_ENV === "production"
+      ? "__Secure-next-auth.session-token"
+      : "next-auth.session-token";
+  const cookie = cookieHeader.get(cookieName);
   const getSessionData = async () => {
     const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/SessionWeek`, {
       method: "GET",
@@ -15,6 +19,7 @@ const fetchData = async () => {
         "Content-Type": "application/json",
         'Cookie': cookie ? `next-auth.session-token=${cookie.value}` : '',
       },
+      credentials: 'include',
     });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -27,7 +32,9 @@ const fetchData = async () => {
       headers: {
         'Content-Type': 'application/json',
         'Cookie': cookie ? `next-auth.session-token=${cookie.value}` : '',
-      }
+      },
+      //쿠키를 포함 
+      credentials: 'include',
     });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
