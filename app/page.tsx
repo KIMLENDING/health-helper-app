@@ -2,6 +2,32 @@ import { Card } from '@/components/ui/card'
 import { DumbbellIcon } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
+export const metadata = {
+    title: "H-Helper | 당신만의 운동 도우미",
+    description: "H-Helper와 함께 건강한 라이프스타일을 만들어보세요.",
+    openGraph: {
+        title: "H-Helper | 당신만의 운동 도우미",
+        description: "H-Helper와 함께 건강한 라이프스타일을 만들어보세요.",
+        url: "https://yourwebsite.com",
+        siteName: "H-Helper",
+        images: [
+            {
+                url: "/opengraph-image", // 동적으로 생성된 이미지
+                width: 1200,
+                height: 630,
+                alt: "H-Helper 메인 페이지",
+            },
+        ],
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "H-Helper | 당신만의 운동 도우미",
+        description: "개인 맞춤형 운동 프로그램을 경험하세요.",
+        images: ["/opengraph-image"], // 트위터에서도 동일한 동적 이미지 사용
+    },
+};
+
 
 const page = () => {
     const today = new Date();
@@ -17,7 +43,6 @@ const page = () => {
     });
     return (
         <div>
-
             <div className="min-h-screen w-full">
                 <nav className="flex items-center justify-between px-6 py-4 border-b">
                     <div className="flex items-center gap-2">
@@ -103,9 +128,6 @@ const page = () => {
                                     비디오를 불러올 수 없습니다.
                                 </video>
                             </div>
-
-
-
                         </div>
                     </div>
                 </main>
