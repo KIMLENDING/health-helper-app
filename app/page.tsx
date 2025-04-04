@@ -2,7 +2,8 @@ import { Card } from '@/components/ui/card'
 import { DumbbellIcon } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
-export const metadata = {
+import type { Metadata } from 'next'
+export const metadata: Metadata = {
     title: "H-Helper | 당신만의 운동 도우미",
     description: "H-Helper와 함께 건강한 라이프스타일을 만들어보세요.",
     openGraph: {
