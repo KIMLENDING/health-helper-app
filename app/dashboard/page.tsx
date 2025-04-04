@@ -1,9 +1,8 @@
-import SessionData from "@/components/UserCpmponents/sessionData";
+
 import ShowChart from "@/components/UserCpmponents/showChart";
 import ShowPlans from "@/components/UserCpmponents/showPlans";
 import ShowWeek from "@/components/UserCpmponents/showWeek";
 import { HydrationBoundary, dehydrate, QueryClient } from "@tanstack/react-query";
-import { Suspense } from "react";
 import { cookies } from "next/headers";
 
 const fetchData = async () => {
@@ -39,14 +38,13 @@ const fetchData = async () => {
 
 
 export default async function Dashboard() {
-
+  console.log(process.env.NEXTAUTH_URL)
   const { sessionData, exercisePlans } = await fetchData();
   const queryClient = new QueryClient();
   await Promise.all([
     queryClient.prefetchQuery({ queryKey: ['weekSessions'], queryFn: () => sessionData }),
     queryClient.prefetchQuery({ queryKey: ['exercisePlans'], queryFn: () => exercisePlans }),
   ])
-
 
   return (
     <section className="flex flex-1 flex-col gap-4 p-4 ">

@@ -20,7 +20,6 @@ const ShowPlans = () => {
         { name: 'VolleyballIcon', icon: <VolleyballIcon className='text-green-400' /> },
     ]
 
-
     return (
         <div className='mx-auto w-full max-w-3xl rounded-xl select-none'>
             <CardTitle className='my-3 font-extrabold text-2xl'>

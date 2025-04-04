@@ -2,7 +2,6 @@
 import Floating from "@/components/floating"
 import { ModeToggle } from "@/components/LayoutCompents/ModeToggle"
 import { SidebarLeft } from "@/components/sidebar-left"
-
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
@@ -10,14 +9,11 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 
-
-
 export default function DachboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
 
   return (
     <SidebarProvider >
