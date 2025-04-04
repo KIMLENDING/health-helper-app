@@ -48,22 +48,22 @@ const fetchData = async () => {
 
 export default async function Dashboard() {
   console.log(process.env.NEXTAUTH_URL)
-  const { sessionData, exercisePlans } = await fetchData();
-  const queryClient = new QueryClient();
-  await Promise.all([
-    queryClient.prefetchQuery({ queryKey: ['weekSessions'], queryFn: () => sessionData }),
-    queryClient.prefetchQuery({ queryKey: ['exercisePlans'], queryFn: () => exercisePlans }),
-  ])
+  // const { sessionData, exercisePlans } = await fetchData();
+  // const queryClient = new QueryClient();
+  // await Promise.all([
+  //   queryClient.prefetchQuery({ queryKey: ['weekSessions'], queryFn: () => sessionData }),
+  //   queryClient.prefetchQuery({ queryKey: ['exercisePlans'], queryFn: () => exercisePlans }),
+  // ])
 
   return (
     <section className="flex flex-1 flex-col gap-4 p-4 ">
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <div className='flex  flex-col gap-4'>
-          <ShowWeek />
-          <ShowChart />
-        </div>
-        <ShowPlans />
-      </HydrationBoundary>
+      {/* <HydrationBoundary state={dehydrate(queryClient)}> */}
+      <div className='flex  flex-col gap-4'>
+        <ShowWeek />
+        <ShowChart />
+      </div>
+      <ShowPlans />
+      {/* </HydrationBoundary> */}
     </section>
   );
 }
