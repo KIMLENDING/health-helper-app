@@ -27,7 +27,7 @@ const fetchWithCookie = async (url: string, cookieName: string, cookieValue: str
   return response.json();
 };
 
-async function useGetSession() {
+async function getSessionData() {
   const cookieHeader = await cookies();
   const cookieName =
     process.env.NODE_ENV === "production"
@@ -42,7 +42,7 @@ export default async function DachboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const sessionData = await useGetSession();
+  const sessionData = await getSessionData();
 
   return (
     <SidebarProvider>
