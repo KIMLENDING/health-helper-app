@@ -1,3 +1,5 @@
+// chartConfig.ts
+
 import { ChartConfig } from "@/components/ui/chart";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"

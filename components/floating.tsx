@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { useInProgress } from '@/server/queries'
 import Link from 'next/link'

@@ -17,7 +17,6 @@ import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
-  useSidebar,
 } from "@/components/ui/sidebar"
 
 import { NavUser } from "./nav-user"
