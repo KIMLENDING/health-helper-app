@@ -1,5 +1,6 @@
 import TapsComponent from "@/components/UserCpmponents/Taps/TapsComponent";
 import { fetchWithCookie } from "@/utils/fetchUrl";
+import getQueryClient from "@/utils/getQueryClient";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { cookies } from "next/headers";
 
@@ -11,13 +12,11 @@ const fetchData = async (sessionId: string) => {
             ? "__Secure-next-auth.session-token"
             : "next-auth.session-token";
     const cookie = cookieHeader.get(cookieName);
-
     return await fetchWithCookie(`${process.env.NEXTAUTH_URL}/api/user/exerciseSession/${sessionId}`, cookieName, cookie?.value);
-
 };
 const Page = async ({ params }: { params: Promise<{ sessionId: string }> }) => {
     const { sessionId } = await params;  // 세션 아이디
-    const queryClient = new QueryClient();
+    const queryClient = getQueryClient();
     await queryClient.prefetchQuery({ queryKey: ["exerciseSession", sessionId], queryFn: () => fetchData(sessionId) });
 
 

@@ -44,7 +44,7 @@ export function DrawerDialogDemo({ children, plan }: Props) {
 
     const handleContinueSession = () => {
         if (!state) return;
-        router.push(`/dashboard/exerciseSession/${state._id}`);
+        router.push(`/dashboard/exerciseSession/${state.latestSessionId}`);
     };
 
     const ActionButtons = (
@@ -55,7 +55,7 @@ export function DrawerDialogDemo({ children, plan }: Props) {
             <Button
                 className="flex-1 hover:bg-zinc-300 hover:dark:bg-zinc-600"
                 variant="secondary"
-                onClick={state ? handleContinueSession : handleStartSession}
+                onClick={state.latestSessionId ? handleContinueSession : handleStartSession}
             >
                 예
             </Button>

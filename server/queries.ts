@@ -110,9 +110,10 @@ export const useGetExerciseSession = (sessionId?: string) => {
  * @returns 
  */
 export const useInProgress = () => {
-    return useQuery<ExerciseSession>({
+    return useQuery({
         queryKey: ["inProgress"],
         queryFn: async () => {
+            console.log("inProgress0----------")
             const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exerciseSession`, {
                 method: 'GET',
                 headers: {
@@ -122,13 +123,7 @@ export const useInProgress = () => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return response.json().then((data) => {
-
-                if (!data.latestSession) {
-                    return null;
-                }
-                return data.latestSession;
-            });
+            return response.json()
         }
     });
 }

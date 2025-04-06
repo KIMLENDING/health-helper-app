@@ -8,45 +8,32 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { SidebarLeft } from "@/components/sidebar-left";
-// import { cookies } from "next/headers";
+import { fetchWithCookie } from "@/utils/fetchUrl";
+import { cookies } from "next/headers";
+import { HydrationBoundary, dehydrate, QueryClient } from "@tanstack/react-query";
+import getQueryClient from "@/utils/getQueryClient";
 
-// const fetchWithCookie = async (url: string, cookieName: string, cookieValue: string | undefined) => {
-//   const response = await fetch(url, {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "application/json",
-//       "Cookie": cookieValue ? `${cookieName}=${cookieValue}` : "",
-//     },
-//     credentials: "include",
-//   });
 
-//   if (!response.ok) {
-//     throw new Error(`HTTP error! status: ${response.status}`);
-//   }
-
-//   return response.json();
-// };
-
-// async function getSessionData() {
-//   const cookieHeader = await cookies();
-//   const cookieName =
-//     process.env.NODE_ENV === "production"
-//       ? "__Secure-next-auth.session-token"
-//       : "next-auth.session-token";
-//   const cookie = cookieHeader.get(cookieName);
-//   return fetchWithCookie(`${process.env.NEXTAUTH_URL}/api/auth-token`, cookieName, cookie?.value);
-// }
+const fetchData = async () => {
+  const cookieHeader = await cookies();
+  const cookieName =
+    process.env.NODE_ENV === "production"
+      ? "__Secure-next-auth.session-token"
+      : "next-auth.session-token";
+  const cookie = cookieHeader.get(cookieName);
+  return await fetchWithCookie(`${process.env.NEXTAUTH_URL}/api/user/exerciseSession`, cookieName, cookie?.value)
+};
 
 export default async function DachboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const sessionData = await getSessionData();
 
+  const queryClient = getQueryClient();
+  await queryClient.prefetchQuery({ queryKey: ["inProgress"], queryFn: () => fetchData() });
   return (
     <SidebarProvider>
-      {/* <SidebarLeft sessionData={sessionData} /> */}
       <SidebarLeft />
       <SidebarInset>
         <main>
@@ -56,7 +43,9 @@ export default async function DachboardLayout({
               <Separator orientation="vertical" className="h-4" />
               <ModeToggle />
             </div>
-            <Floating />
+            <HydrationBoundary state={dehydrate(queryClient)}>
+              <Floating />
+            </HydrationBoundary>
           </header>
           {children}
         </main>

@@ -2,6 +2,7 @@ import ShowChart from "@/components/UserCpmponents/showChart";
 import ShowPlans from "@/components/UserCpmponents/showPlans";
 import ShowWeek from "@/components/UserCpmponents/showWeek";
 import { fetchWithCookie } from "@/utils/fetchUrl";
+import getQueryClient from "@/utils/getQueryClient";
 import { HydrationBoundary, dehydrate, QueryClient } from "@tanstack/react-query";
 import { cookies } from "next/headers";
 
@@ -25,7 +26,7 @@ const fetchData = async () => {
 
 export default async function Dashboard() {
   const { sessionData, exercisePlans } = await fetchData();
-  const queryClient = new QueryClient();
+  const queryClient = getQueryClient();
 
   await Promise.all([
     queryClient.prefetchQuery({ queryKey: ["weekSessions"], queryFn: () => sessionData }),
