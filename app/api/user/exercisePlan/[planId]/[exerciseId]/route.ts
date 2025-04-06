@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth"
 import User from "@/models/User"
 import { ExerciseOption } from "@/utils/util"
 import { getToken } from "next-auth/jwt"
+import { requireUser } from "@/lib/check-auth"
 /**
  *  운동 계획의 선택한 운동항목 삭제 API
  * @param req
@@ -12,26 +13,15 @@ import { getToken } from "next-auth/jwt"
  */
 
 export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ planId: string, exerciseId: string }> }) => {
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-    const getSession = await getServerSession();
 
-    if (!getSession || !token) {
-        // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
-    }
     try {
         const exercisePlanId = (await params).planId; // 요청에서 exercisePlanId 가져오기
         const exerciseId = (await params).exerciseId; // 요청에서 exerciseId 가져오기
 
 
 
-        await connect(); // MongoDB 연결
-
-        // 해당 유저 확인
-        const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
-        if (!user) {
-            return NextResponse.json({ message: "유저를 찾을 수 없습니다." }, { status: 404 });
-        }
+        const { user, error, status } = await requireUser(req);
+        if (!user) return NextResponse.json({ message: error }, { status });
 
 
         // ExercisePlan 찾기

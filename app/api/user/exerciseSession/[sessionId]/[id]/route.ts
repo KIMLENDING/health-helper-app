@@ -1,11 +1,8 @@
 // 생성
 import ExerciseSession from "@/models/ExerciseSession"
-import connect from "@/utils/db"
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import User from "@/models/User"
-import { getToken } from "next-auth/jwt"
 import ExercisePlan from "@/models/ExercisePlan"
+import { requireUser } from "@/lib/check-auth"
 
 /**
  *  운동 시작시 상태를 변경하는 API
@@ -14,21 +11,11 @@ import ExercisePlan from "@/models/ExercisePlan"
  */
 export const POST = async (req: NextRequest) => {
     const { sessionId, exerciseId, action } = await req.json();
-    const session = await getServerSession();
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-
-    if (!session || !token) {
-        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
-    }
-
-    await connect();
-
-    const user = await User.findOne({ email: session.user.email, provider: token.provider });
-    if (!user) {
-        return NextResponse.json({ message: "User not found" }, { status: 404 });
-    }
 
     try {
+        const { user, error, status } = await requireUser(req);
+        if (!user) return NextResponse.json({ message: error }, { status });
+
         const exerciseSession = await ExerciseSession.findOne({ _id: sessionId, userId: user._id });
         if (!exerciseSession) {
             return NextResponse.json({ message: "Exercise session not found" }, { status: 404 });
@@ -44,7 +31,7 @@ export const POST = async (req: NextRequest) => {
             exercise.session.length >= exercise.sets &&
             exercise.state !== "done"
         ) {
-            console.log("세트 수 채움");
+            // 세트 수가 채워진 경우 자동으로 done 처리
             const startTime = new Date(exercise.session[0].createdAt).getTime();
             const endTime = new Date().getTime();
             const repTime = Math.floor((endTime - startTime) / 1000);
@@ -54,7 +41,6 @@ export const POST = async (req: NextRequest) => {
             // 변경 감지
             exerciseSession.markModified("exercises");
             await exerciseSession.save();
-
             return NextResponse.json({ message: "done", exerciseSession }, { status: 200 });
         }
 
@@ -67,7 +53,6 @@ export const POST = async (req: NextRequest) => {
             }
 
             const sessionLength = exercise.session.length;
-
             if (sessionLength === 0) {
                 // 초기 세트 생성 → ExercisePlan 참조
                 const plan = await ExercisePlan.findById(exerciseSession.exercisePlanId);
@@ -87,7 +72,6 @@ export const POST = async (req: NextRequest) => {
                 // 변경 감지
                 exerciseSession.markModified("exercises");
                 await exerciseSession.save();
-
                 return NextResponse.json({ message: "first", exerciseSession }, { status: 200 });
             } else {
                 // 이전 세트 참고해서 세트 추가
@@ -100,7 +84,6 @@ export const POST = async (req: NextRequest) => {
                 // 변경 감지
                 exerciseSession.markModified("exercises");
                 await exerciseSession.save();
-
                 return NextResponse.json({ message: "Updated", exerciseSession }, { status: 200 });
             }
 
@@ -121,12 +104,8 @@ export const POST = async (req: NextRequest) => {
             // 변경 감지
             exerciseSession.markModified("exercises");
             await exerciseSession.save();
-
             return NextResponse.json({ message: "done", exerciseSession }, { status: 200 });
         }
-
-        // // 자동 done 처리 (세트 수 채우면)
-
 
     } catch (err: any) {
         return NextResponse.json(
@@ -139,23 +118,13 @@ export const POST = async (req: NextRequest) => {
 
 
 export const PATCH = async (req: NextRequest) => {
-    const { sessionId, exerciseId, detailSessionId, reps, weight } = await req.json();
-    const getSession = await getServerSession();
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-
-    if (!getSession || !token) {
-        // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
-    }
-    await connect();
-
-    const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
-    if (!user) {
-        return NextResponse.json({ message: 'User not found' }, { status: 404 });
-    }
+    const { sessionId, exerciseId, setId, reps, weight } = await req.json();
     try {
+        const { user, error, status } = await requireUser(req);
+        if (!user) return NextResponse.json({ message: error }, { status });
+
         const updatedSession = await ExerciseSession.findOneAndUpdate(
-            { _id: sessionId, "exercises._id": exerciseId, "exercises.session._id": detailSessionId },// 조건
+            { _id: sessionId, "exercises._id": exerciseId, "exercises.session._id": setId },// 조건
             {
                 $set: {
                     'exercises.$[exercise].session.$[session].reps': reps,
@@ -166,7 +135,7 @@ export const PATCH = async (req: NextRequest) => {
                 new: true,
                 arrayFilters: [
                     { "exercise._id": exerciseId },
-                    { "session._id": detailSessionId }
+                    { "session._id": setId }
                 ]
             } // 업데이트 후 새로운 문서를 반환
         );

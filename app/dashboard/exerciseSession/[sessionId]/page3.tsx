@@ -12,7 +12,7 @@ import { ExerciseOptionSession, ExercisesessionData } from '@/utils/util';
 
 import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner';
 import CountdownOverlay from '@/components/LayoutCompents/CountdownOverlay';
-import InProgressTap from '@/components/UserCpmponents/Taps/inProgressTap';
+import InProgressTap from '@/components/UserCpmponents/Taps/inProgressTap2';
 
 import { useStopwatch } from '@/hooks/use-stopwatch3';
 import { useRestTime } from '@/hooks/use-restTime2';

@@ -1,10 +1,7 @@
 // 생성, 전체 조회
 import ExercisePlan from "@/models/ExercisePlan"
-import connect from "@/utils/db"
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import User from "@/models/User"
-import { getToken } from 'next-auth/jwt';
+import { requireUser } from "@/lib/check-auth"
 /**
  * 
  * 사용자의 운동 계획을 가져오는 API
@@ -14,21 +11,9 @@ import { getToken } from 'next-auth/jwt';
  */
 export const GET = async (req: NextRequest) => {
 
-    const getSession = await getServerSession();
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-
-    if (!getSession || !token) {
-        // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.json({ message: "로그인 해주세요." }, { status: 401 });
-        // return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
-    }
     try {
-        await connect();
-        const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
-
-        if (!user) {
-            return NextResponse.json({ message: 'User not found' }, { status: 404 });
-        }
+        const { user, error, status } = await requireUser(req);
+        if (!user) return NextResponse.json({ message: error }, { status });
         const exercisePlan = await ExercisePlan.find({ userId: user._id });
         return NextResponse.json(exercisePlan, { status: 200 });
     } catch (err: any) {
@@ -47,33 +32,22 @@ export const POST = async (req: NextRequest) => {
     // console.log('post요청')
     const { title, exercises, userId } = await req.json();
 
-    const getSession = await getServerSession();
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-
-    if (!getSession || !token) {
-        // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
-    }
-    await connect();
-    const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
-    if (!user) {
-        return NextResponse.json({ message: 'User not found' }, { status: 404 });
-    }
-    if (user._id.toString() !== userId) {
-        return NextResponse.json({ message: 'Unauthorized access' }, { status: 403 });
-    }
-    const existTitle = await ExercisePlan.findOne({ title: title, userId: userId });
-
-    if (existTitle) {
-        return NextResponse.json({ message: '플랜 이름 중복' }, { status: 400 });
-    }
-    const newExercisePlan = new ExercisePlan({
-        userId: userId,
-        title,
-        exercises,
-    });
-    // console.log('newExercisePlan', newExercisePlan);
     try {
+        const { user, error, status } = await requireUser(req);
+        if (!user) return NextResponse.json({ message: error }, { status });
+        if (user._id.toString() !== userId) {
+            return NextResponse.json({ message: 'Unauthorized access' }, { status: 403 });
+        }
+        const existTitle = await ExercisePlan.findOne({ title: title, userId: userId });
+
+        if (existTitle) {
+            return NextResponse.json({ message: '플랜 이름 중복' }, { status: 400 });
+        }
+        const newExercisePlan = new ExercisePlan({
+            userId: userId,
+            title,
+            exercises,
+        });
         await newExercisePlan.save();
         return NextResponse.json({ message: '플랜 추가 성공' }, { status: 201 });
     } catch (err: any) {
@@ -92,22 +66,10 @@ export const PATCH = async (req: NextRequest) => {
     try {
         const { userId, exercisePlanId, exercises, type } = await req.json();
 
+        // 요청에서 사용자 ID 가져오기
+        const { user, error, status } = await requireUser(req);
+        if (!user) return NextResponse.json({ message: error }, { status });
 
-        const getSession = await getServerSession();
-        const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-
-        if (!getSession || !token) {
-            // 로그인 안되어있으면 로그인 페이지로 이동
-            return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
-        }
-
-        await connect();
-
-        // 로그인된 사용자가 요청 사용자와 일치하는지 확인
-        const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
-        if (!user) {
-            return NextResponse.json({ message: 'User not found' }, { status: 404 });
-        }
         if (user._id.toString() !== userId) {
             return NextResponse.json({ message: 'Unauthorized access' }, { status: 403 });
         }

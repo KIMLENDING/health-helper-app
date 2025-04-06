@@ -1,92 +1,76 @@
+'use client'
 import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner'
 import { DrawerDialogDone } from '@/components/LayoutCompents/ResponsiceDialog2'
 import { Button } from '@/components/ui/button'
-import { Card, CardDescription, CardTitle } from '@/components/ui/card'
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
-import { Progress } from '@/components/ui/progress'
+import { Card, CardDescription } from '@/components/ui/card'
 import { TabsContent } from '@/components/ui/tabs'
-import { useEditExerciseSession } from '@/server/mutations'
+import { toast } from '@/hooks/use-toast'
+import { useActionExerciseSession, useEditExerciseSession } from '@/server/mutations'
 import { ExerciseSession } from '@/utils/util'
-import { Pause, Play } from 'lucide-react'
 import React, { useState } from 'react'
-interface InProgressTapProps {
-    data: ExerciseSession | undefined;
-    currentExercise: string | undefined;
-    loading: boolean;
-    isRunning: boolean;
-    isResting: boolean;
-    progress: number;
-    restTime: number;
-    formattedTime: string;
-    handleStartRest: () => void;
-    handleSkipRest: () => void;
-    handleDone: () => void;
-    toggleRunning: () => void;
-}
 
-const InProgressTap = ({
-    data,
-    currentExercise,
-    loading,
-    isRunning,
-    isResting,
-    progress,
-    restTime,
-    formattedTime,
-    handleStartRest,
-    handleSkipRest,
-    handleDone,
-    toggleRunning
-}: InProgressTapProps) => {
-    const [editingIndex, setEditingIndex] = useState<string | undefined>(undefined);
+
+interface InProgressTProps {
+    data: ExerciseSession;
+    sessionId: string;
+    handleDone: () => void;
+}
+const InProgressT = ({ data, sessionId, handleDone }: InProgressTProps) => {
+    const [loadingIndex, setLoadingIndex] = useState<string | null>(null);
+    const [editingSetId, setEditingSetId] = useState<string | null>(null);
     const [editedReps, setEditedReps] = useState<number>(0);
     const [editedWeight, setEditedWeight] = useState<number>(0);
-    const useEditExerciseSessionMutation = useEditExerciseSession();
-    const handleEdit = (index: string | undefined) => {
-        if (!index) return;
-        const session = data?.exercises.find((exercise) => exercise._id === currentExercise)?.session.find((session) => session._id === index);
-        // console.log(session);
-        if (session?._id === index) {
-            // console.log('edit')
-            setEditingIndex(index);
-            setEditedReps(session.reps);
-            setEditedWeight(session.weight);
-        }
 
+    const { mutateAsync: editSet } = useEditExerciseSession();
+    const { mutate } = useActionExerciseSession();
+
+    const handleEditClick = (setId: string, reps: number, weight: number) => {
+        setEditingSetId(setId);
+        setEditedReps(reps);
+        setEditedWeight(weight);
     };
 
-    const handleSave = () => {
-        // console.log('save')
-        if (!currentExercise || !editingIndex) return;
-        useEditExerciseSessionMutation.mutate({
-            sessionId: data?._id,
-            exerciseId: currentExercise,
-            detailSessionId: editingIndex,
+    const handleSave = async (exerciseId: string, sessionId: string, setId: string) => {
+        setLoadingIndex(setId);
+        await editSet({
+            sessionId,
+            exerciseId,
+            setId,
             reps: editedReps,
-            weight: editedWeight
+            weight: editedWeight,
         });
-        setEditingIndex(undefined);
+        setLoadingIndex(null);
+        setEditingSetId(null);
+    };
+
+    /** 세트 완료 버튼 클릭 시 호출되는 함수 */
+    const handleNewSet = (exerciseId: string) => {
+        if (!data) return;
+        try {
+            mutate({ sessionId, exerciseId, action: 'start' });
+        } catch (error) {
+            console.error(error);
+            toast({ title: '오류 발생', description: '운동 상태를 업데이트하는 중 문제가 발생했습니다.' });
+        }
     };
 
     return (
-
         <TabsContent value="inProgress" className="space-y-2">
-            <div className="space-y-2">
-                {data?.exercises.map((exercise) => (
-                    exercise._id === currentExercise && exercise.state === 'inProgress' &&
-                    <Card key={exercise._id} className="p-4 flex  flex-col gap-2 ">
-                        <div className='flex flex-col pb-4'>
-                            <span className={` max-smc:truncate `}>{exercise.title}</span>
-                            <CardDescription className={`max-smc:truncate `}> 총 {exercise.sets}세트, 세트 당 최소 휴식시간: {exercise.rest}초</CardDescription>
+            {data.exercises.map(exercise => (
+                exercise.state === 'inProgress' && (
+                    <Card key={exercise._id} className="p-4 flex flex-col gap-2">
+                        <div className="flex flex-col pb-4">
+                            <span className="max-smc:truncate">{exercise.title}</span>
+                            <CardDescription className="max-smc:truncate">
+                                총 {exercise.sets}세트, 세트 당 최소 휴식시간: {exercise.rest}초
+                            </CardDescription>
                         </div>
-                        <div className='flex  flex-col gap-2 h-[40vh] overflow-y-scroll'>
-                            {exercise.session.map((session, index) => (
-                                <Card key={session._id} className='flex justify-between items-center p-2 text-nowrap'>
-                                    {editingIndex === session._id ? (<>
+                        <div className="flex flex-col gap-2 h-[40vh] overflow-y-scroll">
+                            {exercise.session.map((set, index) => (
+                                <Card key={set._id} className="flex justify-between items-center p-2 text-nowrap">
+                                    {editingSetId === set._id ? (
                                         <div className='w-full flex justify-between items-center gap-2'>
-                                            <div>
-                                                {session.set}세트
-                                            </div>
+                                            <p>{set.set}세트</p>
                                             <div>
                                                 <input
                                                     type="number"
@@ -97,7 +81,6 @@ const InProgressTap = ({
                                                 회
                                             </div>
                                             <div>
-
                                                 <input
                                                     type="number"
                                                     value={editedWeight}
@@ -106,94 +89,52 @@ const InProgressTap = ({
                                                 />
                                                 kg
                                             </div>
-                                            <Button variant='outline' onClick={handleSave} >저장</Button>
+                                            <div className="flex gap-2">
+                                                <Button
+                                                    variant='destructive'
+                                                    onClick={() => setEditingSetId(null)}
+                                                >
+                                                    취소
+                                                </Button>
+
+                                                <Button
+                                                    variant='outline'
+                                                    onClick={() => handleSave(exercise._id!, sessionId, set._id!)}
+                                                >
+                                                    저장 {loadingIndex === set._id && <LoadingSpinner className="w-5 h-5" />}
+                                                </Button>
+                                            </div>
                                         </div>
-                                    </>) : (<>
-
-                                        <span >{session.set}세트</span>
-
-                                        <Button variant='outline' onClick={() => handleEdit(session._id)}>{session.reps}회</Button>
-                                        <Button variant='outline' onClick={() => handleEdit(session._id)}>{session.weight}kg</Button>
-                                        <Button
-                                            variant="outline"
-                                            disabled={index !== exercise.session.length - 1 || loading || !isRunning || isResting}
-                                            onClick={handleStartRest}
-                                            className={
-                                                index !== exercise.session.length - 1
-                                                    ? "opacity-50 cursor-not-allowed"
-                                                    : ""
-                                            }
-                                        > {
-                                                loading
-                                                    ? <LoadingSpinner />
-                                                    : (index !== exercise.session.length - 1)
-                                                        ? '완료'
-                                                        : (exercise.session.length === 1)
-                                                            ? (!isRunning ? '계속' : isResting ? '휴식 중' : '운동 중')
-                                                            : (!isRunning ? '계속' : isResting ? '휴식 중' : '운동 중')
-                                            }
-                                        </Button>
-                                    </>)}
-
+                                    ) : (
+                                        <>
+                                            <p className='pl-2'>{set.set}세트</p>
+                                            <Button variant="outline" onClick={() => handleEditClick(set._id!, set.reps, set.weight)}>{set.reps}회</Button>
+                                            <Button variant="outline" onClick={() => handleEditClick(set._id!, set.reps, set.weight)}>{set.weight}kg</Button>
+                                            <Button
+                                                variant="outline"
+                                                disabled={index !== exercise.session.length - 1}
+                                                onClick={() => handleNewSet(exercise._id!)}
+                                            >
+                                                완료
+                                            </Button>
+                                        </>
+                                    )}
                                 </Card>
                             ))}
                         </div>
                     </Card>
-                ))}
-                {!currentExercise && <div className='text-center'>진행 중인 운동이 없습니다.</div>}
-            </div>
-            {isResting && (
-                <div className="flex flex-col items-center gap-2">
-                    <Progress value={progress} className="w-full max-w-md  " ></Progress>
-                    <div className='flex flex-row items-center gap-2'>
-                        <p>남은 휴식 시간: {restTime}초</p>
-                        <Button onClick={handleSkipRest} variant='outline' className=' rounded-2xl'>
-                            건너뛰기
-                        </Button>
-                    </div>
-                </div>
+                )
+            ))}
+
+            {!data.exercises.find(ex => ex.state === 'inProgress') ? (
+                <div className="text-center">진행중인 운동이 없습니다.</div>
+            ) : (
+                <DrawerDialogDone onComplete={handleDone}>
+                    <Button className="flex-1">운동 종료</Button>
+                </DrawerDialogDone>
             )}
-            <div className="text-center space-y-2 ">
-                <Card className="text-2xl py-3 space-y-2 flex  flex-col">
-                    <CardDescription>
-                        <HoverCard>
-                            <HoverCardTrigger asChild>
-                                <Button variant="link">시간</Button>
-                            </HoverCardTrigger>
-                            <HoverCardContent>
-                                휴식시간과 운동시간을 합산한 시간입니다.
-                            </HoverCardContent>
-                        </HoverCard>
-                    </CardDescription>
-                    <CardTitle>{formattedTime}</CardTitle>
-                </Card>
-                <Card className="p-4 space-x-2 flex">
-                    <Button
-                        onClick={toggleRunning}
-                        disabled={!currentExercise}
-                        className={`${isRunning ? 'bg-red-600 hover:bg-red-600/80' : 'bg-green-500'} flex-1`}
-                    >
-                        {isRunning ? <>
-                            <Pause />
-                            일시정지</> : <>
-                            <Play />
-                            계속</>}
-
-                    </Button>
-                    <DrawerDialogDone onComplete={handleDone}>
-                        <Button
-                            disabled={!currentExercise}
-                            className="flex-1"
-                        >
-                            운동 종료
-                        </Button>
-                    </DrawerDialogDone>
-                </Card>
-            </div>
         </TabsContent>
-
-
     )
 }
 
-export default InProgressTap
+export default InProgressT

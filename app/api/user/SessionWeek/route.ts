@@ -1,9 +1,6 @@
 import ExerciseSession from "@/models/ExerciseSession"
-import connect from "@/utils/db"
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import User from "@/models/User"
-import { getToken } from "next-auth/jwt"
+import { requireUser } from "@/lib/check-auth"
 function getWeekRange() {
     const today = new Date(); // 오늘 날짜 (한국 시간 기준)
     const utc = today.getTime() + (today.getTimezoneOffset() * 60 * 1000); //해당지역 시간 + 보정값(utc-지역시간) =  UTC 기준 시간
@@ -24,26 +21,11 @@ function getWeekRange() {
 }
 
 
-
-
 export const GET = async (req: NextRequest) => {
     try {
         // 요청에서 사용자 ID 가져오기
-        const getSession = await getServerSession();
-        const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-        // console.log(getSession, token);
-        if (!getSession || !token) {
-            // 로그인 안되어있으면 로그인 페이지로 이동
-            return NextResponse.json({ message: "로그인 해주세요." }, { status: 401 });
-            // return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
-        }
-
-        await connect();
-
-        const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
-        if (!user) {
-            return NextResponse.json({ message: "User not found" }, { status: 404 });
-        }
+        const { user, error, status } = await requireUser(req);
+        if (!user) return NextResponse.json({ message: error }, { status });
         const { sunday, saturday } = getWeekRange();
         const sessions = await ExerciseSession.find({
             userId: user._id,

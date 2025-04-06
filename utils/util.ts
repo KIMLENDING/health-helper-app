@@ -63,7 +63,6 @@ export interface ExerciseSession {
     exercises: ExerciseOptionSession[],
     state: string // 'inProgress' | 'done' 초기 상태는 inProgress 
     createdAt?: string
-
 }
 export interface ExerciseOptionSession {
     _id?: string,
@@ -95,4 +94,12 @@ export interface ExerciseSessionActionPayload {
     sessionId: string,
     exerciseId: string,
     action: "start" | "done",
+};
+
+export interface ExerciseSessionSetPayload {
+    sessionId: string,
+    exerciseId: string,
+    setId: string,
+    reps: number,
+    weight: number
 };

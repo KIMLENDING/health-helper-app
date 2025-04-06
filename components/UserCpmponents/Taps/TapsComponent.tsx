@@ -1,20 +1,22 @@
 'use client'
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useGetExerciseSession } from '@/server/queries';
 import { Card, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
-import { useActionExerciseSession } from '@/server/mutations';
+import { useActionExerciseSession, useEditExerciseSession } from '@/server/mutations';
 import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner';
 import { DrawerDialogDone } from '@/components/LayoutCompents/ResponsiceDialog2';
+import InProgressT from './inProgressTap';
 
 const TapsComponent = ({ sessionId }: { sessionId: string }) => {
     const [activeTab, setActiveTab] = useState('list');
     const { data, error, isLoading } = useGetExerciseSession(sessionId);
     const { mutate, mutateAsync } = useActionExerciseSession();
     const [loadingIndex, setLoadingIndex] = useState<string | null>(null);
+
 
     /** 서버에 운동시작과 종료를 업데이트 하는 함수 */
     const runWithLoading = async (exerciseId: string, action: 'start' | 'done') => {
@@ -58,16 +60,7 @@ const TapsComponent = ({ sessionId }: { sessionId: string }) => {
         runWithLoading(exerciseId, 'start');
     };
 
-    /** 세트 완료 버튼 클릭 시 호출되는 함수 */
-    const handleNewSet = (exerciseId: string) => {
-        if (!data) return;
-        try {
-            mutate({ sessionId, exerciseId, action: 'start' });
-        } catch (error) {
-            console.error(error);
-            toast({ title: '오류 발생', description: '운동 상태를 업데이트하는 중 문제가 발생했습니다.' });
-        }
-    };
+
 
     if (isLoading || !data) return <div className="text-center">Loading...</div>;
     if (error) return <div className="text-center">Error: {error.message}</div>;
@@ -107,38 +100,7 @@ const TapsComponent = ({ sessionId }: { sessionId: string }) => {
                 ))}
             </TabsContent>
 
-            <TabsContent value="inProgress" className="space-y-2">
-                {data.exercises.map(exercise => (
-                    exercise.state === 'inProgress' && (
-                        <Card key={exercise._id} className="p-4 flex flex-col gap-2">
-                            <div className="flex flex-col pb-4">
-                                <span className="max-smc:truncate">{exercise.title}</span>
-                                <CardDescription className="max-smc:truncate">
-                                    총 {exercise.sets}세트, 세트 당 최소 휴식시간: {exercise.rest}초
-                                </CardDescription>
-                            </div>
-                            <div className="flex flex-col gap-2 h-[40vh] overflow-y-scroll">
-                                {exercise.session.map(set => (
-                                    <Card key={set._id} className="flex justify-between items-center p-2 text-nowrap">
-                                        <span>{set.set}세트</span>
-                                        <Button variant="outline">{set.reps}회</Button>
-                                        <Button variant="outline">{set.weight}kg</Button>
-                                        <Button variant="outline" onClick={() => handleNewSet(exercise._id!)}>완료</Button>
-                                    </Card>
-                                ))}
-                            </div>
-                        </Card>
-                    )
-                ))}
-
-                {!data.exercises.find(ex => ex.state === 'inProgress') ? (
-                    <div className="text-center">진행중인 운동이 없습니다.</div>
-                ) : (
-                    <DrawerDialogDone onComplete={handleDone}>
-                        <Button className="flex-1">운동 종료</Button>
-                    </DrawerDialogDone>
-                )}
-            </TabsContent>
+            <InProgressT data={data} sessionId={sessionId} handleDone={handleDone} />
         </Tabs>
     );
 };
