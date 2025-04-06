@@ -76,8 +76,8 @@ const InProgressTap = ({
                     exercise._id === currentExercise && exercise.state === 'inProgress' &&
                     <Card key={exercise._id} className="p-4 flex  flex-col gap-2 ">
                         <div className='flex flex-col pb-4'>
-                            <span className={` max-smc:truncate max-smc:w-32`}>{exercise.title}</span>
-                            <CardDescription className={`max-smc:truncate max-smc:w-32`}> 총 {exercise.sets}세트, 세트 당 최소 휴식시간: {exercise.rest}초</CardDescription>
+                            <span className={` max-smc:truncate `}>{exercise.title}</span>
+                            <CardDescription className={`max-smc:truncate `}> 총 {exercise.sets}세트, 세트 당 최소 휴식시간: {exercise.rest}초</CardDescription>
                         </div>
                         <div className='flex  flex-col gap-2 h-[40vh] overflow-y-scroll'>
                             {exercise.session.map((session, index) => (

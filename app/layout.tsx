@@ -6,7 +6,7 @@ import SessionProvider from "@/providers/SessionProvider";
 import { getServerSession } from "next-auth";
 import { Toaster } from "@/components/ui/toaster"
 import { QueryProviders } from "@/providers/QueryProvider";
-import { SessionProviderWrapper } from "@/providers/SessionContext";
+
 
 
 const geistSans = localFont({
@@ -65,17 +65,15 @@ export default async function RootLayout({
       >
         <QueryProviders>
           <SessionProvider>
-            <SessionProviderWrapper session={session}>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-              >
-                {children}
-                <Toaster />
-              </ThemeProvider>
-            </SessionProviderWrapper>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Toaster />
+            </ThemeProvider>
           </SessionProvider>
         </QueryProviders>
       </body>

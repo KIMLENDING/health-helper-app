@@ -101,9 +101,8 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .max-smc\:w-32 {
     width: 8rem; /* 32 * 0.25rem */
   }
+
+
 }

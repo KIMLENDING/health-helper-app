@@ -89,3 +89,10 @@ export interface PostExerciseSession {
     exerciseId: string,
     sessionData: ExercisesessionData
 }
+
+
+export interface ExerciseSessionActionPayload {
+    sessionId: string,
+    exerciseId: string,
+    action: "start" | "done",
+};

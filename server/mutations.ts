@@ -1,6 +1,6 @@
 
 import { toast } from "@/hooks/use-toast";
-import { Exercise, ExercisePlan, ExerciseSession, ExercisesessionData, PostExerciseSession } from "@/utils/util";
+import { Exercise, ExercisePlan, ExerciseSession, ExerciseSessionActionPayload, ExercisesessionData, PostExerciseSession } from "@/utils/util";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 /**
@@ -356,10 +356,10 @@ export const useCreateExerciseSession = () => {
  * @returns 
  */
 
-export const useStateChangeExerciseSession = () => {
+export const useActionExerciseSession = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async (data: any) => {
+        mutationFn: async (data: ExerciseSessionActionPayload) => {
             const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exerciseSession/${data.sessionId}/${data.exerciseId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', },
@@ -371,22 +371,17 @@ export const useStateChangeExerciseSession = () => {
             }
             return response.json();
         },
-        onSuccess: () => {
-            console.log('onSuccess');
+        onSuccess: async (data) => {
+            toast({ variant: "default2", title: "운동 상태가 업데이트되었습니다." });
+            // invalidate 관련 로직은 성공 시 처리하는 게 더 명확
+            await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.exerciseSession._id] });
+            await queryClient.invalidateQueries({ queryKey: ["inProgress"] });
         },
         onError: (error) => {
-            console.log('onError', error);
+            const message = error instanceof Error ? error.message : String(error);
+            console.error("onError", error);
+            toast({ variant: "destructive", title: message });
         },
-        onSettled: async (data, error) => { // 성공, 실패 상관없이 마지막에 호출 variables
-            console.log('onSettled');
-            if (error) {
-                toast({ variant: 'destructive', title: `${error}` });
-                console.log('error', error);
-            } else {
-                await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.updatedSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
-                await queryClient.invalidateQueries({ queryKey: ["inProgress"] }) // 데이터 갱신 후 자동으로 UI 업데이트
-            }
-        }
     })
 };
 
@@ -395,7 +390,7 @@ export const useStateChangeExerciseSession = () => {
  * @returns 
  */
 
-export const useAllDoneExerciseSession = () => {
+export const useAExerciseSession = () => {
 
     const queryClient = useQueryClient();
     return useMutation({
@@ -423,12 +418,9 @@ export const useAllDoneExerciseSession = () => {
                 toast({ variant: 'destructive', title: `${error}` });
                 console.log('error', error);
             } else {
-
                 toast({ variant: 'default2', title: `${data.message}` });
                 queryClient.invalidateQueries({ queryKey: ["inProgress"] })
                 if (data.updatedSession) { // 데이터가 있을 경우에만 invalidateQueries 호출
-
-
                     await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.updatedSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
                 }
             }
