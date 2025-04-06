@@ -39,6 +39,26 @@ export const POST = async (req: NextRequest) => {
             return NextResponse.json({ message: "Exercise not found" }, { status: 404 });
         }
 
+        if (
+            action === "start" &&
+            exercise.session.length >= exercise.sets &&
+            exercise.state !== "done"
+        ) {
+            console.log("세트 수 채움");
+            const startTime = new Date(exercise.session[0].createdAt).getTime();
+            const endTime = new Date().getTime();
+            const repTime = Math.floor((endTime - startTime) / 1000);
+
+            exercise.state = "done";
+            exercise.repTime = repTime;
+            // 변경 감지
+            exerciseSession.markModified("exercises");
+            await exerciseSession.save();
+
+            return NextResponse.json({ message: "done", exerciseSession }, { status: 200 });
+        }
+
+
         if (action === "start") {
             // state가 pending이면 inProgress로 변경
 
@@ -64,6 +84,11 @@ export const POST = async (req: NextRequest) => {
                     reps: planExercise.reps,
                     weight: planExercise.weight || 40,
                 });
+                // 변경 감지
+                exerciseSession.markModified("exercises");
+                await exerciseSession.save();
+
+                return NextResponse.json({ message: "first", exerciseSession }, { status: 200 });
             } else {
                 // 이전 세트 참고해서 세트 추가
                 const prev = exercise.session[sessionLength - 1];
@@ -72,7 +97,13 @@ export const POST = async (req: NextRequest) => {
                     reps: prev.reps,
                     weight: prev.weight + 5,
                 });
+                // 변경 감지
+                exerciseSession.markModified("exercises");
+                await exerciseSession.save();
+
+                return NextResponse.json({ message: "Updated", exerciseSession }, { status: 200 });
             }
+
         }
 
         if (action === "done") {
@@ -87,27 +118,16 @@ export const POST = async (req: NextRequest) => {
 
             exercise.state = "done";
             exercise.repTime = repTime;
+            // 변경 감지
+            exerciseSession.markModified("exercises");
+            await exerciseSession.save();
+
+            return NextResponse.json({ message: "done", exerciseSession }, { status: 200 });
         }
 
-        // 자동 done 처리 (세트 수 채우면)
-        if (
-            action === "start" &&
-            exercise.session.length >= exercise.sets &&
-            exercise.state !== "done"
-        ) {
-            const startTime = new Date(exercise.session[0].createdAt).getTime();
-            const endTime = new Date().getTime();
-            const repTime = Math.floor((endTime - startTime) / 1000);
+        // // 자동 done 처리 (세트 수 채우면)
 
-            exercise.state = "done";
-            exercise.repTime = repTime;
-        }
 
-        // 변경 감지
-        exerciseSession.markModified("exercises");
-        await exerciseSession.save();
-
-        return NextResponse.json({ message: "Updated", exerciseSession }, { status: 200 });
     } catch (err: any) {
         return NextResponse.json(
             { message: "Internal Server Error", error: err.message },
