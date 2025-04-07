@@ -23,7 +23,8 @@ type Props = {
 export function DrawerDialogDemo({ children, plan }: Props) {
     const router = useRouter();
     const [open, setOpen] = React.useState(false);
-    const { data: state } = useInProgress();
+    const { data: inProgress } = useInProgress();
+    const { latestSessionId } = inProgress || {};
     const isDesktop = useMediaQuery("(min-width: 768px)");
     const { mutateAsync } = useCreateExerciseSession();
 
@@ -42,9 +43,10 @@ export function DrawerDialogDemo({ children, plan }: Props) {
         if (res) router.push(`/dashboard/exerciseSession/${res.newExerciseSession._id}`);
     };
 
+    /** 진행 중인 운동으로 이동  */
     const handleContinueSession = () => {
-        if (!state) return;
-        router.push(`/dashboard/exerciseSession/${state.latestSessionId}`);
+        if (!inProgress) return;
+        router.push(`/dashboard/exerciseSession/${latestSessionId}`);
     };
 
     const ActionButtons = (
@@ -55,15 +57,15 @@ export function DrawerDialogDemo({ children, plan }: Props) {
             <Button
                 className="flex-1 hover:bg-zinc-300 hover:dark:bg-zinc-600"
                 variant="secondary"
-                onClick={state.latestSessionId ? handleContinueSession : handleStartSession}
+                onClick={latestSessionId ? handleContinueSession : handleStartSession}
             >
                 예
             </Button>
         </div>
     );
 
-    const Title = state ? "현재 진행 중인 운동이 있습니다." : "운동을 시작하시겠습니까?";
-    const Description = state
+    const Title = latestSessionId ? "현재 진행 중인 운동이 있습니다." : "운동을 시작하시겠습니까?";
+    const Description = latestSessionId
         ? "진행 중인 운동으로 이동하시겠습니까?"
         : "운동을 시작하면 운동에 집중해 주세요.";
 
@@ -94,7 +96,7 @@ export function DrawerDialogDemo({ children, plan }: Props) {
             </UI.Trigger>
             <UI.Content className={isDesktop ? "sm:max-w-[425px]" : ""}>
                 <UI.Header className={isDesktop ? "" : "text-left"}>
-                    <UI.Title className={state ? "text-red-300" : ""}>{Title}</UI.Title>
+                    <UI.Title className={latestSessionId ? "text-red-300" : ""}>{Title}</UI.Title>
                     <UI.Description>{Description}</UI.Description>
                 </UI.Header>
                 <UI.Footer className="pt-2">

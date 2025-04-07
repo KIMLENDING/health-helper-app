@@ -1,5 +1,5 @@
 'use client'
-import { useExercisePlan, useInProgress, } from '@/server/queries';
+import { useExercisePlan } from '@/server/queries';
 import React from 'react'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { BicepsFlexed, DumbbellIcon, RadicalIcon, SparklesIcon, SquareArrowOutUpRightIcon, VolleyballIcon } from 'lucide-react';

@@ -8,12 +8,14 @@ import { Badge } from './ui/badge'
 
 const Floating = () => {
     const { data } = useInProgress();
+    const { latestSessionId } = data || {};
+
     return (
         <div>
             <div className="w-full">
                 <div className="flex flex-row gap-2 items-center justify-between  ">
                     {data ? (
-                        <Link className='flex items-center' href={`/dashboard/exerciseSession/${data.latestSessionId}`}>
+                        <Link className='flex items-center' href={`/dashboard/exerciseSession/${latestSessionId}`}>
                             <Badge variant="outline">운동 상태</Badge>
                         </Link>
                     ) : (
@@ -23,7 +25,7 @@ const Floating = () => {
                     )}
                     <div
                         className={cn(
-                            `h-3 w-3 rounded-full ${data ? 'bg-green-600' : 'bg-red-600'
+                            `h-3 w-3 rounded-full ${latestSessionId ? 'bg-green-600' : 'bg-red-600'
                             }`
                         )}
                     />

@@ -1,0 +1,119 @@
+ **React Query에서 서버에서 프리패치한 데이터를 어떻게 직렬화(dehydrate)해서 클라이언트로 넘기고,
+  다시 복원(hydrate)하는지** 전체 흐름.
+
+---
+
+## 🧠 핵심 구성요소 요약
+
+| 함수/컴포넌트 | 역할 |
+|---------------|------|
+| `dehydrate(queryClient)` | 서버에서 쿼리 클라이언트의 캐시를 **JSON 형태로 직렬화** |
+| `<HydrationBoundary state={...}>` | 클라이언트에서 받은 직렬화 데이터를 **QueryClient에 주입** |
+| `useQuery()` | 복원된 캐시를 보고 네트워크 요청을 **스킵할지 결정** |
+
+---
+
+## ✅ 서버에서의 흐름 (예: 서버 컴포넌트 `page.tsx`)
+
+```
+// 1. 서버에서 쿼리 클라이언트 만들고
+const queryClient = getQueryClient();
+
+// 2. 데이터 미리 받아오기 (prefetch)
+await queryClient.prefetchQuery({
+  queryKey: ['user'],
+  queryFn: getUserFromDb,
+});
+
+// 3. 캐시 상태 직렬화
+const dehydratedState = dehydrate(queryClient);
+
+// 4. HydrationBoundary에 넘김
+return (
+  <HydrationBoundary state={dehydratedState}>
+    <UserPage />
+  </HydrationBoundary>
+);
+```
+
+➡ `dehydrate()`는 내부적으로 쿼리 클라이언트의 모든 캐시를 `JSON.stringify` 가능한 형태로 바꿔줌.
+
+---
+
+## ✅ 클라이언트에서의 복원 흐름 (예: `UserPage.tsx`)
+
+```
+"use client";
+
+import { useQuery } from '@tanstack/react-query';
+
+export function UserPage() {
+  const { data } = useQuery({
+    queryKey: ['user'],
+    queryFn: getUserFromDb, // 이건 실제로 실행되지 않음 (캐시 있으면)
+  });
+
+  return <div>{data?.name}</div>;
+}
+```
+
+➡ 클라이언트에서는 `QueryClientProvider` 아래 `<HydrationBoundary>`가 제공한 캐시가 미리 복원되어 있어서,  
+이 `useQuery`는 네트워크 요청을 안 보내고 **복원된 캐시에서 바로 읽음**.
+
+---
+
+## 🔍 디버깅 해보기
+
+### 1. 서버 캐시 확인
+
+```
+console.log(queryClient.getQueryData(['user']));
+// 서버에서는 데이터가 있음
+```
+
+### 2. 클라이언트에서도 복원됨
+
+```
+// 클라이언트에서
+useEffect(() => {
+  console.log(queryClient.getQueryData(['user']));
+}, []);
+```
+
+이걸 보면 클라이언트 `QueryClient`에도 데이터가 이미 있음.  
+➡ React Query Devtools에서도 이거 확인 가능해.
+
+---
+
+## 📦 실제 `dehydrate()` 결과 예시
+
+```ts
+{
+  queries: [
+    {
+      queryKey: ["user"],
+      state: {
+        data: { name: "John" },
+        status: "success",
+        fetchStatus: "idle",
+        dataUpdatedAt: 1700000000000,
+        ...
+      }
+    }
+  ]
+}
+```
+
+➡ 이걸 클라이언트에 전달 → `HydrationBoundary`가 받아서 QueryClient의 `cache`에 그대로 복원함.
+
+---
+
+## 🚨 주의할 점
+
+- 서버에서 만든 `QueryClient` 인스턴스는 절대 클라이언트에 그대로 넘어오지 않음 (next.js가 그렇게 설계함)
+- 반드시 `HydrationBoundary` 안에 클라이언트 컴포넌트를 넣어야 캐시가 복원됨
+- `useQuery()`는 내부적으로 이 캐시를 보고 fetch를 스킵하거나 다시 함
+
+---
+
+필요하면 `dehydrate` 내부 동작이나 `hydrate`가 실제로 QueryClient 내부 어디에 데이터를 집어넣는지도 디깅해서 보여줄 수 있어.  

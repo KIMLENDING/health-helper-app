@@ -10,7 +10,8 @@ export function QueryProviders({ children }: { children: React.ReactNode }) {
     const [queryClient] = useState(() => new QueryClient({
         defaultOptions: {
             queries: {
-                staleTime: 1000 * 60 * 5, // 5분
+                staleTime: 1000 * 60 * 5, // 5분 
+                gcTime: 1000 * 60 * 5, // 5분 
             },
         },
     })); // useState로 생성
