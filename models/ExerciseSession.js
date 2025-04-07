@@ -9,6 +9,7 @@ const sessionSchema = new Schema(
     set: { type: Number, required: true },
     reps: { type: Number, required: true },
     weight: { type: Number, required: true },
+    endTime: { type: Date, required: false },
   },
   { timestamps: true }
 );

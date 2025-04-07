@@ -26,18 +26,47 @@ export const POST = async (req: NextRequest) => {
             return NextResponse.json({ message: "Exercise not found" }, { status: 404 });
         }
 
+        if (action === "end") {
+            // 세트 종료 처리
+            if (exercise.state !== "inProgress") {
+                return NextResponse.json({ message: "진행중인 운동이 없습니다." }, { status: 400 });
+            }
+            const sessionLength = exercise.session.length;
+            if (sessionLength === 0) {
+                return NextResponse.json({ message: "종료 할 세트가 없습니다. " }, { status: 400 });
+            }
+
+            const currentSet = exercise.session[sessionLength - 1];
+            if (currentSet.endTime) {
+                return NextResponse.json({ message: "이 세트는 이미 종료되었습니다." }, { status: 400 });
+            }
+
+            currentSet.endTime = new Date();
+            exerciseSession.markModified("exercises");
+            await exerciseSession.save();
+
+            return NextResponse.json({ message: "Set ended", exerciseSession }, { status: 200 });
+        }
+
+
         if (
             action === "start" &&
             exercise.session.length >= exercise.sets &&
             exercise.state !== "done"
         ) {
+
             // 세트 수가 채워진 경우 자동으로 done 처리
-            const startTime = new Date(exercise.session[0].createdAt).getTime();
-            const endTime = new Date().getTime();
-            const repTime = Math.floor((endTime - startTime) / 1000);
+            const totalRepTime = exercise.session.reduce((acc: number, set: any) => {
+                if (set.endTime) {
+                    const duration = new Date(set.endTime).getTime() - new Date(set.createdAt).getTime();
+                    return acc + duration;
+                }
+                return acc;
+            }, 0);
 
             exercise.state = "done";
-            exercise.repTime = repTime;
+            exercise.repTime = Math.floor(totalRepTime / 1000); // 초 단위
+
             // 변경 감지
             exerciseSession.markModified("exercises");
             await exerciseSession.save();
@@ -86,26 +115,40 @@ export const POST = async (req: NextRequest) => {
                 await exerciseSession.save();
                 return NextResponse.json({ message: "Updated", exerciseSession }, { status: 200 });
             }
-
         }
 
         if (action === "done") {
-            // 자동 repTime 계산
             if (exercise.session.length === 0) {
                 return NextResponse.json({ message: "No session data found" }, { status: 400 });
             }
 
-            const startTime = new Date(exercise.session[0].createdAt).getTime();
-            const endTime = new Date().getTime();
-            const repTime = Math.floor((endTime - startTime) / 1000); // 초 단위
+            // 마지막 세트 강제 완료
+            const lastSet = exercise.session.at(-1);
+            if (lastSet && !lastSet.endTime) {
+                lastSet.endTime = new Date();
+            }
+
+            // 총 수행 시간 계산
+            const totalRepTime = exercise.session.reduce((acc: number, set: any) => {
+                if (set.endTime) {
+                    const start = new Date(set.createdAt).getTime();
+                    const end = new Date(set.endTime).getTime();
+                    return acc + (end - start);
+                }
+                return acc;
+            }, 0);
+
+            const repTimeInSeconds = Math.floor(totalRepTime / 1000);
 
             exercise.state = "done";
-            exercise.repTime = repTime;
-            // 변경 감지
+            exercise.repTime = repTimeInSeconds;
+
             exerciseSession.markModified("exercises");
             await exerciseSession.save();
+
             return NextResponse.json({ message: "done", exerciseSession }, { status: 200 });
         }
+
 
     } catch (err: any) {
         return NextResponse.json(

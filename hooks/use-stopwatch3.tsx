@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect, use } from "react";
+'use client';
+import { useState, useRef, useEffect } from "react";
 
 export const useStopwatch = () => {
     const [time, setTime] = useState(0); // 현재까지 측정된 시간

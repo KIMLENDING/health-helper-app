@@ -54,6 +54,17 @@ const InProgressT = ({ data, sessionId, handleDone }: InProgressTProps) => {
         }
     };
 
+    /** 세트 종료 버튼 클릭 시 호출되는 함수 */
+    const handleSetEnd = async (exerciseId: string) => {
+        if (!data) return;
+        try {
+            mutate({ sessionId, exerciseId, action: 'end' });
+        } catch (error) {
+            console.error(error);
+            toast({ title: '오류 발생', description: '운동 상태를 업데이트하는 중 문제가 발생했습니다.' });
+        }
+    };
+
     return (
         <TabsContent value="inProgress" className="space-y-2">
             {data.exercises.map(exercise => (
@@ -67,7 +78,10 @@ const InProgressT = ({ data, sessionId, handleDone }: InProgressTProps) => {
                         </div>
                         <div className="flex flex-col gap-2 h-[40vh] overflow-y-scroll">
                             {exercise.session.map((set, index) => (
-                                <Card key={set._id} className="flex justify-between items-center p-2 text-nowrap">
+                                <Card
+                                    key={set._id}
+                                    className={`flex justify-between items-center p-2 text-nowrap ${index === exercise.session.length - 1 ? 'border-2 border-red-400' : ''}`}
+                                >
                                     {editingSetId === set._id ? (
                                         <div className='w-full flex justify-between items-center gap-2'>
                                             <p>{set.set}세트</p>
@@ -110,17 +124,31 @@ const InProgressT = ({ data, sessionId, handleDone }: InProgressTProps) => {
                                             <p className='pl-2'>{set.set}세트</p>
                                             <Button variant="outline" onClick={() => handleEditClick(set._id!, set.reps, set.weight)}>{set.reps}회</Button>
                                             <Button variant="outline" onClick={() => handleEditClick(set._id!, set.reps, set.weight)}>{set.weight}kg</Button>
+
                                             <Button
                                                 variant="outline"
-                                                disabled={index !== exercise.session.length - 1}
-                                                onClick={() => handleNewSet(exercise._id!)}
+                                                disabled={set.endTime !== undefined}
+                                                onClick={() => handleSetEnd(exercise._id!)}
                                             >
                                                 완료
                                             </Button>
+
                                         </>
                                     )}
                                 </Card>
                             ))}
+                            {exercise.session.length < exercise.sets ? (
+                                exercise.session.at(-1)?.endTime && (
+                                    <Button variant="outline" onClick={() => handleNewSet(exercise._id!)}>
+                                        다음 세트 시작
+                                    </Button>
+                                )
+                            ) : (
+                                <Button variant="outline" onClick={handleDone}>
+                                    마지막 세트 종료
+                                </Button>
+                            )}
+
                         </div>
                     </Card>
                 )

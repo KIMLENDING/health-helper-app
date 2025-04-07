@@ -80,6 +80,8 @@ export interface ExercisesessionData {
     set: number,
     reps: number,
     weight: number,
+    endTime?: string,
+    createdAt?: string,
 }
 
 
@@ -93,7 +95,7 @@ export interface PostExerciseSession {
 export interface ExerciseSessionActionPayload {
     sessionId: string,
     exerciseId: string,
-    action: "start" | "done",
+    action: "start" | "done" | "end",
 };
 
 export interface ExerciseSessionSetPayload {
