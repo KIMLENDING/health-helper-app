@@ -36,7 +36,7 @@ export function DrawerDialogDone({ children,
         return (
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
-                    <div>{children}</div>
+                    <div className="flex ">{children}</div>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
@@ -65,7 +65,7 @@ export function DrawerDialogDone({ children,
     return (
         <Drawer open={open} onOpenChange={setOpen}>
             <DrawerTrigger asChild>
-                <div className="flex flex-row gap-2">{children}</div>
+                <div className="flex ">{children}</div>
             </DrawerTrigger>
             <DrawerContent>
                 <DrawerHeader className="text-left">
