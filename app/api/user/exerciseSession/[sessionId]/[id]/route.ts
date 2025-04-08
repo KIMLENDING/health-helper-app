@@ -12,19 +12,19 @@ import { requireUser } from "@/lib/check-auth"
 export const POST = async (req: NextRequest) => {
     const { sessionId, exerciseId, action } = await req.json();
 
+    const { user, error, status } = await requireUser(req);
+    if (!user) return NextResponse.json({ message: error }, { status });
+
+    const exerciseSession = await ExerciseSession.findOne({ _id: sessionId, userId: user._id });
+    if (!exerciseSession) {
+        return NextResponse.json({ message: "Exercise session not found" }, { status: 404 });
+    }
+
+    const exercise = exerciseSession.exercises.find((e: any) => e._id.toString() === exerciseId);
+    if (!exercise) {
+        return NextResponse.json({ message: "Exercise not found" }, { status: 404 });
+    }
     try {
-        const { user, error, status } = await requireUser(req);
-        if (!user) return NextResponse.json({ message: error }, { status });
-
-        const exerciseSession = await ExerciseSession.findOne({ _id: sessionId, userId: user._id });
-        if (!exerciseSession) {
-            return NextResponse.json({ message: "Exercise session not found" }, { status: 404 });
-        }
-
-        const exercise = exerciseSession.exercises.find((e: any) => e._id.toString() === exerciseId);
-        if (!exercise) {
-            return NextResponse.json({ message: "Exercise not found" }, { status: 404 });
-        }
 
         if (action === "end") {
             // 세트 종료 처리
@@ -49,6 +49,7 @@ export const POST = async (req: NextRequest) => {
         }
 
 
+        // 세트 수가 채워진 경우 자동으로 done 처리
         if (
             action === "start" &&
             exercise.session.length >= exercise.sets &&
@@ -66,6 +67,13 @@ export const POST = async (req: NextRequest) => {
 
             exercise.state = "done";
             exercise.repTime = Math.floor(totalRepTime / 1000); // 초 단위
+
+
+            // // ✅ 자동 종료
+            // if (exerciseSession.exercises.every((ex: { state: string }) => ex.state === 'done')) {
+            //     // 모든 운동이 완료된 경우
+            //     exerciseSession.state = 'done';
+            // }
 
             // 변경 감지
             exerciseSession.markModified("exercises");
@@ -96,11 +104,11 @@ export const POST = async (req: NextRequest) => {
                 exercise.session.push({
                     set: 1,
                     reps: planExercise.reps,
-                    weight: planExercise.weight || 40,
+                    weight: planExercise.weight || 40, // 기본 중량 40kg 인데 이제 이거 없에고 초기 plan에 필드 추가하고 거기서 가져오는 방식으로 해야함 
                 });
                 // 변경 감지
                 exerciseSession.markModified("exercises");
-                await exerciseSession.save();
+                await exerciseSession.save();// 여기서 오류남 
                 return NextResponse.json({ message: "first", exerciseSession }, { status: 200 });
             } else {
                 // 이전 세트 참고해서 세트 추가
@@ -142,6 +150,11 @@ export const POST = async (req: NextRequest) => {
 
             exercise.state = "done";
             exercise.repTime = repTimeInSeconds;
+            // // ✅ 자동 종료
+            // if (exerciseSession.exercises.every((ex: { state: string }) => ex.state === 'done')) {
+            //     // 모든 운동이 완료된 경우
+            //     exerciseSession.state = 'done';
+            // }
 
             exerciseSession.markModified("exercises");
             await exerciseSession.save();

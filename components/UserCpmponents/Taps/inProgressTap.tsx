@@ -15,7 +15,7 @@ interface InProgressTProps {
     sessionId: string;
     handleDone: () => void;
 }
-const InProgressT = ({ data, sessionId, handleDone }: InProgressTProps) => {
+const InProgressTap = ({ data, sessionId, handleDone }: InProgressTProps) => {
     const [loadingIndex, setLoadingIndex] = useState<string | null>(null);
     const [editingSetId, setEditingSetId] = useState<string | null>(null);
     const [editedReps, setEditedReps] = useState<number>(0);
@@ -165,4 +165,4 @@ const InProgressT = ({ data, sessionId, handleDone }: InProgressTProps) => {
     )
 }
 
-export default InProgressT
+export default InProgressTap

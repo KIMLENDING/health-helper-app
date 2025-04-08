@@ -1,35 +1,46 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useGetExerciseSession } from '@/server/queries';
 import { Card, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
-import { useActionExerciseSession, useEditExerciseSession } from '@/server/mutations';
+import { useActionExerciseSession, useDoneExerciseSession } from '@/server/mutations';
 import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner';
-import { DrawerDialogDone } from '@/components/LayoutCompents/ResponsiceDialog2';
-import InProgressT from './inProgressTap';
+import InProgressTap from './inProgressTap';
+import { useRouter } from 'next/navigation';
 
 const TapsComponent = ({ sessionId }: { sessionId: string }) => {
     const [activeTab, setActiveTab] = useState('list');
     const { data, error, isLoading } = useGetExerciseSession(sessionId);
-    const { mutate, mutateAsync } = useActionExerciseSession();
+    const { mutateAsync } = useActionExerciseSession();
+    const { mutateAsync: doneExercise } = useDoneExerciseSession();
     const [loadingIndex, setLoadingIndex] = useState<string | null>(null);
+    const router = useRouter();
 
+    /**운동 플랜 종료 */
+    const updateSessionStatus = async () => {
+        if (!data) return;
+        localStorage.clear();
+        const res = await doneExercise({ sessionId });
+        if (res.delete) { // 완료한 운동이 하나도 없을 땐 세션이 삭제됨 
+            router.push('/dashboard');
+            return;
+        }
+        router.push(`/dashboard/detail/${data._id}`);
+    };
 
     /** 서버에 운동시작과 종료를 업데이트 하는 함수 */
     const runWithLoading = async (exerciseId: string, action: 'start' | 'done') => {
         try {
             setLoadingIndex(exerciseId);
             const res = await mutateAsync({ sessionId, exerciseId, action });
-            if (res.message === 'done') {
+            if (res.message === 'done' || res.message === 'first') {
                 localStorage.clear();
-                setActiveTab('list');
-            } else if (res.message === 'first') {
-                localStorage.clear();
-                setActiveTab('inProgress');
+                setActiveTab(res.message === 'done' ? 'list' : 'inProgress');
             }
+
         } catch (error) {
             console.error(error);
             toast({ title: '오류 발생', description: '운동 상태를 업데이트하는 중 문제가 발생했습니다.' });
@@ -91,16 +102,19 @@ const TapsComponent = ({ sessionId }: { sessionId: string }) => {
                                 (exercise.state === 'pending' && data.exercises.some(e => e.state === 'inProgress'))
                             }
                         >
-                            {exercise.state === 'pending' && '시작'}
-                            {exercise.state === 'inProgress' && '진행중'}
-                            {exercise.state === 'done' && '완료'}
+                            {{
+                                pending: '시작',
+                                inProgress: '진행중',
+                                done: '완료',
+                            }[exercise.state]}
                             {loadingIndex === exercise._id && <LoadingSpinner className="w-5 h-5" />}
                         </Button>
                     </Card>
                 ))}
+                <Button className='w-full' variant='default' onClick={updateSessionStatus}>운동 완료하기</Button>
             </TabsContent>
 
-            <InProgressT data={data} sessionId={sessionId} handleDone={handleDone} />
+            <InProgressTap data={data} sessionId={sessionId} handleDone={handleDone} />
         </Tabs>
     );
 };

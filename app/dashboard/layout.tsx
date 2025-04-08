@@ -10,7 +10,7 @@ import {
 import { SidebarLeft } from "@/components/sidebar-left";
 import { fetchWithCookie } from "@/utils/fetchUrl";
 import { cookies } from "next/headers";
-import { HydrationBoundary, dehydrate, QueryClient } from "@tanstack/react-query";
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import getQueryClient from "@/utils/getQueryClient";
 
 

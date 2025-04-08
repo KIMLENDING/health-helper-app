@@ -20,6 +20,7 @@ type Props = {
     plan: ExercisePlan;
 }
 
+/** 진행할 플랜을 시작하거나 진행중인 운동 페이지로 이동시키는 버튼*/
 export function DrawerDialogDemo({ children, plan }: Props) {
     const router = useRouter();
     const [open, setOpen] = React.useState(false);
@@ -50,7 +51,7 @@ export function DrawerDialogDemo({ children, plan }: Props) {
     };
 
     const ActionButtons = (
-        <div className="w-full flex gap-2">
+        <div className="w-full flex gap-2" >
             <Button className="flex-1 hover:bg-zinc-300 hover:dark:bg-zinc-600" variant="secondary">
                 취소
             </Button>
@@ -90,7 +91,7 @@ export function DrawerDialogDemo({ children, plan }: Props) {
     };
 
     return (
-        <UI.Root open={open} onOpenChange={setOpen}>
+        <UI.Root autoFocus open={open} onOpenChange={setOpen}>
             <UI.Trigger asChild>
                 <div className="flex flex-row gap-2">{children}</div>
             </UI.Trigger>

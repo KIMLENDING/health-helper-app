@@ -9,24 +9,13 @@ import React, { useEffect, useState } from 'react'
 const Page = () => {
     const params = useParams();
     const { data, isLoading, isError } = useGetExerciseSession(params.sessionId as string);
-    const [filter, setFilter] = useState(data)
-
-    useEffect(() => {
-        if (data) {
-            const updatedObject = {
-                ...data,
-                exercises: data.exercises.filter(exercise => exercise.session.length > 0)
-            };
-            setFilter(updatedObject);
-        }
-    }, [data])
 
     if (isLoading) return <div className='w-full h-full flex items-center justify-center '><LoadingSpinner className='w-[5vh] h-[5vh]' /></div>;
     if (isError) return <div>Error loading data</div>;
     return (
         <div className='px-4'>
-            <TotalTitleByWeight data={filter} />
-            <TotalTitleBySession data={filter} />
+            <TotalTitleByWeight data={data} />
+            <TotalTitleBySession data={data} />
         </div>
     )
 }

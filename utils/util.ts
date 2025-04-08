@@ -73,7 +73,6 @@ export interface ExerciseOptionSession {
     rest: number,
     state: string, //'pending' | 'inProgress' | 'done'
     session: ExercisesessionData[]
-
 }
 export interface ExercisesessionData {
     _id?: string

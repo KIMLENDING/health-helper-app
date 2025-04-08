@@ -122,7 +122,6 @@ export const useInProgress = () => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            console.log('11111111')
             return response.json();
         }
     });
