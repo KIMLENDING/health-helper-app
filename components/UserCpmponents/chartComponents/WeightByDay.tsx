@@ -1,5 +1,4 @@
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart'
-import { useSidebar } from '@/components/ui/sidebar'
 import { chartConfig } from '@/lib/utils'
 import { ExerciseOptionSession, ExerciseSession, ExercisesessionData } from '@/utils/util'
 import React from 'react'
@@ -20,6 +19,23 @@ const WeightByDay = ({ data }: { data: any }) => {
             }).reduce((acc, cur) => acc + cur, 0)
         };
     });
+
+    const CustomEvenIndexLabel = (props: any) => {
+
+        const { x, y, value, index } = props;
+        if (index % 2 !== 0) return null;
+
+        return (
+            <text
+                x={x}
+                y={y - 12} // offset 대신 직접 위치 조정
+                textAnchor="middle"
+                className="fill-foreground text-[12px]"
+            >
+                {`${value} kg`}
+            </text>
+        );
+    };
     return (
         <ChartContainer config={chartConfig} className="aspect-auto min-h-[200px] w-full">
             <LineChart
@@ -41,8 +57,26 @@ const WeightByDay = ({ data }: { data: any }) => {
                     tickFormatter={(value) => value.slice(0, 3)}
                 />
                 <ChartTooltip
-                    cursor={false}
+                    cursor={true}
                     content={<ChartTooltipContent indicator="line" />}
+                    formatter={(value, name, props) => {
+                        return (
+                            <div className="grid gap-1.5">
+                                <div className="flex w-full flex-wrap items-stretch gap-2 [&amp;>svg]:h-2.5 [&amp;>svg]:w-2.5 [&amp;>svg]:text-muted-foreground">
+                                    <div className="shrink-0 rounded-[2px] border-blue-400 bg-blue-400 w-1">
+                                    </div>
+                                    <div className="flex flex-1 justify-between leading-none items-end gap-2">
+                                        <div className="grid gap-1.5">
+                                            <div className="font-medium">{props.payload.day}</div>
+                                            <span className="text-muted-foreground">횟수 x 무게(kg) </span>
+                                        </div>
+                                        <span className="font-mono font-medium tabular-nums text-foreground">  {props.payload.totalWeight} kg</span>
+                                    </div>
+                                </div>
+                            </div>)
+                    }}
+
+
                 />
                 <ChartLegend content={<ChartLegendContent />} />
                 <Line
@@ -58,11 +92,7 @@ const WeightByDay = ({ data }: { data: any }) => {
                     }}
                 >
                     <LabelList
-                        position="top"
-                        offset={12}
-                        className="fill-foreground"
-                        fontSize={12}
-                        formatter={(value: number) => `${value} kg`}
+                        content={<CustomEvenIndexLabel />}
                     />
                 </Line>
             </LineChart>
