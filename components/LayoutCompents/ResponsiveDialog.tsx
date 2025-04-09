@@ -14,18 +14,21 @@ import {
 import { ExercisePlan } from "@/utils/util"
 import { useCreateExerciseSession } from "@/server/mutations"
 import { useInProgress } from "@/server/queries"
+import LoadingOverlay from "./LoadingOverlay"
 
 type Props = {
     children: React.ReactNode;
     plan: ExercisePlan;
 }
 
+/** 진행할 플랜을 시작하거나 진행중인 운동 페이지로 이동시키는 버튼*/
 export function DrawerDialogDemo({ children, plan }: Props) {
     const router = useRouter();
     const [open, setOpen] = React.useState(false);
-    const { data: state } = useInProgress();
+    const { data: inProgress } = useInProgress();
+    const { latestSessionId } = inProgress || {};
     const isDesktop = useMediaQuery("(min-width: 768px)");
-    const { mutateAsync } = useCreateExerciseSession();
+    const { mutateAsync, isPending } = useCreateExerciseSession();
 
     const handleStartSession = async () => {
         const { exercises, _id, userId } = plan as any;
@@ -42,28 +45,30 @@ export function DrawerDialogDemo({ children, plan }: Props) {
         if (res) router.push(`/dashboard/exerciseSession/${res.newExerciseSession._id}`);
     };
 
+    /** 진행 중인 운동으로 이동  */
     const handleContinueSession = () => {
-        if (!state) return;
-        router.push(`/dashboard/exerciseSession/${state._id}`);
+        if (!inProgress) return;
+        router.push(`/dashboard/exerciseSession/${latestSessionId}`);
     };
 
     const ActionButtons = (
-        <div className="w-full flex gap-2">
+        <div className="w-full flex gap-2" >
             <Button className="flex-1 hover:bg-zinc-300 hover:dark:bg-zinc-600" variant="secondary">
                 취소
             </Button>
             <Button
                 className="flex-1 hover:bg-zinc-300 hover:dark:bg-zinc-600"
                 variant="secondary"
-                onClick={state ? handleContinueSession : handleStartSession}
+                onClick={latestSessionId ? handleContinueSession : handleStartSession}
+                disabled={isPending} // ✅ 버튼 중복 클릭 방지
             >
                 예
             </Button>
         </div>
     );
 
-    const Title = state ? "현재 진행 중인 운동이 있습니다." : "운동을 시작하시겠습니까?";
-    const Description = state
+    const Title = latestSessionId ? "현재 진행 중인 운동이 있습니다." : "운동을 시작하시겠습니까?";
+    const Description = latestSessionId
         ? "진행 중인 운동으로 이동하시겠습니까?"
         : "운동을 시작하면 운동에 집중해 주세요.";
 
@@ -88,21 +93,24 @@ export function DrawerDialogDemo({ children, plan }: Props) {
     };
 
     return (
-        <UI.Root open={open} onOpenChange={setOpen}>
-            <UI.Trigger asChild>
-                <div className="flex flex-row gap-2">{children}</div>
-            </UI.Trigger>
-            <UI.Content className={isDesktop ? "sm:max-w-[425px]" : ""}>
-                <UI.Header className={isDesktop ? "" : "text-left"}>
-                    <UI.Title className={state ? "text-red-300" : ""}>{Title}</UI.Title>
-                    <UI.Description>{Description}</UI.Description>
-                </UI.Header>
-                <UI.Footer className="pt-2">
-                    <UI.Close asChild>
-                        {ActionButtons}
-                    </UI.Close>
-                </UI.Footer>
-            </UI.Content>
-        </UI.Root>
+        <>
+            <UI.Root autoFocus open={open} onOpenChange={setOpen}>
+                <UI.Trigger asChild>
+                    <div className="flex flex-row gap-2">{children}</div>
+                </UI.Trigger>
+                <UI.Content className={isDesktop ? "sm:max-w-[425px]" : ""}>
+                    <UI.Header className={isDesktop ? "" : "text-left"}>
+                        <UI.Title className={latestSessionId ? "text-red-300" : ""}>{Title}</UI.Title>
+                        <UI.Description>{Description}</UI.Description>
+                    </UI.Header>
+                    <UI.Footer className="pt-2">
+                        <UI.Close asChild>
+                            {ActionButtons}
+                        </UI.Close>
+                    </UI.Footer>
+                </UI.Content>
+            </UI.Root>
+            {isPending && <LoadingOverlay isLoading={isPending} text={'로딩 중'} />} {/* ✅ 로딩 오버레이 */}
+        </>
     );
 }

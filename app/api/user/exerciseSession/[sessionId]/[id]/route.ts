@@ -1,10 +1,8 @@
 // 생성
 import ExerciseSession from "@/models/ExerciseSession"
-import connect from "@/utils/db"
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import User from "@/models/User"
-import { getToken } from "next-auth/jwt"
+import ExercisePlan from "@/models/ExercisePlan"
+import { requireUser } from "@/lib/check-auth"
 
 /**
  *  운동 시작시 상태를 변경하는 API
@@ -12,83 +10,177 @@ import { getToken } from "next-auth/jwt"
  * @returns 
  */
 export const POST = async (req: NextRequest) => {
-    const { sessionId, exerciseId, state, sessionData, repTime } = await req.json();
+    const { sessionId, exerciseId, action } = await req.json();
 
-    const getSession = await getServerSession();
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    const { user, error, status } = await requireUser(req);
+    if (!user) return NextResponse.json({ message: error }, { status });
 
-    if (!getSession || !token) {
-        // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
+    const exerciseSession = await ExerciseSession.findOne({ _id: sessionId, userId: user._id });
+    if (!exerciseSession) {
+        return NextResponse.json({ message: "Exercise session not found" }, { status: 404 });
     }
-    await connect();
 
-    const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
-    if (!user) {
-        return NextResponse.json({ message: 'User not found' }, { status: 404 });
+    const exercise = exerciseSession.exercises.find((e: any) => e._id.toString() === exerciseId);
+    if (!exercise) {
+        return NextResponse.json({ message: "Exercise not found" }, { status: 404 });
     }
     try {
-        // 특정 exerciseId의 state 업데이트
-        if (state === 'inProgress') {
 
-            const updatedSession = await ExerciseSession.findOneAndUpdate(
-                { _id: sessionId, "exercises._id": exerciseId },// 조건
-                {
-                    $set: { 'exercises.$.state': state, },  //(수정) 업데이트할 필드
-                    $push: { 'exercises.$.session': sessionData }//(추가) 업데이트할 내용
-                },
-                { new: true } // 업데이트 후 새로운 문서를 반환
-            );//$ 연산자는 배열의 요소에 접근하기 위해 사용
+        if (action === "end") {
+            // 세트 종료 처리
+            if (exercise.state !== "inProgress") {
+                return NextResponse.json({ message: "진행중인 운동이 없습니다." }, { status: 400 });
+            }
+            const sessionLength = exercise.session.length;
+            if (sessionLength === 0) {
+                return NextResponse.json({ message: "종료 할 세트가 없습니다. " }, { status: 400 });
+            }
 
-            if (!updatedSession) {
-                return NextResponse.json(
-                    { error: "Exercise session or exercise not found" },
-                    { status: 404 }
-                );
+            const currentSet = exercise.session[sessionLength - 1];
+            if (currentSet.endTime) {
+                return NextResponse.json({ message: "이 세트는 이미 종료되었습니다." }, { status: 400 });
             }
-            return NextResponse.json({ updatedSession, message: '세트 시작' }, { status: 201 });
+
+            currentSet.endTime = new Date();
+            exerciseSession.markModified("exercises");
+            await exerciseSession.save();
+
+            return NextResponse.json({ message: "Set ended", exerciseSession }, { status: 200 });
         }
-        if (state === 'done') {
-            // console.log('done');
-            const updatedSession = await ExerciseSession.findOneAndUpdate(
-                { _id: sessionId, "exercises._id": exerciseId },// 조건
-                {
-                    $set: { 'exercises.$.state': state, 'exercises.$.repTime': repTime },  // 업데이트할 필드
-                },
-                { new: true } // 업데이트 후 새로운 문서를 반환
-            );
-            if (!updatedSession) {
-                return NextResponse.json(
-                    { error: "Exercise session or exercise not found" },
-                    { status: 404 }
-                );
+
+
+        // 세트 수가 채워진 경우 자동으로 done 처리
+        if (
+            action === "start" &&
+            exercise.session.length >= exercise.sets &&
+            exercise.state !== "done"
+        ) {
+
+            // 세트 수가 채워진 경우 자동으로 done 처리
+            const totalRepTime = exercise.session.reduce((acc: number, set: any) => {
+                if (set.endTime) {
+                    const duration = new Date(set.endTime).getTime() - new Date(set.createdAt).getTime();
+                    return acc + duration;
+                }
+                return acc;
+            }, 0);
+
+            exercise.state = "done";
+            exercise.repTime = Math.floor(totalRepTime / 1000); // 초 단위
+
+
+            // // ✅ 자동 종료
+            // if (exerciseSession.exercises.every((ex: { state: string }) => ex.state === 'done')) {
+            //     // 모든 운동이 완료된 경우
+            //     exerciseSession.state = 'done';
+            // }
+
+            // 변경 감지
+            exerciseSession.markModified("exercises");
+            await exerciseSession.save();
+            return NextResponse.json({ message: "done", exerciseSession }, { status: 200 });
+        }
+
+
+        if (action === "start") {
+            // state가 pending이면 inProgress로 변경
+
+            if (exercise.state === "pending") {
+                exercise.state = "inProgress";
             }
-            return NextResponse.json({ updatedSession, message: '운동 완료' }, { status: 201 });
+
+            const sessionLength = exercise.session.length;
+            if (sessionLength === 0) {
+                // 초기 세트 생성 → ExercisePlan 참조
+                const plan = await ExercisePlan.findById(exerciseSession.exercisePlanId);
+                const planExercise = plan.exercises.find(
+                    (e: any) => e.exerciseId.toString() === exercise.exerciseId.toString()
+                );
+
+                if (!planExercise) {
+                    return NextResponse.json({ message: "Exercise plan not found" }, { status: 404 });
+                }
+
+                exercise.session.push({
+                    set: 1,
+                    reps: planExercise.reps,
+                    weight: planExercise.weight || 40, // 기본 중량 40kg 인데 이제 이거 없에고 초기 plan에 필드 추가하고 거기서 가져오는 방식으로 해야함 
+                });
+                // 변경 감지
+                exerciseSession.markModified("exercises");
+                await exerciseSession.save();// 여기서 오류남 
+                return NextResponse.json({ message: "first", exerciseSession }, { status: 200 });
+            } else {
+                // 이전 세트 참고해서 세트 추가
+                const prev = exercise.session[sessionLength - 1];
+                exercise.session.push({
+                    set: prev.set + 1,
+                    reps: prev.reps,
+                    weight: prev.weight + 5,
+                });
+                // 변경 감지
+                exerciseSession.markModified("exercises");
+                await exerciseSession.save();
+                return NextResponse.json({ message: "Updated", exerciseSession }, { status: 200 });
+            }
         }
+
+        if (action === "done") {
+            if (exercise.session.length === 0) {
+                return NextResponse.json({ message: "No session data found" }, { status: 400 });
+            }
+
+            // 마지막 세트 강제 완료
+            const lastSet = exercise.session.at(-1);
+            if (lastSet && !lastSet.endTime) {
+                lastSet.endTime = new Date();
+            }
+
+            // 총 수행 시간 계산
+            const totalRepTime = exercise.session.reduce((acc: number, set: any) => {
+                if (set.endTime) {
+                    const start = new Date(set.createdAt).getTime();
+                    const end = new Date(set.endTime).getTime();
+                    return acc + (end - start);
+                }
+                return acc;
+            }, 0);
+
+            const repTimeInSeconds = Math.floor(totalRepTime / 1000);
+
+            exercise.state = "done";
+            exercise.repTime = repTimeInSeconds;
+            // // ✅ 자동 종료
+            // if (exerciseSession.exercises.every((ex: { state: string }) => ex.state === 'done')) {
+            //     // 모든 운동이 완료된 경우
+            //     exerciseSession.state = 'done';
+            // }
+
+            exerciseSession.markModified("exercises");
+            await exerciseSession.save();
+
+            return NextResponse.json({ message: "done", exerciseSession }, { status: 200 });
+        }
+
+
     } catch (err: any) {
-        return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
+        return NextResponse.json(
+            { message: "Internal Server Error", error: err.message },
+            { status: 500 }
+        );
     }
-}
+};
+
 
 
 export const PATCH = async (req: NextRequest) => {
-    const { sessionId, exerciseId, detailSessionId, reps, weight } = await req.json();
-    const getSession = await getServerSession();
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-
-    if (!getSession || !token) {
-        // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
-    }
-    await connect();
-
-    const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
-    if (!user) {
-        return NextResponse.json({ message: 'User not found' }, { status: 404 });
-    }
+    const { sessionId, exerciseId, setId, reps, weight } = await req.json();
     try {
+        const { user, error, status } = await requireUser(req);
+        if (!user) return NextResponse.json({ message: error }, { status });
+
         const updatedSession = await ExerciseSession.findOneAndUpdate(
-            { _id: sessionId, "exercises._id": exerciseId, "exercises.session._id": detailSessionId },// 조건
+            { _id: sessionId, "exercises._id": exerciseId, "exercises.session._id": setId },// 조건
             {
                 $set: {
                     'exercises.$[exercise].session.$[session].reps': reps,
@@ -99,7 +191,7 @@ export const PATCH = async (req: NextRequest) => {
                 new: true,
                 arrayFilters: [
                     { "exercise._id": exerciseId },
-                    { "session._id": detailSessionId }
+                    { "session._id": setId }
                 ]
             } // 업데이트 후 새로운 문서를 반환
         );

@@ -6,7 +6,7 @@ import SessionProvider from "@/providers/SessionProvider";
 import { getServerSession } from "next-auth";
 import { Toaster } from "@/components/ui/toaster"
 import { QueryProviders } from "@/providers/QueryProvider";
-import { SessionProviderWrapper } from "@/providers/SessionContext";
+
 
 
 const geistSans = localFont({
@@ -55,27 +55,28 @@ export default async function RootLayout({
   const session = await getServerSession();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning >
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/dumbbell.svg" type="image/svg+xml" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
         <QueryProviders>
           <SessionProvider>
-            <SessionProviderWrapper session={session}>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-              >
-                {children}
-                <Toaster />
-              </ThemeProvider>
-            </SessionProviderWrapper>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+
+
+              {children}
+
+              <Toaster />
+            </ThemeProvider>
           </SessionProvider>
         </QueryProviders>
       </body>

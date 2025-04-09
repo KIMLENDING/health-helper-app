@@ -1,25 +1,12 @@
 import ShowChart from "@/components/UserCpmponents/showChart";
 import ShowPlans from "@/components/UserCpmponents/showPlans";
 import ShowWeek from "@/components/UserCpmponents/showWeek";
+import { fetchWithCookie } from "@/utils/fetchUrl";
+import getQueryClient from "@/utils/getQueryClient";
 import { HydrationBoundary, dehydrate, QueryClient } from "@tanstack/react-query";
 import { cookies } from "next/headers";
 
-const fetchWithCookie = async (url: string, cookieName: string, cookieValue: string | undefined) => {
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Cookie": cookieValue ? `${cookieName}=${cookieValue}` : "",
-    },
-    credentials: "include",
-  });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return response.json();
-};
 
 const fetchData = async () => {
   const cookieHeader = await cookies();
@@ -39,7 +26,7 @@ const fetchData = async () => {
 
 export default async function Dashboard() {
   const { sessionData, exercisePlans } = await fetchData();
-  const queryClient = new QueryClient();
+  const queryClient = getQueryClient();
 
   await Promise.all([
     queryClient.prefetchQuery({ queryKey: ["weekSessions"], queryFn: () => sessionData }),
@@ -47,7 +34,7 @@ export default async function Dashboard() {
   ]);
 
   return (
-    <section className="flex flex-1 flex-col gap-4 p-4">
+    <section className=" flex shrink-0 flex-col gap-4 p-4 ">
       <HydrationBoundary state={dehydrate(queryClient)}>
         <div className="flex flex-col gap-4">
           <ShowWeek />

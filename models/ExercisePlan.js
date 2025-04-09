@@ -11,6 +11,7 @@ const exercisePlanSchema = new Schema(
         title: { type: String, required: true }, //운동명칭
         sets: { type: Number, required: true }, // 세트 수
         reps: { type: Number, required: true }, // 반복횟수
+        // 초기 무게도 추가해야함 // weight: { type: Number, required: true }, // 무게
         rest: { type: Number, required: true }, // 각 세트 사이의 휴식시간
       },
     ],
