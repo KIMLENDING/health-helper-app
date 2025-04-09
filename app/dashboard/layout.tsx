@@ -36,7 +36,7 @@ export default async function DachboardLayout({
     <SidebarProvider>
       <SidebarLeft />
       <SidebarInset>
-        <main>
+        <main className="h-screen overflow-y-auto scrollbar-hide">
           <header className="sticky top-0 flex justify-between h-14 shrink-0 items-center gap-2 bg-background z-50 shadow-md px-4">
             <div className="flex items-center gap-2">
               <SidebarTrigger />

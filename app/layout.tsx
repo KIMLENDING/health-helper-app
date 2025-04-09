@@ -55,13 +55,13 @@ export default async function RootLayout({
   const session = await getServerSession();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning >
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/dumbbell.svg" type="image/svg+xml" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
         <QueryProviders>
           <SessionProvider>
@@ -71,7 +71,10 @@ export default async function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
+
+
               {children}
+
               <Toaster />
             </ThemeProvider>
           </SessionProvider>

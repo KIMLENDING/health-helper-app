@@ -10,12 +10,13 @@ import { useActionExerciseSession, useDoneExerciseSession } from '@/server/mutat
 import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner';
 import InProgressTap from './inProgressTap';
 import { useRouter } from 'next/navigation';
+import LoadingOverlay from '@/components/LayoutCompents/LoadingOverlay';
 
 const TapsComponent = ({ sessionId }: { sessionId: string }) => {
     const [activeTab, setActiveTab] = useState('list');
     const { data, error, isLoading } = useGetExerciseSession(sessionId);
-    const { mutateAsync } = useActionExerciseSession();
-    const { mutateAsync: doneExercise } = useDoneExerciseSession();
+    const { mutateAsync, isPending: isPandingAction } = useActionExerciseSession();
+    const { mutateAsync: doneExercise, isPending: isPendingDone } = useDoneExerciseSession();
     const [loadingIndex, setLoadingIndex] = useState<string | null>(null);
     const router = useRouter();
 
@@ -98,7 +99,7 @@ const TapsComponent = ({ sessionId }: { sessionId: string }) => {
                             onClick={() => handleExerciseStart(exercise._id!)}
                             variant="outline"
                             disabled={
-                                exercise.state === 'done' ||
+                                exercise.state === 'done' || isPandingAction || loadingIndex === exercise._id ||
                                 (exercise.state === 'pending' && data.exercises.some(e => e.state === 'inProgress'))
                             }
                         >
@@ -111,10 +112,11 @@ const TapsComponent = ({ sessionId }: { sessionId: string }) => {
                         </Button>
                     </Card>
                 ))}
-                <Button className='w-full' variant='default' onClick={updateSessionStatus}>운동 완료하기</Button>
+                <Button className='w-full' variant='default' onClick={updateSessionStatus} disabled={isPandingAction || isPendingDone}>운동 완료하기</Button>
+                {isPandingAction && <LoadingOverlay isLoading={isPandingAction} text={'서버에 저장 중...'} />} {/* ✅ 로딩 오버레이 */}
             </TabsContent>
 
-            <InProgressTap data={data} sessionId={sessionId} handleDone={handleDone} />
+            <InProgressTap data={data} sessionId={sessionId} isPending={isPandingAction} handleDone={handleDone} />
         </Tabs>
     );
 };

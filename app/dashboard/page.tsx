@@ -34,7 +34,7 @@ export default async function Dashboard() {
   ]);
 
   return (
-    <section className="flex flex-1 flex-col gap-4 p-4">
+    <section className=" flex shrink-0 flex-col gap-4 p-4 ">
       <HydrationBoundary state={dehydrate(queryClient)}>
         <div className="flex flex-col gap-4">
           <ShowWeek />

@@ -14,6 +14,7 @@ import {
 import { ExercisePlan } from "@/utils/util"
 import { useCreateExerciseSession } from "@/server/mutations"
 import { useInProgress } from "@/server/queries"
+import LoadingOverlay from "./LoadingOverlay"
 
 type Props = {
     children: React.ReactNode;
@@ -27,7 +28,7 @@ export function DrawerDialogDemo({ children, plan }: Props) {
     const { data: inProgress } = useInProgress();
     const { latestSessionId } = inProgress || {};
     const isDesktop = useMediaQuery("(min-width: 768px)");
-    const { mutateAsync } = useCreateExerciseSession();
+    const { mutateAsync, isPending } = useCreateExerciseSession();
 
     const handleStartSession = async () => {
         const { exercises, _id, userId } = plan as any;
@@ -59,6 +60,7 @@ export function DrawerDialogDemo({ children, plan }: Props) {
                 className="flex-1 hover:bg-zinc-300 hover:dark:bg-zinc-600"
                 variant="secondary"
                 onClick={latestSessionId ? handleContinueSession : handleStartSession}
+                disabled={isPending} // ✅ 버튼 중복 클릭 방지
             >
                 예
             </Button>
@@ -91,21 +93,24 @@ export function DrawerDialogDemo({ children, plan }: Props) {
     };
 
     return (
-        <UI.Root autoFocus open={open} onOpenChange={setOpen}>
-            <UI.Trigger asChild>
-                <div className="flex flex-row gap-2">{children}</div>
-            </UI.Trigger>
-            <UI.Content className={isDesktop ? "sm:max-w-[425px]" : ""}>
-                <UI.Header className={isDesktop ? "" : "text-left"}>
-                    <UI.Title className={latestSessionId ? "text-red-300" : ""}>{Title}</UI.Title>
-                    <UI.Description>{Description}</UI.Description>
-                </UI.Header>
-                <UI.Footer className="pt-2">
-                    <UI.Close asChild>
-                        {ActionButtons}
-                    </UI.Close>
-                </UI.Footer>
-            </UI.Content>
-        </UI.Root>
+        <>
+            <UI.Root autoFocus open={open} onOpenChange={setOpen}>
+                <UI.Trigger asChild>
+                    <div className="flex flex-row gap-2">{children}</div>
+                </UI.Trigger>
+                <UI.Content className={isDesktop ? "sm:max-w-[425px]" : ""}>
+                    <UI.Header className={isDesktop ? "" : "text-left"}>
+                        <UI.Title className={latestSessionId ? "text-red-300" : ""}>{Title}</UI.Title>
+                        <UI.Description>{Description}</UI.Description>
+                    </UI.Header>
+                    <UI.Footer className="pt-2">
+                        <UI.Close asChild>
+                            {ActionButtons}
+                        </UI.Close>
+                    </UI.Footer>
+                </UI.Content>
+            </UI.Root>
+            {isPending && <LoadingOverlay isLoading={isPending} text={'로딩 중'} />} {/* ✅ 로딩 오버레이 */}
+        </>
     );
 }

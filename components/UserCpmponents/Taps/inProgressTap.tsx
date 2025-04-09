@@ -1,4 +1,5 @@
 'use client'
+import LoadingOverlay from '@/components/LayoutCompents/LoadingOverlay'
 import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner'
 import { DrawerDialogDone } from '@/components/LayoutCompents/ResponsiceDialog2'
 import { Button } from '@/components/ui/button'
@@ -13,9 +14,10 @@ import React, { useState } from 'react'
 interface InProgressTProps {
     data: ExerciseSession;
     sessionId: string;
+    isPending: boolean;
     handleDone: () => void;
 }
-const InProgressTap = ({ data, sessionId, handleDone }: InProgressTProps) => {
+const InProgressTap = ({ data, sessionId, isPending, handleDone }: InProgressTProps) => {
     const [loadingIndex, setLoadingIndex] = useState<string | null>(null);
     const [editingSetId, setEditingSetId] = useState<string | null>(null);
     const [editedReps, setEditedReps] = useState<number>(0);
@@ -161,6 +163,8 @@ const InProgressTap = ({ data, sessionId, handleDone }: InProgressTProps) => {
                     <Button className="flex-1">운동 종료</Button>
                 </DrawerDialogDone>
             )}
+
+            {isPending && <LoadingOverlay isLoading={isPending} text={'서버에 저장 중...'} />} {/* ✅ 로딩 오버레이 */}
         </TabsContent>
     )
 }

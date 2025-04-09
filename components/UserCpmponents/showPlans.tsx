@@ -29,7 +29,7 @@ const ShowPlans = () => {
                 </Link>
             </CardTitle>
             {/** 플랜 내용 표시 */}
-            <div className='rounded-xl bg-muted/50 p-2 h-72 overflow-y-scroll '>
+            <div className='rounded-xl bg-muted/50 p-2 h-72 overflow-y-auto scrollbar-hide '>
                 {isLoading ? (
                     <div className="flex flex-col gap-2">
                         {[1, 2, 3].map((index) => (
@@ -39,7 +39,7 @@ const ShowPlans = () => {
                 ) : (
                     <>
                         {data && data.length > 0 ? (
-                            <div className={`grid grid-cols-1 md:grid-cols-2 gap-2`}>
+                            <div className={`grid grid-cols-1 md:grid-cols-2 gap-2 `}>
                                 {data.map((plan) => {
 
                                     const randomIcon = Icons[1].icon;
