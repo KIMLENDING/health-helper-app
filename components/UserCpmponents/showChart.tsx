@@ -20,7 +20,7 @@ const ShowChart = () => {
                 slidesToScroll: 1,
             }}
                 orientation={isMobile ? "vertical" : 'horizontal'} className='bg-muted/50  rounded-xl ' >
-                <CarouselContent className={` ${isMobile ? 'h-[19rem] ' : ''} select-none`} >
+                <CarouselContent className={` ${isMobile ? 'h-[17rem] ' : ''} select-none`} >
                     <CarouselItem >
                         <CardContainer title='주간 운동 종목 Top 5'  >
                             <TitlebyDay data={data} />
