@@ -108,7 +108,7 @@ export const POST = async (req: NextRequest) => {
                 });
                 // 변경 감지
                 exerciseSession.markModified("exercises");
-                await exerciseSession.save();// 여기서 오류남 
+                await exerciseSession.save();
                 return NextResponse.json({ message: "first", exerciseSession }, { status: 200 });
             } else {
                 // 이전 세트 참고해서 세트 추가

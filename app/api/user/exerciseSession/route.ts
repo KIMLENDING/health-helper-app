@@ -23,7 +23,7 @@ export const GET = async (req: NextRequest) => {
         if (!latestSession) {
             return NextResponse.json({ latestSessionId: null, message: "진행 중인 운동이 없습니다." }, { status: 201 });
         }
-        return NextResponse.json({ latestSessionId: latestSession._id, message: "진행 중인 운동이 있습니다다." }, { status: 201 });
+        return NextResponse.json({ latestSessionId: latestSession._id, message: "진행 중인 운동이 있습니다." }, { status: 201 });
     } catch (error) {
         console.error("Error fetching exercise session:", error);
         return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
