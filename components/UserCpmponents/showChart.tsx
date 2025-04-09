@@ -20,29 +20,29 @@ const ShowChart = () => {
                 slidesToScroll: 1,
             }}
                 orientation={isMobile ? "vertical" : 'horizontal'} className='bg-muted/50  rounded-xl ' >
-                <CarouselContent className={` ${isMobile ? 'p-2  h-[19rem] flex ' : 'p-2 ml-0 mr-2'} select-none`} >
-                    <CarouselItem className={`${isMobile && ' flex-1  '}`}>
+                <CarouselContent className={` ${isMobile ? 'h-[19rem] ' : ''} select-none`} >
+                    <CarouselItem >
                         <CardContainer title='주간 운동 종목 Top 5'  >
                             <TitlebyDay data={data} />
                         </CardContainer>
                     </CarouselItem>
-                    <CarouselItem className={`${isMobile && '  flex-1 '}`}>
+                    <CarouselItem >
                         <CardContainer title='주간 운동 시간' >
                             <TimeByDay data={data} />
                         </CardContainer>
                     </CarouselItem>
-                    <CarouselItem className={`${isMobile && '  flex-1 '}`}>
+                    <CarouselItem >
                         <CardContainer title='주간 운동량(kg)' >
                             <WeightByDay data={data} />
                         </CardContainer>
                     </CarouselItem>
-                    <CarouselItem className={`${isMobile && '  flex-1 '}`}>
+                    <CarouselItem >
                         <CardContainer title='주간 부위별 운동량(kg)' >
                             <WeightByPart data={data} />
                         </CardContainer>
                     </CarouselItem>
                 </CarouselContent>
-                {!isMobile &&
+                {
                     <>
                         <CarouselPrevious />
                         <CarouselNext />
