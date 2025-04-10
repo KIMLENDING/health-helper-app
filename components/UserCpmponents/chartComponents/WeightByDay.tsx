@@ -6,25 +6,38 @@ import { CartesianGrid, LabelList, Line, LineChart, XAxis } from 'recharts'
 
 const WeightByDay = ({ data }: { data: any }) => {
 
-    const totalWeightByDay = data?.sessions.flatMap((session: ExerciseSession) => {
-        if (!session.createdAt) return;
-        const day = new Date(session.createdAt).toLocaleString("ko-KR", {
-            weekday: "long",
-        });
-        return {
-            day, totalWeight: session.exercises.map((exercise: ExerciseOptionSession) => {
-                return exercise.session.map((s: ExercisesessionData) => {
-                    return s.weight * s.reps;
-                }).reduce((acc, cur) => acc + cur, 0);
-            }).reduce((acc, cur) => acc + cur, 0)
-        };
-    });
+    const totalWeightByDay = Object.values(
+        data?.sessions.flatMap((session: ExerciseSession) => {
+            if (!session.createdAt) return;
+            const day = new Date(session.createdAt).toLocaleString("ko-KR", {
+                weekday: "long",
+            });
+            return {
+                day,
+                totalWeight: session.exercises
+                    .map((exercise: ExerciseOptionSession) => {
+                        return exercise.session
+                            .map((s: ExercisesessionData) => s.weight * s.reps)
+                            .reduce((acc, cur) => acc + cur, 0);
+                    })
+                    .reduce((acc, cur) => acc + cur, 0),
+            };
+        }).reduce((acc: Record<string, { day: string; totalWeight: number }>, cur: any) => {
+            if (acc[cur.day]) {
+                acc[cur.day].totalWeight += cur.totalWeight;
+            } else {
+                acc[cur.day] = cur;
+            }
+            return acc;
+        }, {})
+    );
 
     const CustomEvenIndexLabel = (props: any) => {
-
+        // LabelList는 기본적으로 모든 인덱스에 대해 레이블을 렌더링합니다.
+        // 여기서는 짝수 인덱스에 대해서만 렌더링하도록 필터링합니다.
+        // props는 LabelList에서 전달된 props입니다.
         const { x, y, value, index } = props;
         if (index % 2 !== 0) return null;
-
         return (
             <text
                 x={x}
