@@ -41,7 +41,7 @@ export interface exercise {
 
 export interface ExercisePlan {
     _id?: string,
-    userId: string,
+
     title: string,
     exercises: ExerciseOption[]
 
@@ -50,10 +50,10 @@ export interface ExercisePlan {
 export interface ExerciseOption {
     _id?: string,
     exerciseId: string,
-    title: string,
+    title?: string,
     sets: number,
     reps: number,
-    rest: number
+    weight: number
 }
 
 export interface ExerciseSession {

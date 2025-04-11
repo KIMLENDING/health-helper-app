@@ -88,7 +88,6 @@ export const useCreatePlan = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (exercisePlan: ExercisePlan) => {
-
             const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', },
@@ -100,23 +99,15 @@ export const useCreatePlan = () => {
             }
             return response.json();
         },
-        onSuccess: () => {
-            console.log('onSuccess');
+        onSuccess: async (data) => {
+            toast({ variant: 'default2', title: `${data.message}` });
+            await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
         },
         onError: (error) => {
-            console.log('onError', error);
+            const message = error instanceof Error ? error.message : String(error);
+            console.error("onError", error);
+            toast({ variant: "destructive", title: message });
         },
-        onSettled: async (data, error) => { // 성공, 실패 상관없이 마지막에 호출 variables
-            console.log('onSettled');
-            if (error) {
-                toast({ variant: 'destructive', title: `${error}` });
-                console.log('error', error);
-            } else {
-                // console.log('data', data);
-                toast({ variant: 'default2', title: `${data.message}` });
-                await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
-            }
-        }
     })
 }
 
@@ -209,22 +200,15 @@ export const useSelectedExercise = () => {
             // 클라이언트 측에서만 데이터를 저장
             return selectedExercises;
         },
-        onSuccess: (data) => {
-            console.log('onSuccess');
+        onSuccess: async (data) => {
             queryClient.setQueryData(["selectedExercise"], data); // 데이터 저장
+
         },
         onError: (error) => {
             console.log('onError', error);
         },
-        onSettled: async (data, error) => { // 성공, 실패 상관없이 마지막에 호출
-            console.log('onSettled');
-            if (error) {
-                console.log('error', error);
-            } else {
-                // console.log('data', data);
-                toast({ variant: "default2", title: "운동이 임시 테이블에 추가 되었습니다." })
-                await queryClient.invalidateQueries({ queryKey: ["selectedExercise"] }) // 데이터 갱신 후 자동으로 UI 업데이트
-            }
+        onSettled: async (data, error) => {
+            await queryClient.invalidateQueries({ queryKey: ["selectedExercise"] })
         }
     })
 }

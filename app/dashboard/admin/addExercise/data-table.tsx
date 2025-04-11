@@ -33,7 +33,7 @@ import { Button } from "@/components/ui/button"
 import { Settings2Icon } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useSelectedExercise } from "@/server/mutations"
-import { DialogClose } from "@/components/ui/dialog"
+
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[] // 컬럼 정의
     data: TData[] // 데이터
@@ -46,7 +46,7 @@ export function DataTable<TData, TValue>({
     const { data: session } = useSession();
     const [sorting, setSorting] = useState<SortingState>([{ id: "title", desc: false }]) // 정렬 상태
     const [rowSelection, setRowSelection] = useState({}) // 행 선택 상태
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]) // 컬럼 필터 상태 이건     
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]) // 컬럼 필터 상태 이건
     const [selectedTags, setSelectedTags] = useState<string[]>([]) // 체크된 태그만 모아둔 상태 이걸 columFilters로 넘겨줘야함 넘겨주는 방법은 setFilterValue(값)을 호출하면 됨
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>({ tags: true, url: true, title: true, actions: false }) // 컬럼 가시성 상태
@@ -57,13 +57,14 @@ export function DataTable<TData, TValue>({
                 : [...prevSelectedTags, tag] // 새 태그 추가
         )
     }
-    const useSelectedExerciseMutation = useSelectedExercise();
+    const useSelectedExerciseMutation = useSelectedExercise(); // 
 
     useEffect(() => {
         if (session?.user?.role === "admin") {
             setColumnVisibility({ tags: true, url: true, title: true, actions: true }) // 관리자만 보이는 컬럼 추가
         }
     }, [session])
+
     const table = useReactTable({
         data,
         columns,
@@ -81,22 +82,17 @@ export function DataTable<TData, TValue>({
             columnVisibility, // 컬럼 가시성 적용
             rowSelection, // 행 선택 적용
         },
+        initialState: { pagination: { pageSize: 5 } }, // 초기 페이지 크기를 5로 설정
     })
-    const handleSelectedRows = () => { // 선택된 행 처리
-        try {
-            const selectedRows = []
-            for (const key in rowSelection) { // 선택된 행의 key는 data의 인덱스임으로 
-                // key가 data의 인덱스임  
-                selectedRows.push(data[+key]) // 참고로 key는 string임으로 +를 붙여서 number로 변환
-            }
-            useSelectedExerciseMutation.mutate(selectedRows) // 선택된 행을 서버로 전송
-        } catch (error) {
-            console.error("Error handling selected rows:", error)
-        }
-    }
-    useEffect(() => {
-        { table.setPageSize(5) }
-    }, [table])
+
+
+    useEffect(() => { // 선택된 행이 변경될 때마다 실행
+        const selectedRows = Object.keys(rowSelection).map((key) => data[+key]) // 선택된 행의 key는 data의 인덱스임으로 
+        useSelectedExerciseMutation.mutate(selectedRows) // 선택된 행의 데이터
+    }, [rowSelection])
+
+
+
     /**
      *     console.log(data)
      * console.log(rowSelection)
@@ -124,7 +120,7 @@ export function DataTable<TData, TValue>({
       */
     }, [selectedTags, table])
     return (
-        <div className="min-h-min" >
+        <div className="min-h-min w-full" >
             <div className="flex-1 text-sm text-muted-foreground">
                 {table.getFilteredRowModel().rows.length} 개의 항목 중{" "}
                 {table.getFilteredSelectedRowModel().rows.length} 선택됨
@@ -157,37 +153,6 @@ export function DataTable<TData, TValue>({
                 </DropdownMenu>
             </div>
             <div className="rounded-md border">
-                <div>
-                    {/* <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="outline" className="ml-auto">
-                                <Settings2Icon />
-                                View
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            {table
-                                .getAllColumns()
-                                .filter(
-                                    (column) => column.getCanHide()
-                                )
-                                .map((column) => {
-                                    return (
-                                        <DropdownMenuCheckboxItem
-                                            key={column.id}
-                                            className="capitalize"
-                                            checked={column.getIsVisible()}
-                                            onCheckedChange={(value) =>
-                                                column.toggleVisibility(!!value)
-                                            }
-                                        >
-                                            {column.id}
-                                        </DropdownMenuCheckboxItem>
-                                    )
-                                })}
-                        </DropdownMenuContent>
-                    </DropdownMenu> */}
-                </div>
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -231,8 +196,9 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
+
+            {/* 페이지네이션 */}
             <div className="flex items-center justify-between space-x-2 py-4">
-                {session?.user?.role !== "admin" ? <DialogClose asChild><Button variant="outline" size="sm" onClick={handleSelectedRows}>선택한 운동 루틴에 추가하기</Button></DialogClose> : <div></div>}
                 <div>
                     <Button
                         variant="outline"
@@ -243,7 +209,6 @@ export function DataTable<TData, TValue>({
                     >
                         이전
                     </Button >
-
                     {table.getState().pagination.pageIndex + 1}{' '}/{' '}{table.getPageCount()}
                     <Button
                         variant="outline"
@@ -256,6 +221,8 @@ export function DataTable<TData, TValue>({
                     </Button>
                 </div>
             </div>
+
+
         </div>
     )
 }

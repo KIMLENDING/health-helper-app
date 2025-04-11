@@ -2,6 +2,7 @@
 import ExercisePlan from "@/models/ExercisePlan"
 import { NextRequest, NextResponse } from "next/server"
 import { requireUser } from "@/lib/check-auth"
+import Exercise from "@/models/Exercise";
 /**
  * 
  * 사용자의 운동 계획을 가져오는 API
@@ -27,33 +28,43 @@ export const GET = async (req: NextRequest) => {
  * @returns 
  */
 export const POST = async (req: NextRequest) => {
-    // 운동 추가
-    // 요청에서 사용자 ID 가져오기
-    // console.log('post요청')
-    const { title, exercises, userId } = await req.json();
+    const { title, exercises } = await req.json();
 
     try {
         const { user, error, status } = await requireUser(req);
         if (!user) return NextResponse.json({ message: error }, { status });
-        if (user._id.toString() !== userId) {
-            return NextResponse.json({ message: 'Unauthorized access' }, { status: 403 });
-        }
-        const existTitle = await ExercisePlan.findOne({ title: title, userId: userId });
 
+        const existTitle = await ExercisePlan.findOne({ title: title, userId: user._id });
         if (existTitle) {
             return NextResponse.json({ message: '플랜 이름 중복' }, { status: 400 });
         }
+
+        // 각 exerciseId에 대해 title을 가져오기
+        const populatedExercises = await Promise.all(
+            exercises.map(async (ex: any) => {
+                const foundExercise = await Exercise.findById(ex.exerciseId);
+                if (!foundExercise) throw new Error(`Exercise not found: ${ex.exerciseId}`);
+                return {
+                    ...ex,
+                    title: foundExercise.title, // 여기에 운동 이름 삽입
+                };
+            })
+        );
+
         const newExercisePlan = new ExercisePlan({
-            userId: userId,
+            userId: user._id,
             title,
-            exercises,
+            exercises: populatedExercises,
         });
+
         await newExercisePlan.save();
+
         return NextResponse.json({ message: '플랜 추가 성공' }, { status: 201 });
     } catch (err: any) {
+        console.error("❌ [POST /api/user/exercisePlan] error:", err);
         return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
     }
-}
+};
 /**
  *  운동 계획 수정 API
  *  type이 수정 이면 exercise에서 rest, sets, reps 수정

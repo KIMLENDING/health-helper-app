@@ -108,6 +108,7 @@ export const authOptions: any = {
     async session({ session, token }: { session: any; token: any, }) { //사용자가 로그인 후 세션을  처음 요청 할 떄 , 페이지를 새로고침 할 때, 세션을 확인 할 때, getSession을 호출 할 때
       session.user = {
         ...session.user,
+        role: token.role, // ✅ 여기 꼭 넣기
         provider: token.provider, // ✅ 여기 꼭 넣기
       };
       return session;

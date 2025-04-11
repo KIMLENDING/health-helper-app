@@ -8,7 +8,6 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { BicepsFlexed, DumbbellIcon, FlagIcon, PencilIcon, RadicalIcon, SparklesIcon, Trash2Icon, VolleyballIcon } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useDeletePlan, useEditPlanTitle } from '@/server/mutations';
-import LoadingSpinner from '../LayoutCompents/LoadingSpinner';
 import LoadingOverlay from '../LayoutCompents/LoadingOverlay';
 import { ExercisePlan } from '@/utils/util';
 import { Input } from '../ui/input';
