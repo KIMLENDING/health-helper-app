@@ -15,7 +15,6 @@ import { useCreatePlan } from '@/server/mutations';
 import { Exercise, ExercisePlan, ExerciseOption } from '@/utils/util';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
-import LoadingSpinner from '../LayoutCompents/LoadingSpinner';
 import LoadingOverlay from '../LayoutCompents/LoadingOverlay';
 
 
@@ -26,7 +25,7 @@ const formSchema2 = z.object({
 })
 
 const CreatPlanUser = () => {
-    const { data } = useSelectedExercises(); // 필요한 운동 종목 데이터를 가져옵니다.
+    const { data } = useSelectedExercises(); // 필요한 운동 종목 데이터를 가져옴
     const [exerciseOption, setExerciseOption] = useState<ExerciseOption[]>([]) // 이건 세트, 반복횟수, 휴식시간을 저장하는 변수
     const formRef = useRef<HTMLFormElement>(null);
     const form = useForm<z.infer<typeof formSchema2>>({
@@ -38,47 +37,24 @@ const CreatPlanUser = () => {
     const { mutateAsync, isPending } = useCreatePlan();
     const router = useRouter(); // 라우터
 
+
     useEffect(() => {
-        // 데이터가 있으면 exerciseOption에 추가합니다.
-        if (data) {
-            setExerciseOption(prevState => { // 중복된 데이터를 제거합니다.
-                const newState = new Map();
-                const defaultData = {
-                    sets: 4,
-                    reps: 6,
-                    weight: 30,
-                };
-                // 기존 상태의 아이템들을 Map에 넣어서 중복 제거
-                prevState.forEach(exercise => {
-                    newState.set(exercise.exerciseId, {
-                        exerciseId: exercise.exerciseId,
-                        sets: exercise.sets || defaultData.sets,
-                        reps: exercise.reps || defaultData.reps,
-                        weight: exercise.weight || defaultData.weight,
-                    });
-                });
-                // 새로 들어온 데이터를 Map에 추가 (중복되면 기존 값 유지)
-                data.forEach(exercise => {
-                    if (!newState.has(exercise._id)) {
-                        newState.set(exercise._id, {
-                            exerciseId: exercise._id,
-                            ...defaultData,
-                        });
-                    }
-                });
+        // 초기 값 설정 - data가 추가 되면 exerciseOption 초기값 필드를 추가
+        if (!data) return;
 
-                // data에 없는 exerciseOption은 삭제
-                prevState.forEach(exercise => {
-                    if (!data.some((item) => item._id === exercise.exerciseId)) {
-                        newState.delete(exercise.exerciseId);
-                    }
-                });
+        const defaultData = { sets: 4, reps: 6, weight: 30 };
+        const newState: ExerciseOption[] = data.map(ex => ({
+            exerciseId: ex._id,
+            title: ex.title,
+            sets: exerciseOption.find(v => v.exerciseId === ex._id)?.sets || defaultData.sets,
+            reps: exerciseOption.find(v => v.exerciseId === ex._id)?.reps || defaultData.reps,
+            weight: exerciseOption.find(v => v.exerciseId === ex._id)?.weight || defaultData.weight,
+        }));
 
-                // Map의 값들만 추출하여 배열로 반환
-                return Array.from(newState.values());
-            });
-        }
-    }, [data])
+        setExerciseOption(newState);
+    }, [data]);
+
+
 
     async function onSubmit2(values: z.infer<typeof formSchema2>) {
         // 루틴 제출 로직
@@ -120,21 +96,19 @@ const CreatPlanUser = () => {
                             />
                         </form>
                     </Form>
-
                     <GetExercise />
-
                     <Card className='px-5 dark:bg-zinc-950'>
                         <div className='flex flex-col max-h-[35vh] scrollbar-none overflow-y-scroll pb-4'>
                             {
-                                data.map((item: Exercise) => (
-                                    <Card key={item._id} className='mt-5'>
+                                exerciseOption?.map((item) => (
+                                    <Card key={item.exerciseId} className='mt-5'>
                                         <CardHeader >
                                             <CardTitle className='flex flex-row justify-between'>
                                                 <div className='flex items-center'>
                                                     {item.title}
                                                 </div>
                                             </CardTitle>
-                                            <PlanDialogForm item={item} key={item._id} SetState={setExerciseOption} state={exerciseOption.find((v) => v.exerciseId === item._id)} />
+                                            <PlanDialogForm item={item} key={item.exerciseId} SetState={setExerciseOption} />
                                         </CardHeader>
                                     </Card>
                                 ))

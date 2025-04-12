@@ -111,17 +111,13 @@ export const PATCH = async (req: NextRequest) => {
             // Exercise 업데이트
             const exerciseIndex = exercisePlan.exercises.findIndex(
                 (ex: any) => ex.exerciseId.toString() === exercises[0].exerciseId);
-
             if (exerciseIndex === -1) {
                 return NextResponse.json({ message: 'Exercise not found' }, { status: 404 });
             }
-
             // 데이터 수정
             exercisePlan.exercises[exerciseIndex] = { ...exercisePlan.exercises[exerciseIndex], ...exercises[0] };
-
             // 변경 내용 저장
             await exercisePlan.save();
-
             return NextResponse.json({ message: '운동 수정 성공', updatedExercise: exercisePlan.exercises[exerciseIndex] }, { status: 200 });
         }
 

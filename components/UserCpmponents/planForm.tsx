@@ -7,20 +7,20 @@ import { Button } from "../ui/button";
 import { Card, CardContent, } from "../ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
-import { Exercise, ExerciseOption } from "@/utils/util";
+import { ExerciseOption } from "@/utils/util";
 
 const formSchema = z.object({
-    sets: z.preprocess((value) => Number(value), z.number().min(0).nonnegative("숫자를 입력해주세요")),
-    reps: z.preprocess((value) => Number(value), z.number().min(0).nonnegative("숫자를 입력해주세요")),
-    weight: z.preprocess((value) => Number(value), z.number().min(0).nonnegative("숫자를 입력해주세요")),
+    sets: z.preprocess((value) => Number(value), z.number().min(1).nonnegative("숫자를 입력해주세요")),
+    reps: z.preprocess((value) => Number(value), z.number().min(1).nonnegative("숫자를 입력해주세요")),
+    weight: z.preprocess((value) => Number(value), z.number().min(1).nonnegative("숫자를 입력해주세요")),
 })
-const PlanDialogForm = ({ item, SetState, state }: { item: Exercise, SetState: React.Dispatch<React.SetStateAction<ExerciseOption[]>>, state?: ExerciseOption }) => {
+const PlanDialogForm = ({ item, SetState }: { item: ExerciseOption, SetState: React.Dispatch<React.SetStateAction<ExerciseOption[]>> }) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            sets: 4,
-            reps: 6,
-            weight: 30,
+            sets: item?.sets,
+            reps: item?.reps,
+            weight: item?.weight,
         },
     });
 
@@ -31,31 +31,29 @@ const PlanDialogForm = ({ item, SetState, state }: { item: Exercise, SetState: R
             sets: data.sets,
             reps: data.reps,
             weight: data.weight,
-        }
+        } // 사용가가 원하는 값으로 업데이트를 위한 값 
+
         SetState(prevState => { // 옵션 데이터를 업데이트합니다.
-            const existingExercise = prevState.find(exercise => exercise.exerciseId === item._id) // 기존에 있는 운동인지 확인합니다.
-            if (existingExercise) {
-                return prevState.map(exercise => {
-                    if (exercise.exerciseId === item._id) {
-                        return { exerciseId: exercise.exerciseId, ...newData } // 기존 데이터에 새로운 데이터를 덮어씌웁니다.
-                    } else {
-                        return exercise // 기존 데이터를 그대로 반환합니다.
-                    }
-                })
-            } else {
-                return [...prevState, { exerciseId: item._id, ...newData }] // 새로운 데이터를 추가합니다.
-            }
+            // 초기값 수정 
+            return prevState.map(exercise => {
+                if (exercise.exerciseId === item.exerciseId) {
+                    // exerciseId가 일치하는 경우에만 업데이트합니다. (선택된 컴포턴트)
+                    return { exerciseId: exercise.exerciseId, title: exercise.title, ...newData } // 기존 데이터에 새로운 데이터를 덮어씌웁니다.
+                } else {
+                    return exercise // 기존 데이터를 그대로 반환합니다.
+                }
+            })
         });
     };
 
     return (
-        <Dialog key={item._id} >
+        <Dialog key={item.exerciseId} >
             <DialogTrigger asChild>
                 <Button >
-                    {state ? <div>
-                        {state?.sets}세트,{' '}
-                        {state?.reps}회,{' '}
-                        {state?.weight}kg{' '}
+                    {item ? <div>
+                        {item?.sets}세트,{' '}
+                        {item?.reps}회,{' '}
+                        {item?.weight}kg{' '}
                     </div> : '상세 설정'
                     }
                 </Button>
@@ -110,7 +108,7 @@ const PlanDialogForm = ({ item, SetState, state }: { item: Exercise, SetState: R
                                     <DialogFooter className="sm:justify-start">
                                         <DialogClose asChild>
                                             <Button type="submit" variant="secondary">
-                                                Close
+                                                저장
                                             </Button>
                                         </DialogClose>
                                     </DialogFooter>

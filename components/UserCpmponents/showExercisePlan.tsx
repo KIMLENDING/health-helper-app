@@ -1,6 +1,6 @@
 'use client'
 import { useExercisePlan, } from '@/server/queries';
-import { useSession } from 'next-auth/react';
+
 import React, { useState } from 'react'
 import { Card, CardHeader, CardTitle } from '../ui/card';
 import ExercisesWithPagination from './exercisesWithPagination';
@@ -147,13 +147,7 @@ const ShowExercisePlan = () => {
                                                             </CardHeader>
                                                         </Card>
                                                     </DialogHeader>
-                                                    {/* <DialogFooter className="sm:justify-start">
-                                            <DialogClose asChild>
-                                                <Button type="button" variant="secondary">
-                                                    Close
-                                                </Button>
-                                            </DialogClose>
-                                        </DialogFooter> */}
+
                                                 </DialogContent>
                                             </Dialog>
 

@@ -248,6 +248,7 @@ export const useUpdatePlan = () => {
                 // console.log('data', data);
                 toast({ variant: 'destructive', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
+                await queryClient.resetQueries({ queryKey: ["selectedExercise"] }); // 캐시된 데이터를 초기화합니다.
             }
         }
     })

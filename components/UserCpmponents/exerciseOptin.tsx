@@ -14,9 +14,9 @@ import { useUpdatePlan } from "@/server/mutations"
 
 
 const formSchema = z.object({
-    sets: z.preprocess((value) => Number(value), z.number().min(0).nonnegative("숫자를 입력해주세요")),
-    reps: z.preprocess((value) => Number(value), z.number().min(0).nonnegative("숫자를 입력해주세요")),
-    rest: z.preprocess((value) => Number(value), z.number().min(0).nonnegative("숫자를 입력해주세요")),
+    sets: z.preprocess((value) => Number(value), z.number().min(1).nonnegative("숫자를 입력해주세요")),
+    reps: z.preprocess((value) => Number(value), z.number().min(1).nonnegative("숫자를 입력해주세요")),
+    weight: z.preprocess((value) => Number(value), z.number().min(1).nonnegative("숫자를 입력해주세요")),
 })
 
 interface ExerciseOptinProps {
@@ -31,7 +31,7 @@ const ExerciseOptin = ({ plan, exercise }: ExerciseOptinProps) => {
         defaultValues: {
             sets: exercise.sets,
             reps: exercise.reps,
-            rest: exercise.rest,
+            weight: exercise.weight,
         },
     })
 
@@ -39,7 +39,7 @@ const ExerciseOptin = ({ plan, exercise }: ExerciseOptinProps) => {
     function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             const newData = {
-                userId: plan.userId,
+
                 title: plan.title,
                 exercisePlanId: plan._id,
                 exercises: [{
@@ -48,7 +48,7 @@ const ExerciseOptin = ({ plan, exercise }: ExerciseOptinProps) => {
                     title: exercise.title,
                     sets: values.sets,
                     reps: values.reps,
-                    rest: values.rest
+                    weight: values.weight
                 }],
                 type: "edit"
             }
@@ -109,7 +109,7 @@ const ExerciseOptin = ({ plan, exercise }: ExerciseOptinProps) => {
                                             />
                                             <FormField
                                                 control={form.control}
-                                                name="rest"
+                                                name="weight"
                                                 render={({ field }) => (
                                                     <FormItem>
                                                         <FormLabel>rest</FormLabel>
