@@ -24,7 +24,6 @@ const exerciseSessionSchema = new Schema(
         title: { type: String, required: true }, // 운동명
         repTime: { type: Number, required: false }, // 운동 시간
         sets: { type: Number, required: true }, // 총 세트 수
-        rest: { type: Number, required: true }, // 휴식시간
         state: { type: String, default: "pending" }, // pending, inProgress, done
         session: [sessionSchema],
       },

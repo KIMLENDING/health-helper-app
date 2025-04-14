@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CardContent } from "../ui/card";
-import { ClockIcon, DumbbellIcon, HamIcon, MoreHorizontal, Trash2Icon } from "lucide-react";
+import { DumbbellIcon, Trash2Icon } from "lucide-react";
 import { ExerciseOption, ExercisePlan } from "@/utils/util";
 import { Button } from "../ui/button";
 import ExerciseOptin from "./exerciseOptin";
@@ -57,7 +57,7 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
     }
     return (
         <CardContent className="space-y-4">
-            <LoadingOverlay isLoading={isLoading} />
+            <LoadingOverlay isLoading={isLoading} text={'로딩중...'} />
             {currentExercises.map((exercise) => (
                 <div key={exercise.exerciseId} className="border rounded p-4 group hover:bg-zinc-200 dark:hover:bg-zinc-900">
                     <div className="flex items-center gap-2 mb-3 justify-between h-6">
@@ -105,7 +105,7 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
                             <p className="font-medium">{exercise.reps}</p>
                         </div>
                         <div>
-                            <span className="text-sm text-gray-500">무게</span>
+                            <span className="text-sm text-gray-500">무게(kg)</span>
                             <p className="font-medium">{exercise.weight}</p>
                         </div>
                     </div>

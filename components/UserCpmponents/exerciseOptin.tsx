@@ -24,6 +24,7 @@ interface ExerciseOptinProps {
     plan: ExercisePlan;
     exercise: ExerciseOption;
 }
+/** 운동 수정(세트,횟수,무게) 모달 */
 const ExerciseOptin = ({ plan, exercise }: ExerciseOptinProps) => {
     const useUpdatePlanMutation = useUpdatePlan();
     const form = useForm<z.infer<typeof formSchema>>({
@@ -112,7 +113,7 @@ const ExerciseOptin = ({ plan, exercise }: ExerciseOptinProps) => {
                                                 name="weight"
                                                 render={({ field }) => (
                                                     <FormItem>
-                                                        <FormLabel>rest</FormLabel>
+                                                        <FormLabel>weight</FormLabel>
                                                         <FormControl>
                                                             <Input type="number" step={5} {...field} />
                                                         </FormControl>

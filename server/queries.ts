@@ -1,7 +1,7 @@
 
 import { Exercise, ExercisePlan, ExerciseSession } from "@/utils/util";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useEexercises = () => {
     return useQuery({
@@ -61,25 +61,24 @@ export const useExercisePlan = () => {
  * @param planId 
  * @returns 
  */
-export const useSpecificExercisePlan = (planId?: string) => {
+export const useExercisePlanById = (id: string) => {
+    const queryClient = useQueryClient();
+
     return useQuery<ExercisePlan>({
-        queryKey: ["exercisePlan", planId], // 개별 데이터를 식별할 수 있는 queryKey
-        queryFn: planId ? async () => {
-            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan/${planId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        } : undefined,
-        enabled: !!planId, // planId가 있을 때만 데이터를 가져옵니다.
+        queryKey: ["exercisePlan", id],
+        queryFn: async () => {
+            const cached = queryClient.getQueryData<ExercisePlan[]>(["exercisePlans"]);
+            const found = cached?.find((plan) => plan._id === id);
+
+            if (found && found.exercises) return found;
+
+            const res = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan/${id}`);
+            if (!res.ok) throw new Error("Failed to fetch plan");
+            return res.json();
+        },
+        enabled: !!id,
     });
 };
-
 
 /**
  * sessionId로 운동 세션 조회

@@ -17,24 +17,23 @@ const AddExercisesPlan = ({ plan_id }: { plan_id: string }) => {
 
     const [isOpen, setIsOpen] = useState(false); // 다이얼로그 창 열기
 
-    const [planData, setPlanData] = useState<Exercise[]>([]) // 가져온 운동 종목 데이터를 저장하는 변수
     const [exerciseOption, setExerciseOption] = useState<ExerciseOption[]>([]) // 이건 세트, 반복횟수, 무게를를 저장하는 변수
-    const { data, error, isLoading } = useSelectedExercises(); // 필요한 운동 종목 데이터를 가져옵니다.
+    // const { data, error, isLoading } = useSelectedExercises(); // 필요한 운동 종목 데이터를 가져옵니다.
     const useUpdatePlanMutation = useUpdatePlan();
 
-    useEffect(() => {
-        // 초기 값 설정 - data가 추가 되면 exerciseOption 초기값 필드를 추가
-        if (!data) return;
-        const defaultData = { sets: 4, reps: 6, weight: 30 };
-        const newState: ExerciseOption[] = data.map(ex => ({
-            exerciseId: ex._id,
-            title: ex.title,
-            sets: exerciseOption.find(v => v.exerciseId === ex._id)?.sets || defaultData.sets,
-            reps: exerciseOption.find(v => v.exerciseId === ex._id)?.reps || defaultData.reps,
-            weight: exerciseOption.find(v => v.exerciseId === ex._id)?.weight || defaultData.weight,
-        }));
-        setExerciseOption(newState);
-    }, [data]);
+    // useEffect(() => {
+    //     // 초기 값 설정 - data가 추가 되면 exerciseOption 초기값 필드를 추가
+    //     if (!data) return;
+    //     const defaultData = { sets: 4, reps: 6, weight: 30 };
+    //     const newState: ExerciseOption[] = data.map(ex => ({
+    //         exerciseId: ex._id,
+    //         title: ex.title,
+    //         sets: exerciseOption.find(v => v.exerciseId === ex._id)?.sets || defaultData.sets,
+    //         reps: exerciseOption.find(v => v.exerciseId === ex._id)?.reps || defaultData.reps,
+    //         weight: exerciseOption.find(v => v.exerciseId === ex._id)?.weight || defaultData.weight,
+    //     }));
+    //     setExerciseOption(newState);
+    // }, [data]);
 
 
     const handleUpdate = async () => {
@@ -48,24 +47,18 @@ const AddExercisesPlan = ({ plan_id }: { plan_id: string }) => {
             const res = await useUpdatePlanMutation.mutateAsync(newUpdataData);
             if (res) {
                 setExerciseOption([])
-                setPlanData([])
+
                 setIsOpen(false)
 
             }
         }
     }
 
-    const handleDelete = (id: string) => {
-        // 삭제 로직
-        // 운동 종목 삭제
-        setPlanData(prevState => prevState.filter(exercise => exercise._id !== id)) // 삭제할 데이터를 제외한 나머지 데이터를 반환합니다.
-        // 상세 데이터 삭제 - 세트, 반복횟수, 휴식시간 , exerciseId
-        setExerciseOption(prevState => prevState.filter(exercise => exercise.exerciseId !== id)) // 삭제할 데이터를 제외한 나머지 데이터를 반환합니다.
-    }
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
+
+    // if (isLoading) {
+    //     return <div>Loading...</div>;
+    // }
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen} >
             <DialogTrigger asChild onClick={() => setIsOpen(true)}>
@@ -111,9 +104,7 @@ const AddExercisesPlan = ({ plan_id }: { plan_id: string }) => {
                                                                 <div className='flex items-center'>
                                                                     {item.title}
                                                                 </div>
-                                                                <Button variant="outline" size="icon" onClick={() => handleDelete(item._id!)}>
-                                                                    <XIcon />
-                                                                </Button>
+
                                                             </CardTitle>
 
                                                             <PlanDialogForm item={item} key={index} SetState={setExerciseOption} />

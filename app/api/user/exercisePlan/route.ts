@@ -5,22 +5,24 @@ import { requireUser } from "@/lib/check-auth"
 import Exercise from "@/models/Exercise";
 /**
  * 
- * 사용자의 운동 계획을 가져오는 API
+ * 사용자의 운동 계획들들을 가져오는 API
  * @param request 
  * @param param1 
  * @returns 
  */
 export const GET = async (req: NextRequest) => {
-
     try {
         const { user, error, status } = await requireUser(req);
         if (!user) return NextResponse.json({ message: error }, { status });
+
+        // 필요한 필드만 선택하여 가져오기 .select('_id userId title')
         const exercisePlan = await ExercisePlan.find({ userId: user._id });
+
         return NextResponse.json(exercisePlan, { status: 200 });
     } catch (err: any) {
         return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
     }
-}
+};
 
 /**
  *  운동 계획 추가

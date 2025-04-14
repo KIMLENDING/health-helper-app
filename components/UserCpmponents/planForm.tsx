@@ -73,7 +73,7 @@ const PlanDialogForm = ({ item, SetState }: { item: ExerciseOption, SetState: Re
                                             <FormItem >
                                                 <FormLabel >총 세트</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="0" min={0} {...field} type="number" />
+                                                    <Input placeholder="1" min={1} {...field} type="number" />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -86,7 +86,7 @@ const PlanDialogForm = ({ item, SetState }: { item: ExerciseOption, SetState: Re
                                             <FormItem>
                                                 <FormLabel>세트 당 반복횟수</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="0" min={0} {...field} type="number" />
+                                                    <Input placeholder="1" min={1} {...field} type="number" />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -99,7 +99,7 @@ const PlanDialogForm = ({ item, SetState }: { item: ExerciseOption, SetState: Re
                                             <FormItem>
                                                 <FormLabel>무게(kg)</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="0" min={0} {...field} type="number" />
+                                                    <Input placeholder="1" min={1} {...field} type="number" />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>

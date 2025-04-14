@@ -46,7 +46,7 @@ const CreatPlanUser = () => {
         const newState: ExerciseOption[] = data.map(ex => ({
             exerciseId: ex._id,
             title: ex.title,
-            sets: exerciseOption.find(v => v.exerciseId === ex._id)?.sets || defaultData.sets,
+            sets: exerciseOption.find(v => v.exerciseId === ex._id)?.sets || defaultData.sets, // 기존값 || 기본값
             reps: exerciseOption.find(v => v.exerciseId === ex._id)?.reps || defaultData.reps,
             weight: exerciseOption.find(v => v.exerciseId === ex._id)?.weight || defaultData.weight,
         }));

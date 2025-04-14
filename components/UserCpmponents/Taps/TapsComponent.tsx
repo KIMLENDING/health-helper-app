@@ -92,7 +92,7 @@ const TapsComponent = ({ sessionId }: { sessionId: string }) => {
                         <div className="flex flex-col">
                             <span className="max-smc:truncate">{exercise.title}</span>
                             <CardDescription className="max-smc:truncate">
-                                {exercise.sets}세트, 휴식시간: {exercise.rest}초
+                                {exercise.sets}세트
                             </CardDescription>
                         </div>
                         <Button

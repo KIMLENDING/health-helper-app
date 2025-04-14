@@ -11,37 +11,28 @@ import {
     Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerFooter, DrawerTitle, DrawerDescription, DrawerClose,
 } from "@/components/ui/drawer"
 
-import { ExercisePlan } from "@/utils/util"
 import { useCreateExerciseSession } from "@/server/mutations"
 import { useInProgress } from "@/server/queries"
 import LoadingOverlay from "./LoadingOverlay"
 
 type Props = {
     children: React.ReactNode;
-    plan: ExercisePlan;
+    planId: string;
 }
 
 /** 진행할 플랜을 시작하거나 진행중인 운동 페이지로 이동시키는 버튼*/
-export function DrawerDialogDemo({ children, plan }: Props) {
+export function DrawerDialogDemo({ children, planId }: Props) {
     const router = useRouter();
     const [open, setOpen] = React.useState(false);
-    const { data: inProgress } = useInProgress();
-    const { latestSessionId } = inProgress || {};
+    const { data: inProgress } = useInProgress(); // ✅ 진행중인 운동 세션 조회
+    const { latestSessionId } = inProgress || {}; // ✅ 진행중인 운동 세션 ID
     const isDesktop = useMediaQuery("(min-width: 768px)");
     const { mutateAsync, isPending } = useCreateExerciseSession();
 
     const handleStartSession = async () => {
-        const { exercises, _id, userId } = plan as any;
-        const newSession = {
-            userId,
-            exercisePlanId: _id,
-            state: 'inProgress',
-            exercises: exercises.map((ex: any) => {
-                const { _id, ...rest } = ex;
-                return { ...rest, state: 'pending' };
-            }),
-        };
-        const res = await mutateAsync(newSession);
+        if (!planId) return;
+        const data = { planId }
+        const res = await mutateAsync(data);
         if (res) router.push(`/dashboard/exerciseSession/${res.newExerciseSession._id}`);
     };
 

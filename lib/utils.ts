@@ -41,3 +41,13 @@ export const chartConfig = {
 
 
 } satisfies ChartConfig;
+
+export function formatDate(dateString: string) {
+  // dateString이 ISO 8601 형식이어야 합니다. 예: "2023-10-01T00:00:00Z"
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(date);
+}

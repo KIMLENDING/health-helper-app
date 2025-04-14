@@ -41,10 +41,9 @@ export interface exercise {
 
 export interface ExercisePlan {
     _id?: string,
-
     title: string,
     exercises: ExerciseOption[]
-
+    createdAt?: string,
 }
 
 export interface ExerciseOption {
@@ -70,7 +69,6 @@ export interface ExerciseOptionSession {
     title: string,
     repTime?: number, // 마지막에 운동시간 저장
     sets: number,
-    rest: number,
     state: string, //'pending' | 'inProgress' | 'done'
     session: ExercisesessionData[]
 }

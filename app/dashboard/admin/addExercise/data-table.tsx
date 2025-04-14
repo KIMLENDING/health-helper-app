@@ -46,7 +46,7 @@ export function DataTable<TData, TValue>({
     const { data: session } = useSession();
     const [sorting, setSorting] = useState<SortingState>([{ id: "title", desc: false }]) // 정렬 상태
     const [rowSelection, setRowSelection] = useState({}) // 행 선택 상태
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]) // 컬럼 필터 상태 이건
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]) // 컬럼 필터 상태 
     const [selectedTags, setSelectedTags] = useState<string[]>([]) // 체크된 태그만 모아둔 상태 이걸 columFilters로 넘겨줘야함 넘겨주는 방법은 setFilterValue(값)을 호출하면 됨
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>({ tags: true, url: true, title: true, actions: false }) // 컬럼 가시성 상태
@@ -57,7 +57,8 @@ export function DataTable<TData, TValue>({
                 : [...prevSelectedTags, tag] // 새 태그 추가
         )
     }
-    const useSelectedExerciseMutation = useSelectedExercise(); // 
+
+    const useSelectedExerciseMutation = useSelectedExercise(); //  선택된 운동을 서버에 저장하는 뮤테이션 훅
 
     useEffect(() => {
         if (session?.user?.role === "admin") {
@@ -84,6 +85,12 @@ export function DataTable<TData, TValue>({
         },
         initialState: { pagination: { pageSize: 5 } }, // 초기 페이지 크기를 5로 설정
     })
+
+    // 초기 랜더링시 데이터를 받아와서 rowSelection에 넣어줌
+    useEffect(() => {
+
+    }, [])
+
 
 
     useEffect(() => { // 선택된 행이 변경될 때마다 실행
@@ -189,7 +196,7 @@ export function DataTable<TData, TValue>({
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    No results.
+                                    결과 값이 없습니다.
                                 </TableCell>
                             </TableRow>
                         )}
@@ -221,8 +228,6 @@ export function DataTable<TData, TValue>({
                     </Button>
                 </div>
             </div>
-
-
         </div>
     )
 }
