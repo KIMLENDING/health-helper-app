@@ -14,9 +14,9 @@ import { useUpdatePlan } from "@/server/mutations"
 
 
 const formSchema = z.object({
-    sets: z.preprocess((value) => Number(value), z.number().min(0).nonnegative("숫자를 입력해주세요")),
-    reps: z.preprocess((value) => Number(value), z.number().min(0).nonnegative("숫자를 입력해주세요")),
-    rest: z.preprocess((value) => Number(value), z.number().min(0).nonnegative("숫자를 입력해주세요")),
+    sets: z.preprocess((value) => Number(value), z.number().min(1).nonnegative("숫자를 입력해주세요")),
+    reps: z.preprocess((value) => Number(value), z.number().min(1).nonnegative("숫자를 입력해주세요")),
+    weight: z.preprocess((value) => Number(value), z.number().min(1).nonnegative("숫자를 입력해주세요")),
 })
 
 interface ExerciseOptinProps {
@@ -24,6 +24,7 @@ interface ExerciseOptinProps {
     plan: ExercisePlan;
     exercise: ExerciseOption;
 }
+/** 운동 수정(세트,횟수,무게) 모달 */
 const ExerciseOptin = ({ plan, exercise }: ExerciseOptinProps) => {
     const useUpdatePlanMutation = useUpdatePlan();
     const form = useForm<z.infer<typeof formSchema>>({
@@ -31,7 +32,7 @@ const ExerciseOptin = ({ plan, exercise }: ExerciseOptinProps) => {
         defaultValues: {
             sets: exercise.sets,
             reps: exercise.reps,
-            rest: exercise.rest,
+            weight: exercise.weight,
         },
     })
 
@@ -39,7 +40,7 @@ const ExerciseOptin = ({ plan, exercise }: ExerciseOptinProps) => {
     function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             const newData = {
-                userId: plan.userId,
+
                 title: plan.title,
                 exercisePlanId: plan._id,
                 exercises: [{
@@ -48,7 +49,7 @@ const ExerciseOptin = ({ plan, exercise }: ExerciseOptinProps) => {
                     title: exercise.title,
                     sets: values.sets,
                     reps: values.reps,
-                    rest: values.rest
+                    weight: values.weight
                 }],
                 type: "edit"
             }
@@ -109,10 +110,10 @@ const ExerciseOptin = ({ plan, exercise }: ExerciseOptinProps) => {
                                             />
                                             <FormField
                                                 control={form.control}
-                                                name="rest"
+                                                name="weight"
                                                 render={({ field }) => (
                                                     <FormItem>
-                                                        <FormLabel>rest</FormLabel>
+                                                        <FormLabel>weight</FormLabel>
                                                         <FormControl>
                                                             <Input type="number" step={5} {...field} />
                                                         </FormControl>

@@ -2,6 +2,7 @@
 import ExerciseSession from "@/models/ExerciseSession"
 import { NextRequest, NextResponse } from "next/server"
 import { requireUser } from "@/lib/check-auth"
+import ExercisePlan from "@/models/ExercisePlan";
 
 
 /**
@@ -37,30 +38,54 @@ export const GET = async (req: NextRequest) => {
  */
 export const POST = async (req: NextRequest) => {
     try {
-        const sessionData = await req.json();
-
+        // 클라이언트에서 전달된 planId를 가져옴
+        const { planId } = await req.json();
+        console.log("planId", planId); // planId 확인   
+        // 사용자 인증 확인
         const { user, error, status } = await requireUser(req);
         if (!user) return NextResponse.json({ message: error }, { status });
 
-        if (user._id.toString() !== sessionData.userId.toString()) {
-            return NextResponse.json({ message: 'Unauthorized access' }, { status: 403 });
-        }
+        // 진행 중인 운동 세션이 있는지 확인
         const latestSession = await ExerciseSession.findOne({
             userId: user._id,
             state: "inProgress",
         })
             .sort({ createdAt: -1 }) // 최신 순으로 정렬
-            .populate("exercises.exerciseId"); // 운동 정보 연결 populate를 첨 알 았음  findOne()으로 찾은 데이터에 연결된 데이터를 가져올 때 사용
+            .populate("exercises.exerciseId"); // 운동 정보 연결
 
         if (latestSession) {
             return NextResponse.json({ message: "이미 진행 중인 운동이 있습니다." }, { status: 201 });
         }
 
-        const newExerciseSession = new ExerciseSession(sessionData);
+        // planId로 운동 계획을 찾음
 
+        const plan = await ExercisePlan.findById(planId);
+        if (!plan) {
+            return NextResponse.json({ message: "운동 계획을 찾을 수 없습니다." }, { status: 404 });
+        }
+
+        // 운동 계획에 포함된 운동 데이터를 기반으로 새로운 운동 세션 데이터를 생성
+        const sessionData = {
+            userId: user._id,
+            exercisePlanId: plan._id,
+            exercises: plan.exercises.map((exercise: any) => ({
+                exerciseId: exercise._id,
+                title: exercise.title,
+                repTime: exercise.repTime,
+                sets: exercise.sets,
+                state: "pending", // 초기 상태는 'pending'
+                session: [], // 세트 데이터는 빈 배열로 초기화
+            })),
+            state: "inProgress", // 세션 상태를 'inProgress'로 설정
+        };
+
+        // 새로운 운동 세션 생성 및 저장
+        const newExerciseSession = new ExerciseSession(sessionData);
         await newExerciseSession.save();
-        return NextResponse.json({ newExerciseSession, message: '세션 생성' }, { status: 201 });
+
+        return NextResponse.json({ newExerciseSession, message: "세션 생성" }, { status: 201 });
     } catch (err: any) {
-        return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
+        console.error("Error creating exercise session:", err);
+        return NextResponse.json({ message: "Internal Server Error", error: err.message }, { status: 500 });
     }
-}
+};

@@ -75,7 +75,7 @@ const InProgressTap = ({ data, sessionId, isPending, handleDone }: InProgressTPr
                         <div className="flex flex-col pb-4">
                             <span className="max-smc:truncate">{exercise.title}</span>
                             <CardDescription className="max-smc:truncate">
-                                총 {exercise.sets}세트, 세트 당 최소 휴식시간: {exercise.rest}초
+                                총 {exercise.sets}세트
                             </CardDescription>
                         </div>
                         <div className="flex flex-col gap-2 h-[40vh] overflow-y-scroll">

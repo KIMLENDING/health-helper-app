@@ -1,6 +1,6 @@
 
 import { toast } from "@/hooks/use-toast";
-import { Exercise, ExercisePlan, ExerciseSession, ExerciseSessionActionPayload, ExercisesessionData, ExerciseSessionSetPayload, PostExerciseSession } from "@/utils/util";
+import { Exercise, ExerciseOption, ExercisePlan, ExerciseSession, ExerciseSessionActionPayload, ExercisesessionData, ExerciseSessionSetPayload, PostExerciseSession } from "@/utils/util";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 /**
@@ -73,7 +73,7 @@ export const useDeleteExercise = () => {
                 console.log('error', error);
             } else {
                 // console.log('data', data);
-                toast({ variant: 'destructive', title: `${data.message}` });
+                toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exercises"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
@@ -88,7 +88,6 @@ export const useCreatePlan = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (exercisePlan: ExercisePlan) => {
-
             const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', },
@@ -100,23 +99,15 @@ export const useCreatePlan = () => {
             }
             return response.json();
         },
-        onSuccess: () => {
-            console.log('onSuccess');
+        onSuccess: async (data) => {
+            toast({ variant: 'default2', title: `${data.message}` });
+            await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
         },
         onError: (error) => {
-            console.log('onError', error);
+            const message = error instanceof Error ? error.message : String(error);
+            console.error("onError", error);
+            toast({ variant: "destructive", title: message });
         },
-        onSettled: async (data, error) => { // 성공, 실패 상관없이 마지막에 호출 variables
-            console.log('onSettled');
-            if (error) {
-                toast({ variant: 'destructive', title: `${error}` });
-                console.log('error', error);
-            } else {
-                // console.log('data', data);
-                toast({ variant: 'default2', title: `${data.message}` });
-                await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
-            }
-        }
     })
 }
 
@@ -151,7 +142,7 @@ export const useDeletePlan = () => {
                 console.log('error', error);
             } else {
                 // console.log('data', data);
-                toast({ variant: 'destructive', title: `${data.message}` });
+                toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
@@ -161,14 +152,14 @@ export const useDeletePlan = () => {
  * 사용자 전용 운동 계획 제목 수정 Mutation
  * @returns
 */
-export const useEditPlanTitle = () => {
+export const useEditPlan = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async ({ title, exercisePlanId }: { title: string, exercisePlanId: string }) => {
-            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan/${exercisePlanId}`, {
+        mutationFn: async (data: any) => {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan/${data.exercisePlanId}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json', },
-                body: JSON.stringify(title)
+                body: JSON.stringify(data)
             });
             if (!response.ok) {
                 const errorData = await response.json();
@@ -188,9 +179,10 @@ export const useEditPlanTitle = () => {
                 toast({ variant: 'destructive', title: `${error}` });
                 console.log('error', error);
             } else {
-                // console.log('data', data);
+                console.log('data', data);
                 toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
+                await queryClient.invalidateQueries({ queryKey: ["exercisePlan", data.data._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }
         }
     })
@@ -209,22 +201,15 @@ export const useSelectedExercise = () => {
             // 클라이언트 측에서만 데이터를 저장
             return selectedExercises;
         },
-        onSuccess: (data) => {
-            console.log('onSuccess');
+        onSuccess: async (data) => {
             queryClient.setQueryData(["selectedExercise"], data); // 데이터 저장
+
         },
         onError: (error) => {
             console.log('onError', error);
         },
-        onSettled: async (data, error) => { // 성공, 실패 상관없이 마지막에 호출
-            console.log('onSettled');
-            if (error) {
-                console.log('error', error);
-            } else {
-                // console.log('data', data);
-                toast({ variant: "default2", title: "운동이 임시 테이블에 추가 되었습니다." })
-                await queryClient.invalidateQueries({ queryKey: ["selectedExercise"] }) // 데이터 갱신 후 자동으로 UI 업데이트
-            }
+        onSettled: async (data, error) => {
+            await queryClient.invalidateQueries({ queryKey: ["selectedExercise"] })
         }
     })
 }
@@ -234,10 +219,16 @@ export const useSelectedExercise = () => {
  *  사용자 전용 운동 계획 수정 Mutation
  * @returns 
  */
+interface UpdatePlanProps {
+    exercisePlanId: string;
+    title: string;
+    exercises: ExerciseOption[];
+    type: 'add' | 'edit' | 'delete'; // 추가, 수정, 삭제
+}
 export const useUpdatePlan = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async (exercisePlan: ExercisePlan) => {
+        mutationFn: async (exercisePlan: any) => {
             const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json', },
@@ -262,8 +253,9 @@ export const useUpdatePlan = () => {
                 console.log('error', error);
             } else {
                 // console.log('data', data);
-                toast({ variant: 'destructive', title: `${data.message}` });
+                toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
+                await queryClient.resetQueries({ queryKey: ["selectedExercise"] }); // 캐시된 데이터를 초기화합니다.
             }
         }
     })
@@ -320,11 +312,11 @@ export const useDetailDeletePlan = () => {
 export const useCreateExerciseSession = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async (exerciseSession: ExerciseSession) => {
+        mutationFn: async (data: any) => {
             const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exerciseSession`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', },
-                body: JSON.stringify(exerciseSession)
+                body: JSON.stringify(data)
             });
             if (!response.ok) {
                 const errorData = await response.json();

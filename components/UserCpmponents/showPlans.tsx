@@ -6,7 +6,7 @@ import { BicepsFlexed, DumbbellIcon, RadicalIcon, SparklesIcon, SquareArrowOutUp
 import Link from 'next/link';
 import { DrawerDialogDemo } from '../LayoutCompents/ResponsiveDialog';
 
-
+/** Dashboard페이지에서 빠른 운동 시작을 위한 컴포넌트 */
 const ShowPlans = () => {
     const { data, isError, isLoading } = useExercisePlan(); // 필요한 운동 계획 데이터를 가져옵니다.
     const Icons = [
@@ -24,7 +24,6 @@ const ShowPlans = () => {
                 <Link href={'/dashboard/exercisePlans'}>
                     <div className='flex flex-row gap-2 items-center hover:underline'>
                         플랜 목록
-                        <SquareArrowOutUpRightIcon className='text-red-400' />
                     </div>
                 </Link>
             </CardTitle>
@@ -47,7 +46,7 @@ const ShowPlans = () => {
                                         <Card key={plan.title} className='aspect-auto '>
                                             <CardHeader className='px-0'>
                                                 <CardTitle className="text-xl px-6 cursor-pointer hover:underline">
-                                                    <DrawerDialogDemo plan={plan}>
+                                                    <DrawerDialogDemo planId={plan._id!}>
                                                         {randomIcon}
                                                         <div className='whitespace-nowrap overflow-hidden text-ellipsis w-32'> {plan.title}</div>
                                                     </DrawerDialogDemo>

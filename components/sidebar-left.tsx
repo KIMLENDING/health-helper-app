@@ -11,6 +11,9 @@ import {
   Settings2,
   Sparkles,
   Trash2,
+  FlagIcon,
+  PlusSquareIcon,
+  Search,
 } from "lucide-react"
 
 import {
@@ -29,11 +32,11 @@ import { useSession } from "next-auth/react"
 // This is sample data.
 const menuItems = {
   navMain: [
-    // {
-    //   title: "Search",
-    //   url: "#",
-    //   icon: Search,
-    // },
+    {
+      title: "Search",
+      url: "#",
+      icon: Search,
+    },
     {
       title: "홈",
       url: "/dashboard",
@@ -41,9 +44,15 @@ const menuItems = {
       // isActive: true,
     },
     {
+      title: "운동 플랜",
+      url: "/dashboard/exercisePlans",
+      icon: FlagIcon,
+      // isActive: true,
+    },
+    {
       title: "운동 루틴 생성",
       url: "/dashboard/user/createPlan",
-      icon: ClipboardPlus,
+      icon: PlusSquareIcon,
       // isActive: true,
     },
     {

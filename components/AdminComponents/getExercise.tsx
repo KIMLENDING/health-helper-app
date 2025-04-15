@@ -9,7 +9,7 @@ const GetExercise = () => {
     const { data, error, isLoading } = useEexercises();
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div className='w-full flex justify-center'>테이블 불러오는 중...</div>;
     }
 
     if (error) {

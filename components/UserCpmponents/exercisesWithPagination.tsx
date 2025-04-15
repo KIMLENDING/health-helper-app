@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CardContent } from "../ui/card";
-import { ClockIcon, DumbbellIcon, HamIcon, MoreHorizontal, Trash2Icon } from "lucide-react";
+import { DumbbellIcon, Trash2Icon } from "lucide-react";
 import { ExerciseOption, ExercisePlan } from "@/utils/util";
 import { Button } from "../ui/button";
 import ExerciseOptin from "./exerciseOptin";
@@ -57,7 +57,7 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
     }
     return (
         <CardContent className="space-y-4">
-            <LoadingOverlay isLoading={isLoading} />
+            <LoadingOverlay isLoading={isLoading} text={'로딩중...'} />
             {currentExercises.map((exercise) => (
                 <div key={exercise.exerciseId} className="border rounded p-4 group hover:bg-zinc-200 dark:hover:bg-zinc-900">
                     <div className="flex items-center gap-2 mb-3 justify-between h-6">
@@ -67,9 +67,6 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
                         </div>
                         <div className="gap-2 flex-row transition-opacity duration-300 opacity-0 flex group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none">
                             <ExerciseOptin plan={plan} exercise={exercise} />
-                            {/* <Button variant='outline' onClick={() => handleDelete(exercise)} className="border-0 h-6 ring-0 shadow-none ">
-                                <Trash2Icon />
-                            </Button> */}
 
                             <Dialog>
                                 <DialogTrigger asChild>
@@ -100,19 +97,16 @@ const ExercisesWithPagination = ({ plan }: { plan: ExercisePlan }) => {
                     </div>
                     <div className="grid grid-cols-3 gap-4">
                         <div>
-                            <span className="text-sm text-gray-500">Sets</span>
+                            <span className="text-sm text-gray-500">세트</span>
                             <p className="font-medium">{exercise.sets}</p>
                         </div>
                         <div>
-                            <span className="text-sm text-gray-500">Reps</span>
+                            <span className="text-sm text-gray-500">반복 횟수</span>
                             <p className="font-medium">{exercise.reps}</p>
                         </div>
                         <div>
-                            <span className="text-sm text-gray-500">Rest</span>
-                            <div className="font-medium flex items-center max-sm:justify-center">
-                                <ClockIcon className="w-4 h-4 mr-1" />
-                                <p>{exercise.rest}s</p>
-                            </div>
+                            <span className="text-sm text-gray-500">무게(kg)</span>
+                            <p className="font-medium">{exercise.weight}</p>
                         </div>
                     </div>
                 </div>
