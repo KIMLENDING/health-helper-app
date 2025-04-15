@@ -11,6 +11,8 @@ import {
   Settings2,
   Sparkles,
   Trash2,
+  FlagIcon,
+  PlusSquareIcon,
 } from "lucide-react"
 
 import {
@@ -41,9 +43,15 @@ const menuItems = {
       // isActive: true,
     },
     {
+      title: "운동 플랜",
+      url: "/dashboard/exercisePlans",
+      icon: FlagIcon,
+      // isActive: true,
+    },
+    {
       title: "운동 루틴 생성",
       url: "/dashboard/user/createPlan",
-      icon: ClipboardPlus,
+      icon: PlusSquareIcon,
       // isActive: true,
     },
     {

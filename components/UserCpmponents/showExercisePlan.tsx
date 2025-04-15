@@ -13,7 +13,7 @@ const ShowExercisePlan = () => {
         <div className='mx-auto w-full max-w-3xl rounded-xl'>
             <CardTitle className='my-3 font-extrabold text-2xl flex'>
                 <div className='flex flex-row gap-2 items-center'>
-                    <FlagIcon className='text-red-400' />
+
                     플랜 목록
                 </div>
             </CardTitle>

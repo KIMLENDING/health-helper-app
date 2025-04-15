@@ -24,7 +24,6 @@ const ShowPlans = () => {
                 <Link href={'/dashboard/exercisePlans'}>
                     <div className='flex flex-row gap-2 items-center hover:underline'>
                         플랜 목록
-                        <SquareArrowOutUpRightIcon className='text-red-400' />
                     </div>
                 </Link>
             </CardTitle>
