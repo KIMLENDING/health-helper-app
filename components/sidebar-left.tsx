@@ -13,6 +13,7 @@ import {
   Trash2,
   FlagIcon,
   PlusSquareIcon,
+  Search,
 } from "lucide-react"
 
 import {
@@ -31,11 +32,11 @@ import { useSession } from "next-auth/react"
 // This is sample data.
 const menuItems = {
   navMain: [
-    // {
-    //   title: "Search",
-    //   url: "#",
-    //   icon: Search,
-    // },
+    {
+      title: "Search",
+      url: "#",
+      icon: Search,
+    },
     {
       title: "홈",
       url: "/dashboard",
