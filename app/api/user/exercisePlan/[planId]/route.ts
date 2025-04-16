@@ -50,14 +50,13 @@ export async function PATCH(
     try {
         // 인증 확인
         const { user, error, status } = await requireUser(request);
-
         if (error || !user) {
             return NextResponse.json({ message: error || '인증되지 않은 요청입니다.' }, { status: status || 401 });
         }
 
         // 요청 본문 파싱
-        const { title, exercises } = await request.json();
-        const exercisePlanId = (await params).planId; // 요청에서  ID 가져오기
+        const { exercisePlanId, title, exercises } = await request.json();
+        // const exercisePlanId = (await params).planId; // 요청에서  ID 가져오기
 
 
         // 업데이트할 운동 계획이 사용자의 것인지 확인

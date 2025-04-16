@@ -33,6 +33,7 @@ import { Button } from "@/components/ui/button"
 import { Settings2Icon } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useSelectedExercise } from "@/server/mutations"
+import { useExercisePlanById } from "@/server/queries"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[] // 컬럼 정의
@@ -57,7 +58,6 @@ export function DataTable<TData, TValue>({
                 : [...prevSelectedTags, tag] // 새 태그 추가
         )
     }
-
     const useSelectedExerciseMutation = useSelectedExercise(); //  선택된 운동을 서버에 저장하는 뮤테이션 훅
 
     useEffect(() => {
@@ -83,47 +83,28 @@ export function DataTable<TData, TValue>({
             columnVisibility, // 컬럼 가시성 적용
             rowSelection, // 행 선택 적용
         },
-        initialState: { pagination: { pageSize: 5 } }, // 초기 페이지 크기를 5로 설정
+        initialState: {
+            pagination: { pageSize: 5 },
+            rowSelection: {
+                // 초기 선택된 row id 목록
+                1: true,
+                12: true,
+                '13': true,
+                '14': true,
+            },
+        },
     })
 
-    // 초기 랜더링시 데이터를 받아와서 rowSelection에 넣어줌
-    useEffect(() => {
-
-    }, [])
-
-
-
     useEffect(() => { // 선택된 행이 변경될 때마다 실행
-        const selectedRows = Object.keys(rowSelection).map((key) => data[+key]) // 선택된 행의 key는 data의 인덱스임으로 
+        const selectedRows = table.getSelectedRowModel().rows.map((row) => row.original)
         useSelectedExerciseMutation.mutate(selectedRows) // 선택된 행의 데이터
     }, [rowSelection])
 
-
-
-    /**
-     *     console.log(data)
-     * console.log(rowSelection)
-     * 이거 거가지고 선택된 데이터를 어떻게 처리할지 생각해보기
-     */
     useEffect(() => { // selectedTags 값이 변경될 때마다 태그 필터링 적용
         table.getColumn("tags")?.setFilterValue(selectedTags) // 태그 필터링 적용
         /**
       * setFilterValue(값)을 사용하면 columnFilters에 값이 들어가게 됨 이걸로 필터링을 적용함 
       * 즉 columnFilters가 모든 컬럼에 대한 필터링을 관리하는 변수임
-     
-      * 예시  이런식으로 columnFilters에 값이 들어가게 됨
-      * columnFilters = [
-         {
-             "id": "tags",
-             "value": [
-                 "가슴"
-             ]
-         },
-         {
-             "id": "title",
-             "value": "ㄹ"
-         }
-     ]
       */
     }, [selectedTags, table])
     return (

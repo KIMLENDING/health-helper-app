@@ -1,13 +1,13 @@
-import { useSelectedExercises } from '@/server/queries';
-import React, { useEffect, useState } from 'react'
+
+import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { useSession } from 'next-auth/react';
+
 import { Button } from '../ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import GetExercise from '../AdminComponents/getExercise';
-import { XIcon } from 'lucide-react';
+
 import PlanDialogForm from './planForm';
-import { Exercise, ExerciseOption } from '@/utils/util';
+import { ExerciseOption } from '@/utils/util';
 
 import { useUpdatePlan } from '@/server/mutations';
 

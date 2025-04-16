@@ -159,7 +159,7 @@ const InProgressTap = ({ data, sessionId, isPending, handleDone }: InProgressTPr
             {!data.exercises.find(ex => ex.state === 'inProgress') ? (
                 <div className="text-center">진행중인 운동이 없습니다.</div>
             ) : (
-                <DrawerDialogDone onComplete={handleDone}>
+                <DrawerDialogDone onAction={handleDone}>
                     <Button className="flex-1">운동 종료</Button>
                 </DrawerDialogDone>
             )}

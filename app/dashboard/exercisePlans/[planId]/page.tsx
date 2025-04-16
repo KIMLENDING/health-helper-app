@@ -1,26 +1,25 @@
 'use client';
 import LoadingOverlay from '@/components/LayoutCompents/LoadingOverlay';
-import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Dumbbell, Save, X, Edit, Check } from 'lucide-react';
+import { Dumbbell, Save, X, Edit, Check, Trash2, PlusSquare } from 'lucide-react';
 import { useExercisePlanById } from '@/server/queries';
 import { useEditPlan } from '@/server/mutations';
 import React, { use, useState } from 'react';
 import { formatDate } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { DrawerDialogDemo } from '@/components/LayoutCompents/ResponsiveDialog';
 
 /** 플랜 세부 CRUD 페이지 */
 type Params = Promise<{ planId: string }>;
-type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
 const ExercisePlanDetailPage = (props: {
     params: Params;
-    searchParams: SearchParams;
 }) => {
     const params = use(props.params);
     const planId = params.planId;
-    const { data, isLoading } = useExercisePlanById(planId);
+    const { data } = useExercisePlanById(planId);
     const { mutateAsync, isPending } = useEditPlan();
 
     const [isEditing, setIsEditing] = useState(false);
@@ -71,15 +70,19 @@ const ExercisePlanDetailPage = (props: {
         await mutateAsync(updatedData);
         setIsEditing(false);
     };
+    // 플랜 삭제
+    const handleDeletePlan = async () => {
+        // 삭제 로직 추가
+    };
 
 
-    if (isLoading) return <LoadingOverlay isLoading={isLoading} text={'로딩 중...'} />;
+    if (isPending) return <LoadingOverlay isLoading={isPending} text={'처리 중...'} />;
 
     if (!data) return <div className="p-8 text-center">운동 계획을 찾을 수 없습니다.</div>;
 
     return (
         <section className='mx-auto w-full max-w-3xl p-4'>
-            <div className="mb-6 flex items-center justify-between">
+            <div className="mb-6 flex items-center justify-between gap-2">
                 {isEditing ? (
                     <Input
                         value={editedTitle}
@@ -89,12 +92,12 @@ const ExercisePlanDetailPage = (props: {
                 ) : (
                     <h1 className="text-2xl font-bold">{data.title}</h1>
                 )}
-                <Badge variant="outline" className="px-3 py-1">
+                <Badge variant="outline" className="px-3 py-1 shrink-0">
                     {formatDate(data.createdAt!)}
                 </Badge>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-4 max-h-[70vh] overflow-y-auto scrollbar-hide">
                 {(isEditing ? editedExercises : data.exercises).map((exercise, index) => (
                     <Card key={exercise._id} className="overflow-hidden">
                         <div className="flex items-center border-b p-4">
@@ -117,10 +120,10 @@ const ExercisePlanDetailPage = (props: {
                                             min="1"
                                             value={exercise.sets}
                                             onChange={(e) => handleExerciseChange(index, 'sets', parseInt(e.target.value))}
-                                            className="w-16 text-center"
+                                            className="w-16 text-center "
                                         />
                                     ) : (
-                                        <p className="text-lg font-semibold">{exercise.sets}</p>
+                                        <p className="text-lg font-semibold ">{exercise.sets}</p>
                                     )}
                                 </div>
                                 <div className="text-center">
@@ -131,7 +134,7 @@ const ExercisePlanDetailPage = (props: {
                                             min="1"
                                             value={exercise.reps}
                                             onChange={(e) => handleExerciseChange(index, 'reps', parseInt(e.target.value))}
-                                            className="w-16 text-center"
+                                            className="w-16 text-center "
                                         />
                                     ) : (
                                         <p className="text-lg font-semibold">{exercise.reps}</p>
@@ -142,11 +145,11 @@ const ExercisePlanDetailPage = (props: {
                                     {isEditing ? (
                                         <Input
                                             type="number"
-                                            min="0"
-                                            step="0.5"
+                                            min="1"
+                                            step="1"
                                             value={exercise.weight}
                                             onChange={(e) => handleExerciseChange(index, 'weight', parseFloat(e.target.value))}
-                                            className="w-16 text-center"
+                                            className="w-16 text-center   "
                                         />
                                     ) : (
                                         <p className="text-lg font-semibold">{exercise.weight}</p>
@@ -158,9 +161,9 @@ const ExercisePlanDetailPage = (props: {
                 ))}
             </div>
 
-            <div className="mt-6 flex justify-end space-x-2">
+            <div className="mt-6 ">
                 {isEditing ? (
-                    <>
+                    <div className='flex justify-end gap-2'>
                         <Button variant='default'
 
                             onClick={handleCancelEditing}
@@ -179,22 +182,37 @@ const ExercisePlanDetailPage = (props: {
                                 </>
                             )}
                         </Button>
-                    </>
+                    </div>
                 ) : (
-                    <>
-                        <Button
-                            variant='default'
+                    <div className="flex  flex-col-reverse items-end sm:flex-row sm:justify-between gap-2">
+                        <div className='flex gap-2'>
+                            <Button
+                                variant='destructive'
+                            >
+                                <Trash2 className="mr-1 h-4 w-4" /> 삭제하기
+                            </Button>
+                            <Button
+                                variant='addButton'
+                            >
+                                <PlusSquare className="mr-1 h-4 w-4" /> 운동 추가
+                            </Button>
 
-                            disabled={isPending}
-                            onClick={handleStartEditing}
-                        >
-                            <Edit className="mr-1 h-4 w-4" /> 수정하기
-                        </Button>
-                        <Button variant='default'
-                        >
-                            <Check className="mr-1 h-4 w-4" /> 운동 시작
-                        </Button>
-                    </>
+                            <Button
+                                variant='default'
+
+                                disabled={isPending}
+                                onClick={handleStartEditing}
+                            >
+                                <Edit className="mr-1 h-4 w-4" /> 수정하기
+                            </Button>
+                            <DrawerDialogDemo planId={planId}>
+                                <Button variant='default'
+                                >
+                                    <Check className="mr-1 h-4 w-4" /> 운동 시작
+                                </Button>
+                            </DrawerDialogDemo>
+                        </div>
+                    </div>
                 )}
             </div>
         </section>

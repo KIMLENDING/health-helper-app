@@ -149,7 +149,11 @@ export const useDeletePlan = () => {
     })
 }
 /** 
- * 사용자 전용 운동 계획 제목 수정 Mutation
+ * 사용자 전용 운동 계획 수정 Mutation
+ * @description 운동 계획을 수정하는 Mutation입니다. 운동계획의 제목, 세부 운동 목록의 세트, 반복, 무게를 수정합니다.
+ * @param exercisePlanId - 수정할 운동 계획의 ID입니다. 
+ * @param title - 수정할 운동 계획의 제목입니다.
+ * @param exercises - 수정할 운동 계획의 세부 운동 목록입니다. 각 운동의 ID, 세트, 반복, 무게를 포함합니다.
  * @returns
 */
 export const useEditPlan = () => {
@@ -167,24 +171,16 @@ export const useEditPlan = () => {
             }
             return response.json();
         },
-        onSuccess: () => {
-            console.log('onSuccess');
+        onSuccess: async (data) => {
+            toast({ variant: 'default2', title: `${data.message}` });
+            await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] })
+            await queryClient.invalidateQueries({ queryKey: ["exercisePlan", data.data._id] })
         },
         onError: (error) => {
-            console.log('onError', error);
+            const message = error instanceof Error ? error.message : String(error);
+            console.error("onError", error);
+            toast({ variant: "destructive", title: message });
         },
-        onSettled: async (data, error) => { // 성공, 실패 상관없이 마지막에 호출 variables
-            console.log('onSettled');
-            if (error) {
-                toast({ variant: 'destructive', title: `${error}` });
-                console.log('error', error);
-            } else {
-                console.log('data', data);
-                toast({ variant: 'default2', title: `${data.message}` });
-                await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
-                await queryClient.invalidateQueries({ queryKey: ["exercisePlan", data.data._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
-            }
-        }
     })
 }
 

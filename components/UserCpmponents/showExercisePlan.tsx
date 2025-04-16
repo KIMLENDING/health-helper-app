@@ -10,7 +10,7 @@ const ShowExercisePlan = () => {
     const Icons = <DumbbellIcon className='text-green-400' />
 
     return (
-        <div className='mx-auto w-full max-w-3xl rounded-xl'>
+        <div className='mx-auto w-full max-w-3xl rounded-xl min-h-[calc(100vh-56px)] relative'>
             <CardTitle className='my-3 font-extrabold text-2xl flex'>
                 <div className='flex flex-row gap-2 items-center'>
 
@@ -46,7 +46,14 @@ const ShowExercisePlan = () => {
                     }
                 </>
             )}
-
+            <div className='absolute bottom-20 left-0 right-0 flex justify-center gap-2 p-4'>
+                <Link href={`/dashboard/user/createPlan`}>
+                    <Card className='flex flex-row gap-2 items-center justify-center p-4 hover:bg-muted/50'>
+                        <FlagIcon className='text-green-400' />
+                        <div className='text-lg font-semibold'>새로운 운동 계획 만들기</div>
+                    </Card>
+                </Link>
+            </div>
         </div>
     )
 }
