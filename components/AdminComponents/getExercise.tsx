@@ -17,17 +17,16 @@ const GetExercise = () => {
     }
 
     return (
-        <div className="mx-auto  min-h-min w-full max-w-3xl rounded-xl bg-muted/50" >
-            <Card>
-                <CardHeader>
-                    <CardTitle>운동 리스트</CardTitle>
-                    <CardDescription></CardDescription>
-                </CardHeader>
-                <CardContent>
+
+        <Card className="border-muted shadow-sm dark:shadow-md dark:shadow-black/10">
+            <CardContent className='pt-4'>
+                <div className="rounded-md overflow-hidden">
                     <DataTable columns={columns} data={data} />
-                </CardContent>
-            </Card>
-        </div>
+                </div>
+            </CardContent>
+        </Card>
+
+
     )
 }
 

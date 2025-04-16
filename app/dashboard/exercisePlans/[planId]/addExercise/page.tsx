@@ -1,12 +1,15 @@
 'use client';
 import { columns } from '@/components/Table/columns';
 import { DataTable } from '@/components/Table/data-table';
-import { useEexercises, useExercisePlanById } from '@/server/queries';
-import React, { use } from 'react';
-import { Loader2, PlusCircle, ListFilter } from 'lucide-react';
+import { useEexercises, useExercisePlanById, useSelectedExercises } from '@/server/queries';
+import React, { use, useEffect, useState } from 'react';
+import { Loader2, PlusCircle, ListFilter, ListPlus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+import { ExerciseOption } from '@/utils/util';
+import PlanDialogForm from '@/components/UserCpmponents/planForm';
+import { Button } from '@/components/ui/button';
 
 /** 플랜 세부 CRUD 페이지 */
 type Params = Promise<{ planId: string }>;
@@ -18,10 +21,31 @@ const Page = (props: {
     const planId = params.planId;
     const { data: preData } = useExercisePlanById(planId);
     const { data, isLoading } = useEexercises();
+    const { data: selectedItmes } = useSelectedExercises(); // 필요한 운동 종목 데이터를 가져옴
+    const [exerciseOption, setExerciseOption] = useState<ExerciseOption[]>([]) // 이건 세트, 반복횟수, 휴식시간을 저장하는 변수
+    const filteredData = React.useMemo(() => {
+        // useMemo를 사용하여 성능 최적화
+        // selectedItems로 인해 filteredData이 다시 계산되면서 테이블의 불필요한 재랜더링을 방지하기 위해 useMemo를 사용함
+        return data?.filter(
+            (exercise: any) => !preData?.exercises.some((pre: any) => pre.exerciseId === exercise._id)
+        );
+    }, [data, preData]);
 
-    const filteredData = data?.filter(
-        (exercise: any) => !preData?.exercises.some((pre: any) => pre.exerciseId === exercise._id)
-    );
+    useEffect(() => {
+        // 초기 값 설정 - data가 추가 되면 exerciseOption 초기값 필드를 추가
+        if (!selectedItmes) return;
+
+        const defaultData = { sets: 4, reps: 6, weight: 30 };
+        const newState: ExerciseOption[] = selectedItmes.map(ex => ({
+            exerciseId: ex._id,
+            title: ex.title,
+            sets: exerciseOption.find(v => v.exerciseId === ex._id)?.sets || defaultData.sets, // 기존값 || 기본값
+            reps: exerciseOption.find(v => v.exerciseId === ex._id)?.reps || defaultData.reps,
+            weight: exerciseOption.find(v => v.exerciseId === ex._id)?.weight || defaultData.weight,
+        }));
+
+        setExerciseOption(newState);
+    }, [selectedItmes]);
 
     if (isLoading) {
         return (
@@ -105,6 +129,59 @@ const Page = (props: {
                     </div>
                 </CardContent>
             </Card>
+            <Card className="p-4 dark:bg-zinc-950 border-muted shadow-sm">
+                <div className="mb-3 flex items-center justify-between">
+                    <h3 className="text-lg font-semibold">운동 옵션</h3>
+                    <Badge variant="outline" className="text-xs">
+                        {exerciseOption?.length || 0}개 항목
+                    </Badge>
+                </div>
+
+                <Separator className="mb-3" />
+
+                <div className="flex flex-col gap-2 max-h-[25vh] overflow-y-auto pr-1 scrollbar-thumb-rounded scrollbar-track-rounded scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-muted/10 pb-1">
+                    {exerciseOption?.length ? (
+                        exerciseOption.map((item) => (
+                            <Card
+                                key={item.exerciseId}
+                                className="border border-muted/40 hover:border-muted transition-colors group dark:hover:bg-zinc-900/50"
+                            >
+                                <CardHeader className="p-3">
+                                    <div className="flex items-center justify-between">
+                                        <CardTitle className="text-base flex items-center gap-2">
+                                            <div className="h-2 w-2 rounded-full bg-primary/80"></div>
+                                            <span className="truncate">{item.title}</span>
+                                        </CardTitle>
+                                        <div className="opacity-80 group-hover:opacity-100 transition-opacity">
+                                            <PlanDialogForm item={item} key={item.exerciseId} SetState={setExerciseOption} />
+                                        </div>
+                                    </div>
+                                </CardHeader>
+                            </Card>
+                        ))
+                    ) : (
+                        <div className="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
+                            <div className="rounded-full bg-muted/30 p-3 mb-2">
+                                <ListPlus className="h-5 w-5" />
+                            </div>
+                            <p className="font-medium">운동 옵션이 없습니다</p>
+                            <p className="text-sm mt-1">새 운동 옵션을 추가해 보세요</p>
+                        </div>
+                    )}
+                </div>
+
+                {exerciseOption?.length > 5 && (
+                    <div className="mt-2 pt-2 border-t border-muted/30 text-center">
+                        <p className="text-xs text-muted-foreground">
+                            스크롤하여 더 많은 옵션 보기
+                        </p>
+                    </div>
+                )}
+            </Card>
+
+            <div className='flex justify-end'>
+                <Button className=''>루틴 저장하기</Button>
+            </div>
         </section>
     );
 };

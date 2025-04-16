@@ -119,7 +119,7 @@ export function DataTable<TData, TValue>({
     }, [selectedTags, table])
 
     return (
-        <div className="bg-white dark:bg-black rounded-lg shadow-md p-6 min-h-min w-full">
+        <div className="p-4 dark:bg-zinc-950 border-muted shadow-sm">
             <div className="mb-6">
                 <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">운동 목록</h2>
                 <div className="flex items-center text-sm text-gray-500">

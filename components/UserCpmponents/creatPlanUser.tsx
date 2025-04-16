@@ -12,10 +12,13 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import PlanDialogForm from './planForm';
 import { useCreatePlan } from '@/server/mutations';
-import { Exercise, ExercisePlan, ExerciseOption } from '@/utils/util';
+import { ExercisePlan, ExerciseOption } from '@/utils/util';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import LoadingOverlay from '../LayoutCompents/LoadingOverlay';
+import { Separator } from '../ui/separator';
+import { Badge } from '../ui/badge';
+import { ListPlus } from 'lucide-react';
 
 
 
@@ -96,24 +99,56 @@ const CreatPlanUser = () => {
                             />
                         </form>
                     </Form>
+                    {/**  운동 리스트 */}
                     <GetExercise />
-                    <Card className='px-5 dark:bg-zinc-950'>
-                        <div className='flex flex-col max-h-[35vh] scrollbar-none overflow-y-scroll pb-4'>
-                            {
-                                exerciseOption?.map((item) => (
-                                    <Card key={item.exerciseId} className='mt-5'>
-                                        <CardHeader >
-                                            <CardTitle className='flex flex-row justify-between'>
-                                                <div className='flex items-center'>
-                                                    {item.title}
+                    <Card className="p-4 dark:bg-zinc-950 border-muted shadow-sm">
+                        <div className="mb-3 flex items-center justify-between">
+                            <h3 className="text-lg font-semibold">운동 옵션</h3>
+                            <Badge variant="outline" className="text-xs">
+                                {exerciseOption?.length || 0}개 항목
+                            </Badge>
+                        </div>
+
+                        <Separator className="mb-3" />
+
+                        <div className="flex flex-col gap-2 max-h-[25vh] overflow-y-auto pr-1 scrollbar-thumb-rounded scrollbar-track-rounded scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-muted/10 pb-1">
+                            {exerciseOption?.length ? (
+                                exerciseOption.map((item) => (
+                                    <Card
+                                        key={item.exerciseId}
+                                        className="border border-muted/40 hover:border-muted transition-colors group dark:hover:bg-zinc-900/50"
+                                    >
+                                        <CardHeader className="p-3">
+                                            <div className="flex items-center justify-between">
+                                                <CardTitle className="text-base flex items-center gap-2">
+                                                    <div className="h-2 w-2 rounded-full bg-primary/80"></div>
+                                                    <span className="truncate">{item.title}</span>
+                                                </CardTitle>
+                                                <div className="opacity-80 group-hover:opacity-100 transition-opacity">
+                                                    <PlanDialogForm item={item} key={item.exerciseId} SetState={setExerciseOption} />
                                                 </div>
-                                            </CardTitle>
-                                            <PlanDialogForm item={item} key={item.exerciseId} SetState={setExerciseOption} />
+                                            </div>
                                         </CardHeader>
                                     </Card>
                                 ))
-                            }
+                            ) : (
+                                <div className="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
+                                    <div className="rounded-full bg-muted/30 p-3 mb-2">
+                                        <ListPlus className="h-5 w-5" />
+                                    </div>
+                                    <p className="font-medium">운동 옵션이 없습니다</p>
+                                    <p className="text-sm mt-1">새 운동 옵션을 추가해 보세요</p>
+                                </div>
+                            )}
                         </div>
+
+                        {exerciseOption?.length > 5 && (
+                            <div className="mt-2 pt-2 border-t border-muted/30 text-center">
+                                <p className="text-xs text-muted-foreground">
+                                    스크롤하여 더 많은 옵션 보기
+                                </p>
+                            </div>
+                        )}
                     </Card>
 
                     <div className='flex justify-end'>
