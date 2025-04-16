@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import {
     ColumnDef,
     SortingState,
@@ -27,66 +28,79 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Settings2Icon } from "lucide-react"
+import {
+    Settings2Icon,
+    SearchIcon,
+    FilterIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
+    CheckCircleIcon
+} from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useSelectedExercise } from "@/server/mutations"
-import { useExercisePlanById } from "@/server/queries"
+import { Badge } from "@/components/ui/badge"
 
 interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[] // 컬럼 정의
-    data: TData[] // 데이터
+    columns: ColumnDef<TData, TValue>[]
+    data: TData[]
 }
-const availableTags = ["상체", "하체", "가슴", "등", "어깨", "팔", "허벅지", "종아리",]
+
+const availableTags = ["상체", "하체", "가슴", "등", "어깨", "팔", "허벅지", "종아리"]
+
 export function DataTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
     const { data: session } = useSession();
-    const [sorting, setSorting] = useState<SortingState>([{ id: "title", desc: false }]) // 정렬 상태
-    const [rowSelection, setRowSelection] = useState({}) // 행 선택 상태
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]) // 컬럼 필터 상태 
-    const [selectedTags, setSelectedTags] = useState<string[]>([]) // 체크된 태그만 모아둔 상태 이걸 columFilters로 넘겨줘야함 넘겨주는 방법은 setFilterValue(값)을 호출하면 됨
-    const [columnVisibility, setColumnVisibility] =
-        useState<VisibilityState>({ tags: true, url: true, title: true, actions: false }) // 컬럼 가시성 상태
-    const toggleTagSelection = (tag: string) => { // 태그 필터링 체크박스 선택 토글
+    const [sorting, setSorting] = useState<SortingState>([{ id: "title", desc: false }])
+    const [rowSelection, setRowSelection] = useState({})
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [selectedTags, setSelectedTags] = useState<string[]>([])
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+        tags: true,
+        url: true,
+        title: true,
+        actions: false
+    })
+
+    const useSelectedExerciseMutation = useSelectedExercise();
+
+    const toggleTagSelection = (tag: string) => {
         setSelectedTags((prevSelectedTags) =>
             prevSelectedTags.includes(tag)
-                ? prevSelectedTags.filter((t) => t !== tag) // 이미 선택된 태그는 제외
-                : [...prevSelectedTags, tag] // 새 태그 추가
+                ? prevSelectedTags.filter((t) => t !== tag)
+                : [...prevSelectedTags, tag]
         )
     }
-    const useSelectedExerciseMutation = useSelectedExercise(); //  선택된 운동을 서버에 저장하는 뮤테이션 훅
 
     useEffect(() => {
         if (session?.user?.role === "admin") {
-            setColumnVisibility({ tags: true, url: true, title: true, actions: true }) // 관리자만 보이는 컬럼 추가
+            setColumnVisibility({ tags: true, url: true, title: true, actions: true })
         }
     }, [session])
 
     const table = useReactTable({
         data,
         columns,
-        getCoreRowModel: getCoreRowModel(), // 기본 테이블 모델
-        onSortingChange: setSorting, // 정렬 변경 useState
-        getSortedRowModel: getSortedRowModel(), // 정렬 활성화
-        onColumnFiltersChange: setColumnFilters, // 컬럼 필터 변경 useState
-        getFilteredRowModel: getFilteredRowModel(), // 필터링 활성화
-        onColumnVisibilityChange: setColumnVisibility, // 컬럼 가시성 변경 useState 
-        getPaginationRowModel: getPaginationRowModel(), // 페이지네이션 활성화
-        onRowSelectionChange: setRowSelection, // 행 선택 변경 useState
-        state: { // useState 변수
-            sorting, // 정렬 적용
-            columnFilters, // 모든 컬럼에 대한 필터링 적용
-            columnVisibility, // 컬럼 가시성 적용
-            rowSelection, // 행 선택 적용
+        getCoreRowModel: getCoreRowModel(),
+        onSortingChange: setSorting,
+        getSortedRowModel: getSortedRowModel(),
+        onColumnFiltersChange: setColumnFilters,
+        getFilteredRowModel: getFilteredRowModel(),
+        onColumnVisibilityChange: setColumnVisibility,
+        getPaginationRowModel: getPaginationRowModel(),
+        onRowSelectionChange: setRowSelection,
+        state: {
+            sorting,
+            columnFilters,
+            columnVisibility,
+            rowSelection,
         },
         initialState: {
             pagination: { pageSize: 5 },
             rowSelection: {
-                // 초기 선택된 row id 목록
                 1: true,
                 12: true,
                 '13': true,
@@ -95,44 +109,61 @@ export function DataTable<TData, TValue>({
         },
     })
 
-    useEffect(() => { // 선택된 행이 변경될 때마다 실행
+    useEffect(() => {
         const selectedRows = table.getSelectedRowModel().rows.map((row) => row.original)
-        useSelectedExerciseMutation.mutate(selectedRows) // 선택된 행의 데이터
+        useSelectedExerciseMutation.mutate(selectedRows)
     }, [rowSelection])
 
-    useEffect(() => { // selectedTags 값이 변경될 때마다 태그 필터링 적용
-        table.getColumn("tags")?.setFilterValue(selectedTags) // 태그 필터링 적용
-        /**
-      * setFilterValue(값)을 사용하면 columnFilters에 값이 들어가게 됨 이걸로 필터링을 적용함 
-      * 즉 columnFilters가 모든 컬럼에 대한 필터링을 관리하는 변수임
-      */
+    useEffect(() => {
+        table.getColumn("tags")?.setFilterValue(selectedTags)
     }, [selectedTags, table])
+
     return (
-        <div className="min-h-min w-full" >
-            <div className="flex-1 text-sm text-muted-foreground">
-                {table.getFilteredRowModel().rows.length} 개의 항목 중{" "}
-                {table.getFilteredSelectedRowModel().rows.length} 선택됨
+        <div className="bg-white dark:bg-black rounded-lg shadow-md p-6 min-h-min w-full">
+            <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">운동 목록</h2>
+                <div className="flex items-center text-sm text-gray-500">
+                    <CheckCircleIcon className="h-4 w-4 mr-1 text-green-500" />
+                    <span className="dark:text-gray-400">
+                        {table.getFilteredRowModel().rows.length}개 중 {" "}
+                        <span className="font-medium text-green-600">
+                            {table.getFilteredSelectedRowModel().rows.length}개
+                        </span> 선택됨
+                    </span>
+                </div>
             </div>
-            <div className="flex items-center py-4">
-                <Input
-                    placeholder="운동 이름으로 검색"
-                    value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) => table.getColumn("title")?.setFilterValue(event.target.value)}
-                    className="max-w-sm"
-                />
+
+            <div className="flex flex-col sm:flex-row gap-4 mb-6 items-start sm:items-center">
+                <div className="relative w-full sm:max-w-sm">
+                    <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                        placeholder="운동 이름으로 검색"
+                        value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+                        onChange={(event) => table.getColumn("title")?.setFilterValue(event.target.value)}
+                        className="pl-10 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                    />
+                </div>
+
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            <Settings2Icon />
-                            태그
+                        <Button variant="outline">
+                            <FilterIcon className="h-4 w-4 mr-2" />
+                            태그 필터
+                            {selectedTags.length > 0 && (
+                                <Badge className="ml-2 bg-blue-100 text-blue-800 hover:bg-blue-200">
+                                    {selectedTags.length}
+                                </Badge>
+                            )}
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
+                    <DropdownMenuContent align="end" className="w-48 p-2">
+                        <div className="mb-2 px-2 py-1 text-sm font-medium text-black dark:text-white">태그 선택</div>
                         {availableTags.map((tag) => (
                             <DropdownMenuCheckboxItem
                                 key={tag}
                                 checked={selectedTags.includes(tag)}
                                 onCheckedChange={() => { toggleTagSelection(tag) }}
+                                className="cursor-pointer"
                             >
                                 {tag}
                             </DropdownMenuCheckboxItem>
@@ -140,23 +171,25 @@ export function DataTable<TData, TValue>({
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
-            <div className="rounded-md border">
+
+            <div className="rounded-md  border-2  overflow-hidden">
                 <Table>
-                    <TableHeader>
+                    <TableHeader >
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <TableHead key={header.id}>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(
-                                                    header.column.columnDef.header,
-                                                    header.getContext()
-                                                )}
-                                        </TableHead>
-                                    )
-                                })}
+                            <TableRow key={headerGroup.id} className="hover:bg-transparent">
+                                {headerGroup.headers.map((header) => (
+                                    <TableHead
+                                        key={header.id}
+                                        className=" text-black dark:text-white py-3"
+                                    >
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext()
+                                            )}
+                                    </TableHead>
+                                ))}
                             </TableRow>
                         ))}
                     </TableHeader>
@@ -166,9 +199,13 @@ export function DataTable<TData, TValue>({
                                 <TableRow
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
+                                    className={`
+                                       
+                                        ${row.getIsSelected() ? "bg-blue-50" : ""}
+                                    `}
                                 >
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
+                                        <TableCell key={cell.id} className="py-3">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
@@ -176,7 +213,7 @@ export function DataTable<TData, TValue>({
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 text-center">
+                                <TableCell colSpan={columns.length} className="h-32 text-center text-gray-500">
                                     결과 값이 없습니다.
                                 </TableCell>
                             </TableRow>
@@ -185,27 +222,30 @@ export function DataTable<TData, TValue>({
                 </Table>
             </div>
 
-            {/* 페이지네이션 */}
-            <div className="flex items-center justify-between space-x-2 py-4">
-                <div>
+            <div className="flex items-center justify-between mt-6">
+                <div className="flex items-center space-x-2 text-sm ">
+                    <span>페이지 {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}</span>
+                </div>
+                <div className="flex items-center space-x-2">
                     <Button
                         variant="outline"
                         size="sm"
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
-                        className="mr-1"
+                        className="flex items-center border-gray-300 disabled:opacity-50"
                     >
+                        <ChevronLeftIcon className="h-4 w-4 mr-1" />
                         이전
-                    </Button >
-                    {table.getState().pagination.pageIndex + 1}{' '}/{' '}{table.getPageCount()}
+                    </Button>
                     <Button
                         variant="outline"
                         size="sm"
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
-                        className="ml-1"
+                        className="flex items-center border-gray-300 disabled:opacity-50"
                     >
                         다음
+                        <ChevronRightIcon className="h-4 w-4 ml-1" />
                     </Button>
                 </div>
             </div>

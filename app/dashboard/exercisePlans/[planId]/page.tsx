@@ -11,6 +11,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { DrawerDialogDemo } from '@/components/LayoutCompents/ResponsiveDialog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { BreadcrumbEllipsis } from '@/components/ui/breadcrumb';
+import Link from 'next/link';
 
 /** 플랜 세부 CRUD 페이지 */
 type Params = Promise<{ planId: string }>;
@@ -93,9 +95,49 @@ const ExercisePlanDetailPage = (props: {
                 ) : (
                     <h1 className="text-2xl font-bold">{data.title}</h1>
                 )}
-                <Badge variant="outline" className="px-3 py-1 shrink-0">
-                    {formatDate(data.createdAt!)}
-                </Badge>
+                <div className='flex items-center  gap-2 shrink-0'>
+
+                    <Badge variant="outline" className="px-3 py-1 shrink-0">
+                        {formatDate(data.createdAt!)}
+                    </Badge>
+
+                    <DropdownMenu>
+                        <DropdownMenuTrigger >
+                            <BreadcrumbEllipsis className='h-4 w-4 ' />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem disabled={isPending || isEditing}>
+                                <DrawerDialogDemo planId={planId}>
+                                    <Button variant='default'>
+                                        <Check className="mr-1 h-4 w-4" /> 운동 시작
+                                    </Button>
+                                </DrawerDialogDemo>
+                            </DropdownMenuItem>
+
+                            <DropdownMenuItem disabled={isPending || isEditing}>
+                                <Button
+                                    variant='default'
+                                    className='w-full'
+                                    onClick={handleStartEditing}
+                                >
+                                    <Edit className="mr-1 h-4 w-4" /> 수정
+                                </Button>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem disabled={isPending || isEditing}>
+                                <Link href={`/dashboard/exercisePlans/${planId}/addExercise`}>
+                                    <Button variant='default'>
+                                        <PlusSquare className="mr-1 h-4 w-4" /> 운동 추가
+                                    </Button>
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem disabled={isPending || isEditing}>
+                                <Button variant='destructive'>
+                                    <Trash2 className="mr-1 h-4 w-4" /> 플랜 삭제
+                                </Button>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </div>
 
             <div className="space-y-4 max-h-[70vh] overflow-y-auto scrollbar-hide">
@@ -163,7 +205,7 @@ const ExercisePlanDetailPage = (props: {
             </div>
 
             <div className="mt-6 ">
-                {isEditing ? (
+                {isEditing && (
                     <div className='flex justify-end gap-2'>
                         <Button variant='default'
 
@@ -184,45 +226,6 @@ const ExercisePlanDetailPage = (props: {
                             )}
                         </Button>
                     </div>
-                ) : (
-
-
-                    <DropdownMenu>
-                        <DropdownMenuTrigger>옵션</DropdownMenuTrigger>
-                        <DropdownMenuContent>
-
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem>
-                                <Button
-                                    variant='destructive'
-                                >
-                                    <Trash2 className="mr-1 h-4 w-4" /> 삭제하기
-                                </Button>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem><Button
-                                variant='addButton'
-                            >
-                                <PlusSquare className="mr-1 h-4 w-4" /> 운동 추가
-                            </Button></DropdownMenuItem>
-                            <DropdownMenuItem><Button
-                                variant='default'
-
-                                disabled={isPending}
-                                onClick={handleStartEditing}
-                            >
-                                <Edit className="mr-1 h-4 w-4" /> 수정하기
-                            </Button></DropdownMenuItem>
-                            <DropdownMenuItem><DrawerDialogDemo planId={planId}>
-                                <Button variant='default'
-                                >
-                                    <Check className="mr-1 h-4 w-4" /> 운동 시작
-                                </Button>
-                            </DrawerDialogDemo></DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-
-
-
                 )}
             </div>
         </section>
