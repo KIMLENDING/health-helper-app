@@ -10,6 +10,7 @@ import { formatDate } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { DrawerDialogDemo } from '@/components/LayoutCompents/ResponsiveDialog';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 /** 플랜 세부 CRUD 페이지 */
 type Params = Promise<{ planId: string }>;
@@ -184,35 +185,44 @@ const ExercisePlanDetailPage = (props: {
                         </Button>
                     </div>
                 ) : (
-                    <div className="flex  flex-col-reverse items-end sm:flex-row sm:justify-between gap-2">
-                        <div className='flex gap-2'>
-                            <Button
-                                variant='destructive'
-                            >
-                                <Trash2 className="mr-1 h-4 w-4" /> 삭제하기
-                            </Button>
-                            <Button
+
+
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>옵션</DropdownMenuTrigger>
+                        <DropdownMenuContent>
+
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem>
+                                <Button
+                                    variant='destructive'
+                                >
+                                    <Trash2 className="mr-1 h-4 w-4" /> 삭제하기
+                                </Button>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem><Button
                                 variant='addButton'
                             >
                                 <PlusSquare className="mr-1 h-4 w-4" /> 운동 추가
-                            </Button>
-
-                            <Button
+                            </Button></DropdownMenuItem>
+                            <DropdownMenuItem><Button
                                 variant='default'
 
                                 disabled={isPending}
                                 onClick={handleStartEditing}
                             >
                                 <Edit className="mr-1 h-4 w-4" /> 수정하기
-                            </Button>
-                            <DrawerDialogDemo planId={planId}>
+                            </Button></DropdownMenuItem>
+                            <DropdownMenuItem><DrawerDialogDemo planId={planId}>
                                 <Button variant='default'
                                 >
                                     <Check className="mr-1 h-4 w-4" /> 운동 시작
                                 </Button>
-                            </DrawerDialogDemo>
-                        </div>
-                    </div>
+                            </DrawerDialogDemo></DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
+
+
                 )}
             </div>
         </section>
