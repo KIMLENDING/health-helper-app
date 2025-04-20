@@ -78,7 +78,6 @@ export const POST = async (req: NextRequest) => {
 export const PATCH = async (req: NextRequest) => {
     try {
         const { exercisePlanId, exercises } = await req.json();
-        console.log('운동 추가:', exercisePlanId, exercises);
         // 요청에서 사용자 ID 가져오기
         const { user, error, status } = await requireUser(req);
         if (!user) return NextResponse.json({ message: error }, { status });

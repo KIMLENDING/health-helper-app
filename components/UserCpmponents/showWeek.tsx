@@ -11,7 +11,6 @@ const ShowWeek = () => {
         // 오늘 날짜를 기준으로 이번주 일요일부터 토요일까지의 날짜를 배열로 반환
         const today = new Date();
         const monday = new Date(today);
-        console.log(monday.getDate(), monday.getDay())
         monday.setDate(monday.getDate() - monday.getDay() + 1); // 월요일 날짜 구하기
         return Array(7)
             .fill(null)

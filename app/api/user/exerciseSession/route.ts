@@ -40,7 +40,6 @@ export const POST = async (req: NextRequest) => {
     try {
         // 클라이언트에서 전달된 planId를 가져옴
         const { planId } = await req.json();
-        console.log("planId", planId); // planId 확인   
         // 사용자 인증 확인
         const { user, error, status } = await requireUser(req);
         if (!user) return NextResponse.json({ message: error }, { status });
