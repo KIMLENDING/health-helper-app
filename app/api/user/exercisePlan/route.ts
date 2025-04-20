@@ -63,29 +63,25 @@ export const POST = async (req: NextRequest) => {
 
         return NextResponse.json({ message: '플랜 추가 성공' }, { status: 201 });
     } catch (err: any) {
-        console.error("❌ [POST /api/user/exercisePlan] error:", err);
+        console.error(" [POST /api/user/exercisePlan] error:", err);
         return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
     }
 };
+
+
 /**
- *  운동 계획 수정 API
- *  type이 수정 이면 exercise에서 rest, sets, reps 수정
- *  type이 추가 이면 exercise 추가
+ *  운동 계획에 운동 추가 API
  * @param req
  * @returns 
  */
 
 export const PATCH = async (req: NextRequest) => {
     try {
-        const { userId, exercisePlanId, exercises, type } = await req.json();
-
+        const { exercisePlanId, exercises } = await req.json();
+        console.log('운동 추가:', exercisePlanId, exercises);
         // 요청에서 사용자 ID 가져오기
         const { user, error, status } = await requireUser(req);
         if (!user) return NextResponse.json({ message: error }, { status });
-
-        if (user._id.toString() !== userId) {
-            return NextResponse.json({ message: 'Unauthorized access' }, { status: 403 });
-        }
 
         // ExercisePlan 찾기
         const exercisePlan = await ExercisePlan.findOne({ _id: exercisePlanId });
@@ -94,36 +90,13 @@ export const PATCH = async (req: NextRequest) => {
             return NextResponse.json({ message: 'Exercise Plan not found' }, { status: 404 });
         }
 
-        if (type === 'add') {
-            // Exercise 추가
-            // 기존 운동 ID 가져오기
-            const existingExerciseIds = exercisePlan.exercises.map((ex: any) => ex.exerciseId.toString());
-            // 기존 운동 ID와 새로운 운동 ID 비교 해서 중복 제거
-            const newExercises = exercises.filter((ex: any) => !existingExerciseIds.includes(ex.exerciseId));
-            if (newExercises.length === 0) {
-                // console.log('이미 존재하는 운동입니다.');
-                return NextResponse.json({ message: '이미 존재하는 운동입니다.' }, { status: 400 });
-            }
-            // 운동 추가
-            exercisePlan.exercises.push(...newExercises);
-            await exercisePlan.save();
-            return NextResponse.json({ message: '운동 추가 성공', updatedExercise: newExercises }, { status: 200 });
-        }
-        if (type === 'edit') {
-            // Exercise 업데이트
-            const exerciseIndex = exercisePlan.exercises.findIndex(
-                (ex: any) => ex.exerciseId.toString() === exercises[0].exerciseId);
-            if (exerciseIndex === -1) {
-                return NextResponse.json({ message: 'Exercise not found' }, { status: 404 });
-            }
-            // 데이터 수정
-            exercisePlan.exercises[exerciseIndex] = { ...exercisePlan.exercises[exerciseIndex], ...exercises[0] };
-            // 변경 내용 저장
-            await exercisePlan.save();
-            return NextResponse.json({ message: '운동 수정 성공', updatedExercise: exercisePlan.exercises[exerciseIndex] }, { status: 200 });
-        }
+        // 운동 추가
+        exercisePlan.exercises.push(...exercises);
+        await exercisePlan.save();
+        return NextResponse.json({ message: '운동 추가 성공', data: exercisePlan }, { status: 200 });
 
     } catch (err: any) {
+        console.error(" [PATCH /api/user/exercisePlan] error:", err);
         return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
     }
 };

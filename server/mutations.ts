@@ -212,23 +212,18 @@ export const useSelectedExercise = () => {
 
 
 /**
- *  사용자 전용 운동 계획 수정 Mutation
+ *  사용자 전용 운동 플랜에 운동 추가가 Mutation
  * @returns 
  */
-interface UpdatePlanProps {
-    exercisePlanId: string;
-    title: string;
-    exercises: ExerciseOption[];
-    type: 'add' | 'edit' | 'delete'; // 추가, 수정, 삭제
-}
+
 export const useUpdatePlan = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async (exercisePlan: any) => {
+        mutationFn: async (data: any) => {
             const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json', },
-                body: JSON.stringify(exercisePlan)
+                body: JSON.stringify(data)
             });
             if (!response.ok) {
                 const errorData = await response.json(); // 서버의 메시지 파싱
@@ -251,6 +246,7 @@ export const useUpdatePlan = () => {
                 // console.log('data', data);
                 toast({ variant: 'default2', title: `${data.message}` });
                 await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
+                await queryClient.invalidateQueries({ queryKey: ["exercisePlan", data.data._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
                 await queryClient.resetQueries({ queryKey: ["selectedExercise"] }); // 캐시된 데이터를 초기화합니다.
             }
         }

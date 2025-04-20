@@ -10,6 +10,8 @@ import { Badge } from '@/components/ui/badge';
 import { ExerciseOption } from '@/utils/util';
 import PlanDialogForm from '@/components/UserCpmponents/planForm';
 import { Button } from '@/components/ui/button';
+import { useUpdatePlan } from '@/server/mutations';
+import { useRouter } from 'next/navigation';
 
 /** 플랜 세부 CRUD 페이지 */
 type Params = Promise<{ planId: string }>;
@@ -22,7 +24,9 @@ const Page = (props: {
     const { data: preData } = useExercisePlanById(planId);
     const { data, isLoading } = useEexercises();
     const { data: selectedItmes } = useSelectedExercises(); // 필요한 운동 종목 데이터를 가져옴
-    const [exerciseOption, setExerciseOption] = useState<ExerciseOption[]>([]) // 이건 세트, 반복횟수, 휴식시간을 저장하는 변수
+    const [exerciseOption, setExerciseOption] = useState<ExerciseOption[]>([]) //  세트, 반복횟수, 무게 저장하는 변수
+    const { mutate, isPending } = useUpdatePlan(); // 플랜 업데이트를 위한 훅
+    const router = useRouter(); // 페이지 이동을 위한 훅
     const filteredData = React.useMemo(() => {
         // useMemo를 사용하여 성능 최적화
         // selectedItems로 인해 filteredData이 다시 계산되면서 테이블의 불필요한 재랜더링을 방지하기 위해 useMemo를 사용함
@@ -46,6 +50,17 @@ const Page = (props: {
 
         setExerciseOption(newState);
     }, [selectedItmes]);
+
+    const handleSave = async () => {
+        // 서버에 저장하는 로직을 추가해야 함
+        const data = {
+            exercisePlanId: planId,
+            exercises: exerciseOption
+        }
+        mutate(data); // 플랜 업데이트
+        router.push(`/dashboard/exercisePlans/${planId}`); // 플랜 목록 페이지로 이동
+
+    }
 
     if (isLoading) {
         return (
@@ -180,7 +195,7 @@ const Page = (props: {
             </Card>
 
             <div className='flex justify-end'>
-                <Button className=''>루틴 저장하기</Button>
+                <Button onClick={handleSave} disabled={isPending}>루틴 저장하기</Button>
             </div>
         </section>
     );

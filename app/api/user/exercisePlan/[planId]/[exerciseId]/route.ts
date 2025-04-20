@@ -1,10 +1,6 @@
 import ExercisePlan from "@/models/ExercisePlan"
-import connect from "@/utils/db"
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import User from "@/models/User"
 import { ExerciseOption } from "@/utils/util"
-import { getToken } from "next-auth/jwt"
 import { requireUser } from "@/lib/check-auth"
 /**
  *  운동 계획의 선택한 운동항목 삭제 API
@@ -18,11 +14,8 @@ export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ p
         const exercisePlanId = (await params).planId; // 요청에서 exercisePlanId 가져오기
         const exerciseId = (await params).exerciseId; // 요청에서 exerciseId 가져오기
 
-
-
         const { user, error, status } = await requireUser(req);
         if (!user) return NextResponse.json({ message: error }, { status });
-
 
         // ExercisePlan 찾기
         const exercisePlan = await ExercisePlan.findOne({ _id: exercisePlanId, userId: user._id });
@@ -52,9 +45,10 @@ export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ p
         }
 
         return NextResponse.json({ message: "운동 삭제 성공!" }, { status: 200 });
-    } catch (error: any) {
+    } catch (err: any) {
+        console.error(" [DELETE /api/user/exercisePlan/[planId]/[exerciseId]] error:", err);
         return NextResponse.json(
-            { message: "서버 에러 발생", error: error.message },
+            { message: "서버 에러 발생", error: err.message },
             { status: 500 }
         );
     }

@@ -18,35 +18,13 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ plan
         const exercisePlan = await ExercisePlan.findOne({ _id: planId });
         return NextResponse.json(exercisePlan, { status: 200 });
     } catch (err: any) {
+        console.error(" [GET /api/user/exercisePlan/[planId]] error:", err);
         return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
     }
 }
 
-// export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ planId: string }> }) => {
-//     const planId = (await params).planId; // 요청에서 플랜 ID 가져오기
-//     const title = await req.json();
-
-//     try {
-//         const { user, error, status } = await requireUser(req);
-//         if (!user) return NextResponse.json({ message: error }, { status });
-
-//         const updatedPlan = await ExercisePlan.findOneAndUpdate(
-//             { _id: planId }, { $set: { title } }, { new: true });
-
-//         if (!updatedPlan) {
-//             return NextResponse.json({ message: '수정할 플랜이 존재하지 않습니다.' }, { status: 404 });
-//         }
-//         return NextResponse.json({ updatedPlan, message: '제목 수정 완료' }, { status: 200 });
-
-//     } catch (err: any) {
-//         return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
-//     }
-// }
-
-export async function PATCH(
-    request: NextRequest,
-    { params }: { params: Promise<{ planId: string }> }
-) {
+/** 개별 운동 수정(세트,횟수,무게) */
+export async function PATCH(request: NextRequest) {
     try {
         // 인증 확인
         const { user, error, status } = await requireUser(request);
@@ -56,8 +34,6 @@ export async function PATCH(
 
         // 요청 본문 파싱
         const { exercisePlanId, title, exercises } = await request.json();
-        // const exercisePlanId = (await params).planId; // 요청에서  ID 가져오기
-
 
         // 업데이트할 운동 계획이 사용자의 것인지 확인
         const plan = await ExercisePlan.findOne({
@@ -112,9 +88,9 @@ export async function PATCH(
             message: '운동 계획이 성공적으로 업데이트되었습니다.',
             data: result
         }, { status: 200 });
-    } catch (error: any) {
-        console.error('운동 계획 업데이트 오류:', error);
-        return NextResponse.json({ message: `오류가 발생했습니다: ${error.message}` }, { status: 500 });
+    } catch (err: any) {
+        console.error(" [PATCH /api/user/exercisePlan/[planId]] error:", err);
+        return NextResponse.json({ message: `오류가 발생했습니다: ${err.message}` }, { status: 500 });
     }
 }
 
@@ -123,14 +99,13 @@ export async function PATCH(
 export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ planId: string }> }) => {
     const planId = (await params).planId; // 요청에서 플랜 ID 가져오기
 
-
-
     try {
         const { user, error, status } = await requireUser(req);
         if (!user) return NextResponse.json({ message: error }, { status });
         const exercisePlan = await ExercisePlan.findOneAndDelete({ _id: planId });
         return NextResponse.json({ exercisePlan, message: '삭제 성공' }, { status: 200 });
     } catch (err: any) {
+        console.error(" [DELETE /api/user/exercisePlan/[planId]] error:", err);
         return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
     }
 }
