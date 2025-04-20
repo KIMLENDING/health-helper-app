@@ -6,7 +6,7 @@ import { Dumbbell, Save, X, Edit, Check, Trash2, PlusSquare, Loader2, Play, Chev
 import { useExercisePlanById } from '@/server/queries';
 import { useEditPlan } from '@/server/mutations';
 import React, { use, useEffect, useRef, useState } from 'react';
-import { formatDate } from '@/lib/utils';
+import { cn, formatDate } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { DrawerDialogDemo } from '@/components/LayoutCompents/ResponsiveDialog';
@@ -116,17 +116,44 @@ const ExercisePlanDetailPage = (props: {
         };
     }, []);
 
+    // 세트 클래스 결정 함수
+    // function getSetsClass(sets: number): string {
+    //     if (sets >= 10) return 'bg-purple-200 dark:bg-purple-900/30';
+    //     if (sets >= 8) return 'bg-purple-100 dark:bg-purple-800/30';
+    //     if (sets >= 6) return 'bg-indigo-100 dark:bg-indigo-800/30';
+    //     if (sets >= 4) return 'bg-blue-100 dark:bg-blue-700/30';
+    //     if (sets >= 2) return 'bg-slate-100 dark:bg-slate-700/30';
+    //     return 'bg-secondary/10';
+    // }
+
+
+    // // 반복 횟수 클래스 결정 함수
+    // function getRepsClass(reps: number): string {
+    //     if (reps >= 15) return 'bg-emerald-200 dark:bg-emerald-900/30';
+    //     if (reps >= 12) return 'bg-emerald-100 dark:bg-emerald-800/30';
+    //     if (reps >= 10) return 'bg-teal-100 dark:bg-teal-800/30';
+    //     if (reps >= 8) return 'bg-cyan-100 dark:bg-cyan-700/30';
+    //     if (reps >= 6) return 'bg-sky-100 dark:bg-sky-700/30';
+    //     if (reps >= 4) return 'bg-sky-50 dark:bg-sky-600/30';
+    //     return 'bg-secondary/10';
+    // }
+
+
+    // 무게 클래스 결정 함수
     function getWeightClass(weight: number): string {
-        if (weight >= 150) return 'bg-red-100 dark:bg-red-900/30';
-        if (weight >= 120) return 'bg-red-200 dark:bg-red-800/30';
+        if (weight >= 150) return 'bg-red-200 dark:bg-red-900/30';
+        if (weight >= 120) return 'bg-red-100 dark:bg-red-800/30';
         if (weight >= 100) return 'bg-orange-200 dark:bg-orange-800/30';
         if (weight >= 80) return 'bg-orange-100 dark:bg-orange-700/30';
-        if (weight >= 60) return 'bg-yellow-200 dark:bg-yellow-700/30';
-        if (weight >= 40) return 'bg-yellow-100 dark:bg-yellow-600/30';
-        if (weight >= 20) return 'bg-lime-100 dark:bg-lime-600/30';
-        if (weight >= 10) return 'bg-lime-50 dark:bg-lime-500/30';
+        if (weight >= 60) return 'bg-amber-200 dark:bg-amber-700/30';
+        if (weight >= 40) return 'bg-amber-100 dark:bg-amber-600/30';
+        if (weight >= 20) return 'bg-yellow-100 dark:bg-yellow-600/30';
+        if (weight >= 10) return 'bg-yellow-50 dark:bg-yellow-500/30';
         return 'bg-secondary/10';
     }
+
+
+
 
     if (isPending) return <LoadingOverlay isLoading={isPending} text={'처리 중...'} />;
 
@@ -144,7 +171,7 @@ const ExercisePlanDetailPage = (props: {
                 ) : (
                     <h1 className="text-2xl font-bold">{data.title}</h1>
                 )}
-                <div className='flex items-center gap-2 shrink-0'>
+                <div className='flex items-center gap-2 shrink-0  '>
                     <Badge variant="outline" className="px-3 py-1 shrink-0">
                         {formatDate(data.createdAt!)}
                     </Badge>
@@ -190,13 +217,13 @@ const ExercisePlanDetailPage = (props: {
                 </div>
             </div>
 
-            <div className="mb-4 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="px-3 py-1">
-                        <Dumbbell className="mr-2 h-4 w-4" />
-                        총 {(isEditing ? editedExercises : data.exercises).length}개 운동
-                    </Badge>
-                </div>
+            <div className="mb-4 flex items-center  ">
+
+                <Badge variant="secondary" className="px-3 py-1">
+                    <Dumbbell className="mr-2 h-4 w-4" />
+                    총 {(isEditing ? editedExercises : data.exercises).length}개 운동
+                </Badge>
+
             </div>
 
             <div className="relative">
@@ -257,8 +284,7 @@ const ExercisePlanDetailPage = (props: {
                                     <div className="grid grid-cols-3 gap-4">
                                         {/* 세트 */}
                                         <div
-                                            className={`text-center p-3 rounded-lg ${exercise.sets > 4 ? 'bg-blue-50 dark:bg-blue-900/20' : 'bg-secondary/10'
-                                                }`}
+                                            className={cn(`text-center p-3 rounded-lg `)}
                                         >
                                             <div className="flex items-center justify-center gap-1 mb-1">
                                                 <Layers className="h-4 w-4 text-gray-500" />
@@ -285,8 +311,7 @@ const ExercisePlanDetailPage = (props: {
 
                                         {/* 반복 */}
                                         <div
-                                            className={`text-center p-3 rounded-lg ${exercise.reps > 12 ? 'bg-purple-50 dark:bg-purple-900/20' : 'bg-secondary/10'
-                                                }`}
+                                            className={`text-center p-3 rounded-lg `}
                                         >
                                             <div className="flex items-center justify-center gap-1 mb-1">
                                                 <Repeat className="h-4 w-4 text-gray-500" />
