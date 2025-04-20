@@ -302,9 +302,11 @@ const ExercisePlanDetailPage = (props: {
                                             ) : (
                                                 <div className="flex items-center justify-center">
                                                     <p className="text-lg font-semibold">{exercise.sets}</p>
+                                                    {/*  db 수정해서 prevSets 추가하기 그리고 api도 수정해야함 그럼 이거 주석 풀기
                                                     {exercise.prevSets && exercise.sets > exercise.prevSets && (
                                                         <TrendingUp className="ml-1 h-3 w-3 text-green-500" />
                                                     )}
+                                                        */}
                                                 </div>
                                             )}
                                         </div>
@@ -359,9 +361,12 @@ const ExercisePlanDetailPage = (props: {
                                             ) : (
                                                 <div className="flex items-center justify-center">
                                                     <p className="text-lg font-semibold">{exercise.weight}</p>
+
+                                                    {/*  db 수정해서 prevWeight 추가하기 그리고 api도 수정해야함 그럼 이거 주석 풀기
                                                     {exercise.prevWeight && exercise.weight > exercise.prevWeight && (
                                                         <TrendingUp className="ml-1 h-3 w-3 text-green-500" />
                                                     )}
+                                                        */}
                                                 </div>
                                             )}
                                         </div>
