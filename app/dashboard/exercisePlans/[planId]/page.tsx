@@ -262,7 +262,6 @@ const ExercisePlanDetailPage = (props: {
                                         </span>
                                         {/* 카드 액션 버튼 - 편집 모드일 때만 표시 */}
                                         {isEditing && (
-
                                             <Button
                                                 variant="ghost"
                                                 size="sm"

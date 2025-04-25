@@ -100,3 +100,22 @@ export const PATCH = async (req: NextRequest) => {
     }
 };
 
+/** 플랜 제거 */
+export const DELETE = async (req: NextRequest) => {
+    try {
+        const { exercisePlanId } = await req.json();
+        const { user, error, status } = await requireUser(req);
+        if (!user) return NextResponse.json({ message: error }, { status });
+
+        // 운동 계획 삭제
+        const deletedExercisePlan = await ExercisePlan.findOneAndDelete({ _id: exercisePlanId, userId: user._id });
+        if (!deletedExercisePlan) {
+            return NextResponse.json({ message: '운동 계획을 찾을 수 없습니다.' }, { status: 404 });
+        }
+
+        return NextResponse.json({ message: '운동 계획 삭제 성공' }, { status: 200 });
+    } catch (err: any) {
+        console.error(" [DELETE /api/user/exercisePlan] error:", err);
+        return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
+    }
+}

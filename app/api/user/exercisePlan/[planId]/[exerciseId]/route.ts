@@ -8,11 +8,10 @@ import { requireUser } from "@/lib/check-auth"
  * @returns 
  */
 
-export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ planId: string, exerciseId: string }> }) => {
+export const DELETE = async (req: NextRequest) => {
 
     try {
-        const exercisePlanId = (await params).planId; // 요청에서 exercisePlanId 가져오기
-        const exerciseId = (await params).exerciseId; // 요청에서 exerciseId 가져오기
+        const { exercisePlanId, exerciseId } = await req.json(); // 요청 본문에서 exercisePlanId와 exerciseId 가져오기
 
         const { user, error, status } = await requireUser(req);
         if (!user) return NextResponse.json({ message: error }, { status });
