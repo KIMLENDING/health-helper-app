@@ -41,14 +41,13 @@ export interface exercise {
 
 export interface ExercisePlan {
     _id?: string,
-    title: string,
     exercises: ExerciseOption[]
     createdAt?: string,
 }
 
 export interface ExerciseOption {
     _id?: string,
-    exerciseId: string,
+    exerciseId: any,
     title?: string,
     sets: number,
     reps: number,
@@ -65,7 +64,7 @@ export interface ExerciseSession {
 }
 export interface ExerciseOptionSession {
     _id?: string,
-    exerciseId: string,
+    exerciseId: any,
     title: string,
     repTime?: number, // 마지막에 운동시간 저장
     sets: number,
@@ -84,20 +83,20 @@ export interface ExercisesessionData {
 
 export interface PostExerciseSession {
     sessionId: string,
-    exerciseId: string,
+    exerciseId: any,
     sessionData: ExercisesessionData
 }
 
 
 export interface ExerciseSessionActionPayload {
     sessionId: string,
-    exerciseId: string,
+    exerciseId: any,
     action: "start" | "done" | "end",
 };
 
 export interface ExerciseSessionSetPayload {
     sessionId: string,
-    exerciseId: string,
+    exerciseId: any,
     setId: string,
     reps: number,
     weight: number

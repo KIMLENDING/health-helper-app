@@ -11,7 +11,7 @@ import { requireUser } from "@/lib/check-auth"
  */
 export const POST = async (req: NextRequest) => {
     const { sessionId, exerciseId, action } = await req.json();
-
+    console.log('sessionID', sessionId)
     const { user, error, status } = await requireUser(req);
     if (!user) return NextResponse.json({ message: error }, { status });
 

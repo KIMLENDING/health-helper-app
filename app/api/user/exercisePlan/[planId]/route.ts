@@ -15,7 +15,8 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ plan
     try {
         const { user, error, status } = await requireUser(req);
         if (!user) return NextResponse.json({ message: error }, { status });
-        const exercisePlan = await ExercisePlan.findOne({ _id: planId });
+        const exercisePlan = await ExercisePlan.findOne({ _id: planId }).populate('exercises.exerciseId', 'title tags description');
+        console.log('exercisePlan', exercisePlan);
         return NextResponse.json(exercisePlan, { status: 200 });
     } catch (err: any) {
         console.error(" [GET /api/user/exercisePlan/[planId]] error:", err);

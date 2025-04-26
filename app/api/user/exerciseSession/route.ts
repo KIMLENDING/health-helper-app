@@ -19,7 +19,7 @@ export const GET = async (req: NextRequest) => {
             state: "inProgress",
         })
             .sort({ createdAt: -1 })
-            .populate("exercises.exerciseId"); // populate로 Exercise 정보 가져오기
+            .populate("exercises.exerciseId", "_id"); // populate로 Exercise 정보 가져오기
 
         if (!latestSession) {
             return NextResponse.json({ latestSessionId: null, message: "진행 중인 운동이 없습니다." }, { status: 201 });
@@ -50,7 +50,6 @@ export const POST = async (req: NextRequest) => {
             state: "inProgress",
         })
             .sort({ createdAt: -1 }) // 최신 순으로 정렬
-            .populate("exercises.exerciseId"); // 운동 정보 연결
 
         if (latestSession) {
             return NextResponse.json({ message: "이미 진행 중인 운동이 있습니다." }, { status: 201 });
@@ -69,7 +68,6 @@ export const POST = async (req: NextRequest) => {
             exercisePlanId: plan._id,
             exercises: plan.exercises.map((exercise: any) => ({
                 exerciseId: exercise.exerciseId,
-                title: exercise.title,
                 repTime: exercise.repTime,
                 sets: exercise.sets,
                 state: "pending", // 초기 상태는 'pending'

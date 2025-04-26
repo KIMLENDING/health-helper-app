@@ -2,10 +2,10 @@
 import ExercisePlan from "@/models/ExercisePlan"
 import { NextRequest, NextResponse } from "next/server"
 import { requireUser } from "@/lib/check-auth"
-import Exercise from "@/models/Exercise";
+
 /**
  * 
- * 사용자의 운동 계획들들을 가져오는 API
+ * 사용자의 운동 계획들을 가져오는 API
  * @param request 
  * @param param1 
  * @returns 
@@ -16,7 +16,8 @@ export const GET = async (req: NextRequest) => {
         if (!user) return NextResponse.json({ message: error }, { status });
 
         // 필요한 필드만 선택하여 가져오기 .select('_id userId title')
-        const exercisePlan = await ExercisePlan.find({ userId: user._id });
+        const exercisePlan = await ExercisePlan.find({ userId: user._id })
+            .populate('exercises.exerciseId', 'title');
 
         return NextResponse.json(exercisePlan, { status: 200 });
     } catch (err: any) {
@@ -41,22 +42,10 @@ export const POST = async (req: NextRequest) => {
             return NextResponse.json({ message: '플랜 이름 중복' }, { status: 400 });
         }
 
-        // 각 exerciseId에 대해 title을 가져오기
-        const populatedExercises = await Promise.all(
-            exercises.map(async (ex: any) => {
-                const foundExercise = await Exercise.findById(ex.exerciseId);
-                if (!foundExercise) throw new Error(`Exercise not found: ${ex.exerciseId}`);
-                return {
-                    ...ex,
-                    title: foundExercise.title, // 여기에 운동 이름 삽입
-                };
-            })
-        );
-
         const newExercisePlan = new ExercisePlan({
             userId: user._id,
             title,
-            exercises: populatedExercises,
+            exercises: exercises,
         });
 
         await newExercisePlan.save();
@@ -83,7 +72,7 @@ export const PATCH = async (req: NextRequest) => {
         if (!user) return NextResponse.json({ message: error }, { status });
 
         // ExercisePlan 찾기
-        const exercisePlan = await ExercisePlan.findOne({ _id: exercisePlanId });
+        const exercisePlan = await ExercisePlan.findOne({ _id: exercisePlanId }).populate("exercises.exerciseId");
 
         if (!exercisePlan) {
             return NextResponse.json({ message: 'Exercise Plan not found' }, { status: 404 });

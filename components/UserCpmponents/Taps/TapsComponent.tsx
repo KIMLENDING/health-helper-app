@@ -90,7 +90,7 @@ const TapsComponent = ({ sessionId }: { sessionId: string }) => {
                 {data.exercises.map(exercise => (
                     <Card key={exercise._id} className="p-4 flex justify-between items-center">
                         <div className="flex flex-col">
-                            <span className="max-smc:truncate">{exercise.title}</span>
+                            <span className="max-smc:truncate">{exercise.exerciseId.title}</span>
                             <CardDescription className="max-smc:truncate">
                                 {exercise.sets}세트
                             </CardDescription>

@@ -242,19 +242,21 @@ const ExercisePlanDetailPage = (props: {
                                     </div>
                                     <div className="flex-1">
                                         <div className="flex items-center gap-2">
-                                            <h3 className="font-medium">{exercise.title}</h3>
+                                            <h3 className="font-medium">{exercise.exerciseId.title}</h3>
                                             <Tooltip delayDuration={300}>
                                                 <TooltipTrigger asChild>
                                                     <Info className="h-4 w-4 text-gray-400 hover:text-gray-600 cursor-help" />
                                                 </TooltipTrigger>
                                                 <TooltipContent className="max-w-xs">
-                                                    <p>이 운동에 대한 정보와 올바른 수행 방법을 확인하세요.</p>
+                                                    <p>{exercise.exerciseId.description || '설명 없음'}</p>
                                                 </TooltipContent>
                                             </Tooltip>
                                         </div>
-                                        {exercise.muscleGroup && (
-                                            <p className="text-xs text-gray-500">{exercise.muscleGroup}</p>
-                                        )}
+                                        <div className='flex items-center gap-2 mt-1'>
+                                            {exercise.exerciseId.tags?.map((tag: any) => (
+                                                <p key={tag} className="text-xs text-gray-500">{tag}</p>
+                                            ))}
+                                        </div>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <span className="px-2 py-1 rounded-full bg-secondary/30 text-xs font-semibold">
@@ -273,7 +275,6 @@ const ExercisePlanDetailPage = (props: {
                                                 <Trash2 className="h-4 w-4" />
                                                 <span className="sr-only">삭제</span>
                                             </Button>
-
                                         )}
                                     </div>
                                 </div>

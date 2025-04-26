@@ -25,7 +25,7 @@ const TotalTitleByWeight = ({ data }: { data: any }) => {
 
     const totalTitleByWeight = data?.exercises.flatMap((exercise: ExerciseOptionSession) => {
         return {
-            title: exercise.title,
+            title: exercise.exerciseId.title,
             totalTitleByWeight: exercise.session.map((s: ExercisesessionData) => {
                 return s.weight * s.reps;
             }).reduce((acc, cur) => acc + cur, 0),
@@ -72,7 +72,7 @@ const TotalTitleByWeight = ({ data }: { data: any }) => {
                     {applyLogData.length > 2 ? (
                         <ChartContainer
                             config={chartConfig}
-                            className="mx-auto aspect-[1/1] max-h-[300px]"
+                            className="mx-auto aspect-[1/1] max-h-[40vh] max-w-[40vh]"
                         >
                             <RadarChart data={applyLogData} margin={{
                                 top: -40,

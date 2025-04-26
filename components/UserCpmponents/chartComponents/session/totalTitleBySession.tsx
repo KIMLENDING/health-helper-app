@@ -25,14 +25,14 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
     const isDesktop = useMediaQuery("(min-width: 768px)")
     const titleBySession = data?.exercises.flatMap((exercise: ExerciseOptionSession) => {
         return {
-            title: exercise.title,
+            title: exercise.exerciseId.title,
             session: exercise.session.map((s: ExercisesessionData) => {
                 return { sessionSet: s.set, sessionRep: s.reps, sessionWeight: s.weight }
             }),
         }
     });
 
-
+    console.log(titleBySession)
     return (
         <Card>
 

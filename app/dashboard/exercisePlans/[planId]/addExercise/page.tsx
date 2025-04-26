@@ -31,7 +31,7 @@ const Page = (props: {
         // useMemo를 사용하여 성능 최적화
         // selectedItems로 인해 filteredData이 다시 계산되면서 테이블의 불필요한 재랜더링을 방지하기 위해 useMemo를 사용함
         return data?.filter(
-            (exercise: any) => !preData?.exercises.some((pre: any) => pre.exerciseId === exercise._id)
+            (exercise: any) => !preData?.exercises.some((pre: any) => pre.exerciseId._id === exercise._id)
         );
     }, [data, preData]);
 

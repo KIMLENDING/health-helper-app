@@ -66,14 +66,14 @@ const InProgressTap = ({ data, sessionId, isPending, handleDone }: InProgressTPr
             toast({ title: '오류 발생', description: '운동 상태를 업데이트하는 중 문제가 발생했습니다.' });
         }
     };
-
+    console.log('InProgressTap data:', data);
     return (
         <TabsContent value="inProgress" className="space-y-2">
             {data.exercises.map(exercise => (
                 exercise.state === 'inProgress' && (
                     <Card key={exercise._id} className="p-4 flex flex-col gap-2">
                         <div className="flex flex-col pb-4">
-                            <span className="max-smc:truncate">{exercise.title}</span>
+                            <span className="max-smc:truncate">{exercise.exerciseId.title}</span>
                             <CardDescription className="max-smc:truncate">
                                 총 {exercise.sets}세트
                             </CardDescription>
