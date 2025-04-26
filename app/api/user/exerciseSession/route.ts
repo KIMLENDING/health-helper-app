@@ -68,7 +68,7 @@ export const POST = async (req: NextRequest) => {
             userId: user._id,
             exercisePlanId: plan._id,
             exercises: plan.exercises.map((exercise: any) => ({
-                exerciseId: exercise._id,
+                exerciseId: exercise.exerciseId,
                 title: exercise.title,
                 repTime: exercise.repTime,
                 sets: exercise.sets,
