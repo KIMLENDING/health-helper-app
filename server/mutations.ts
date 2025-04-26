@@ -129,8 +129,10 @@ export const useDeletePlan = () => {
             }
             return response.json();
         },
-        onSuccess: () => {
-            console.log('onSuccess');
+        onSuccess: async (data) => {
+            toast({ variant: 'default2', title: `${data.message}` });
+            await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] }) // 데이터 갱신 후 자동으로 UI 업데이트
+            queryClient.removeQueries({ queryKey: ["exercisePlan", data] })
         },
         onError: (error) => {
             console.log('onError', error);
@@ -172,9 +174,9 @@ export const useEditPlan = () => {
             return response.json();
         },
         onSuccess: async (data) => {
-            toast({ variant: 'default2', title: `${data.message}` });
-            await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] })
+            toast({ variant: 'default2', title: `${data.message}${data.data._id}` });
             await queryClient.invalidateQueries({ queryKey: ["exercisePlan", data.data._id] })
+            await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] })
         },
         onError: (error) => {
             const message = error instanceof Error ? error.message : String(error);

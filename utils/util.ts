@@ -41,6 +41,7 @@ export interface exercise {
 
 export interface ExercisePlan {
     _id?: string,
+    title: string,
     exercises: ExerciseOption[]
     createdAt?: string,
 }

@@ -102,7 +102,7 @@ export const DELETE = async (req: NextRequest) => {
             return NextResponse.json({ message: '운동 계획을 찾을 수 없습니다.' }, { status: 404 });
         }
 
-        return NextResponse.json({ message: '운동 계획 삭제 성공' }, { status: 200 });
+        return NextResponse.json({ message: '운동 계획 삭제 성공', data: { exercisePlanId } }, { status: 200 });
     } catch (err: any) {
         console.error(" [DELETE /api/user/exercisePlan] error:", err);
         return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
