@@ -46,12 +46,12 @@
 
 **exercises 배열의 내부 구조:**
 
-| 필드         | 타입     | 필수 여부 | 설명              |
-| ------------ | -------- | --------- | ----------------- |
-| `exerciseId` | ObjectId | ✅        | 참조: `Exercise`  |
-| `sets`       | Number   | ✅        | 세트 수           |
-| `reps`       | Number   | ✅        | 반복 횟수         |
-| `weight`     | Number   | ✅        | 목표 중량 (kg 등) |
+| 필드         | 타입     | 필수 여부 | 설명             |
+| ------------ | -------- | --------- | ---------------- |
+| `exerciseId` | ObjectId | ✅        | 참조: `Exercise` |
+| `sets`       | Number   | ✅        | 세트 수          |
+| `reps`       | Number   | ✅        | 반복 횟수        |
+| `weight`     | Number   | ✅        | 초기 중량 (kg)   |
 
 | > **(제거됨)**: | `title` | String | ✅ | 운동 이름 |
 `title` 필드는 `exerciseId`를 통해 populate하여 조회합니다. (2024-04 기준)
