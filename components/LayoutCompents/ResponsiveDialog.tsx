@@ -28,18 +28,35 @@ export function DrawerDialogDemo({ children, planId }: Props) {
     const { latestSessionId } = inProgress || {}; // ✅ 진행중인 운동 세션 ID
     const isDesktop = useMediaQuery("(min-width: 768px)");
     const { mutateAsync, isPending } = useCreateExerciseSession();
+    const [isLoading, setLoading] = React.useState(false);
 
     const handleStartSession = async () => {
         if (!planId) return;
-        const data = { planId }
-        const res = await mutateAsync(data);
-        if (res) router.push(`/dashboard/exerciseSession/${res.newExerciseSession._id}`);
+        setLoading(true);
+        try {
+            const data = { planId };
+            const res = await mutateAsync(data);
+            if (res) router.push(`/dashboard/exerciseSession/${res.newExerciseSession._id}`);
+        } catch (error) {
+            console.error("운동 세션 시작 중 오류 발생:", error);
+        } finally {
+            setLoading(false); // 로딩 상태 초기화
+            setOpen(false);
+        }
     };
 
     /** 진행 중인 운동으로 이동  */
     const handleContinueSession = () => {
         if (!inProgress) return;
-        router.push(`/dashboard/exerciseSession/${latestSessionId}`);
+        setLoading(true);
+        try {
+            router.push(`/dashboard/exerciseSession/${latestSessionId}`);
+        } catch (error) {
+            console.error("운동 세션 이동 중 오류 발생:", error);
+        } finally {
+            setLoading(false); // 로딩 상태 초기화
+            setOpen(false);
+        }
     };
 
     const ActionButtons = (
@@ -82,7 +99,7 @@ export function DrawerDialogDemo({ children, planId }: Props) {
         Description: DrawerDescription,
         Close: DrawerClose,
     };
-
+    if (isLoading) return <LoadingOverlay isLoading={isLoading} text={'로딩 중'} />; // ✅ 로딩 오버레이
     return (
         <>
             <UI.Root autoFocus open={open} onOpenChange={setOpen}>

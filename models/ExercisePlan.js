@@ -8,7 +8,7 @@ const exercisePlanSchema = new Schema(
     exercises: [
       {
         exerciseId: { type: Schema.Types.ObjectId, ref: "Exercise" },
-        title: { type: String, required: true }, //운동명칭
+        // title: { type: String, required: true }, //운동명칭
         sets: { type: Number, required: true }, // 세트 수
         reps: { type: Number, required: true }, // 반복횟수
         weight: { type: Number, required: true }, // 무게

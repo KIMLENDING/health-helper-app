@@ -10,27 +10,26 @@ const ShowWeek = () => {
     const getCurrentWeekDates = () => {
         // 오늘 날짜를 기준으로 이번주 일요일부터 토요일까지의 날짜를 배열로 반환
         const today = new Date();
-        const monday = new Date(today);
-        console.log(monday.getDate(), monday.getDay())
-        monday.setDate(monday.getDate() - monday.getDay() + 1); // 월요일 날짜 구하기
+        const sunday = new Date(today);
+        sunday.setDate(sunday.getDate() - sunday.getDay()); // 월요일 날짜 구하기
         return Array(7)
             .fill(null)
             .map((_, i) => {
-                const date = new Date(monday);
-                date.setDate(monday.getDate() + i);
+                const date = new Date(sunday);
+                date.setDate(sunday.getDate() + i);
                 return date;
             });
     };
-    // 일주일 요일 배열 생성성
+
+    // 일주일 요일 배열 생성
     const weekDates = getCurrentWeekDates();
     const days = weekDates.map((date, index) => ({
-        label: ["월", "화", "수", "목", "금", "토", '일'][index],
+        label: ['일', "월", "화", "수", "목", "금", "토",][index],
         name: date.toLocaleString("ko-KR", {
             weekday: "long",
         }),
         date: date,
     }));
-
 
     // 해당 요일에 운동 기록이 있는지 확인 및 id값 추가
     const weekSessionMapping = days.map((day) => {
@@ -38,6 +37,7 @@ const ShowWeek = () => {
             // 같은 날이 2개 이상일 경우, 가장 최근의 session을 가져오기 위해 createdAt을 사용하여 비교
             const sessionDate = new Date(session.createdAt).toLocaleDateString("ko-KR");
             const dayDate = day.date.toLocaleDateString("ko-KR");
+            console.log("sessionDate", sessionDate, "dayDate", dayDate);
             return sessionDate === dayDate;
         });
 

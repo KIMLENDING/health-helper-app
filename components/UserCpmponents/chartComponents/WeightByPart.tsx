@@ -63,8 +63,9 @@ const WeightByPart = ({ data }: { data: any }) => {
                 }}
 
             >
+                <ChartTooltip content={<ChartTooltipContent />} />
 
-                <CartesianGrid vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#616266" vertical={false} />
                 <XAxis
                     dataKey="part"
                     tickLine={false}
@@ -72,7 +73,6 @@ const WeightByPart = ({ data }: { data: any }) => {
                     axisLine={false}
                     tickFormatter={(value) => value.slice(0, 3)}
                 />
-                <ChartTooltip content={<ChartTooltipContent />} />
                 <ChartLegend content={<ChartLegendContent />} />
                 <Bar dataKey="weight" fill="var(--color-weight)" radius={4} />
             </BarChart>

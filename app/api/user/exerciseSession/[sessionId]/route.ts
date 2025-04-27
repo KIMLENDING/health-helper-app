@@ -14,7 +14,7 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ sess
         const { user, error, status } = await requireUser(req);
         if (!user) return NextResponse.json({ message: error }, { status });
 
-        const exerciseSession = await ExerciseSession.findOne({ _id: sessionId });
+        const exerciseSession = await ExerciseSession.findOne({ _id: sessionId }).populate('exercises.exerciseId', 'title');
         return NextResponse.json(exerciseSession, { status: 200 });
     } catch (err: any) {
         return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });
@@ -29,7 +29,7 @@ export const PATCH = async (req: NextRequest) => {
         if (!user) return NextResponse.json({ message: error }, { status });
 
 
-        const checkSession = await ExerciseSession.findOne({ _id: sessionId });
+        const checkSession = await ExerciseSession.findOne({ _id: sessionId }).populate('exercises.exerciseId', 'title');
         if (!checkSession) {
             return NextResponse.json({ message: '존재하지 않는 세션입니다.' }, { status: 404 });
         }
@@ -46,12 +46,6 @@ export const PATCH = async (req: NextRequest) => {
         checkSession.markModified("exercises");
         await checkSession.save();
 
-        // const updatedSession = await ExerciseSession.findOneAndUpdate(
-        //     { _id: sessionId, },// 조건
-        //     {
-        //         $set: { 'state': 'done', },  // 업데이트할 필드
-        //     },
-        // );
         return NextResponse.json({ updatedSession: checkSession, message: '서버에 저장되었습니다.' }, { status: 201 });
     }
     catch (err: any) {

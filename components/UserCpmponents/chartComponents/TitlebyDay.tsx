@@ -14,7 +14,7 @@ const TitlebyDay = ({ data, }: { data: any }) => {
             const totalWeight = exercise.session.map((s: ExercisesessionData) => {
                 return s.weight * s.reps;
             }).reduce((acc, cur) => acc + cur, 0);
-            return { title: exercise.title, totalWeight };
+            return { title: exercise.exerciseId.title, totalWeight };
         });
     }).reduce((acc: any, cur: any) => {
         const existing = acc.find((item: any) => item.title === cur.title);
@@ -29,13 +29,24 @@ const TitlebyDay = ({ data, }: { data: any }) => {
     return (
         <ChartContainer config={chartConfig} className="min-h-[200px] aspect-auto w-full">
             <BarChart accessibilityLayer data={totalWeightsByTitle}
-                margin={{
-                    top: 20,
-                }}
-                barSize={isMobile ? 20 : 50}
+                margin={{ top: 20, left: 12, right: 12 }}
+            // barSize={isMobile ? 20 : 50}
             >
+                <ChartTooltip content={<ChartTooltipContent />}
+                    formatter={(value, name, props) => {
+                        console.log(props)
+                        return (
+                            <div>
+                                <div className='flex flex-row gap-1 items-center'>
+                                    <div className='h-2.5 w-2.5 bg-blue-400 border-blue-400 rounded-[2px]' />
+                                    {props.payload.totalWeight} kg
+                                </div>
+                            </div>
+                        )
+                    }}
 
-                <CartesianGrid vertical={false} />
+                />
+                <CartesianGrid strokeDasharray="3 3" stroke="#616266" vertical={false} />
                 <XAxis
                     dataKey="title"
                     tickLine={false}
@@ -43,16 +54,7 @@ const TitlebyDay = ({ data, }: { data: any }) => {
                     axisLine={false}
                     tickFormatter={(value) => value.slice(0, 5)}
                 />
-                <ChartTooltip content={<ChartTooltipContent />}
-                    formatter={(value, name, props) => {
-                        return <div>
-                            <div className='flex flex-row gap-1 items-center'>
-                                <div className='h-2.5 w-2.5 bg-blue-400 border-blue-400 rounded-[2px]' />
-                                {props.payload.totalWeight} kg
-                            </div>
-                        </div>
-                    }}
-                />
+
                 <ChartLegend content={<ChartLegendContent />} />
                 <Bar dataKey="totalWeight" fill="var(--color-title)" radius={4}  >
                 </Bar>

@@ -11,7 +11,6 @@ import { requireUser } from "@/lib/check-auth"
  */
 export const POST = async (req: NextRequest) => {
     const { sessionId, exerciseId, action } = await req.json();
-
     const { user, error, status } = await requireUser(req);
     if (!user) return NextResponse.json({ message: error }, { status });
 
@@ -20,12 +19,14 @@ export const POST = async (req: NextRequest) => {
         return NextResponse.json({ message: "Exercise session not found" }, { status: 404 });
     }
 
+
+    // 세션에 해당하는 운동 찾기
     const exercise = exerciseSession.exercises.find((e: any) => e._id.toString() === exerciseId);
     if (!exercise) {
         return NextResponse.json({ message: "Exercise not found" }, { status: 404 });
     }
-    try {
 
+    try {
         if (action === "end") {
             // 세트 종료 처리
             if (exercise.state !== "inProgress") {
@@ -68,19 +69,11 @@ export const POST = async (req: NextRequest) => {
             exercise.state = "done";
             exercise.repTime = Math.floor(totalRepTime / 1000); // 초 단위
 
-
-            // // ✅ 자동 종료
-            // if (exerciseSession.exercises.every((ex: { state: string }) => ex.state === 'done')) {
-            //     // 모든 운동이 완료된 경우
-            //     exerciseSession.state = 'done';
-            // }
-
             // 변경 감지
             exerciseSession.markModified("exercises");
             await exerciseSession.save();
             return NextResponse.json({ message: "done", exerciseSession }, { status: 200 });
         }
-
 
         if (action === "start") {
             // state가 pending이면 inProgress로 변경

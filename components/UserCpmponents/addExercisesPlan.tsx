@@ -1,13 +1,13 @@
-import { useSelectedExercises } from '@/server/queries';
-import React, { useEffect, useState } from 'react'
+
+import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { useSession } from 'next-auth/react';
+
 import { Button } from '../ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import GetExercise from '../AdminComponents/getExercise';
-import { XIcon } from 'lucide-react';
+
 import PlanDialogForm from './planForm';
-import { Exercise, ExerciseOption } from '@/utils/util';
+import { ExerciseOption } from '@/utils/util';
 
 import { useUpdatePlan } from '@/server/mutations';
 
@@ -21,44 +21,20 @@ const AddExercisesPlan = ({ plan_id }: { plan_id: string }) => {
     // const { data, error, isLoading } = useSelectedExercises(); // 필요한 운동 종목 데이터를 가져옵니다.
     const useUpdatePlanMutation = useUpdatePlan();
 
-    // useEffect(() => {
-    //     // 초기 값 설정 - data가 추가 되면 exerciseOption 초기값 필드를 추가
-    //     if (!data) return;
-    //     const defaultData = { sets: 4, reps: 6, weight: 30 };
-    //     const newState: ExerciseOption[] = data.map(ex => ({
-    //         exerciseId: ex._id,
-    //         title: ex.title,
-    //         sets: exerciseOption.find(v => v.exerciseId === ex._id)?.sets || defaultData.sets,
-    //         reps: exerciseOption.find(v => v.exerciseId === ex._id)?.reps || defaultData.reps,
-    //         weight: exerciseOption.find(v => v.exerciseId === ex._id)?.weight || defaultData.weight,
-    //     }));
-    //     setExerciseOption(newState);
-    // }, [data]);
-
-
     const handleUpdate = async () => {
         {
             const newUpdataData = {
-                title: '', // 이건 인터페이스에 있지만 여기서는 사용하지 않기때문에 빈값으로 넣어줍니다.
                 exercisePlanId: plan_id,
                 exercises: exerciseOption,
-                type: 'add',
             }
             const res = await useUpdatePlanMutation.mutateAsync(newUpdataData);
             if (res) {
                 setExerciseOption([])
-
                 setIsOpen(false)
-
             }
         }
     }
 
-
-
-    // if (isLoading) {
-    //     return <div>Loading...</div>;
-    // }
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen} >
             <DialogTrigger asChild onClick={() => setIsOpen(true)}>

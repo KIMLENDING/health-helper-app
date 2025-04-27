@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 📦 MongoDB 스키마 개요
 
-## Getting Started
+이 프로젝트는 Mongoose를 사용하여 피트니스 관련 핵심 데이터를 스키마 형태로 정의합니다.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 🧑‍💼 User
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+앱 사용자에 대한 정보를 저장하는 스키마입니다.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| 필드       | 타입   | 필수 여부 | 설명                                            |
+| ---------- | ------ | --------- | ----------------------------------------------- |
+| `email`    | String | ✅        | 이메일 주소                                     |
+| `password` | String | ❌        | 비밀번호 (소셜 로그인 사용 시 비어있을 수 있음) |
+| `name`     | String | ✅        | 사용자 이름                                     |
+| `image`    | String | ❌        | 프로필 이미지 URL                               |
+| `role`     | String | ✅        | 사용자 권한 (기본값: `"user"`)                  |
+| `provider` | String | ✅        | 로그인 제공자 (`google`, `github` 등)           |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+> 🔐 `email + provider` 조합으로 고유한 사용자 식별을 보장하기 위해 복합 인덱스가 설정되어 있습니다.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+### 🏋️ Exercise
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+운동 항목을 정의하는 스키마입니다.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| 필드          | 타입   | 필수 여부 | 설명                                  |
+| ------------- | ------ | --------- | ------------------------------------- |
+| `title`       | String | ✅        | 운동 이름 (고유)                      |
+| `description` | String | ✅        | 운동 설명                             |
+| `url`         | String | ✅        | 참고 영상 또는 설명 링크              |
+| `tags`        | String | ✅        | 태그 목록 (예: 상체, 하체, 유산소 등) |
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 📋 ExercisePlan
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+사용자가 미리 설정한 운동 계획(루틴)을 저장하는 스키마입니다.
+
+| 필드        | 타입     | 필수 여부 | 설명                                |
+| ----------- | -------- | --------- | ----------------------------------- |
+| `userId`    | ObjectId | ✅        | 계획을 생성한 사용자 ID 참조:`User` |
+| `title`     | String   | ✅        | 계획 제목                           |
+| `exercises` | [객체]   | ✅        | 포함된 운동 목록                    |
+
+**exercises 배열의 내부 구조:**
+
+| 필드         | 타입     | 필수 여부 | 설명             |
+| ------------ | -------- | --------- | ---------------- |
+| `exerciseId` | ObjectId | ✅        | 참조: `Exercise` |
+| `sets`       | Number   | ✅        | 세트 수          |
+| `reps`       | Number   | ✅        | 반복 횟수        |
+| `weight`     | Number   | ✅        | 초기 중량 (kg)   |
+
+| > **(제거됨)**: | `title` | String | ✅ | 운동 이름 |
+`title` 필드는 `exerciseId`를 통해 populate하여 조회합니다. (2024-04 기준)
+
+---
+
+### 🧪 ExerciseSession
+
+실제 수행된 운동 세션을 기록하는 스키마입니다.
+
+| 필드             | 타입     | 필수 여부 | 설명                                 |
+| ---------------- | -------- | --------- | ------------------------------------ |
+| `userId`         | ObjectId | ✅        | 세션 수행자 ID 참조:`User`           |
+| `exercisePlanId` | ObjectId | ✅        | 기반이 된 운동 계획                  |
+| `exercises`      | [객체]   | ✅        | 세션 동안 수행된 운동들              |
+| `state`          | String   | ✅        | 세션 상태 (`"inProgress"`, `"done"`) |
+
+**exercises 배열의 내부 구조:**
+
+| 필드         | 타입     | 필수 여부 | 설명                                  |
+| ------------ | -------- | --------- | ------------------------------------- |
+| `exerciseId` | ObjectId | ✅        | 참조: `Exercise`                      |
+| `repTime`    | Number   | ❌        | 전체 세트 수행 시간 (초 단위 등)      |
+| `sets`       | Number   | ✅        | 세트 수                               |
+| `state`      | String   | ✅        | `"pending"`, `"inProgress"`, `"done"` |
+| `session`    | [객체]   | ✅        | 실제 수행한 각 세트 정보              |
+
+| > **(제거됨)**: | `title` | String | ✅ | 운동 이름 |
+`title` 필드는 `exerciseId`를 통해 populate하여 조회합니다. (2024-04 기준)
+
+**session 배열의 내부 구조 (개별 세트):**
+
+| 필드      | 타입   | 필수 여부 | 설명           |
+| --------- | ------ | --------- | -------------- |
+| `set`     | Number | ✅        | 세트 번호      |
+| `reps`    | Number | ✅        | 실제 반복 횟수 |
+| `weight`  | Number | ✅        | 사용 중량      |
+| `endTime` | Date   | ❌        | 세트 종료 시각 |
+
+---
+
+### ✅ 설계 의도
+
+- 미리 정의된 운동 계획과 실제 수행 데이터를 분리하여 유연한 기록 구조 제공
+- 세트 단위의 정밀 기록을 통해 운동 통계 및 분석 가능

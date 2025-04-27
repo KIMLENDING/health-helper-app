@@ -2,7 +2,7 @@
 import { useExercisePlan } from '@/server/queries';
 import React from 'react'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
-import { BicepsFlexed, DumbbellIcon, RadicalIcon, SparklesIcon, SquareArrowOutUpRightIcon, VolleyballIcon } from 'lucide-react';
+import { BicepsFlexed, DumbbellIcon, RadicalIcon, SparklesIcon, VolleyballIcon } from 'lucide-react';
 import Link from 'next/link';
 import { DrawerDialogDemo } from '../LayoutCompents/ResponsiveDialog';
 

@@ -61,14 +61,6 @@ const WeightByDay = ({ data }: { data: any }) => {
 
                 }}
             >
-                <CartesianGrid vertical={false} />
-                <XAxis
-                    dataKey="day"
-                    tickLine={false}
-                    axisLine={false}
-                    tickMargin={8}
-                    tickFormatter={(value) => value.slice(0, 3)}
-                />
                 <ChartTooltip
                     cursor={true}
                     content={<ChartTooltipContent indicator="line" />}
@@ -88,9 +80,16 @@ const WeightByDay = ({ data }: { data: any }) => {
                                 </div>
                             </div>)
                     }}
-
-
                 />
+                <CartesianGrid strokeDasharray="3 3" stroke="#616266" vertical={false} />
+                <XAxis
+                    dataKey="day"
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                    tickFormatter={(value) => value.slice(0, 3)}
+                />
+
                 <ChartLegend content={<ChartLegendContent />} />
                 <Line
                     dataKey="totalWeight"

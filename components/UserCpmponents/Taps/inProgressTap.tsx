@@ -73,7 +73,7 @@ const InProgressTap = ({ data, sessionId, isPending, handleDone }: InProgressTPr
                 exercise.state === 'inProgress' && (
                     <Card key={exercise._id} className="p-4 flex flex-col gap-2">
                         <div className="flex flex-col pb-4">
-                            <span className="max-smc:truncate">{exercise.title}</span>
+                            <span className="max-smc:truncate">{exercise.exerciseId.title}</span>
                             <CardDescription className="max-smc:truncate">
                                 총 {exercise.sets}세트
                             </CardDescription>
@@ -159,7 +159,7 @@ const InProgressTap = ({ data, sessionId, isPending, handleDone }: InProgressTPr
             {!data.exercises.find(ex => ex.state === 'inProgress') ? (
                 <div className="text-center">진행중인 운동이 없습니다.</div>
             ) : (
-                <DrawerDialogDone onComplete={handleDone}>
+                <DrawerDialogDone onAction={handleDone}>
                     <Button className="flex-1">운동 종료</Button>
                 </DrawerDialogDone>
             )}

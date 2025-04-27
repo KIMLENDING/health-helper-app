@@ -24,24 +24,26 @@ import {
     DrawerTrigger,
 } from "@/components/ui/drawer"
 
-/** 하나의 운동 종목을 종료 시키는 버튼 */
+/** action함수를 받아서 진행 시키기 전 모달을 띄워 다시 한 번 확인 하는 컴포넌트 */
 export function DrawerDialogDone({ children,
-    onComplete
+    onAction, title, description
 }: Readonly<{
     children: React.ReactNode;
-    onComplete: () => void;
+    onAction: () => void;
+    title?: string;
+    description?: string;
 }>) {
     const [open, setOpen] = React.useState(false)
     const isDesktop = useMediaQuery("(min-width: 768px)")
 
-    const Title = '운동을 종료 하시겠습니까?'
-    const Description = '운동을 종료하면 종료한 운동은 다시 시작할 수 없습니다.'
+    const Title = title || '운동을 종료 하시겠습니까?'
+    const Description = description || '운동을 종료하면 종료한 운동은 다시 시작할 수 없습니다.'
     const ActionButtons = (
         <div className="w-full flex gap-2">
             <Button className="flex-1 hover:bg-zinc-300 hover:dark:bg-zinc-600" variant="secondary">
                 취소
             </Button>
-            <Button className="flex-1 hover:bg-zinc-300 hover:dark:bg-zinc-600" variant="secondary" onClick={onComplete} >
+            <Button className="flex-1 hover:bg-zinc-300 hover:dark:bg-zinc-600" variant="secondary" onClick={onAction} >
                 예
             </Button>
         </div>

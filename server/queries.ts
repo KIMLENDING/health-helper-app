@@ -62,15 +62,13 @@ export const useExercisePlan = () => {
  * @returns 
  */
 export const useExercisePlanById = (id: string) => {
-    const queryClient = useQueryClient();
-
     return useQuery<ExercisePlan>({
         queryKey: ["exercisePlan", id],
         queryFn: async () => {
-            const cached = queryClient.getQueryData<ExercisePlan[]>(["exercisePlans"]);
-            const found = cached?.find((plan) => plan._id === id);
+            // const cached = queryClient.getQueryData<ExercisePlan[]>(["exercisePlans"]);
+            // const found = cached?.find((plan) => plan._id === id);
 
-            if (found && found.exercises) return found;
+            // if (found && found.exercises) return found;
 
             const res = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan/${id}`);
             if (!res.ok) throw new Error("Failed to fetch plan");

@@ -19,7 +19,7 @@ export const GET = async (req: NextRequest) => {
             state: "inProgress",
         })
             .sort({ createdAt: -1 })
-            .populate("exercises.exerciseId"); // populate로 Exercise 정보 가져오기
+            .populate("exercises.exerciseId", "_id"); // populate로 Exercise 정보 가져오기
 
         if (!latestSession) {
             return NextResponse.json({ latestSessionId: null, message: "진행 중인 운동이 없습니다." }, { status: 201 });
@@ -40,7 +40,6 @@ export const POST = async (req: NextRequest) => {
     try {
         // 클라이언트에서 전달된 planId를 가져옴
         const { planId } = await req.json();
-        console.log("planId", planId); // planId 확인   
         // 사용자 인증 확인
         const { user, error, status } = await requireUser(req);
         if (!user) return NextResponse.json({ message: error }, { status });
@@ -51,7 +50,6 @@ export const POST = async (req: NextRequest) => {
             state: "inProgress",
         })
             .sort({ createdAt: -1 }) // 최신 순으로 정렬
-            .populate("exercises.exerciseId"); // 운동 정보 연결
 
         if (latestSession) {
             return NextResponse.json({ message: "이미 진행 중인 운동이 있습니다." }, { status: 201 });
@@ -69,8 +67,7 @@ export const POST = async (req: NextRequest) => {
             userId: user._id,
             exercisePlanId: plan._id,
             exercises: plan.exercises.map((exercise: any) => ({
-                exerciseId: exercise._id,
-                title: exercise.title,
+                exerciseId: exercise.exerciseId,
                 repTime: exercise.repTime,
                 sets: exercise.sets,
                 state: "pending", // 초기 상태는 'pending'

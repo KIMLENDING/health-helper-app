@@ -1,4 +1,5 @@
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { useSidebar } from '@/components/ui/sidebar';
 import { chartConfig } from '@/lib/utils';
 import { ExerciseSession } from '@/utils/util';
 import React, { useMemo } from 'react';
@@ -10,7 +11,7 @@ const TimeByDay = ({ data }: { data: any }) => {
         totalTime: number;
         formetTime: string;
     };
-
+    const { isMobile } = useSidebar();
     const formatTime = (seconds: number): string => {
         const minutes = Math.floor(seconds / 60);
         const secs = seconds % 60;
@@ -49,15 +50,9 @@ const TimeByDay = ({ data }: { data: any }) => {
         <ChartContainer config={chartConfig} className={`min-h-[200px] aspect-auto w-full`}>
             <BarChart accessibilityLayer data={totalTimeByDay}
                 margin={{ top: 20, left: 12, right: 12 }}
+            // barSize={isMobile ? 20 : 50}
             >
-                <CartesianGrid vertical={false} />
-                <XAxis
-                    dataKey="day"
-                    tickLine={false}
-                    tickMargin={10}
-                    axisLine={false}
-                    tickFormatter={(value) => value.slice(0, 3)}
-                />
+
                 <ChartTooltip content={<ChartTooltipContent />}
                     formatter={(value, name, props) => {
                         return [<div
@@ -67,6 +62,14 @@ const TimeByDay = ({ data }: { data: any }) => {
                             {props.payload.formetTime}
                         </div>];
                     }}
+                />
+                <CartesianGrid strokeDasharray="3 3" stroke="#616266" vertical={false} />
+                <XAxis
+                    dataKey="day"
+                    tickLine={false}
+                    tickMargin={10}
+                    axisLine={false}
+                    tickFormatter={(value) => value.slice(0, 5)}
                 />
                 <ChartLegend content={<ChartLegendContent />} />
                 <Bar dataKey="totalTime" fill="var(--color-totalTime)" radius={4} />
