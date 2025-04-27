@@ -63,7 +63,6 @@ export const authOptions: any = {
       if (account.provider === "github" || account.provider === "google") {
         await connect(); // db연결
         try {
-          // console.log("--------", account.provider);
           const existingUser = await User.findOne({ email: user.email, provider: account.provider });
           if (!existingUser) { // user가 없으면
             const newUser = new User({
@@ -87,7 +86,7 @@ export const authOptions: any = {
     async jwt({ token, user, trigger, session, profile, account }: { token: any; user?: any; trigger: string; session: any, profile: any, account: any }) {
 
       if (trigger === 'update' && session?.user) {  // 세션이 업데이트 될 때마다 실행
-        // console.log("Session User----", session.user);
+
         return { ...token, ...session.user };
       }
       if (user) { // 로그인할 때마다 실행

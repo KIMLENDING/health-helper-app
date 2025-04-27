@@ -18,18 +18,26 @@ const TapsComponent = ({ sessionId }: { sessionId: string }) => {
     const { mutateAsync, isPending: isPandingAction } = useActionExerciseSession();
     const { mutateAsync: doneExercise, isPending: isPendingDone } = useDoneExerciseSession();
     const [loadingIndex, setLoadingIndex] = useState<string | null>(null);
+    const [isLoading2, setLoading2] = useState(false);
     const router = useRouter();
 
     /**운동 플랜 종료 */
     const updateSessionStatus = async () => {
         if (!data) return;
-        localStorage.clear();
-        const res = await doneExercise({ sessionId });
-        if (res.delete) { // 완료한 운동이 하나도 없을 땐 세션이 삭제됨 
-            router.push('/dashboard');
-            return;
+        setLoading2(true);
+        try {
+            localStorage.clear();
+            const res = await doneExercise({ sessionId });
+            if (res.delete) { // 완료한 운동이 하나도 없을 땐 세션이 삭제됨 
+                router.push('/dashboard');
+                return;
+            }
+            router.push(`/dashboard/detail/${data._id}`);
+        } catch (error) {
+            console.error("운동 세션 종료 중 오류 발생:", error);
+        } finally {
+            setLoading2(false);
         }
-        router.push(`/dashboard/detail/${data._id}`);
     };
 
     /** 서버에 운동시작과 종료를 업데이트 하는 함수 */
@@ -74,9 +82,9 @@ const TapsComponent = ({ sessionId }: { sessionId: string }) => {
 
 
 
-    if (isLoading || !data) return <div className="text-center">Loading...</div>;
+    if (isLoading || !data) return <LoadingOverlay isLoading={isLoading2} text={'데이터 불러오는 중...'} />;
     if (error) return <div className="text-center">Error: {error.message}</div>;
-
+    if (isLoading2) return <LoadingOverlay isLoading={isLoading2} text={'서버에 저장 중...'} />; // ✅ 로딩 오버레이
     return (
         <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="w-full mb-4">

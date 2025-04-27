@@ -333,7 +333,12 @@ export const useDoneExerciseSession = () => {
         },
         onSuccess: async (data) => {
             toast({ variant: 'default2', title: `${data.message}` });
-            queryClient.invalidateQueries({ queryKey: ["inProgress"] }) // 모든 운동을 완료 했기 때문에 inProgress 쿼리 갱신을 위한 무효화화
+            // 모든 운동을 완료 했기 때문에 inProgress 쿼리 갱신을 위한 무효화
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1 필요
+            queryClient.invalidateQueries({ queryKey: ["allSessions", year, month, 1] }) // detail페이지의 데이터 업데이트
+
             if (data.updatedSession) { // 데이터가 있을 경우에만 invalidateQueries 호출
                 await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.updatedSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
             }

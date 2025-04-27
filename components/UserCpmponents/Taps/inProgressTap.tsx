@@ -66,7 +66,7 @@ const InProgressTap = ({ data, sessionId, isPending, handleDone }: InProgressTPr
             toast({ title: '오류 발생', description: '운동 상태를 업데이트하는 중 문제가 발생했습니다.' });
         }
     };
-    console.log('InProgressTap data:', data);
+
     return (
         <TabsContent value="inProgress" className="space-y-2">
             {data.exercises.map(exercise => (
