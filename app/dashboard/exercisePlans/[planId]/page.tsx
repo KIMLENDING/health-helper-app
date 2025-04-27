@@ -24,18 +24,23 @@ const ExercisePlanDetailPage = (props: {
 }) => {
     const params = use(props.params);
     const planId = params.planId;
+    const route = useRouter();
     const { data } = useExercisePlanById(planId);
-    const { mutateAsync, isPending } = useEditPlan();
 
+    // 운동 계획 수정
+    const { mutateAsync, isPending } = useEditPlan();
     const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState('');
     const [editedExercises, setEditedExercises] = useState<any[]>([]);
+    const [deleteItem, setDeleteItem] = useState<string[]>([]); // 삭제된 운동 ID 목록
+
+    // 플랜 삭제
+    const { mutate: deletPlan } = useDeletePlan();
 
     // 스크롤 상태를 추적하기 위한 상태 추가
     const [isScrolled, setIsScrolled] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
-    const { mutate } = useDeletePlan();
-    const route = useRouter();
+
     // 편집 모드 시작
     const handleStartEditing = () => {
         setEditedTitle(data?.title || '');
@@ -65,33 +70,34 @@ const ExercisePlanDetailPage = (props: {
 
     // 수정 사항 저장
     const handleSaveChanges = async () => {
-        const updatedData = {
-            exercisePlanId: planId,
-            title: editedTitle,
-            exercises: editedExercises.map(ex => ({
-                _id: ex._id,
-                exerciseId: ex.exerciseId,
-                sets: ex.sets,
-                reps: ex.reps,
-                weight: ex.weight
-            }))
-        };
-
-        await mutateAsync(updatedData);
-        setIsEditing(false);
-    };
-    /** 플랜 삭제*/
-    const handleDeletePlan = async () => {
-        // 삭제 로직 추가
-        mutate(planId)
-        route.push('/dashboard/exercisePlans')
+        try {
+            const updatedData = {
+                exercisePlanId: planId,
+                title: editedTitle,
+                exercises: editedExercises
+            };
+            await mutateAsync(updatedData);
+            setIsEditing(false);
+            setDeleteItem([]); // 삭제 항목 초기화
+        } catch (error) {
+            console.error('Error saving changes:', error);
+        }
     };
 
-    /** 운동 삭제*/
-    const handleRemoveExercise = async (exerciseId: string) => {
-        // 삭제 로직 추가
+    /** 운동 삭제 */
+    const handleRemoveExercise = (id: string) => {
+        setDeleteItem((prev) => [...prev, id]);
+        setEditedExercises(
+            (prev => prev.filter(ex => ex._id !== id)) // 삭제된 운동 제외
+        );
     }
 
+    /** 플랜 삭제*/
+    const handleDeletePlan = () => {
+        // 삭제 로직 추가
+        deletPlan(planId)
+        route.push('/dashboard/exercisePlans')
+    };
 
     // 스크롤 이벤트 핸들러
     const handleScroll = () => {
@@ -137,10 +143,8 @@ const ExercisePlanDetailPage = (props: {
     }
 
 
-
-
+    // 로딩 상태에 따라 다른 컴포넌트 렌더링
     if (isPending) return <LoadingOverlay isLoading={isPending} text={'처리 중...'} />;
-
     if (!data) return <div className="p-8 text-center">운동 계획을 찾을 수 없습니다.</div>;
 
     return (
@@ -249,9 +253,7 @@ const ExercisePlanDetailPage = (props: {
                                                 variant="ghost"
                                                 size="sm"
                                                 className="h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50"
-                                                onClick={() => {
-                                                    // handleRemoveExercise(exercise._id) 
-                                                }}
+                                                onClick={() => handleRemoveExercise(exercise._id)}
                                             >
                                                 <Trash2 className="h-4 w-4" />
                                                 <span className="sr-only">삭제</span>

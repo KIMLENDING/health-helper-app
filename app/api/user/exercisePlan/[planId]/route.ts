@@ -54,13 +54,13 @@ export async function PATCH(request: NextRequest) {
         }
 
         if (exercises && Array.isArray(exercises)) {
-            // 각 운동의 세트, 반복, 무게 업데이트
-            plan.exercises = plan.exercises.map((existingExercise: any) => {
-                const updatedExercise = exercises.find((ex: any) =>
-                    ex._id === existingExercise._id.toString() // 업데이트 될 운동 찾기
+            // 요청된 운동만 필터링하여 저장
+            const updatedExercises = exercises.map((updatedExercise: any) => {
+                const existingExercise = plan.exercises.find((ex: any) =>
+                    ex._id.toString() === updatedExercise._id
                 );
 
-                if (updatedExercise) {
+                if (existingExercise) {
                     return {
                         ...existingExercise.toObject(), // 기존 운동 정보 유지
                         sets: updatedExercise.sets || existingExercise.sets,
@@ -68,10 +68,10 @@ export async function PATCH(request: NextRequest) {
                         weight: updatedExercise.weight || existingExercise.weight
                     };
                 }
-                return existingExercise;
-            });
+                return null; // 존재하지 않는 운동은 제외
+            }).filter((exercise: any) => exercise !== null);
 
-            updateData.exercises = plan.exercises;
+            updateData.exercises = updatedExercises;
         }
 
         // 업데이트 실행
