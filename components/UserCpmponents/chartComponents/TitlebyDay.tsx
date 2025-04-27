@@ -14,7 +14,7 @@ const TitlebyDay = ({ data, }: { data: any }) => {
             const totalWeight = exercise.session.map((s: ExercisesessionData) => {
                 return s.weight * s.reps;
             }).reduce((acc, cur) => acc + cur, 0);
-            return { title: exercise.title, totalWeight };
+            return { title: exercise.exerciseId.title, totalWeight };
         });
     }).reduce((acc: any, cur: any) => {
         const existing = acc.find((item: any) => item.title === cur.title);
@@ -29,13 +29,12 @@ const TitlebyDay = ({ data, }: { data: any }) => {
     return (
         <ChartContainer config={chartConfig} className="min-h-[200px] aspect-auto w-full">
             <BarChart accessibilityLayer data={totalWeightsByTitle}
-                margin={{
-                    top: 20,
-                }}
-                barSize={isMobile ? 20 : 50}
+                margin={{ top: 20, left: 12, right: 12 }}
+            // barSize={isMobile ? 20 : 50}
             >
                 <ChartTooltip content={<ChartTooltipContent />}
                     formatter={(value, name, props) => {
+                        console.log(props)
                         return (
                             <div>
                                 <div className='flex flex-row gap-1 items-center'>

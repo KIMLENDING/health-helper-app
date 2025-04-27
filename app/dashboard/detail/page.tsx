@@ -18,12 +18,6 @@ const Page = () => {
     const [page, setPage] = useState(1);
     const { data, isLoading, isError } = useAllSessions(year, month, page, 5);
 
-    // 운동 세션 데이터 필터링 (빈 세션 제거)
-    const filteredSessions = data?.allSession?.map((sessionData: ExerciseSession) => ({
-        ...sessionData,
-        exercises: sessionData.exercises.filter(exercise => exercise.session.length > 0),
-    }));
-
     // 월, 연도 변경 시 첫 페이지로 초기화
     useEffect(() => {
         setPage(1);
@@ -103,9 +97,9 @@ const Page = () => {
                         </div>
                     ))}
                 </div>
-            ) : filteredSessions?.length > 0 ? (
+            ) : data?.allSession?.length > 0 ? (
                 <Accordion type="multiple" className="space-y-4">
-                    {filteredSessions.map((session: ExerciseSession) => {
+                    {data?.allSession.map((session: ExerciseSession) => {
                         const { formatted, dayOfWeek } = formatDate(session.createdAt || '');
 
                         return (
@@ -158,14 +152,14 @@ const Page = () => {
             )}
 
             {/* 🔹 페이지네이션 (로딩 중이면 버튼 비활성화) */}
-            {filteredSessions?.length > 0 && (
+            {data?.allSession?.length > 0 && (
                 <div className="flex justify-between items-center mt-8 bg-white dark:bg-zinc-800 p-3 rounded-xl shadow-md">
                     <button
                         onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
                         disabled={page === 1 || isLoading}
                         className={`flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${page === 1 || isLoading
-                                ? 'bg-gray-100 dark:bg-zinc-700 text-gray-400 dark:text-zinc-500 cursor-not-allowed'
-                                : 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/40'
+                            ? 'bg-gray-100 dark:bg-zinc-700 text-gray-400 dark:text-zinc-500 cursor-not-allowed'
+                            : 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/40'
                             }`}
                     >
                         <ChevronLeft className="h-4 w-4" />
@@ -181,8 +175,8 @@ const Page = () => {
                         onClick={() => setPage((prev) => (prev < (data?.totalPages ?? 1) ? prev + 1 : prev))}
                         disabled={page >= (data?.totalPages ?? 1) || isLoading}
                         className={`flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${page >= (data?.totalPages ?? 1) || isLoading
-                                ? 'bg-gray-100 dark:bg-zinc-700 text-gray-400 dark:text-zinc-500 cursor-not-allowed'
-                                : 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/40'
+                            ? 'bg-gray-100 dark:bg-zinc-700 text-gray-400 dark:text-zinc-500 cursor-not-allowed'
+                            : 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/40'
                             }`}
                     >
                         <span>다음</span>

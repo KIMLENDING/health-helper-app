@@ -50,7 +50,7 @@ export const GET = async (req: NextRequest) => {
         })
             .sort({ createdAt: -1 }) // 최신순 정렬
             .skip((page - 1) * limit) // 페이지네이션 적용
-            .limit(limit)
+            .limit(limit) // 페이지당 개수 제한
             .populate("exercises.exerciseId", "_id title") // 운동 정보 연결
 
         // 총 운동 기록 개수 (페이지네이션을 위해 필요)
