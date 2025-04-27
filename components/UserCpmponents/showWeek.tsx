@@ -37,7 +37,7 @@ const ShowWeek = () => {
             // 같은 날이 2개 이상일 경우, 가장 최근의 session을 가져오기 위해 createdAt을 사용하여 비교
             const sessionDate = new Date(session.createdAt).toLocaleDateString("ko-KR");
             const dayDate = day.date.toLocaleDateString("ko-KR");
-            console.log("sessionDate", sessionDate, "dayDate", dayDate);
+
             return sessionDate === dayDate;
         });
 

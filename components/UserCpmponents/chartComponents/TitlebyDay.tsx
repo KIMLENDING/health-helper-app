@@ -34,7 +34,7 @@ const TitlebyDay = ({ data, }: { data: any }) => {
             >
                 <ChartTooltip content={<ChartTooltipContent />}
                     formatter={(value, name, props) => {
-                        console.log(props)
+
                         return (
                             <div>
                                 <div className='flex flex-row gap-1 items-center'>
