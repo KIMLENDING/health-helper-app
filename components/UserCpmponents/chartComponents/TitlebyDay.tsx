@@ -34,8 +34,20 @@ const TitlebyDay = ({ data, }: { data: any }) => {
                 }}
                 barSize={isMobile ? 20 : 50}
             >
+                <ChartTooltip content={<ChartTooltipContent />}
+                    formatter={(value, name, props) => {
+                        return (
+                            <div>
+                                <div className='flex flex-row gap-1 items-center'>
+                                    <div className='h-2.5 w-2.5 bg-blue-400 border-blue-400 rounded-[2px]' />
+                                    {props.payload.totalWeight} kg
+                                </div>
+                            </div>
+                        )
+                    }}
 
-                <CartesianGrid vertical={false} />
+                />
+                <CartesianGrid strokeDasharray="3 3" stroke="#616266" vertical={false} />
                 <XAxis
                     dataKey="title"
                     tickLine={false}
@@ -43,16 +55,7 @@ const TitlebyDay = ({ data, }: { data: any }) => {
                     axisLine={false}
                     tickFormatter={(value) => value.slice(0, 5)}
                 />
-                <ChartTooltip content={<ChartTooltipContent />}
-                    formatter={(value, name, props) => {
-                        return <div>
-                            <div className='flex flex-row gap-1 items-center'>
-                                <div className='h-2.5 w-2.5 bg-blue-400 border-blue-400 rounded-[2px]' />
-                                {props.payload.totalWeight} kg
-                            </div>
-                        </div>
-                    }}
-                />
+
                 <ChartLegend content={<ChartLegendContent />} />
                 <Bar dataKey="totalWeight" fill="var(--color-title)" radius={4}  >
                 </Bar>

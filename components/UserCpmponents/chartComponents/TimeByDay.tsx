@@ -50,14 +50,7 @@ const TimeByDay = ({ data }: { data: any }) => {
             <BarChart accessibilityLayer data={totalTimeByDay}
                 margin={{ top: 20, left: 12, right: 12 }}
             >
-                <CartesianGrid vertical={false} />
-                <XAxis
-                    dataKey="day"
-                    tickLine={false}
-                    tickMargin={10}
-                    axisLine={false}
-                    tickFormatter={(value) => value.slice(0, 3)}
-                />
+
                 <ChartTooltip content={<ChartTooltipContent />}
                     formatter={(value, name, props) => {
                         return [<div
@@ -67,6 +60,14 @@ const TimeByDay = ({ data }: { data: any }) => {
                             {props.payload.formetTime}
                         </div>];
                     }}
+                />
+                <CartesianGrid strokeDasharray="3 3" stroke="#616266" vertical={false} />
+                <XAxis
+                    dataKey="day"
+                    tickLine={false}
+                    tickMargin={10}
+                    axisLine={false}
+                    tickFormatter={(value) => value.slice(0, 3)}
                 />
                 <ChartLegend content={<ChartLegendContent />} />
                 <Bar dataKey="totalTime" fill="var(--color-totalTime)" radius={4} />
