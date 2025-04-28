@@ -97,3 +97,90 @@
 
 - 미리 정의된 운동 계획과 실제 수행 데이터를 분리하여 유연한 기록 구조 제공
 - 세트 단위의 정밀 기록을 통해 운동 통계 및 분석 가능
+
+# 📚 API Routes
+
+Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
+
+---
+
+## 🛡️ 인증 (Auth)
+
+| Method |         Endpoint          | 설명                   |
+| :----: | :-----------------------: | :--------------------- |
+|  POST  | `/api/auth/[...nextauth]` | NextAuth 인증 핸들러   |
+|  POST  |     `/api/auth-token`     | JWT 발급 (로그인 토큰) |
+|  POST  |      `/api/register`      | 사용자 회원가입        |
+|  POST  |   `/api/registerAdmin`    | 관리자 회원가입        |
+
+---
+
+## 🏋️‍♂️ 관리자 - 운동 관리 (Admin / Exercise)
+
+| Method |              Endpoint              | 설명                |
+| :----: | :--------------------------------: | :------------------ |
+|  GET   |       `/api/admin/exercise`        | 모든 운동 목록 조회 |
+|  POST  |       `/api/admin/exercise`        | 새로운 운동 등록    |
+| PATCH  | `/api/admin/exercise/[exerciseId]` | 운동 정보 수정      |
+| DELETE | `/api/admin/exercise/[exerciseId]` | 운동 삭제           |
+
+---
+
+## 👤 사용자 (User)
+
+| Method |          Endpoint          | 설명             |
+| :----: | :------------------------: | :--------------- |
+| DELETE | `/api/user/delete-account` | 사용자 계정 삭제 |
+
+---
+
+## 📝 운동 플랜 (Exercise Plan)
+
+| Method |             Endpoint              | 설명                     |
+| :----: | :-------------------------------: | :----------------------- |
+|  GET   |     `/api/user/exercisePlan`      | 운동 플랜 전체 조회      |
+|  POST  |     `/api/user/exercisePlan`      | 새로운 운동 플랜 생성    |
+|  GET   | `/api/user/exercisePlan/[planId]` | 특정 운동 플랜 상세 조회 |
+| PATCH  | `/api/user/exercisePlan/[planId]` | 운동 플랜 수정           |
+| DELETE | `/api/user/exercisePlan/[planId]` | 운동 플랜 삭제           |
+
+---
+
+## 🏃 운동 세션 (Exercise Session)
+
+| Method |                Endpoint                 | 설명                         |
+| :----: | :-------------------------------------: | :--------------------------- |
+|  GET   |       `/api/user/exerciseSession`       | 운동 세션 전체 조회          |
+|  POST  |       `/api/user/exerciseSession`       | 새로운 운동 세션 생성        |
+|  GET   | `/api/user/exerciseSession/[sessionId]` | 특정 운동 세션 상세 조회     |
+| PATCH  | `/api/user/exerciseSession/[sessionId]` | 운동 세션 업데이트           |
+| DELETE | `/api/user/exerciseSession/[sessionId]` | 운동 세션 삭제               |
+|  GET   |     `/api/user/exerciseSession/all`     | 모든 세션 기록 조회 (관리용) |
+
+---
+
+## 📅 주간 세션 (Session Week)
+
+| Method |                Endpoint                 | 설명                |
+| :----: | :-------------------------------------: | :------------------ |
+|  GET   | `/api/user/exerciseSession/SessionWeek` | 주간 운동 세션 조회 |
+
+---
+
+# 📌 Notes
+
+- 모든 API 요청은 `Content-Type: application/json` 헤더를 사용합니다.
+- 인증이 필요한 엔드포인트는 JWT 또는 세션을 통한 인증을 요구합니다.
+- 에러 발생 시 표준화된 에러 메시지가 반환됩니다.
+
+---
+
+# 🛠️ Tech Stack
+
+- **Next.js 15** (App Router)
+- **TypeScript**
+- **MongoDB**
+- **React Query**
+- **TailwindCSS 4.0**
+- **Shadcn-UI**
+- **Vercel Deploy**
