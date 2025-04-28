@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 import React from 'react'
 
-const page = () => {
+const Page = () => {
     const { mutateAsync, isPending } = useDeleteAccount();
     const route = useRouter();
     const handleDeleteAccount = async () => {
@@ -32,4 +32,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page
