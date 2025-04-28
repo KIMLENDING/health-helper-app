@@ -383,3 +383,32 @@ export const useEditExerciseSession = () => {
     })
 };
 
+
+/**
+ * 탈퇴하기
+ * @description 유저의 모든 운동 계획과 세션을 삭제하고, 유저를 삭제합니다.
+ */
+export const useDeleteAccount = () => {
+    return useMutation({
+        mutationFn: async () => {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/delete-account`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json', },
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        },
+        onSuccess: async (data) => {
+            toast({ variant: 'default2', title: data.message });
+
+        },
+        onError: (error: any) => {
+            const message = error instanceof Error ? error.message : String(error);
+            console.error("onError", error);
+            toast({ variant: "destructive", title: message });
+        },
+    })
+}

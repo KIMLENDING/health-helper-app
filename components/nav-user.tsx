@@ -30,6 +30,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { signOut } from "next-auth/react";
+import Link from "next/link"
 export function NavUser({
   user,
 }: {
@@ -89,19 +90,16 @@ export function NavUser({
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             }
-            {/* <DropdownMenuSeparator />
+            <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                계정
-              </DropdownMenuItem>
-
-              <DropdownMenuItem>
-                <Bell />
-                알림
-              </DropdownMenuItem>
+              <Link href="/dashboard/notification">
+                <DropdownMenuItem>
+                  <BadgeCheck />
+                  계정
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator /> */}
+            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => {
               signOut();
             }}>

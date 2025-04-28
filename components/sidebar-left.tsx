@@ -155,9 +155,7 @@ export function SidebarLeft() {
         {session?.user?.role === "admin" ? <NavMain items={AdminData.navMain} /> : <NavMain items={menuItems.navMain} />}
 
       </SidebarHeader>
-      <SidebarContent className="bg-zinc-300 dark:bg-inherit">
-        {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
-      </SidebarContent>
+
     </Sidebar>
   )
 }

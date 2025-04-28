@@ -4,7 +4,7 @@ import TotalTitleBySession from '@/components/UserCpmponents/chartComponents/ses
 import TotalTitleByWeight from '@/components/UserCpmponents/chartComponents/session/totalTitleByWeight';
 import { useGetExerciseSession } from '@/server/queries';
 import { useParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 const Page = () => {
     const params = useParams();
