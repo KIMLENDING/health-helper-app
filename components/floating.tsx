@@ -1,13 +1,14 @@
 'use client'
 
 import React from 'react'
-import { useInProgress } from '@/server/queries'
+
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { Badge } from './ui/badge'
+import { useInProgress } from '@/server/user/exerciseSession/queries'
 
 const Floating = () => {
-    const { data } = useInProgress()
+    const { data } = useInProgress();
     const { latestSessionId } = data || {}
 
     const badge = <Badge variant="outline">운동 상태</Badge>

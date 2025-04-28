@@ -5,6 +5,7 @@ import { requireUser } from "@/lib/check-auth"
 
 
 /**
+ * useExercisePlanById()
  * 플랜 ID에 해당하는 운동 계획을 가져오는 API
  * @param req 
  * @param param1 플랜ID 
@@ -24,7 +25,10 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ plan
     }
 }
 
-/** 개별 운동 수정(세트,횟수,무게) */
+/** 
+ * useEditPlan()
+ * 개별 운동 수정(세트,횟수,무게) 
+*/
 export async function PATCH(request: NextRequest) {
     try {
         // 인증 확인
@@ -87,7 +91,7 @@ export async function PATCH(request: NextRequest) {
 
         return NextResponse.json({
             message: '운동 계획이 성공적으로 업데이트되었습니다.',
-            data: result
+            exercisePlan: result
         }, { status: 200 });
     } catch (err: any) {
         console.error(" [PATCH /api/user/exercisePlan/[planId]] error:", err);
@@ -96,7 +100,12 @@ export async function PATCH(request: NextRequest) {
 }
 
 
-
+/**
+ * useDeletePlan()
+ * @param req 
+ * @param param1 
+ * @returns 
+ */
 export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ planId: string }> }) => {
     const planId = (await params).planId; // 요청에서 플랜 ID 가져오기
 
@@ -104,7 +113,7 @@ export const DELETE = async (req: NextRequest, { params }: { params: Promise<{ p
         const { user, error, status } = await requireUser(req);
         if (!user) return NextResponse.json({ message: error }, { status });
         const exercisePlan = await ExercisePlan.findOneAndDelete({ _id: planId });
-        return NextResponse.json({ exercisePlan, message: '삭제 성공' }, { status: 200 });
+        return NextResponse.json({ message: '삭제 성공', exercisePlan }, { status: 200 });
     } catch (err: any) {
         console.error(" [DELETE /api/user/exercisePlan/[planId]] error:", err);
         return NextResponse.json({ message: 'Internal Server Error', error: err.message }, { status: 500 });

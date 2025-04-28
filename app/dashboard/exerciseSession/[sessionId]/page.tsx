@@ -1,7 +1,7 @@
 import TapsComponent from "@/components/UserCpmponents/Taps/TapsComponent";
 import { fetchWithCookie } from "@/utils/fetchUrl";
 import getQueryClient from "@/utils/getQueryClient";
-import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { cookies } from "next/headers";
 
 

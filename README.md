@@ -106,64 +106,73 @@ Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
 
 ## 🛡️ 인증 (Auth)
 
-| Method |         Endpoint          | 설명                   |
-| :----: | :-----------------------: | :--------------------- |
-|  POST  | `/api/auth/[...nextauth]` | NextAuth 인증 핸들러   |
-|  POST  |     `/api/auth-token`     | JWT 발급 (로그인 토큰) |
-|  POST  |      `/api/register`      | 사용자 회원가입        |
-|  POST  |   `/api/registerAdmin`    | 관리자 회원가입        |
+| Method |         Endpoint          | 설명                 |
+| :----: | :-----------------------: | :------------------- |
+|  POST  | `/api/auth/[...nextauth]` | NextAuth 인증 핸들러 |
+|  POST  |      `/api/register`      | 사용자 회원가입      |
+|  POST  |   `/api/registerAdmin`    | 관리자 회원가입      |
 
 ---
 
 ## 🏋️‍♂️ 관리자 - 운동 관리 (Admin / Exercise)
 
-| Method |              Endpoint              | 설명                |
-| :----: | :--------------------------------: | :------------------ |
-|  GET   |       `/api/admin/exercise`        | 모든 운동 목록 조회 |
-|  POST  |       `/api/admin/exercise`        | 새로운 운동 등록    |
-| PATCH  | `/api/admin/exercise/[exerciseId]` | 운동 정보 수정      |
-| DELETE | `/api/admin/exercise/[exerciseId]` | 운동 삭제           |
+/server/admin/mutations.ts
+
+| Method |              Endpoint              | 설명                |     TanstackQuery     |
+| :----: | :--------------------------------: | :------------------ | :-------------------: |
+|  GET   |       `/api/admin/exercise`        | 모든 운동 목록 조회 |   `useEexercises()`   |
+|  POST  |       `/api/admin/exercise`        | 새로운 운동 등록    |    `addExercise()`    |
+| PATCH  | `/api/admin/exercise/[exerciseId]` | 운동 정보 수정      | `useUpdateExercise()` |
+| DELETE | `/api/admin/exercise/[exerciseId]` | 운동 삭제           | `useDeleteExercise()` |
 
 ---
 
 ## 👤 사용자 (User)
 
-| Method |          Endpoint          | 설명             |
-| :----: | :------------------------: | :--------------- |
-| DELETE | `/api/user/delete-account` | 사용자 계정 삭제 |
+| Method |          Endpoint          | 설명             |   TanstackQuery   |
+| :----: | :------------------------: | :--------------- | :---------------: |
+| DELETE | `/api/user/delete-account` | 사용자 계정 삭제 | `useEexercises()` |
 
 ---
 
 ## 📝 운동 플랜 (Exercise Plan)
 
-| Method |             Endpoint              | 설명                     |
-| :----: | :-------------------------------: | :----------------------- |
-|  GET   |     `/api/user/exercisePlan`      | 운동 플랜 전체 조회      |
-|  POST  |     `/api/user/exercisePlan`      | 새로운 운동 플랜 생성    |
-|  GET   | `/api/user/exercisePlan/[planId]` | 특정 운동 플랜 상세 조회 |
-| PATCH  | `/api/user/exercisePlan/[planId]` | 운동 플랜 수정           |
-| DELETE | `/api/user/exercisePlan/[planId]` | 운동 플랜 삭제           |
+/server/exercisePlan/mutations.ts
+/server/exercisePlan/queries.ts
+
+| Method |             Endpoint              | 설명                  |      TanstackQuery      |
+| :----: | :-------------------------------: | :-------------------- | :---------------------: |
+|  GET   |     `/api/user/exercisePlan`      | 운동 플랜 전체 조회   |   `useExercisePlan()`   |
+|  POST  |     `/api/user/exercisePlan`      | 새로운 운동 플랜 생성 |    `useCreatePlan()`    |
+| PATCH  |     `/api/user/exercisePlan`      | 운동 플랜 운동 추가   |    `useUpdatePlan()`    |
+|  GET   | `/api/user/exercisePlan/[planId]` | 특정 운동 상세 조회   | `useExercisePlanById()` |
+| PATCH  | `/api/user/exercisePlan/[planId]` | 개별 운동 수정        |     `useEditPlan()`     |
+| DELETE | `/api/user/exercisePlan/[planId]` | 플랜 삭제             |    `useDeletePlan()`    |
 
 ---
 
 ## 🏃 운동 세션 (Exercise Session)
 
-| Method |                Endpoint                 | 설명                         |
-| :----: | :-------------------------------------: | :--------------------------- |
-|  GET   |       `/api/user/exerciseSession`       | 운동 세션 전체 조회          |
-|  POST  |       `/api/user/exerciseSession`       | 새로운 운동 세션 생성        |
-|  GET   | `/api/user/exerciseSession/[sessionId]` | 특정 운동 세션 상세 조회     |
-| PATCH  | `/api/user/exerciseSession/[sessionId]` | 운동 세션 업데이트           |
-| DELETE | `/api/user/exerciseSession/[sessionId]` | 운동 세션 삭제               |
-|  GET   |     `/api/user/exerciseSession/all`     | 모든 세션 기록 조회 (관리용) |
+/server/exerciseSession/mutations.ts
+/server/exerciseSession/queries.ts
+
+| Method |                   Endpoint                   | 설명                       |        TanstackQuery         |
+| :----: | :------------------------------------------: | :------------------------- | :--------------------------: |
+|  GET   |         `/api/user/exerciseSession`          | 가장 최근 세션조회         |      `useInProgress()`       |
+|  POST  |         `/api/user/exerciseSession`          | 새로운 운동 세션 생성      | `useCreateExerciseSession()` |
+|  GET   |   `/api/user/exerciseSession/[sessionId]`    | 특정 운동 세션 상세 조회   |  `useGetExerciseSession()`   |
+| PATCH  |   `/api/user/exerciseSession/[sessionId]`    | 특정 운동 세션 업데이트    |  `useDoneExerciseSession()`  |
+|  POST  | `/api/user/exerciseSession/[sessionId]/[id]` | 운동 세션 세트 업데이트    | `useActionExerciseSession()` |
+| PATCH  | `/api/user/exerciseSession/[sessionId]/[id]` | 운동 세션 세트 데이터 수정 |  `useEditExerciseSession()`  |
+|  GET   |       `/api/user/exerciseSession/all`        | 모든 세션 기록 조회        |      `useAllSessions()`      |
 
 ---
 
 ## 📅 주간 세션 (Session Week)
 
-| Method |                Endpoint                 | 설명                |
-| :----: | :-------------------------------------: | :------------------ |
-|  GET   | `/api/user/exerciseSession/SessionWeek` | 주간 운동 세션 조회 |
+| Method |                Endpoint                 | 설명                |    TanstackQuery    |
+| :----: | :-------------------------------------: | :------------------ | :-----------------: |
+|  GET   | `/api/user/exerciseSession/SessionWeek` | 주간 운동 세션 조회 | `useWeekSessions()` |
 
 ---
 

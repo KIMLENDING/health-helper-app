@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardDescription } from '@/components/ui/card'
 import { TabsContent } from '@/components/ui/tabs'
 import { toast } from '@/hooks/use-toast'
-import { useActionExerciseSession, useEditExerciseSession } from '@/server/mutations'
+import { useActionExerciseSession, useEditExerciseSession } from '@/server/user/exerciseSession/mutations'
+
 import { ExerciseSession } from '@/utils/util'
 import React, { useState } from 'react'
 

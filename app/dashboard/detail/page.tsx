@@ -1,5 +1,5 @@
 'use client';
-import { useAllSessions } from "@/server/queries";
+
 import { ExerciseSession } from "@/utils/util";
 import {
     Accordion,
@@ -11,6 +11,7 @@ import TotalTitleBySession from "@/components/UserCpmponents/chartComponents/ses
 import { useEffect, useState } from "react";
 import TotalTitleByWeight from "@/components/UserCpmponents/chartComponents/session/totalTitleByWeight";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { useAllSessions } from "@/server/user/exerciseSession/queries";
 
 const Page = () => {
     const [year, setYear] = useState(new Date().getFullYear());

@@ -5,8 +5,6 @@ import getQueryClient from '@/utils/getQueryClient';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { cookies } from 'next/headers';
 
-// /api/admin/exercise
-
 const fetchData = async () => {
     const cookieHeader = await cookies();
     const cookieName =

@@ -13,15 +13,13 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useDeleteExercise } from "@/server/mutations"
-import { toast } from "@/hooks/use-toast"
+
 import TagSelector from "@/components/AdminComponents/addTag"
-import { Exercise } from "@/utils/util"
+import { useDeleteExercise, useUpdateExercise } from "@/server/admin/mutations"
 
 const ActionCell = ({ row }: { row: any }) => {
     const exercise = row.original
-    const queryClient = useQueryClient()
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isDialogOpen, setDialogOpen] = useState(false)
     const [dbTags, setDbTags] = useState<string[]>(exercise.tags)
     const [formData, setFormData] = useState({
@@ -29,34 +27,9 @@ const ActionCell = ({ row }: { row: any }) => {
         tags: dbTags.join(", "), // 폼에서 태그를 콤마로 구분된 문자열로 표시
         url: exercise.url,
     })
+    // useMutation 설정 (수정, 삭제)
     const useDeleteMutation = useDeleteExercise();
-    // 데이터 업데이트를 위한 useMutation 설정
-    const { mutate: updateExercise } = useMutation(
-        {
-            mutationFn: async (updatedData: Partial<Exercise>) => {
-                const response = await fetch(`${process.env.NEXTAUTH_URL}/api/admin/exercise/${exercise._id}`, {
-                    method: "PATCH",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(updatedData),
-                })
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
-                }
-                return response.json()
-            },
-            onSuccess: (data) => {
-
-                toast({ variant: "default2", title: `${data.message}` })
-                queryClient.invalidateQueries({ queryKey: ["exercises"] }) // 데이터 갱신 후 자동으로 UI 업데이트
-                setDialogOpen(false) // 모달 닫기
-            },
-            onError: (error) => {
-
-                toast({ variant: "destructive", title: `${error}` })
-            }
-        },
-    )
+    const updateExercise = useUpdateExercise();
 
     // 폼 데이터 변경 핸들러
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,9 +42,10 @@ const ActionCell = ({ row }: { row: any }) => {
     }, [dbTags]);
 
     // 수정 버튼 클릭 시 호출되는 핸들러
-    const handleEdit = () => {
+    const handleEdit = async () => {
         const updatedTags = formData.tags.split(",").map((tag) => tag.trim())
-        updateExercise({ _id: exercise._id, title: formData.title, tags: updatedTags, url: formData.url })
+        await updateExercise.mutateAsync({ _id: exercise._id, title: formData.title, tags: updatedTags, url: formData.url })
+        setDialogOpen(false) // 다이얼로그 닫기
     }
 
     const handleDelete = () => {
@@ -83,7 +57,7 @@ const ActionCell = ({ row }: { row: any }) => {
     return (
         <>
             {/* DropdownMenu */}
-            <DropdownMenu>
+            <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="h-8 w-8 p-0">
                         <span className="sr-only">Open menu</span>
@@ -92,26 +66,27 @@ const ActionCell = ({ row }: { row: any }) => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    {/* <DropdownMenuItem
-                        onClick={() => navigator.clipboard.writeText(exercise._id)}
-                    >
-                        Copy Exercise ID
-                    </DropdownMenuItem> */}
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => setDialogOpen(true)}>Edit</DropdownMenuItem>
+                    <DropdownMenuItem
+                        onClick={() => {
+                            setDropdownOpen(false); // 먼저 DropdownMenu 닫고
+                            setDialogOpen(true);    // 그리고 Dialog 열기
+                        }}
+                    >Edit</DropdownMenuItem>
                     <DropdownMenuItem onClick={handleDelete}>Delete</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
 
             {/* Edit Dialog */}
             <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-                <DialogContent>
+                <DialogContent >
                     <DialogHeader>
                         <DialogTitle>Edit Exercise</DialogTitle>
                         <DialogDescription></DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4">
                         <Input
+
                             aria-label="Title"
                             name="title"
                             value={formData.title}

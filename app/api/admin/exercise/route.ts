@@ -3,41 +3,42 @@ import Exercise from "@/models/Exercise"
 import connect from "@/utils/db"
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
-import User from "@/models/User"
-import { getToken } from "next-auth/jwt"
+import { requireUser } from "@/lib/check-auth"
+
+/**
+ *  * 운동 추가
+ * @param req 
+ * @returns 
+ */
 export const POST = async (req: NextRequest) => {
     // 운동 추가
     const { title, description, url, tags } = await req.json();
-    const getSession = await getServerSession();
-    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-
-    if (!getSession || !token) {
-        // 로그인 안되어있으면 로그인 페이지로 이동
-        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/login`);
-    }
-    await connect();
-
-    const user = await User.findOne({ email: getSession.user.email, provider: token.provider });
-    if (!user) {
-        return NextResponse.json({ message: 'User not found' }, { status: 404 });
-    }
+    const { user, error, status } = await requireUser(req);
+    if (!user) return NextResponse.json({ message: error }, { status });
     if (user.role !== 'admin') {
         return NextResponse.json({ message: '관리자가 아닙니다.' }, { status: 403 });
     }
-    const newExercise = new Exercise({
-        title,
-        description,
-        url,
-        tags,
-    });
     try {
+        const newExercise = new Exercise({
+            title,
+            description,
+            url,
+            tags,
+        });
         await newExercise.save();
         return NextResponse.json({ message: '운동 추가 성공' }, { status: 201 });
     } catch (err: any) {
+        console.error(" [POST /api/admin/exercise] error:", err);
         return NextResponse.json(err, { status: 500 });
     }
 }
-export const GET = async (request: NextRequest) => {
+
+/**
+ *  * 운동 전체 조회
+ * @param request 
+ * @returns 
+ */
+export const GET = async () => {
     const getSession = await getServerSession();
     if (!getSession) {
         // 로그인 안되어있으면 로그인 페이지로 이동
@@ -48,6 +49,7 @@ export const GET = async (request: NextRequest) => {
         const exercises = await Exercise.find();
         return NextResponse.json(exercises);
     } catch (err: any) {
+        console.error(" [GET /api/admin/exercise] error:", err);
         return NextResponse.json(err, { status: 500 });
     }
 }

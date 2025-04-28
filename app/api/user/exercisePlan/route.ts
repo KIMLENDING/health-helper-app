@@ -81,7 +81,7 @@ export const PATCH = async (req: NextRequest) => {
         // 운동 추가
         exercisePlan.exercises.push(...exercises);
         await exercisePlan.save();
-        return NextResponse.json({ message: '운동 추가 성공', data: exercisePlan }, { status: 200 });
+        return NextResponse.json({ message: '운동 추가 성공', exercisePlan }, { status: 200 });
 
     } catch (err: any) {
         console.error(" [PATCH /api/user/exercisePlan] error:", err);

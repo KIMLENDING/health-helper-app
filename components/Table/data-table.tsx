@@ -100,12 +100,7 @@ export function DataTable<TData, TValue>({
         },
         initialState: {
             pagination: { pageSize: 5 },
-            rowSelection: {
-                1: true,
-                12: true,
-                '13': true,
-                '14': true,
-            },
+
         },
     })
 

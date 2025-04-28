@@ -2,7 +2,8 @@
 import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner';
 import TotalTitleBySession from '@/components/UserCpmponents/chartComponents/session/totalTitleBySession';
 import TotalTitleByWeight from '@/components/UserCpmponents/chartComponents/session/totalTitleByWeight';
-import { useGetExerciseSession } from '@/server/queries';
+import { useGetExerciseSession } from '@/server/user/exerciseSession/queries';
+
 import { useParams } from 'next/navigation';
 import React from 'react'
 

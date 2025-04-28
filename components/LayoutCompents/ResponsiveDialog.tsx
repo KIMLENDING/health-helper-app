@@ -11,9 +11,11 @@ import {
     Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerFooter, DrawerTitle, DrawerDescription, DrawerClose,
 } from "@/components/ui/drawer"
 
-import { useCreateExerciseSession } from "@/server/mutations"
-import { useInProgress } from "@/server/queries"
+
+
 import LoadingOverlay from "./LoadingOverlay"
+import { useInProgress } from "@/server/user/exerciseSession/queries"
+import { useCreateExerciseSession } from "@/server/user/exerciseSession/mutations"
 
 type Props = {
     children: React.ReactNode;

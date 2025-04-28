@@ -1,16 +1,18 @@
 'use client'
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useGetExerciseSession } from '@/server/queries';
+
 import { Card, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
-import { useActionExerciseSession, useDoneExerciseSession } from '@/server/mutations';
+
 import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner';
 import InProgressTap from './inProgressTap';
 import { useRouter } from 'next/navigation';
 import LoadingOverlay from '@/components/LayoutCompents/LoadingOverlay';
+import { useGetExerciseSession } from '@/server/user/exerciseSession/queries';
+import { useActionExerciseSession, useDoneExerciseSession } from '@/server/user/exerciseSession/mutations';
 
 const TapsComponent = ({ sessionId }: { sessionId: string }) => {
     const [activeTab, setActiveTab] = useState('list');

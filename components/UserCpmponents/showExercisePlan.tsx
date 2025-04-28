@@ -1,5 +1,6 @@
 'use client'
-import { useExercisePlan, } from '@/server/queries';
+
+import { useExercisePlan } from '@/server/user/exercisePlan/queries';
 import { Card, CardHeader, CardTitle } from '../ui/card';
 import { DumbbellIcon, FlagIcon } from 'lucide-react';
 import Link from 'next/link';

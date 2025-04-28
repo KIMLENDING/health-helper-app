@@ -2,11 +2,9 @@
 import LoadingOverlay from '@/components/LayoutCompents/LoadingOverlay';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Dumbbell, Save, X, Edit, Check, Trash2, PlusSquare, Loader2, Play, ChevronsDown, Info, Layers, TrendingUp, Repeat, Weight, StickyNote, ChevronDown, Copy, ChevronUp, MoreHorizontal } from 'lucide-react';
-import { useExercisePlanById } from '@/server/queries';
-import { useDeletePlan, useEditPlan } from '@/server/mutations';
+import { Dumbbell, Save, X, Edit, Trash2, PlusSquare, Loader2, Play, ChevronsDown, Info, Layers, Repeat, Weight, } from 'lucide-react';
 import React, { use, useEffect, useRef, useState } from 'react';
-import { cn, formatDate } from '@/lib/utils';
+import { formatDate } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { DrawerDialogDemo } from '@/components/LayoutCompents/ResponsiveDialog';
@@ -15,6 +13,8 @@ import { BreadcrumbEllipsis } from '@/components/ui/breadcrumb';
 import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useRouter } from 'next/navigation';
+import { useDeletePlan, useEditPlan } from '@/server/user/exercisePlan/mutations';
+import { useExercisePlanById } from '@/server/user/exercisePlan/queries';
 
 /** 플랜 세부 CRUD 페이지 */
 type Params = Promise<{ planId: string }>;

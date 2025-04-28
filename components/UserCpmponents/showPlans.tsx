@@ -1,10 +1,11 @@
 'use client'
-import { useExercisePlan } from '@/server/queries';
+
 import React from 'react'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { BicepsFlexed, DumbbellIcon, RadicalIcon, SparklesIcon, VolleyballIcon } from 'lucide-react';
 import Link from 'next/link';
 import { DrawerDialogDemo } from '../LayoutCompents/ResponsiveDialog';
+import { useExercisePlan } from '@/server/user/exercisePlan/queries';
 
 /** Dashboard페이지에서 빠른 운동 시작을 위한 컴포넌트 */
 const ShowPlans = () => {

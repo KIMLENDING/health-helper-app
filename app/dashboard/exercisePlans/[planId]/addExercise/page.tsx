@@ -1,7 +1,7 @@
 'use client';
 import { columns } from '@/components/Table/columns';
 import { DataTable } from '@/components/Table/data-table';
-import { useEexercises, useExercisePlanById, useSelectedExercises } from '@/server/queries';
+import { useSelectedExercises } from '@/server/queries';
 import React, { use, useEffect, useState } from 'react';
 import { Loader2, PlusCircle, ListFilter, ListPlus } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -10,8 +10,11 @@ import { Badge } from '@/components/ui/badge';
 import { ExerciseOption } from '@/utils/util';
 import PlanDialogForm from '@/components/UserCpmponents/planForm';
 import { Button } from '@/components/ui/button';
-import { useUpdatePlan } from '@/server/mutations';
+
 import { useRouter } from 'next/navigation';
+import { useUpdatePlan } from '@/server/user/exercisePlan/mutations';
+import { useExercisePlanById } from '@/server/user/exercisePlan/queries';
+import { useEexercises } from '@/server/admin/queries';
 
 /** 플랜 세부 CRUD 페이지 */
 type Params = Promise<{ planId: string }>;

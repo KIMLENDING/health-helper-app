@@ -17,7 +17,8 @@ import {
 import { Input } from "@/components/ui/input"
 import TagSelector from './addTag';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { addExercise } from '@/server/mutations';
+import { addExercise } from '@/server/admin/mutations';
+
 
 const formSchema = z.object({
     title: z.string().min(2).max(50),

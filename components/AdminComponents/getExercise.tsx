@@ -2,7 +2,8 @@ import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { DataTable } from '@/components/Table/data-table';
 import { columns } from "@/components/Table/columns"
-import { useEexercises } from '@/server/queries';
+import { useEexercises } from '@/server/admin/queries';
+
 
 
 const GetExercise = () => {
