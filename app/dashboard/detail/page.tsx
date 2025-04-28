@@ -125,14 +125,8 @@ const Page = () => {
                                 </AccordionTrigger>
                                 <AccordionContent className="px-6 pb-6 pt-2">
                                     <div className="space-y-6">
-                                        <div className="bg-gray-50 dark:bg-zinc-900/50 p-4 rounded-lg">
-                                            <h3 className="text-sm uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-3">운동 무게별 분석</h3>
-                                            <TotalTitleByWeight data={session} />
-                                        </div>
-                                        <div className="bg-gray-50 dark:bg-zinc-900/50 p-4 rounded-lg">
-                                            <h3 className="text-sm uppercase tracking-wider text-zinc-500 dark:text-zinc-400 mb-3">세션별 분석</h3>
-                                            <TotalTitleBySession data={session} />
-                                        </div>
+                                        <TotalTitleByWeight data={session} />
+                                        <TotalTitleBySession data={session} />
                                     </div>
                                 </AccordionContent>
                             </AccordionItem>

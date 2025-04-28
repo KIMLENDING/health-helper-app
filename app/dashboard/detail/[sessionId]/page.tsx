@@ -13,8 +13,11 @@ const Page = () => {
     if (isError) return <div>Error loading data</div>;
     return (
         <div className='px-4'>
-            <TotalTitleByWeight data={data} />
-            <TotalTitleBySession data={data} />
+
+            <div className="space-y-6">
+                <TotalTitleByWeight data={data} />
+                <TotalTitleBySession data={data} />
+            </div>
         </div>
     )
 }
