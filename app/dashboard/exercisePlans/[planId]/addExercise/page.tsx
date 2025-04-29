@@ -110,8 +110,8 @@ const Page = (props: {
             <div className="space-y-2">
                 <div className="flex items-center justify-between">
                     <h1 className="text-3xl font-bold tracking-tight">운동 추가</h1>
-                    <Badge variant="outline" className="text-xs bg-primary/10 hover:bg-primary/20 dark:bg-primary/20 dark:hover:bg-primary/30">
-                        플랜 ID: {planId}
+                    <Badge variant="outline" className="text-xs bg-primary/10 hover:bg-primary/20 dark:bg-primary/20 dark:hover:bg-primary/30 max-w-52">
+                        {preData?.title}
                     </Badge>
                 </div>
                 <p className="text-muted-foreground">
