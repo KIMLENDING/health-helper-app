@@ -72,15 +72,15 @@ const Page = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
                         {/* 주간 히스토리 카드 */}
-                        <div className="p-6 border rounded-xl shadow-md hover:shadow-lg transition-all duration-300 bg-white dark:bg-gray-800">
+                        <div className="p-6 border rounded-xl shadow-md hover:shadow-lg transition-all duration-300 bg-white dark:bg-gray-800 ">
                             <div className="flex items-center gap-3 mb-4">
                                 <div className="p-2 rounded-full bg-emerald-100 dark:bg-emerald-900/30">
                                     <Calendar className="h-6 w-6 text-emerald-600" />
                                 </div>
                                 <h3 className="text-xl font-semibold">주간 히스토리</h3>
                             </div>
-                            <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-xl">
-                                <Card className="aspect-auto flex justify-between items-center p-4 select-none">
+                            <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-xl ">
+                                <Card className="aspect-auto flex justify-between items-center p-4 select-none overflow-y-scroll">
                                     {days.map((day, index) => (
                                         <div key={index} className="flex flex-col items-center flex-1">
                                             <div

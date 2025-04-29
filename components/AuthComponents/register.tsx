@@ -131,8 +131,10 @@ const Register = ({ fetchUrl }: { fetchUrl?: string }) => {
                         <p className="text-red-600 text-center text-[16px] my-4">
                             {error && error}
                         </p>
-                        <div className="mt-4 text-end text-sm ">
-
+                        <div className="mt-4 text-end text-sm flex justify-between">
+                            <Link href="/" className="hover:underline ">
+                                홈
+                            </Link>
                             <Link href="/login" className="hover:underline ">
                                 로그인으로 이동
                             </Link>
