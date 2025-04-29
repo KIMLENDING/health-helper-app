@@ -10,6 +10,10 @@ const ShowExercisePlan = () => {
     const { data, error, isLoading } = useExercisePlan(); // 필요한 운동 계획 데이터를 가져옵니다.
     const Icons = <DumbbellIcon className='text-green-400' />
 
+    if (error) {
+
+        return <div className="flex items-center justify-center h-32 text-gray-500 text-lg font-medium">운동 계획을 불러오는 중 오류가 발생했습니다.</div>;
+    }
     return (
         <div className='mx-auto w-full max-w-3xl rounded-xl min-h-[calc(100vh-56px)] relative'>
             <CardTitle className='my-3 font-extrabold text-2xl flex'>
