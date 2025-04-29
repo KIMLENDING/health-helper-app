@@ -114,9 +114,6 @@ const Page = (props: {
                         {preData?.title}
                     </Badge>
                 </div>
-                <p className="text-muted-foreground">
-                    운동을 선택하여 운동 계획에 추가하세요. 체크박스로 여러 운동을 한 번에 선택할 수 있습니다.
-                </p>
             </div>
 
             <Separator className="my-6" />
