@@ -10,7 +10,6 @@ import { Badge } from '@/components/ui/badge';
 import { ExerciseOption } from '@/utils/util';
 import PlanDialogForm from '@/components/UserCpmponents/planForm';
 import { Button } from '@/components/ui/button';
-
 import { useRouter } from 'next/navigation';
 import { useUpdatePlan } from '@/server/user/exercisePlan/mutations';
 import { useExercisePlanById } from '@/server/user/exercisePlan/queries';
@@ -39,7 +38,7 @@ const Page = (props: {
     }, [data, preData]);
 
     useEffect(() => {
-        // 초기 값 설정 - data가 추가 되면 exerciseOption 초기값 필드를 추가
+        // 초기 값 설정 - selectedItmes이 추가 되면 exerciseOption에 초기값을 설정
         if (!selectedItmes) return;
 
         const defaultData = { sets: 4, reps: 6, weight: 30 };
