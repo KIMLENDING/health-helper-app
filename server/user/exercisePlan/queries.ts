@@ -11,7 +11,7 @@ export const useExercisePlan = () => {
     return useQuery<ExercisePlan[]>({
         queryKey: ["exercisePlans"],
         queryFn: async () => {
-            const response = await fetch(`/api/user/exercisePlan`, {
+            const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
