@@ -93,8 +93,8 @@ export const useEditPlan = () => {
         },
         onSuccess: async (data) => {
             toast({ variant: 'default2', title: `${data.message}${data.exercisePlan._id}` });
-            await queryClient.invalidateQueries({ queryKey: ["exercisePlan", data.exercisePlan._id] })
             await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] })
+            await queryClient.invalidateQueries({ queryKey: ["exercisePlan", data.exercisePlan._id] })
         },
         onError: handleMutationError,
     })

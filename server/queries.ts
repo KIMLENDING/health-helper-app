@@ -1,6 +1,5 @@
 
-import { Exercise, ExercisePlan, ExerciseSession } from "@/utils/util";
-
+import { Exercise, } from "@/utils/util";
 import { useQuery } from "@tanstack/react-query";
 
 /** 컴포넌트간 데이터를 받아오기 위한 기능 */

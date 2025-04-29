@@ -1,5 +1,5 @@
 import { ExercisePlan } from "@/utils/util";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, } from "@tanstack/react-query";
 
 /**
  * * api/user/exercisePlan
@@ -32,18 +32,16 @@ export const useExercisePlan = () => {
  * @returns 
  */
 export const useExercisePlanById = (id: string) => {
+    // const QueryClient = useQueryClient();
     return useQuery<ExercisePlan>({
         queryKey: ["exercisePlan", id],
         queryFn: async () => {
-            // const cached = queryClient.getQueryData<ExercisePlan[]>(["exercisePlans"]);
-            // const found = cached?.find((plan) => plan._id === id);
 
-            // if (found && found.exercises) return found;
 
             const res = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan/${id}`);
             if (!res.ok) throw new Error("Failed to fetch plan");
             return res.json();
         },
-        enabled: !!id,
+        enabled: !!id,// id가 있을 때만 쿼리 실행
     });
 };
