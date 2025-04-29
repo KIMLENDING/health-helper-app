@@ -116,7 +116,7 @@ Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
 
 ## 🏋️‍♂️ 관리자 - 운동 관리 (Admin / Exercise)
 
-/server/admin/mutations.ts
+[🔗 GitHub Repository - Exercise Plan](https://github.com/KIMLENDING/health-helper-app/tree/master/server/admin)
 
 | Method |              Endpoint              | 설명                |     TanstackQuery     |
 | :----: | :--------------------------------: | :------------------ | :-------------------: |
@@ -137,8 +137,7 @@ Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
 
 ## 📝 운동 플랜 (Exercise Plan)
 
-/server/exercisePlan/mutations.ts
-/server/exercisePlan/queries.ts
+[🔗 GitHub Repository - Exercise Plan](https://github.com/KIMLENDING/health-helper-app/tree/master/server/user/exercisePlan)
 
 | Method |             Endpoint              | 설명                  |      TanstackQuery      |
 | :----: | :-------------------------------: | :-------------------- | :---------------------: |
@@ -153,8 +152,7 @@ Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
 
 ## 🏃 운동 세션 (Exercise Session)
 
-/server/exerciseSession/mutations.ts
-/server/exerciseSession/queries.ts
+[🔗 GitHub Repository - Exercise Plan](https://github.com/KIMLENDING/health-helper-app/tree/master/server/user/exerciseSession)
 
 | Method |                       Endpoint                       | 설명                       |        TanstackQuery         |
 | :----: | :--------------------------------------------------: | :------------------------- | :--------------------------: |
