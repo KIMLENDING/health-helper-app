@@ -6,6 +6,7 @@
 
 ### 🧑‍💼 User
 
+[🔗 GitHub Repository - Exercise](https://github.com/KIMLENDING/health-helper-app/blob/master/models/User.js)
 앱 사용자에 대한 정보를 저장하는 스키마입니다.
 
 | 필드       | 타입   | 필수 여부 | 설명                                            |
@@ -23,6 +24,7 @@
 
 ### 🏋️ Exercise
 
+[🔗 GitHub Repository - Exercise](https://github.com/KIMLENDING/health-helper-app/blob/master/models/Exercise.js)
 운동 항목을 정의하는 스키마입니다.
 
 | 필드          | 타입   | 필수 여부 | 설명                                  |
@@ -36,6 +38,7 @@
 
 ### 📋 ExercisePlan
 
+[🔗 GitHub Repository - ExercisePlan](https://github.com/KIMLENDING/health-helper-app/blob/master/models/ExercisePlan.js)
 사용자가 미리 설정한 운동 계획(루틴)을 저장하는 스키마입니다.
 
 | 필드        | 타입     | 필수 여부 | 설명                                |
@@ -60,6 +63,7 @@
 
 ### 🧪 ExerciseSession
 
+[🔗 GitHub Repository - ExerciseSession](https://github.com/KIMLENDING/health-helper-app/blob/master/models/ExerciseSession.js)
 실제 수행된 운동 세션을 기록하는 스키마입니다.
 
 | 필드             | 타입     | 필수 여부 | 설명                                 |
@@ -106,6 +110,8 @@ Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
 
 ## 🛡️ 인증 (Auth)
 
+[🔗 GitHub Repository - Auth](https://github.com/KIMLENDING/health-helper-app/tree/master/app/api)
+
 | Method |         Endpoint          | 설명                 |
 | :----: | :-----------------------: | :------------------- |
 |  POST  | `/api/auth/[...nextauth]` | NextAuth 인증 핸들러 |
@@ -116,7 +122,7 @@ Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
 
 ## 🏋️‍♂️ 관리자 - 운동 관리 (Admin / Exercise)
 
-[🔗 GitHub Repository - Exercise Plan](https://github.com/KIMLENDING/health-helper-app/tree/master/server/admin)
+[🔗 GitHub Repository - Admin](https://github.com/KIMLENDING/health-helper-app/tree/master/server/admin)
 
 | Method |              Endpoint              | 설명                |     TanstackQuery     |
 | :----: | :--------------------------------: | :------------------ | :-------------------: |
@@ -129,9 +135,11 @@ Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
 
 ## 👤 사용자 (User)
 
-| Method |          Endpoint          | 설명             |   TanstackQuery   |
-| :----: | :------------------------: | :--------------- | :---------------: |
-| DELETE | `/api/user/delete-account` | 사용자 계정 삭제 | `useEexercises()` |
+[🔗 GitHub Repository - server](https://github.com/KIMLENDING/health-helper-app/tree/master/server/mutations.ts)
+
+| Method |          Endpoint          | 설명             |    TanstackQuery     |
+| :----: | :------------------------: | :--------------- | :------------------: |
+| DELETE | `/api/user/delete-account` | 사용자 계정 삭제 | `useDeleteAccount()` |
 
 ---
 
@@ -152,7 +160,7 @@ Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
 
 ## 🏃 운동 세션 (Exercise Session)
 
-[🔗 GitHub Repository - Exercise Plan](https://github.com/KIMLENDING/health-helper-app/tree/master/server/user/exerciseSession)
+[🔗 GitHub Repository - Exercise Session](https://github.com/KIMLENDING/health-helper-app/tree/master/server/user/exerciseSession)
 
 | Method |                       Endpoint                       | 설명                       |        TanstackQuery         |
 | :----: | :--------------------------------------------------: | :------------------------- | :--------------------------: |
@@ -167,6 +175,8 @@ Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
 ---
 
 ## 📅 주간 세션 (Session Week)
+
+[🔗 GitHub Repository - Session Week](https://github.com/KIMLENDING/health-helper-app/tree/master/server/queries.ts)
 
 | Method |                Endpoint                 | 설명                |    TanstackQuery    |
 | :----: | :-------------------------------------: | :------------------ | :-----------------: |
