@@ -25,8 +25,7 @@ const ExercisePlanDetailPage = (props: {
     const params = use(props.params);
     const planId = params.planId;
     const route = useRouter();
-    const { data } = useExercisePlanById(planId);
-
+    const { data, isPending: isPendingData } = useExercisePlanById(planId);
     // 운동 계획 수정
     const { mutateAsync, isPending } = useEditPlan();
     const [isEditing, setIsEditing] = useState(false);
@@ -145,6 +144,7 @@ const ExercisePlanDetailPage = (props: {
 
     // 로딩 상태에 따라 다른 컴포넌트 렌더링
     if (isPending) return <LoadingOverlay isLoading={isPending} text={'처리 중...'} />;
+    if (isPendingData) return <LoadingOverlay isLoading={isPendingData} text={'로딩 중...'} />;
     if (!data) return <div className="p-8 text-center">운동 계획을 찾을 수 없습니다.</div>;
 
     return (

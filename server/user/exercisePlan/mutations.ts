@@ -87,7 +87,7 @@ export const useDeletePlan = () => {
 */
 export const useEditPlan = () => {
     const queryClient = useQueryClient();
-    return useMutation<{ message: string, exercisePlan: any }, Error, string>({
+    return useMutation<{ message: string, exercisePlan: any }, Error, any>({
         mutationFn: async (data: any) => {
             return fetcher(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan/${data.exercisePlanId}`, 'PATCH', data)
         },
