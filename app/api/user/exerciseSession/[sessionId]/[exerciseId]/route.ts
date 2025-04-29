@@ -28,7 +28,7 @@ export const POST = async (req: NextRequest) => {
 
     try {
         if (action === "end") {
-            // 세트 종료 처리
+            // 세트 종료 처리 종료된 시간을 추가해기 위한 action
             if (exercise.state !== "inProgress") {
                 return NextResponse.json({ message: "진행중인 운동이 없습니다." }, { status: 400 });
             }
@@ -57,7 +57,6 @@ export const POST = async (req: NextRequest) => {
             exercise.state !== "done"
         ) {
 
-            // 세트 수가 채워진 경우 자동으로 done 처리
             const totalRepTime = exercise.session.reduce((acc: number, set: any) => {
                 if (set.endTime) {
                     const duration = new Date(set.endTime).getTime() - new Date(set.createdAt).getTime();
@@ -76,9 +75,9 @@ export const POST = async (req: NextRequest) => {
         }
 
         if (action === "start") {
-            // state가 pending이면 inProgress로 변경
 
             if (exercise.state === "pending") {
+                // state가 pending이면 inProgress로 변경 처음 시작 할 때 
                 exercise.state = "inProgress";
             }
 
@@ -109,7 +108,7 @@ export const POST = async (req: NextRequest) => {
                 exercise.session.push({
                     set: prev.set + 1,
                     reps: prev.reps,
-                    weight: prev.weight + 5,
+                    weight: prev.weight + 5, // 5는 변수로 해서 사용자의 선택으로 바꿀 예정 
                 });
                 // 변경 감지
                 exerciseSession.markModified("exercises");
@@ -119,11 +118,11 @@ export const POST = async (req: NextRequest) => {
         }
 
         if (action === "done") {
+            // 세트 강제 완료 TapsComponent.tsx에서 운동이 진행 중 일때 강제로 종료하기 위한 action
             if (exercise.session.length === 0) {
                 return NextResponse.json({ message: "No session data found" }, { status: 400 });
             }
 
-            // 마지막 세트 강제 완료
             const lastSet = exercise.session.at(-1);
             if (lastSet && !lastSet.endTime) {
                 lastSet.endTime = new Date();

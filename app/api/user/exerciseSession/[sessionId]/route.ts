@@ -33,6 +33,16 @@ export const PATCH = async (req: NextRequest) => {
         if (!checkSession) {
             return NextResponse.json({ message: '존재하지 않는 세션입니다.' }, { status: 404 });
         }
+
+        // 완료되지 않은 운동이 있는지 확인
+        checkSession.exercises.forEach((exercise: any) => {
+            const sessionLength = exercise.session.length;
+            if (sessionLength > 0) {
+                const currentSet = exercise.session[sessionLength - 1];
+                currentSet.endTime = new Date();
+                exercise.state = "done";
+            }
+        })
         const allDone: boolean = checkSession.exercises.every((exercise: { state: string }) => exercise.state !== 'done');
         if (allDone) {
             // 완료한 운동이 하나라도 없으면 세션 삭제

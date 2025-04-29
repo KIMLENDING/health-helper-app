@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { ExerciseOptionSession, ExercisesessionData } from '@/utils/util';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bar, BarChart, CartesianGrid, LabelList, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { Activity, Layers, Repeat, Weight } from 'lucide-react';
 
@@ -24,7 +24,7 @@ const chartConfig = {
 
 const TotalTitleBySession = ({ data }: { data: any }) => {
     const isDesktop = useMediaQuery("(min-width: 768px)");
-    const [activeItem, setActiveItem] = useState<string | null>(null);
+    const [activeItem, setActiveItem] = useState<number[]>([]);
 
     const titleBySession = data?.exercises.flatMap((exercise: ExerciseOptionSession) => {
         return {
@@ -47,7 +47,7 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
     // 가장 많은 무게를 들은 운동 찾기
     const maxWeightExercise = titleBySession?.reduce((max: any, current: any) =>
         (!max || current.totalWeight > max.totalWeight) ? current : max, null);
-
+    console.log(activeItem)
     return (
         <Card className="border border-gray-200 dark:border-zinc-800 shadow-lg overflow-hidden">
             <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-6">
@@ -72,7 +72,11 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
                                 type="single"
                                 collapsible
                                 key={item.title}
-                                onValueChange={(value) => setActiveItem(value)}
+                                onValueChange={() => setActiveItem(pre => {
+
+                                    return pre.includes(index) ? pre.filter(item => item !== index) : [...pre, index]
+                                }
+                                )}
                             >
                                 <AccordionItem
                                     value={item.title}
@@ -117,7 +121,7 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
                                                 </div>
                                             </div>
                                             <div className="hidden md:block px-2 py-1 text-xs font-medium rounded-full bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-300 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/30 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                                                {activeItem === item.title ? '접기' : '자세히'}
+                                                {activeItem.includes(index) ? '접기' : '자세히'}
                                             </div>
                                         </div>
                                     </AccordionTrigger>

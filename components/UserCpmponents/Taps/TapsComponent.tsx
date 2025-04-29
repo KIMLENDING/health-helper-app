@@ -29,6 +29,7 @@ const TapsComponent = ({ sessionId }: { sessionId: string }) => {
         setLoading2(true);
         try {
             localStorage.clear();
+
             const res = await doneExercise({ sessionId });
             if (res.delete) { // 완료한 운동이 하나도 없을 땐 세션이 삭제됨 
                 router.push('/dashboard');

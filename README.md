@@ -156,15 +156,15 @@ Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
 /server/exerciseSession/mutations.ts
 /server/exerciseSession/queries.ts
 
-| Method |                   Endpoint                   | 설명                       |        TanstackQuery         |
-| :----: | :------------------------------------------: | :------------------------- | :--------------------------: |
-|  GET   |         `/api/user/exerciseSession`          | 가장 최근 세션조회         |      `useInProgress()`       |
-|  POST  |         `/api/user/exerciseSession`          | 새로운 운동 세션 생성      | `useCreateExerciseSession()` |
-|  GET   |   `/api/user/exerciseSession/[sessionId]`    | 특정 운동 세션 상세 조회   |  `useGetExerciseSession()`   |
-| PATCH  |   `/api/user/exerciseSession/[sessionId]`    | 특정 운동 세션 업데이트    |  `useDoneExerciseSession()`  |
-|  POST  | `/api/user/exerciseSession/[sessionId]/[id]` | 운동 세션 세트 업데이트    | `useActionExerciseSession()` |
-| PATCH  | `/api/user/exerciseSession/[sessionId]/[id]` | 운동 세션 세트 데이터 수정 |  `useEditExerciseSession()`  |
-|  GET   |       `/api/user/exerciseSession/all`        | 모든 세션 기록 조회        |      `useAllSessions()`      |
+| Method |                       Endpoint                       | 설명                       |        TanstackQuery         |
+| :----: | :--------------------------------------------------: | :------------------------- | :--------------------------: |
+|  GET   |             `/api/user/exerciseSession`              | 가장 최근 세션조회         |      `useInProgress()`       |
+|  POST  |             `/api/user/exerciseSession`              | 새로운 운동 세션 생성      | `useCreateExerciseSession()` |
+|  GET   |       `/api/user/exerciseSession/[sessionId]`        | 운동 세션 상세 조회        |  `useGetExerciseSession()`   |
+| PATCH  |       `/api/user/exerciseSession/[sessionId]`        | 운동 세션 상태 수정        |  `useDoneExerciseSession()`  |
+|  POST  | `/api/user/exerciseSession/[sessionId]/[exerciseId]` | 운동 세션 세트 추가        | `useActionExerciseSession()` |
+| PATCH  | `/api/user/exerciseSession/[sessionId]/[exerciseId]` | 운동 세션 세트 데이터 수정 |  `useEditExerciseSession()`  |
+|  GET   |           `/api/user/exerciseSession/all`            | 모든 세션 기록 조회        |      `useAllSessions()`      |
 
 ---
 
