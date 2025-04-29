@@ -57,7 +57,7 @@ export const AddExercise = () => {
         }
     }
     return (
-        <div className="mx-auto  min-h-min w-full max-w-3xl rounded-xl bg-muted/50" >
+        <div className="mx-auto max-h-screen w-full max-w-3xl " >
             <Card>
                 <CardHeader>
                     <CardTitle>Add Exercise</CardTitle>

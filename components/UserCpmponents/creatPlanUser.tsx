@@ -11,7 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import PlanDialogForm from './planForm';
-import { useCreatePlan } from '@/server/mutations';
+
 import { ExercisePlan, ExerciseOption } from '@/utils/util';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
@@ -19,6 +19,7 @@ import LoadingOverlay from '../LayoutCompents/LoadingOverlay';
 import { Separator } from '../ui/separator';
 import { Badge } from '../ui/badge';
 import { ListPlus } from 'lucide-react';
+import { useCreatePlan } from '@/server/user/exercisePlan/mutations';
 
 
 
