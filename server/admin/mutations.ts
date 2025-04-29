@@ -30,7 +30,7 @@ export const addExercise = () => {
         onError: (error) => {
             const message = error instanceof Error ? error.message : String(error);
             console.error("onError", error);
-            toast({ variant: "destructive", title: message });
+            toast({ variant: "destructive", title: `${message} 동일한 이름의 운동이 있습니다. ` });
         },
     })
 }
