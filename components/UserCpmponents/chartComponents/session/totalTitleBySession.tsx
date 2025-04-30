@@ -47,7 +47,7 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
     // 가장 많은 무게를 들은 운동 찾기
     const maxWeightExercise = titleBySession?.reduce((max: any, current: any) =>
         (!max || current.totalWeight > max.totalWeight) ? current : max, null);
-    console.log(activeItem)
+
     return (
         <Card className="border border-gray-200 dark:border-zinc-800 shadow-lg overflow-hidden">
             <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-6">

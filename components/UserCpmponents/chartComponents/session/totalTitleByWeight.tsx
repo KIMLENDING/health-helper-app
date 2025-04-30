@@ -18,10 +18,6 @@ const chartConfig = {
 
 const TotalTitleByWeight = ({ data }: { data: any }) => {
     const [applyLogData, setApplyLogData] = useState([]);
-    const [chartTooltip, setChartTooltip] = useState({
-        active: false,
-        payload: null,
-    });
 
     const totalTime = data?.exercises.flatMap((exercise: ExerciseOptionSession) => {
         return exercise.repTime || 0;
@@ -118,17 +114,17 @@ const TotalTitleByWeight = ({ data }: { data: any }) => {
                                     content={<ChartTooltipContent
                                         indicator="line"
                                         formatter={(value, name, props) => {
-                                            const originalValue = name === "log_totalTitleByWeight"
+                                            const originalValue = name === "무게"
                                                 ? props.payload.totalTitleByWeight
                                                 : props.payload.totalTitleByReps;
 
                                             return (
                                                 <div className="flex flex-row gap-1 items-center py-1">
-                                                    <div className={`h-3 w-3 ${name === "log_totalTitleByWeight"
+                                                    <div className={`h-3 w-3 ${name === "무게"
                                                         ? 'bg-blue-500 border-blue-500'
                                                         : 'bg-pink-500 border-pink-500'} rounded-full`} />
                                                     <span className="font-medium">
-                                                        {name === "log_totalTitleByWeight"
+                                                        {name === "무게"
                                                             ? `${originalValue} kg`
                                                             : `${originalValue} 회`}
                                                     </span>

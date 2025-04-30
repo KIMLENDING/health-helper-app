@@ -75,7 +75,7 @@ export const useUpdateExercise = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (updatedData: Partial<Exercise>) => {
-            console.log("updatedData", updatedData)
+
             const response = await fetch(`${process.env.NEXTAUTH_URL}/api/admin/exercise/${updatedData._id}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },

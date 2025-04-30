@@ -42,7 +42,6 @@ const ShowChart = () => {
     ];
 
     const handleSlideChange = (index: any) => {
-        console.log('index', index);
         setActiveSlide(index);
     };
 
