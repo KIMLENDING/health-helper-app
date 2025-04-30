@@ -1,6 +1,7 @@
 import ExerciseSession from "@/models/ExerciseSession"
 import { NextRequest, NextResponse } from "next/server"
 import { requireUser } from "@/lib/check-auth"
+import ExercisePlan from "@/models/ExercisePlan";
 
 /**
  *  운동 세션 id로 조회
@@ -33,6 +34,8 @@ export const PATCH = async (req: NextRequest) => {
         if (!checkSession) {
             return NextResponse.json({ message: '존재하지 않는 세션입니다.' }, { status: 404 });
         }
+        const planId = checkSession.exercisePlanId;
+        console.log('planId', planId);
 
         // 완료되지 않은 운동이 있는지 확인
         checkSession.exercises.forEach((exercise: any) => {
@@ -53,9 +56,17 @@ export const PATCH = async (req: NextRequest) => {
         checkSession.exercises = checkSession.exercises.filter((exercise: { state: string }) => exercise.state === 'done');
         // 세션 상태 업데이트
         checkSession.state = 'done';
+
         checkSession.markModified("exercises");
         await checkSession.save();
-
+        const a = await ExercisePlan.findOneAndUpdate(
+            { _id: planId },
+            { $set: { lastPlayed: new Date() } },
+            { new: true, strict: false }
+        );
+        if (!a) {
+            return NextResponse.json({ message: '운동 계획을 찾을 수 없습니다.' }, { status: 404 });
+        }
         return NextResponse.json({ updatedSession: checkSession, message: '서버에 저장되었습니다.' }, { status: 201 });
     }
     catch (err: any) {

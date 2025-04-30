@@ -127,6 +127,7 @@ const ShowExercisePlan = () => {
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center h-64 rounded-xl bg-zinc-50 dark:bg-zinc-800/30">
+                            <Dumbbell size={40} className="text-zinc-300 mb-2" />
                             <div className="text-zinc-500 text-lg font-medium mb-6">아직 운동 계획이 없습니다.</div>
                             <Link href="/dashboard/user/createPlan">
                                 <button className="px-6 py-3 bg-green-100 hover:bg-green-200 dark:bg-green-900/20 dark:hover:bg-green-900/30 text-green-800 dark:text-green-300 rounded-lg flex items-center transition-colors">

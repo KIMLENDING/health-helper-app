@@ -43,6 +43,7 @@ export interface ExercisePlan {
     _id?: string,
     title: string,
     exercises: ExerciseOption[]
+    lastPlayed?: string,
     createdAt?: string,
 }
 

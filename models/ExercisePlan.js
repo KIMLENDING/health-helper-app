@@ -20,6 +20,7 @@ const exercisePlanSchema = new Schema(
         weight: { type: Number, required: true }, // 무게
       },
     ],
+    lastPlayed: { type: Date, required: false }, // 마지막 운동한 날짜
   },
   { timestamps: true }
 );
