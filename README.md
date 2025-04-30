@@ -1,3 +1,23 @@
+## 🎯 프로젝트 개요
+
+이 프로젝트는 “운동 루틴을 체계적으로 기록하고 분석하고 싶은 사용자”를 위해 만든 웹 앱입니다.
+
+- 운동 계획 생성 → 수행 → 기록까지의 전 과정을 관리
+- 세트별 수행 기록, 중량, 시간 등 데이터 기반 분석 지원
+- 실제 서비스를 염두에 두고 설계된 CRUD 및 인증 흐름 구현
+
+## 개발 기간
+
+- v1 2024/11/06 - 2024/12/19 전체적인 설계 및 구현
+- v2 2025/03/25 - 2025/04/30 코드 리팩토링 및 디자인 수정
+
+## 🔧 기술적 도전과 해결
+
+- **동적 라우팅 기반 CRUD 페이지 구성** (App Router + Shadcn UI)
+- **반응형 Drawer / Dialog 통합 구조 구현** (모바일 UX 대응)
+- **React Query + 서버 컴포넌트 프리패치 연동**
+- **운동 세트별 repTime 자동 계산 로직 (서버에서 세트별 endTime 누적)**
+
 ## 📦 MongoDB 스키마 개요
 
 이 프로젝트는 Mongoose를 사용하여 피트니스 관련 핵심 데이터를 스키마 형태로 정의합니다.
@@ -189,7 +209,7 @@ Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
 - 인증이 필요한 API는 내부적으로 `requireUser(req)` 유틸을 사용하여 다음을 검사합니다:
   - `next-auth` 세션 유효성 (`getServerSession`)
   - JWT 토큰 검증 (`getToken`)
-  - MongoDB에 존재하는 유저 확인 (`User.findOne`)
+- MongoDB에 존재하는 유저 확인 (`User.findOne`)
 - 인증 실패 시, 다음과 같은 JSON 응답이 반환됩니다:
   ```json
   { "error": "Unauthorized", "status": 401 }
