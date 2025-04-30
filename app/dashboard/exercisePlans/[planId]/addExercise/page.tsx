@@ -3,8 +3,8 @@ import { columns } from '@/components/Table/columns';
 import { DataTable } from '@/components/Table/data-table';
 import { useSelectedExercises } from '@/server/queries';
 import React, { use, useEffect, useState } from 'react';
-import { Loader2, PlusCircle, ListFilter, ListPlus } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Loader2, PlusCircle, ListFilter, ListPlus, ArrowLeft, Info, Dumbbell, Save } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { ExerciseOption } from '@/utils/util';
@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import { useUpdatePlan } from '@/server/user/exercisePlan/mutations';
 import { useExercisePlanById } from '@/server/user/exercisePlan/queries';
 import { useEexercises } from '@/server/admin/queries';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 /** 플랜 세부 CRUD 페이지 */
 type Params = Promise<{ planId: string }>;
@@ -106,16 +107,26 @@ const Page = (props: {
 
     return (
         <section className="mx-auto w-full max-w-3xl p-4 space-y-6">
-            <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                    <h1 className="text-3xl font-bold tracking-tight">운동 추가</h1>
-                    <Badge variant="outline" className="text-xs bg-primary/10 hover:bg-primary/20 dark:bg-primary/20 dark:hover:bg-primary/30 max-w-52">
-                        {preData?.title}
-                    </Badge>
+
+            <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 rounded-xl shadow-lg">
+                <div className="flex items-center gap-4">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-10 w-10 rounded-full bg-white/20 text-white hover:bg-white/30 hover:text-white"
+                        onClick={() => router.back()}
+                    >
+                        <ArrowLeft className="h-5 w-5" />
+                    </Button>
+                    <div className="flex-1">
+                        <h1 className="text-3xl font-bold text-white mb-2">운동 추가</h1>
+                        <p className="text-emerald-100">
+                            <span className='text-xl text-black '>{preData?.title}</span> 에 필요한 운동을 추가하세요.
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            <Separator className="my-6" />
 
             <Card className="border-muted shadow-sm dark:shadow-md dark:shadow-black/10">
                 <CardHeader className="pb-3">
@@ -144,57 +155,133 @@ const Page = (props: {
                 </CardContent>
             </Card>
             <Card className="p-4 dark:bg-zinc-950 border-muted shadow-sm">
-                <div className="mb-3 flex items-center justify-between">
-                    <h3 className="text-lg font-semibold">운동 옵션</h3>
-                    <Badge variant="outline" className="text-xs">
-                        {exerciseOption?.length || 0}개 항목
-                    </Badge>
-                </div>
+                <CardHeader className="pb-3 bg-emerald-50/50 dark:bg-emerald-900/10">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <ListPlus className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                            <CardTitle className="text-lg font-medium">선택된 운동</CardTitle>
+                        </div>
+                        <Badge
+                            variant={exerciseOption?.length > 0 ? "default" : "outline"}
+                            className={`${exerciseOption?.length > 0 ? 'bg-emerald-600 hover:bg-emerald-700' : ''}`}
+                        >
+                            {exerciseOption?.length || 0}개 선택됨
+                        </Badge>
+                    </div>
+                    <CardDescription>
+                        각 운동의 세트, 반복 횟수, 무게를 설정하세요
+                    </CardDescription>
+                </CardHeader>
 
-                <Separator className="mb-3" />
 
-                <div className="flex flex-col gap-2 max-h-[25vh] overflow-y-auto pr-1 scrollbar-thumb-rounded scrollbar-track-rounded scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-muted/10 pb-1">
-                    {exerciseOption?.length ? (
-                        exerciseOption.map((item) => (
-                            <Card
-                                key={item.exerciseId}
-                                className="border border-muted/40 hover:border-muted transition-colors group dark:hover:bg-zinc-900/50"
-                            >
-                                <CardHeader className="p-3">
-                                    <div className="flex items-center justify-between">
-                                        <CardTitle className="text-base flex items-center gap-2">
-                                            <div className="h-2 w-2 rounded-full bg-primary/80"></div>
-                                            <span className="truncate">{item.title}</span>
-                                        </CardTitle>
-                                        <div className="opacity-80 group-hover:opacity-100 transition-opacity">
-                                            <PlanDialogForm item={item} key={item.exerciseId} SetState={setExerciseOption} />
+                <CardContent className="pt-4">
+                    <div className="flex flex-col gap-3 max-h-[40vh] overflow-y-auto pr-1 scrollbar-thumb-rounded scrollbar-track-rounded scrollbar-thin scrollbar-thumb-emerald-300/20 dark:scrollbar-thumb-emerald-600/30 scrollbar-track-muted/10 pb-1">
+                        {exerciseOption?.length ? (
+                            exerciseOption.map((item) => (
+                                <Card
+                                    key={item.exerciseId}
+                                    className="border border-emerald-50 dark:border-emerald-900/20 hover:border-emerald-200 dark:hover:border-emerald-800/30 transition-colors group hover:bg-emerald-50/30 dark:hover:bg-emerald-900/10"
+                                >
+                                    <CardHeader className="p-3">
+                                        <div className="flex items-center justify-between">
+                                            <CardTitle className="text-base flex items-center gap-2">
+                                                <div className="h-2 w-2 rounded-full bg-emerald-500"></div>
+                                                <span className="truncate">{item.title}</span>
+                                            </CardTitle>
+                                            <div className="opacity-90 group-hover:opacity-100 transition-opacity">
+                                                <TooltipProvider>
+                                                    <Tooltip>
+                                                        <TooltipTrigger asChild>
+                                                            <div>
+                                                                <PlanDialogForm item={item} key={item.exerciseId} SetState={setExerciseOption} />
+                                                            </div>
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>
+                                                            <p>운동 세부 설정</p>
+                                                        </TooltipContent>
+                                                    </Tooltip>
+                                                </TooltipProvider>
+                                            </div>
                                         </div>
-                                    </div>
-                                </CardHeader>
-                            </Card>
-                        ))
-                    ) : (
-                        <div className="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
-                            <div className="rounded-full bg-muted/30 p-3 mb-2">
-                                <ListPlus className="h-5 w-5" />
+                                        <div className="flex gap-4 mt-1">
+                                            <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-900/20">
+                                                {item.sets}세트
+                                            </Badge>
+                                            <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-900/20">
+                                                {item.reps}회
+                                            </Badge>
+                                            <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-900/20">
+                                                {item.weight}kg
+                                            </Badge>
+                                        </div>
+                                    </CardHeader>
+                                </Card>
+                            ))
+                        ) : (
+                            <div className="flex flex-col items-center justify-center py-12 text-center text-muted-foreground">
+                                <div className="rounded-full bg-emerald-100 dark:bg-emerald-900/30 p-4 mb-3">
+                                    <Dumbbell className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+                                </div>
+                                <p className="font-medium text-gray-700 dark:text-gray-300">운동이 선택되지 않았습니다</p>
+                                <p className="text-sm mt-1 text-gray-500 dark:text-gray-400">
+                                    위의 '운동 선택' 섹션에서 원하는 운동을 추가해주세요
+                                </p>
                             </div>
-                            <p className="font-medium">운동 옵션이 없습니다</p>
-                            <p className="text-sm mt-1">새 운동 옵션을 추가해 보세요</p>
+                        )}
+                    </div>
+
+                    {exerciseOption?.length > 5 && (
+                        <div className="mt-3 pt-2 border-t border-muted/30 text-center">
+                            <p className="text-xs text-muted-foreground">
+                                스크롤하여 더 많은 운동 보기
+                            </p>
                         </div>
                     )}
-                </div>
-
-                {exerciseOption?.length > 5 && (
-                    <div className="mt-2 pt-2 border-t border-muted/30 text-center">
-                        <p className="text-xs text-muted-foreground">
-                            스크롤하여 더 많은 옵션 보기
-                        </p>
-                    </div>
+                </CardContent>
+                {exerciseOption?.length > 0 && (
+                    <CardFooter className="bg-emerald-50/50 dark:bg-emerald-900/10 border-t pt-4">
+                        <div className="flex items-start gap-3 w-full">
+                            <Info className="h-5 w-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
+                            <p className="text-sm text-emerald-700 dark:text-emerald-300">
+                                각 운동 항목을 수정하려면 해당 운동 오른쪽의 편집 버튼을 클릭하세요.
+                                운동 순서는 위에서 선택한 순서대로 저장됩니다.
+                            </p>
+                        </div>
+                    </CardFooter>
                 )}
             </Card>
 
-            <div className='flex justify-end'>
-                <Button onClick={handleSave} disabled={isPending}>루틴 저장하기</Button>
+
+            {/* 저장 버튼 */}
+            <div className='flex justify-between items-center'>
+                <Button
+                    variant="outline"
+                    className="border-emerald-200 hover:border-emerald-300 dark:border-emerald-800/30"
+                    onClick={() => router.back()}
+                >
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    취소
+                </Button>
+                <Button
+                    className='bg-emerald-600 hover:bg-emerald-700 text-white shadow-md'
+                    onClick={handleSave}
+                    disabled={isPending || exerciseOption.length === 0}
+                >
+                    {isPending ? (
+                        <>
+                            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            저장 중...
+                        </>
+                    ) : (
+                        <>
+                            <Save className="mr-2 h-4 w-4" />
+                            루틴 저장하기
+                        </>
+                    )}
+                </Button>
             </div>
         </section>
     );

@@ -36,7 +36,8 @@ import {
     FilterIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
-    CheckCircleIcon
+    CheckCircleIcon,
+    Dumbbell
 } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useSelectedExercise } from "@/server/mutations"
@@ -114,17 +115,24 @@ export function DataTable<TData, TValue>({
     }, [selectedTags, table])
 
     return (
-        <div className="p-4 dark:bg-zinc-950 border-muted shadow-sm">
+        <div className="py-3 dark:bg-zinc-950 border-muted shadow-sm">
             <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">운동 목록</h2>
-                <div className="flex items-center text-sm text-gray-500">
-                    <CheckCircleIcon className="h-4 w-4 mr-1 text-green-500" />
-                    <span className="dark:text-gray-400">
-                        {table.getFilteredRowModel().rows.length}개 중 {" "}
-                        <span className="font-medium text-green-600">
-                            {table.getFilteredSelectedRowModel().rows.length}개
-                        </span> 선택됨
-                    </span>
+                <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+
+                        <Dumbbell className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
+                        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 ">운동 목록</h2>
+                    </div>
+
+                    <div className="flex items-center text-sm text-gray-500">
+                        <CheckCircleIcon className="h-4 w-4 mr-1 text-green-500" />
+                        <span className="dark:text-gray-400">
+                            {table.getFilteredRowModel().rows.length}개 중 {" "}
+                            <span className="font-medium text-green-600">
+                                {table.getFilteredSelectedRowModel().rows.length}개
+                            </span> 선택됨
+                        </span>
+                    </div>
                 </div>
             </div>
 
