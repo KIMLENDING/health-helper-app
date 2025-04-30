@@ -17,8 +17,6 @@ const ShowChart = () => {
     const { isMobile } = useSidebar();
     const [activeSlide, setActiveSlide] = useState(0);
     const [api, setApi] = React.useState<CarouselApi>();
-    const [current, setCurrent] = React.useState(0);
-    const [count, setCount] = React.useState(0);
     // 차트 정보 배열
     const chartItems = [
         {

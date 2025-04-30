@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import Exercise from "./Exercise";
 const { Schema } = mongoose;
 const exercisePlanSchema = new Schema(
   {
@@ -7,7 +7,7 @@ const exercisePlanSchema = new Schema(
     title: { type: String, required: true },
     exercises: [
       {
-        exerciseId: { type: Schema.Types.ObjectId, ref: "Exercise" },
+        exerciseId: { type: Schema.Types.ObjectId, ref: Exercise },
         // title: { type: String, required: true }, //운동명칭
         sets: { type: Number, required: true }, // 세트 수
         reps: { type: Number, required: true }, // 반복횟수
