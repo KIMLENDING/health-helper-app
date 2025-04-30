@@ -7,6 +7,8 @@ import { Dumbbell, Flag, PlusCircle, Calendar, Clock, ArrowLeft } from 'lucide-r
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
+import { formatToKST } from '@/utils/date';
+import { formatDate } from '@/lib/utils';
 
 const ShowExercisePlan = () => {
     const { data, error, isLoading } = useExercisePlan();
@@ -105,7 +107,7 @@ const ShowExercisePlan = () => {
                                                         <div className="flex flex-wrap gap-2 text-sm text-zinc-600 dark:text-zinc-400">
                                                             <div className="flex items-center">
                                                                 <Calendar className="h-4 w-4 mr-1" />
-                                                                <span>{plan.createdAt ? new Date(plan.createdAt).toLocaleDateString() : '날짜 없음'}</span>
+                                                                <span>{plan.createdAt ? formatDate(formatToKST(plan.createdAt)) : '날짜 없음'}</span>
                                                             </div>
                                                             <div className="flex items-center">
                                                                 <Clock className="h-4 w-4 mr-1" />

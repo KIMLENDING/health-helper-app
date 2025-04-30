@@ -15,6 +15,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useRouter } from 'next/navigation';
 import { useDeletePlan, useEditPlan } from '@/server/user/exercisePlan/mutations';
 import { useExercisePlanById } from '@/server/user/exercisePlan/queries';
+import { formatToKST } from '@/utils/date';
 
 /** 플랜 세부 CRUD 페이지 */
 type Params = Promise<{ planId: string }>;
@@ -161,7 +162,7 @@ const ExercisePlanDetailPage = (props: {
                 )}
                 <div className='flex items-center gap-2 shrink-0  '>
                     <Badge variant="outline" className="px-3 py-1 shrink-0">
-                        {formatDate(data.createdAt!)}
+                        {formatDate(formatToKST(data.createdAt!))}
                     </Badge>
 
                     <DropdownMenu>

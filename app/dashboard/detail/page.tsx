@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import TotalTitleByWeight from "@/components/UserCpmponents/chartComponents/session/totalTitleByWeight";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAllSessions } from "@/server/user/exerciseSession/queries";
+import { formatToKST } from "@/utils/date";
 
 const Page = () => {
     const [year, setYear] = useState(new Date().getFullYear());
@@ -101,7 +102,7 @@ const Page = () => {
             ) : data?.allSession?.length > 0 ? (
                 <Accordion type="multiple" className="space-y-4">
                     {data?.allSession.map((session: ExerciseSession) => {
-                        const { formatted, dayOfWeek } = formatDate(session.createdAt || '');
+                        const { formatted, dayOfWeek } = formatDate(formatToKST(session.createdAt!) || '');
 
                         return (
                             <AccordionItem
