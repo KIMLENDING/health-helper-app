@@ -4,7 +4,6 @@ import {
   Blocks,
   Calendar,
   Home,
-  ClipboardPlus,
   History,
   Inbox,
   MessageCircleQuestion,
@@ -18,7 +17,6 @@ import {
 
 import {
   Sidebar,
-  SidebarContent,
   SidebarHeader,
 } from "@/components/ui/sidebar"
 
