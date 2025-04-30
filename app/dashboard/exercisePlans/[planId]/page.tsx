@@ -219,7 +219,7 @@ const ExercisePlanDetailPage = (props: {
                 >
                     {(isEditing ? editedExercises : data.exercises).length > 0 ? (
                         (isEditing ? editedExercises : data.exercises).map((exercise, index) => (
-                            <Card key={exercise._id} className="overflow-hidden transition-all hover:shadow-md group">
+                            <Card key={exercise._id} className="overflow-hidden transition-all hover:shadow-md ">
                                 {/* 헤더 영역 */}
                                 <div className="flex items-center  m-4 mb-0 bg-zinc-100 dark:bg-zinc-600/30 p-2 rounded-md">
                                     <div className="mr-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
@@ -237,9 +237,9 @@ const ExercisePlanDetailPage = (props: {
                                                 </TooltipContent>
                                             </Tooltip>
                                         </div>
-                                        <div className='flex items-center gap-2 mt-1'>
+                                        <div className='flex flex-wrap items-center gap-2 mt-1  overflow-hidden'>
                                             {exercise.exerciseId.tags?.map((tag: any) => (
-                                                <p key={tag} className="text-xs text-zinc-600 dark:text-zinc-300">{tag}</p>
+                                                <p key={tag} className="text-xs text-zinc-600 dark:text-zinc-300 truncate">{tag}</p>
                                             ))}
                                         </div>
                                     </div>
@@ -271,7 +271,7 @@ const ExercisePlanDetailPage = (props: {
                                         >
                                             <div className="flex items-center justify-center gap-1 mb-1">
                                                 <Layers className="h-4 w-4 text-gray-500" />
-                                                <p className="text-sm text-gray-700 dark:text-gray-400">세트</p>
+                                                <p className="text-sm   text-zinc-700 dark:text-zinc-300">세트</p>
                                             </div>
                                             {isEditing ? (
                                                 <Input
@@ -300,7 +300,7 @@ const ExercisePlanDetailPage = (props: {
                                         >
                                             <div className="flex items-center justify-center gap-1 mb-1">
                                                 <Repeat className="h-4 w-4 text-gray-500" />
-                                                <p className="text-sm text-gray-700 dark:text-gray-400">반복</p>
+                                                <p className="text-sm  text-zinc-700 dark:text-zinc-300">반복</p>
                                             </div>
                                             {isEditing ? (
                                                 <Input
@@ -329,7 +329,7 @@ const ExercisePlanDetailPage = (props: {
                                         >
                                             <div className="flex items-center justify-center gap-1 mb-1">
                                                 <Weight className="h-4 w-4 text-gray-500" />
-                                                <p className="text-sm text-gray-700 dark:text-gray-400">무게 (kg)</p>
+                                                <p className="text-sm   text-zinc-700 dark:text-zinc-300">무게</p>
                                             </div>
                                             {isEditing ? (
                                                 <Input
@@ -343,7 +343,7 @@ const ExercisePlanDetailPage = (props: {
                                                 />
                                             ) : (
                                                 <div className="flex items-center justify-center">
-                                                    <p className="text-lg font-semibold">{exercise.weight}</p>
+                                                    <p className="text-lg font-semibold pl-2">{exercise.weight}kg</p>
 
                                                     {/*  db 수정해서 prevWeight 추가하기 그리고 api도 수정해야함 그럼 이거 주석 풀기
                                                     {exercise.prevWeight && exercise.weight > exercise.prevWeight && (
