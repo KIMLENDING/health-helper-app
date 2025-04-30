@@ -16,14 +16,11 @@ import { ExercisePlan, ExerciseOption } from '@/utils/util';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import LoadingOverlay from '../LayoutCompents/LoadingOverlay';
-import { Separator } from '../ui/separator';
 import { Badge } from '../ui/badge';
 import {
     ListPlus,
     Dumbbell,
     Save,
-    CheckCircle2,
-    AlertCircle,
     Info,
     CalendarClock,
     ArrowLeft,
@@ -258,7 +255,7 @@ const CreatPlanUser = () => {
                                         </div>
                                         <p className="font-medium text-gray-700 dark:text-gray-300">운동이 선택되지 않았습니다</p>
                                         <p className="text-sm mt-1 text-gray-500 dark:text-gray-400">
-                                            위의 '운동 선택' 섹션에서 원하는 운동을 추가해주세요
+                                            위의 &apos;운동 선택&apos; 섹션에서 원하는 운동을 추가해주세요
                                         </p>
                                     </div>
                                 )}
