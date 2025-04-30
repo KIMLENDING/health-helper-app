@@ -27,12 +27,12 @@
 [🔗 GitHub Repository - Exercise](https://github.com/KIMLENDING/health-helper-app/blob/master/models/Exercise.js)
 운동 항목을 정의하는 스키마입니다.
 
-| 필드          | 타입   | 필수 여부 | 설명                                  |
-| ------------- | ------ | --------- | ------------------------------------- |
-| `title`       | String | ✅        | 운동 이름 (고유)                      |
-| `description` | String | ✅        | 운동 설명                             |
-| `url`         | String | ✅        | 참고 영상 또는 설명 링크              |
-| `tags`        | String | ✅        | 태그 목록 (예: 상체, 하체, 유산소 등) |
+| 필드          | 타입   | 필수 여부 | 설명                           |
+| ------------- | ------ | --------- | ------------------------------ |
+| `title`       | String | ✅        | 운동 이름 (고유)               |
+| `description` | String | ✅        | 운동 설명                      |
+| `url`         | String | ✅        | 참고 영상 또는 설명 링크       |
+| `tags`        | String | ✅        | 태그 목록 (예: 상체, 하체, 등) |
 
 ---
 
@@ -66,12 +66,12 @@
 [🔗 GitHub Repository - ExerciseSession](https://github.com/KIMLENDING/health-helper-app/blob/master/models/ExerciseSession.js)
 실제 수행된 운동 세션을 기록하는 스키마입니다.
 
-| 필드             | 타입     | 필수 여부 | 설명                                 |
-| ---------------- | -------- | --------- | ------------------------------------ |
-| `userId`         | ObjectId | ✅        | 세션 수행자 ID 참조:`User`           |
-| `exercisePlanId` | ObjectId | ✅        | 기반이 된 운동 계획                  |
-| `exercises`      | [객체]   | ✅        | 세션 동안 수행된 운동들              |
-| `state`          | String   | ✅        | 세션 상태 (`"inProgress"`, `"done"`) |
+| 필드             | 타입     | 필수 여부 | 설명                                    |
+| ---------------- | -------- | --------- | --------------------------------------- |
+| `userId`         | ObjectId | ✅        | 세션 수행자 ID 참조:`User`              |
+| `exercisePlanId` | ObjectId | ✅        | 기반이 된 운동 계획 참조:`ExercisePlan` |
+| `exercises`      | [객체]   | ✅        | 세션 동안 수행된 운동들                 |
+| `state`          | String   | ✅        | 세션 상태 (`"inProgress"`, `"done"`)    |
 
 **exercises 배열의 내부 구조:**
 
@@ -184,13 +184,16 @@ Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
 
 ---
 
-# 📌 Notes
+## 🔐 인증 처리 방식 (Authentication)
 
-- 모든 API 요청은 `Content-Type: application/json` 헤더를 사용합니다.
-- 인증이 필요한 엔드포인트는 JWT 또는 세션을 통한 인증을 요구합니다.
-- 에러 발생 시 표준화된 에러 메시지가 반환됩니다.
-
----
+- 인증이 필요한 API는 내부적으로 `requireUser(req)` 유틸을 사용하여 다음을 검사합니다:
+  - `next-auth` 세션 유효성 (`getServerSession`)
+  - JWT 토큰 검증 (`getToken`)
+  - MongoDB에 존재하는 유저 확인 (`User.findOne`)
+- 인증 실패 시, 다음과 같은 JSON 응답이 반환됩니다:
+  ```json
+  { "error": "Unauthorized", "status": 401 }
+  ```
 
 # 🛠️ Tech Stack
 

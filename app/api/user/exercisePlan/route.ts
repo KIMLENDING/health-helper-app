@@ -16,8 +16,7 @@ export const GET = async (req: NextRequest) => {
         if (!user) return NextResponse.json({ message: error }, { status });
 
         // 필요한 필드만 선택하여 가져오기 .select('_id userId title')
-        const exercisePlan = await ExercisePlan.find({ userId: user._id })
-            .populate('exercises.exerciseId', 'title');
+        const exercisePlan = await ExercisePlan.find({ userId: user._id }).populate('exercises.exerciseId', 'title');
         if (!exercisePlan) {
             return NextResponse.json({ message: '운동 계획을 찾을 수 없습니다.' }, { status: 404 });
         }
