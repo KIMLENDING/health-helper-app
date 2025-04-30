@@ -270,7 +270,7 @@ const ExercisePlanDetailPage = (props: {
                                             className={`text-center p-3 rounded-lg bg-zinc-100 dark:bg-zinc-600/30`}
                                         >
                                             <div className="flex items-center justify-center gap-1 mb-1">
-                                                <Layers className="h-4 w-4 text-gray-500" />
+                                                <Layers className="h-4 w-4 text-zinc-500 dark:text-zinc-300" />
                                                 <p className="text-sm   text-zinc-700 dark:text-zinc-300">세트</p>
                                             </div>
                                             {isEditing ? (
@@ -299,7 +299,7 @@ const ExercisePlanDetailPage = (props: {
                                             className={`text-center p-3 rounded-lg bg-zinc-100 dark:bg-zinc-600/30`}
                                         >
                                             <div className="flex items-center justify-center gap-1 mb-1">
-                                                <Repeat className="h-4 w-4 text-gray-500" />
+                                                <Repeat className="h-4 w-4 text-zinc-500 dark:text-zinc-300" />
                                                 <p className="text-sm  text-zinc-700 dark:text-zinc-300">반복</p>
                                             </div>
                                             {isEditing ? (
@@ -328,7 +328,7 @@ const ExercisePlanDetailPage = (props: {
                                             className={`text-center p-3 rounded-lg ${getWeightClass(+exercise.weight)}`}
                                         >
                                             <div className="flex items-center justify-center gap-1 mb-1">
-                                                <Weight className="h-4 w-4 text-gray-500" />
+                                                <Weight className="h-4 w-4 text-zinc-500 dark:text-zinc-300" />
                                                 <p className="text-sm   text-zinc-700 dark:text-zinc-300">무게</p>
                                             </div>
                                             {isEditing ? (
