@@ -224,7 +224,7 @@ const Page = (props: {
                                 </div>
                                 <p className="font-medium text-gray-700 dark:text-gray-300">운동이 선택되지 않았습니다</p>
                                 <p className="text-sm mt-1 text-gray-500 dark:text-gray-400">
-                                    위의 '운동 선택' 섹션에서 원하는 운동을 추가해주세요
+                                    위의 &apos;운동 선택&apos; 섹션에서 원하는 운동을 추가해주세요
                                 </p>
                             </div>
                         )}
