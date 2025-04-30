@@ -27,9 +27,9 @@ const Page = () => {
             <nav className="flex items-center justify-between px-6 py-4 bg-white dark:bg-gray-800 border-b shadow-sm">
                 <div className="flex items-center gap-2">
                     <DumbbellIcon className="h-8 w-8 text-emerald-500" />
-                    <span className="text-xl font-bold bg-gradient-to-r from-emerald-500 to-teal-600 bg-clip-text text-transparent">H-Helper</span>
+                    <span className="text-xl font-bold bg-gradient-to-r from-emerald-500 to-teal-600 bg-clip-text text-transparent whitespace-nowrap">H-Helper</span>
                 </div>
-                <div className="flex gap-4">
+                <div className="flex gap-4  break-keep">
                     <Link href={'/login'} className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">
                         로그인
                     </Link>
@@ -45,7 +45,7 @@ const Page = () => {
                     <div className="absolute inset-0 bg-gradient-to-br from-emerald-100 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/10 -z-10"></div>
                     <div className="max-w-6xl mx-auto px-4 py-20">
                         <div className="flex flex-col items-center text-center gap-8">
-                            <h1 className="text-5xl font-bold tracking-tight sm:text-6xl bg-gradient-to-r from-emerald-600 to-teal-700 bg-clip-text text-transparent">
+                            <h1 className="text-5xl font-bold tracking-tight sm:text-6xl bg-gradient-to-r from-emerald-600 to-teal-700 bg-clip-text text-transparent break-keep">
                                 당신만의 운동 도우미
                             </h1>
                             <p className="text-xl text-gray-700 dark:text-gray-300 max-w-2xl">
