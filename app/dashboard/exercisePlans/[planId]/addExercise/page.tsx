@@ -79,7 +79,7 @@ const Page = (props: {
 
     if (!filteredData || filteredData.length === 0) {
         return (
-            <section className="mx-auto w-full max-w-4xl px-4 py-6 space-y-6">
+            <section className="mx-auto w-full max-w-4xl py-4 space-y-6">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">운동 추가</h1>
                     <p className="text-muted-foreground mt-2">
@@ -106,7 +106,7 @@ const Page = (props: {
     const addedExercises = totalExercises - filteredData.length;
 
     return (
-        <section className="mx-auto w-full  max-w-4xl px-4 py-6 space-y-6">
+        <section className="mx-auto w-full  max-w-4xl  py-4 space-y-6">
 
             <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 rounded-xl shadow-lg">
                 <div className="flex items-center gap-4">

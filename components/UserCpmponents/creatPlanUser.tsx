@@ -103,7 +103,7 @@ const CreatPlanUser = () => {
     }
 
     return (
-        <div className="mx-auto w-full max-w-4xl px-4 py-6">
+        <div className="mx-auto w-full max-w-4xl  py-4">
             <div className='space-y-6'>
                 {/* 헤더 섹션 */}
                 <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 rounded-xl shadow-lg">

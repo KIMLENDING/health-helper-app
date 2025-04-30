@@ -21,7 +21,7 @@ const Page = async ({ params }: { params: Promise<{ sessionId: string }> }) => {
 
 
     return (
-        <div className='mx-auto w-full h-full   flex-1  max-w-4xl px-4 py-6'>
+        <div className='mx-auto w-full h-full   flex-1  max-w-4xl  py-4'>
             <HydrationBoundary state={dehydrate(queryClient)}>
                 <TapsComponent sessionId={sessionId} />
             </HydrationBoundary>

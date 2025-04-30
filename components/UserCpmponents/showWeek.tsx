@@ -61,7 +61,7 @@ const ShowWeek = () => {
     const completionRate = Math.round((completedSessions / 7) * 100);
 
     return (
-        <section className="mx-auto w-full max-w-4xl px-4   space-y-4">
+        <section className="mx-auto w-full max-w-4xl space-y-4">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <Calendar className="h-6 w-6 text-green-600" />

@@ -96,7 +96,7 @@ export const AddExercise = () => {
     }
 
     return (
-        <div className="mx-auto max-h-screen w-full  max-w-4xl px-4 py-6">
+        <div className="mx-auto max-h-screen w-full  max-w-4xl py-4">
             <Card className="shadow-md border-emerald-100 dark:border-emerald-800/30">
                 <CardHeader className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 border-b pb-8">
                     <div className="flex items-center gap-3">

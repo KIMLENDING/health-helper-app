@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/componen
 import {
     Dumbbell,
     ChevronRight,
-    PlusCircle
+    PlusCircle,
+    List
 } from 'lucide-react'
 import Link from 'next/link'
 import { DrawerDialogDemo } from '../LayoutCompents/ResponsiveDialog'
@@ -14,21 +15,26 @@ import { useExercisePlan } from '@/server/user/exercisePlan/queries'
 const ShowPlans = () => {
     const { data, isError, isLoading } = useExercisePlan()
 
-
-
     return (
-        <div className="mx-auto w-full max-w-4xl px-4 ">
-            <div className="flex justify-between items-center mb-4">
-                <Link href="/dashboard/exercisePlans">
-                    <CardTitle className="font-extrabold text-2xl group flex items-center">
-                        <span className="group-hover:underline">플랜 목록</span>
-                        <ChevronRight size={20} className="ml-1 opacity-70" />
-                    </CardTitle>
-                </Link>
+        <div className="mx-auto w-full max-w-4xl  ">
 
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <List className="h-6 w-6 text-green-600" />
+                    <CardTitle className='font-extrabold text-2xl'>
+                        플랜 목록
+                    </CardTitle>
+                </div>
+                <Link
+                    href="/dashboard/exercisePlans"
+                    className='flex items-center text-sm text-gray-600 hover:text-green-600 transition-colors'
+                >
+                    전체보기
+                    <ChevronRight className="h-4 w-4 ml-1" />
+                </Link>
             </div>
 
-            <div className="rounded-xl bg-muted/30 p-4 h-72 overflow-y-auto scrollbar-hide shadow-sm border border-gray-100 dark:border-gray-800">
+            <div className="mt-4 rounded-xl bg-muted/30 p-4 h-72 overflow-y-auto scrollbar-hide shadow-sm border border-gray-100 dark:border-gray-800">
                 {isLoading ? (
                     <div className="flex flex-col gap-3">
                         {[1, 2, 3].map((index) => (
