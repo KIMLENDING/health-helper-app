@@ -16,6 +16,7 @@ const ShowChart = () => {
     const { data, isError, isLoading } = useWeekSessions(); // 필요한 운동 계획 데이터를 가져옵니다.
     const { isMobile } = useSidebar();
     const [activeSlide, setActiveSlide] = useState(0);
+
     const [api, setApi] = React.useState<CarouselApi>();
     // 차트 정보 배열
     const chartItems = [
@@ -51,8 +52,14 @@ const ShowChart = () => {
         if (!api) {
             return
         }
-        api.scrollTo(activeSlide, true)
-    }, [activeSlide])
+
+        api.scrollTo(activeSlide, false)
+        api.on("select", () => {
+            if (api.selectedScrollSnap() !== activeSlide) setActiveSlide(api.selectedScrollSnap())
+        })
+    }, [api, activeSlide])
+
+
 
 
 
@@ -94,7 +101,7 @@ const ShowChart = () => {
     return (
         <section className="mx-auto w-full max-w-4xl py-4 space-y-4">
             <Card>
-                <div className={`flex ${isMobile ? 'flex-col gap-2' : 'flex-row gap-4 justify-between p-4'} `}>
+                <div className={`flex ${'flex-row gap-4 justify-evenly p-4'} `}>
                     {chartItems.map((item, index) => (
                         <button
                             key={index}
@@ -105,7 +112,7 @@ const ShowChart = () => {
                                 }`}
                         >
                             {item.icon}
-                            <span className={isMobile ? 'text-sm' : 'text-xs'}>{item.title}</span>
+                            <span className={`break-words sm:block hidden ${isMobile ? 'text-sm ' : 'text-xs'}`}>{item.title}</span>
                         </button>
                     ))}
                 </div>
@@ -118,22 +125,22 @@ const ShowChart = () => {
                 orientation={isMobile ? "vertical" : 'horizontal'} className='bg-muted/50  rounded-xl ' >
                 <CarouselContent className={` ${isMobile ? 'h-[17rem] ' : ''} select-none`} >
                     <CarouselItem >
-                        <CardContainer title='주간 운동 종목 Top 5'  >
+                        <CardContainer title='주간 운동 종목 Top 5' icon={<BarChart2 className="h-5 w-5 text-blue-500" />}>
                             <TitlebyDay data={data} />
                         </CardContainer>
                     </CarouselItem>
                     <CarouselItem >
-                        <CardContainer title='주간 운동 시간' >
+                        <CardContainer title='주간 운동 시간' icon={<Clock className="h-5 w-5 text-purple-500" />}>
                             <TimeByDay data={data} />
                         </CardContainer>
                     </CarouselItem>
                     <CarouselItem >
-                        <CardContainer title='주간 운동량(kg)' >
+                        <CardContainer title='주간 운동량(kg)' icon={<Activity className="h-5 w-5 text-green-500" />}>
                             <WeightByDay data={data} />
                         </CardContainer>
                     </CarouselItem>
                     <CarouselItem >
-                        <CardContainer title='주간 부위별 운동량(kg)' >
+                        <CardContainer title='주간 부위별 운동량(kg)' icon={<Dumbbell className="h-5 w-5 text-orange-500" />}>
                             <WeightByPart data={data} />
                         </CardContainer>
                     </CarouselItem>
