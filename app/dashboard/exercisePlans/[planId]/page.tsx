@@ -148,7 +148,7 @@ const ExercisePlanDetailPage = (props: {
     if (!data) return <div className="p-8 text-center">운동 계획을 찾을 수 없습니다.</div>;
 
     return (
-        <section className='mx-auto w-full max-w-3xl p-4'>
+        <section className='mx-auto w-full max-w-4xl px-4 py-6'>
             <div className="mb-6 flex items-center justify-between gap-2">
                 {isEditing ? (
                     <Input

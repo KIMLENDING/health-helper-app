@@ -59,7 +59,7 @@ const ShowChart = () => {
     // 로딩 상태 표시
     if (isLoading) {
         return (
-            <section className="mx-auto w-full max-w-3xl rounded-xl">
+            <section className="mx-auto w-full max-w-4xl px-4 py-6 ">
                 <div className="bg-white dark:bg-gray-800 shadow-sm rounded-xl p-6 animate-pulse">
                     <div className="flex items-center justify-between mb-6">
                         <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
@@ -77,7 +77,7 @@ const ShowChart = () => {
     // 에러 상태 표시
     if (isError) {
         return (
-            <section className="mx-auto w-full max-w-3xl rounded-xl">
+            <section className="mx-auto w-full max-w-4xl px-4 py-6">
                 <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 p-4 rounded-xl flex flex-col items-center justify-center h-64">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mb-4">
                         <circle cx="12" cy="12" r="10"></circle>
@@ -92,10 +92,10 @@ const ShowChart = () => {
     }
 
     return (
-        <section className="mx-auto w-full max-w-3xl rounded-xl space-y-4">
+        <section className="mx-auto w-full max-w-4xl px-4 py-6  space-y-4">
             <Card>
 
-                <div className={`flex ${isMobile ? 'flex-col gap-2' : 'flex-row gap-4 justify-between'} `}>
+                <div className={`flex ${isMobile ? 'flex-col gap-2' : 'flex-row gap-4 justify-between p-4'} `}>
                     {chartItems.map((item, index) => (
                         <button
                             key={index}

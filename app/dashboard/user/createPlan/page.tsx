@@ -21,7 +21,7 @@ const CreatPlan = async () => {
     const queryClient = getQueryClient();
     await queryClient.prefetchQuery({ queryKey: ["exercises"], queryFn: () => ExerciseData });
     return (
-        <div className='flex flex-1 flex-col gap-4 p-4'>
+        <div className='flex flex-1 flex-col  p-4'>
             <HydrationBoundary state={dehydrate(queryClient)}>
                 <CreatPlanUser />
             </HydrationBoundary>

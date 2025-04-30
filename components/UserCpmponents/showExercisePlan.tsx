@@ -28,7 +28,7 @@ const ShowExercisePlan = () => {
     );
 
     return (
-        <div className="mx-auto w-full max-w-3xl px-4 py-6 rounded-xl min-h-[calc(100vh-56px)] relative flex flex-col gap-4">
+        <div className="mx-auto w-full max-w-4xl px-4 py-6  min-h-[calc(100vh-56px)] relative flex flex-col gap-4">
 
             <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 rounded-xl shadow-lg">
                 <div className="flex items-center gap-4">

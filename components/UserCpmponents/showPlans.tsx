@@ -3,17 +3,11 @@
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import {
-    Activity,
     Dumbbell,
-    Flame,
-    Trophy,
-    Clock,
     ChevronRight,
-    Filter,
     PlusCircle
 } from 'lucide-react'
 import Link from 'next/link'
-import { useState } from 'react'
 import { DrawerDialogDemo } from '../LayoutCompents/ResponsiveDialog'
 import { useExercisePlan } from '@/server/user/exercisePlan/queries'
 
@@ -23,7 +17,7 @@ const ShowPlans = () => {
 
 
     return (
-        <div className="mx-auto w-full max-w-3xl">
+        <div className="mx-auto w-full max-w-4xl px-4 ">
             <div className="flex justify-between items-center mb-4">
                 <Link href="/dashboard/exercisePlans">
                     <CardTitle className="font-extrabold text-2xl group flex items-center">
