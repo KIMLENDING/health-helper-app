@@ -33,8 +33,8 @@ export const GET = async (req: NextRequest) => {
 
         // URL에서 `year`, `month`, `page`, `limit` 가져오기
         const { searchParams } = new URL(req.url);
-        const year = parseInt(searchParams.get("year") || new Date(Date.now() + 9 * 60 * 60 * 1000).getFullYear().toString()); // 기본값: 한국 시간 기준 올해
-        const month = parseInt(searchParams.get("month") || (new Date(Date.now() + 9 * 60 * 60 * 1000).getMonth() + 1).toString()); // 기본값: 한국 시간 기준 이번 달
+        const year = parseInt(searchParams.get("year") || new Date().getFullYear().toString()); // 기본값: 올해
+        const month = parseInt(searchParams.get("month") || (new Date().getMonth() + 1).toString()); // 기본값: 이번 달
         const page = parseInt(searchParams.get("page") || "1"); // 기본값: 1페이지
         const limit = parseInt(searchParams.get("limit") || "10"); // 기본값: 10개씩 가져오기
 
