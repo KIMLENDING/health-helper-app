@@ -3,9 +3,9 @@ import ShowPlans from "@/components/UserCpmponents/showPlans";
 import ShowWeek from "@/components/UserCpmponents/showWeek";
 import { fetchWithCookie } from "@/utils/fetchUrl";
 import getQueryClient from "@/utils/getQueryClient";
-import { HydrationBoundary, dehydrate, QueryClient } from "@tanstack/react-query";
+import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { cookies } from "next/headers";
-
+// import { ShowChart } from "@/components/UserCpmponents/DynamicComponents";  // 동적 import
 const fetchData = async () => {
   const cookieHeader = await cookies();
   const cookieName =

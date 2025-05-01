@@ -7,13 +7,13 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import TotalTitleBySession from "@/components/UserCpmponents/chartComponents/session/totalTitleBySession";
 import { useEffect, useState } from "react";
-import TotalTitleByWeight from "@/components/UserCpmponents/chartComponents/session/totalTitleByWeight";
+// import TotalTitleBySession from "@/components/UserCpmponents/chartComponents/session/totalTitleBySession";
+// import TotalTitleByWeight from "@/components/UserCpmponents/chartComponents/session/totalTitleByWeight";
+import { TotalTitleBySession, TotalTitleByWeight } from "@/components/UserCpmponents/DynamicComponents";  // 동적 import
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAllSessions } from "@/server/user/exerciseSession/queries";
 import { formatToKST } from "@/utils/date";
-
 const Page = () => {
     const [year, setYear] = useState(new Date().getFullYear());
     const [month, setMonth] = useState(new Date().getMonth() + 1);

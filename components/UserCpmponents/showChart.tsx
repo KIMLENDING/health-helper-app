@@ -112,7 +112,7 @@ const ShowChart = () => {
                                 }`}
                         >
                             {item.icon}
-                            <span className={`break-words sm:block hidden ${isMobile ? 'text-sm ' : 'text-xs'}`}>{item.title}</span>
+                            <span className={`break-words md:block hidden ${isMobile ? 'text-sm ' : 'text-xs'}`}>{item.title}</span>
                         </button>
                     ))}
                 </div>

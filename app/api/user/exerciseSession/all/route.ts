@@ -41,9 +41,11 @@ export const GET = async (req: NextRequest) => {
         const KST_OFFSET = 9 * 60 * 60 * 1000;
 
         // 선택한 월의 시작 날짜와 끝 날짜 계산
+        // 로컬에서 이거 쓰고 
         // const startDate = new Date(year, month - 1, 1); // 해당 월의 첫째 날
         // const endDate = new Date(year, month, 0, 23, 59, 59); // 해당 월의 마지막 날 (23:59:59)
 
+        // 서버에선 이거 쓰고
         const startDate = new Date(new Date(year, month - 1, 1).getTime() - KST_OFFSET);
         const endDate = new Date(new Date(year, month, 0, 23, 59, 59).getTime() - KST_OFFSET);
         // 페이지네이션 적용하여 데이터 가져오기
