@@ -2,13 +2,18 @@
 import LoadingOverlay from '@/components/LayoutCompents/LoadingOverlay'
 import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner'
 import { DrawerDialogDone } from '@/components/LayoutCompents/ResponsiceDialog2'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardDescription } from '@/components/ui/card'
+import { Card, CardDescription, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { TabsContent } from '@/components/ui/tabs'
 import { toast } from '@/hooks/use-toast'
 import { useActionExerciseSession, useEditExerciseSession } from '@/server/user/exerciseSession/mutations'
 
 import { ExerciseSession } from '@/utils/util'
+import { Ellipsis } from 'lucide-react'
 import React, { useState } from 'react'
 
 
@@ -23,6 +28,7 @@ const InProgressTap = ({ data, sessionId, isPending, handleDone }: InProgressTPr
     const [editingSetId, setEditingSetId] = useState<string | null>(null);
     const [editedReps, setEditedReps] = useState<number>(0);
     const [editedWeight, setEditedWeight] = useState<number>(0);
+    const [addWeight, setAddWeight] = useState(5);
 
     const { mutateAsync: editSet } = useEditExerciseSession();
     const { mutate } = useActionExerciseSession();
@@ -50,7 +56,7 @@ const InProgressTap = ({ data, sessionId, isPending, handleDone }: InProgressTPr
     const handleNewSet = (exerciseId: string) => {
         if (!data) return;
         try {
-            mutate({ sessionId, exerciseId, action: 'start' });
+            mutate({ sessionId, exerciseId, action: 'start', addWeight });
         } catch (error) {
             console.error(error);
             toast({ title: '오류 발생', description: '운동 상태를 업데이트하는 중 문제가 발생했습니다.' });
@@ -73,10 +79,32 @@ const InProgressTap = ({ data, sessionId, isPending, handleDone }: InProgressTPr
             {data.exercises.map(exercise => (
                 exercise.state === 'inProgress' && (
                     <Card key={exercise._id} className="p-4 flex flex-col gap-2">
-                        <div className="flex flex-col pb-4">
-                            <span className="max-smc:truncate">{exercise.exerciseId.title}</span>
+                        <div className="flex flex-col pb-4 gap-2">
+                            <CardTitle className='flex justify-between items-center'>
+                                <span className="max-smc:truncate">{exercise.exerciseId.title}</span>
+                                <Popover>
+                                    <PopoverTrigger><Badge variant='outline'>증가량: {addWeight}kg</Badge></PopoverTrigger>
+                                    <PopoverContent className='flex flex-row justify-between items-center gap-2 '>
+                                        <Label className='text-nowrap'>다음 세트 증가량</Label>
+                                        <Input
+                                            type="number"
+                                            value={addWeight}
+                                            min={0}
+                                            onChange={(e) => setAddWeight(Number(e.target.value))}
+                                            className="text-center w-fit min-w-[1ch] max-w-[10ch]"
+                                            placeholder="5"
+                                        />
+                                    </PopoverContent>
+                                </Popover>
+                            </CardTitle>
+
                             <CardDescription className="max-smc:truncate">
-                                총 {exercise.sets}세트
+                                <div className="flex justify-between items-center">
+                                    <span className="text-sm">시작시간: {new Date(exercise.session[0].createdAt!).toLocaleString()}</span>
+                                    총 {exercise.sets}세트
+                                </div>
+
+
                             </CardDescription>
                         </div>
                         <div className="flex flex-col gap-2 h-[40vh] overflow-y-scroll">

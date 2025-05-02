@@ -94,6 +94,7 @@ export interface ExerciseSessionActionPayload {
     sessionId: string,
     exerciseId: any,
     action: "start" | "done" | "end",
+    addWeight?: number // 세트 완료 시 세트 수 증가
 };
 
 export interface ExerciseSessionSetPayload {

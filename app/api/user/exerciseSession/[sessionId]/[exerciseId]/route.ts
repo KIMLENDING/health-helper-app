@@ -10,7 +10,7 @@ import { requireUser } from "@/lib/check-auth"
  * @returns 
  */
 export const POST = async (req: NextRequest) => {
-    const { sessionId, exerciseId, action } = await req.json();
+    const { sessionId, exerciseId, action, addWeight } = await req.json();
     const { user, error, status } = await requireUser(req);
     if (!user) return NextResponse.json({ message: error }, { status });
 
@@ -96,7 +96,7 @@ export const POST = async (req: NextRequest) => {
                 exercise.session.push({
                     set: 1,
                     reps: planExercise.reps,
-                    weight: planExercise.weight || 40, // 기본 중량 40kg 인데 이제 이거 없에고 초기 plan에 필드 추가하고 거기서 가져오는 방식으로 해야함 
+                    weight: planExercise.weight,
                 });
                 // 변경 감지
                 exerciseSession.markModified("exercises");
@@ -108,7 +108,7 @@ export const POST = async (req: NextRequest) => {
                 exercise.session.push({
                     set: prev.set + 1,
                     reps: prev.reps,
-                    weight: prev.weight + 5, // 5는 변수로 해서 사용자의 선택으로 바꿀 예정 
+                    weight: prev.weight + (addWeight || 5), // 5는 변수로 해서 사용자의 선택으로 바꿀 예정 
                 });
                 // 변경 감지
                 exerciseSession.markModified("exercises");
