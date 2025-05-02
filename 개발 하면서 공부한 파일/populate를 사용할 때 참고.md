@@ -91,8 +91,6 @@ const exercisePlanSchema = new Schema({
 - 이는 Mongoose가 내부에서 참조 모델을 전역 모델 목록에서 검색하기 때문입니다.
 - 안정적인 앱 동작을 위해서 `populate`를 사용하는 모든 스키마에서 참조 대상 모델을 import하는 습관을 들이세요.
 
-> 💡 작은 습관 하나로 디버깅 시간을 아낄 수 있습니다.
-
 ---
 
 ## 참고
@@ -101,5 +99,4 @@ const exercisePlanSchema = new Schema({
 
 ---
 
-작성자: [당신의 이름]
 날짜: 2025-04-30
