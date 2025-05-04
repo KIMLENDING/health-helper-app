@@ -39,8 +39,17 @@ export const SidebarLeft = dynamic(() => import("@/components/sidebar-left"), {
 ```tsx
 // LeftSideBar.tsx
 const LeftSideBar = () => {
-  const { openMobile, open } = useSidebar();
-  return <div>{openMobile || (open && <SidebarLeft />)}</div>;
+  const { openMobile, open, isMobile } = useSidebar();
+
+  return (
+    <div>
+      {isMobile ? (
+        <> {openMobile && <SidebarLeft />}</>
+      ) : (
+        <> {open && <SidebarLeft />}</>
+      )}
+    </div>
+  );
 };
 ```
 
