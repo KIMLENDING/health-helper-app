@@ -50,72 +50,66 @@ const PlanDialogForm = ({ item, SetState }: { item: ExerciseOption, SetState: Re
         <Dialog key={item.exerciseId} >
             <DialogTrigger asChild>
                 <Button >
-                    {item ? <div>
-                        {item?.sets}세트,{' '}
-                        {item?.reps}회,{' '}
-                        {item?.weight}kg{' '}
-                    </div> : '상세 설정'
-                    }
+                    {item && '상세 설정'}
                 </Button>
             </DialogTrigger>
             <DialogContent className="rounded-lg">
                 <DialogHeader>
                     <DialogTitle className="pb-2">{item.title}</DialogTitle>
                     <DialogDescription></DialogDescription>
-                    <Card className="w-full border-none">
-                        <CardContent>
-                            <Form {...form}>
-                                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                                    <FormField
-                                        control={form.control}
-                                        name="sets"
-                                        render={({ field }) => (
-                                            <FormItem >
-                                                <FormLabel >총 세트</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="1" min={1} {...field} type="number" />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="reps"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>세트 당 반복횟수</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="1" min={1} {...field} type="number" />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="weight"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>무게(kg)</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="1" min={1} {...field} type="number" />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <DialogFooter className="sm:justify-start">
-                                        <DialogClose asChild>
-                                            <Button type="submit" variant="secondary">
-                                                저장
-                                            </Button>
-                                        </DialogClose>
-                                    </DialogFooter>
-                                </form>
-                            </Form>
-                        </CardContent>
-                    </Card>
+                    <CardContent className="px-4 py-2 bg-background ">
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                                <FormField
+                                    control={form.control}
+                                    name="sets"
+                                    render={({ field }) => (
+                                        <FormItem >
+                                            <FormLabel >총 세트</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="1" min={1} {...field} type="number" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="reps"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>세트 당 반복횟수</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="1" min={1} {...field} type="number" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="weight"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>무게(kg)</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="1" min={1} {...field} type="number" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <DialogFooter className="sm:justify-start">
+                                    <DialogClose asChild>
+                                        <Button type="submit" variant="secondary">
+                                            저장
+                                        </Button>
+                                    </DialogClose>
+                                </DialogFooter>
+                            </form>
+                        </Form>
+                    </CardContent>
+
                 </DialogHeader>
             </DialogContent>
         </Dialog>
