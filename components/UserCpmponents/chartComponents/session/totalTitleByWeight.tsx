@@ -3,7 +3,7 @@ import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTool
 import { ExerciseOptionSession, ExercisesessionData } from '@/utils/util';
 import { Clock, Dumbbell, TrendingUp, Info } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer } from 'recharts';
+import { PolarAngleAxis, PolarGrid, Radar, RadarChart, } from 'recharts';
 
 const chartConfig = {
     log_totalTitleByWeight: {

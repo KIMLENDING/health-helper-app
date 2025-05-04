@@ -7,11 +7,13 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { SidebarLeft } from "@/components/sidebar-left";
+
 import { fetchWithCookie } from "@/utils/fetchUrl";
 import { cookies } from "next/headers";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import getQueryClient from "@/utils/getQueryClient";
+import LeftSideBar from "@/components/LayoutCompents/LeftSideBar"
+
 
 
 const fetchData = async () => {
@@ -32,9 +34,10 @@ export default async function DachboardLayout({
 
   const queryClient = getQueryClient();
   await queryClient.prefetchQuery({ queryKey: ["inProgress"], queryFn: () => fetchData() });
+
   return (
     <SidebarProvider>
-      <SidebarLeft />
+      <LeftSideBar />
       <SidebarInset>
         <main className="h-screen overflow-y-auto scrollbar-hide">
           <header className="sticky top-0 flex justify-between h-14 shrink-0 items-center gap-2 bg-background z-50 shadow-md px-4">

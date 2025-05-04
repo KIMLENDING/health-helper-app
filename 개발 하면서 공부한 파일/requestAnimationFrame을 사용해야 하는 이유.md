@@ -74,7 +74,7 @@ const elapsedTime = (Date.now() - startTimeRef.current) / 1000 + 이전 저장�
 
 ## 참고
 
-- [`use-stopwatch2.tsx`](https://github.com/KIMLENDING/health-helper-app/blob/master/hooks//use-stopwatch2.tsx): 초기 구현 (`setInterval`)
+- [`use-stopwatch2.tsx`](https://github.com/KIMLENDING/health-helper-app/blob/master/hooks/use-stopwatch2.tsx): 초기 구현 (`setInterval`)
 - [`use-stopwatch3.tsx`](https://github.com/KIMLENDING/health-helper-app/blob/master/hooks/use-stopwatch3.tsx): 개선된 구현 (`rAF + Date.now()`)
 
 ---

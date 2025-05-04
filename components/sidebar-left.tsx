@@ -136,7 +136,7 @@ interface CustomSession {
   image: string
   role: string
 }
-export function SidebarLeft() {
+const SidebarLeft = () => {
   const { data: session } = useSession()
 
   return (
@@ -157,3 +157,5 @@ export function SidebarLeft() {
     </Sidebar>
   )
 }
+
+export default SidebarLeft;
