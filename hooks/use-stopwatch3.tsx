@@ -45,15 +45,6 @@ export const useStopwatch = () => {
         };
     }, [isRunning]);
 
-    // useEffect(() => {
-    //     return () => {
-    //         if (time) {
-    //             localStorage.setItem('stopwatch_time', time.toString());
-    //         }
-    //     }
-    // }, [time]);
-
-
 
     // 실행 상태 저장
     useEffect(() => {
