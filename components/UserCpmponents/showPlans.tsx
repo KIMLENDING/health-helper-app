@@ -9,7 +9,7 @@ import {
     List
 } from 'lucide-react'
 import Link from 'next/link'
-import { DrawerDialogDemo } from '../LayoutCompents/ResponsiveDialog'
+import { DrawerDialogDemo } from '../LayoutCompents/DrawerDialogDemo'
 import { useExercisePlan } from '@/server/user/exercisePlan/queries'
 
 const ShowPlans = () => {

@@ -4,15 +4,15 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { Card, CardContent, } from "../ui/card";
+import { CardContent, } from "../ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { ExerciseOption } from "@/utils/util";
 
 const formSchema = z.object({
-    sets: z.preprocess((value) => Number(value), z.number().min(1).nonnegative("숫자를 입력해주세요")),
-    reps: z.preprocess((value) => Number(value), z.number().min(1).nonnegative("숫자를 입력해주세요")),
-    weight: z.preprocess((value) => Number(value), z.number().min(1).nonnegative("숫자를 입력해주세요")),
+    sets: z.number({ invalid_type_error: "숫자를 입력해주세요" }).min(1, "1 이상의 숫자를 입력해주세요"),
+    reps: z.number({ invalid_type_error: "숫자를 입력해주세요" }).min(1, "1 이상의 숫자를 입력해주세요"),
+    weight: z.number({ invalid_type_error: "숫자를 입력해주세요" }).min(1, "1 이상의 숫자를 입력해주세요"),
 })
 const PlanDialogForm = ({ item, SetState }: { item: ExerciseOption, SetState: React.Dispatch<React.SetStateAction<ExerciseOption[]>> }) => {
     const form = useForm<z.infer<typeof formSchema>>({

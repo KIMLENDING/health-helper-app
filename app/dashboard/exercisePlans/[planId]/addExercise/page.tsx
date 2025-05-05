@@ -28,7 +28,7 @@ const Page = (props: {
     const { data, isLoading } = useEexercises();
     const { data: selectedItmes } = useSelectedExercises(); // 필요한 운동 종목 데이터를 가져옴
     const [exerciseOption, setExerciseOption] = useState<ExerciseOption[]>([]) //  세트, 반복횟수, 무게 저장하는 변수
-    const { mutate, isPending } = useUpdatePlan(); // 플랜 업데이트를 위한 훅
+    const { mutate, isPending } = useUpdatePlan(); // 플랜 업데이트를 위한 훅 (운동 추가)
     const router = useRouter(); // 페이지 이동을 위한 훅
     const filteredData = React.useMemo(() => {
         // useMemo를 사용하여 성능 최적화
