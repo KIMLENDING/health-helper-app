@@ -9,8 +9,9 @@ import {
     List
 } from 'lucide-react'
 import Link from 'next/link'
-import { DrawerDialogDemo } from '../LayoutCompents/DrawerDialogDemo'
+
 import { useExercisePlan } from '@/server/user/exercisePlan/queries'
+import { DrawerDialogDemo } from './DynamicComponents'
 
 const ShowPlans = () => {
     const { data, isError, isLoading } = useExercisePlan()

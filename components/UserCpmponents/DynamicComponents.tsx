@@ -7,3 +7,4 @@ export const ShowPlans = dynamic(() => import('./showPlans'));
 export const TotalTitleBySession = dynamic(() => import('@/components/UserCpmponents/chartComponents/session/totalTitleBySession'));
 export const TotalTitleByWeight = dynamic(() => import('@/components/UserCpmponents/chartComponents/session/totalTitleByWeight'));
 export const SidebarLeft = dynamic(() => import('@/components/sidebar-left'), { loading: () => null, });
+export const DrawerDialogDemo = dynamic(() => import('@/components/LayoutCompents/DrawerDialogDemo'));

@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/drawer"
 
 /** action함수를 받아서 진행 시키기 전 모달을 띄워 다시 한 번 확인 하는 컴포넌트 */
-export function DrawerDialogDone({ children,
+export default function DrawerDialogDone({ children,
     onAction, title, description
 }: Readonly<{
     children: React.ReactNode;

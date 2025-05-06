@@ -23,7 +23,7 @@ type Props = {
 }
 
 /** 진행할 플랜을 시작하거나 진행중인 운동 페이지로 이동시키는 버튼*/
-export function DrawerDialogDemo({ children, planId }: Props) {
+export default function DrawerDialogDemo({ children, planId }: Props) {
     const router = useRouter();
     const [open, setOpen] = React.useState(false);
     const { data: inProgress } = useInProgress(); // ✅ 진행중인 운동 세션 조회
@@ -124,3 +124,5 @@ export function DrawerDialogDemo({ children, planId }: Props) {
         </>
     );
 }
+
+// export default DrawerDialogDemo;

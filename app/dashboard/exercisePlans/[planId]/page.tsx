@@ -7,7 +7,7 @@ import React, { use, useEffect, useRef, useState } from 'react';
 import { formatDate } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { DrawerDialogDemo } from '@/components/LayoutCompents/DrawerDialogDemo';
+
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { BreadcrumbEllipsis } from '@/components/ui/breadcrumb';
 import Link from 'next/link';
@@ -16,6 +16,9 @@ import { useRouter } from 'next/navigation';
 import { useDeletePlan, useEditPlan } from '@/server/user/exercisePlan/mutations';
 import { useExercisePlanById } from '@/server/user/exercisePlan/queries';
 import { formatToKST } from '@/utils/date';
+import { DrawerDialogDemo } from '@/components/UserCpmponents/DynamicComponents';
+
+
 
 /** 플랜 세부 CRUD 페이지 */
 type Params = Promise<{ planId: string }>;
