@@ -8,8 +8,6 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion"
 import { useEffect, useState } from "react";
-// import TotalTitleBySession from "@/components/UserCpmponents/chartComponents/session/totalTitleBySession";
-// import TotalTitleByWeight from "@/components/UserCpmponents/chartComponents/session/totalTitleByWeight";
 import { TotalTitleBySession, TotalTitleByWeight } from "@/components/UserCpmponents/DynamicComponents";  // 동적 import
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAllSessions } from "@/server/user/exerciseSession/queries";
@@ -19,7 +17,7 @@ const Page = () => {
     const [month, setMonth] = useState(new Date().getMonth() + 1);
     const [page, setPage] = useState(1);
     const { data, isLoading, isError } = useAllSessions(year, month, page, 5);
-
+    const [activeItem, setActiveItem] = useState<number[]>([]);
     // 월, 연도 변경 시 첫 페이지로 초기화
     useEffect(() => {
         setPage(1);
@@ -100,7 +98,7 @@ const Page = () => {
                     ))}
                 </div>
             ) : data?.allSession?.length > 0 ? (
-                <Accordion type="multiple" className="space-y-4">
+                <Accordion type="single" collapsible className="space-y-4">
                     {data?.allSession.map((session: ExerciseSession) => {
                         const { formatted, dayOfWeek } = formatDate(formatToKST(session.createdAt!) || '');
 
@@ -120,9 +118,7 @@ const Page = () => {
                                                 {session.exercises.length}개 운동 기록
                                             </p>
                                         </div>
-                                        <div className="bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 px-3 py-1 rounded-full text-xs font-medium">
-                                            자세히 보기
-                                        </div>
+
                                     </div>
                                 </AccordionTrigger>
                                 <AccordionContent className="px-6 pb-6 pt-2">

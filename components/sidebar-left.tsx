@@ -30,11 +30,11 @@ import { useSession } from "next-auth/react"
 // This is sample data.
 const menuItems = {
   navMain: [
-    {
-      title: "Search",
-      url: "#",
-      icon: Search,
-    },
+    // {
+    //   title: "Search",
+    //   url: "#",
+    //   icon: Search,
+    // },
     {
       title: "홈",
       url: "/dashboard",
@@ -59,27 +59,7 @@ const menuItems = {
       icon: History,
       // isActive: true,
     },
-
-
   ],
-  navSecondary: [
-    {
-      title: "캘린더",
-      url: "#",
-      icon: Calendar,
-    },
-    {
-      title: "설정",
-      url: "#",
-      icon: Settings2,
-    },
-    {
-      title: "Help",
-      url: "#",
-      icon: MessageCircleQuestion,
-    },
-  ],
-
 }
 const AdminData = {
   navMain: [
@@ -101,34 +81,6 @@ const AdminData = {
       badge: "100",
     },
   ],
-  navSecondary: [
-    {
-      title: "Calendar",
-      url: "#",
-      icon: Calendar,
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-    },
-    {
-      title: "Templates",
-      url: "#",
-      icon: Blocks,
-    },
-    {
-      title: "Trash",
-      url: "#",
-      icon: Trash2,
-    },
-    {
-      title: "Help",
-      url: "#",
-      icon: MessageCircleQuestion,
-    },
-  ],
-
 }
 interface CustomSession {
   name: string

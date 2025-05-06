@@ -1,9 +1,9 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { ExerciseOptionSession, ExercisesessionData } from '@/utils/util';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Bar, BarChart, CartesianGrid, LabelList, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 import { Activity, Layers, Repeat, Weight } from 'lucide-react';
 
@@ -24,10 +24,9 @@ const chartConfig = {
 
 const TotalTitleBySession = ({ data }: { data: any }) => {
     const isDesktop = useMediaQuery("(min-width: 768px)");
-    const [activeItem, setActiveItem] = useState<number[]>([]);
-
     const titleBySession = data?.exercises.flatMap((exercise: ExerciseOptionSession) => {
         return {
+            _id: exercise._id,
             title: exercise.exerciseId.title,
             totalWeight: exercise.session.reduce((acc: number, s: ExercisesessionData) => acc + (s.weight * s.reps), 0),
             totalReps: exercise.session.reduce((acc: number, s: ExercisesessionData) => acc + s.reps, 0),
@@ -64,21 +63,16 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
 
             {titleBySession && titleBySession.length > 0 ? (
                 <div className="divide-y divide-gray-100 dark:divide-zinc-800">
-                    {titleBySession.map((item: any, index: number) => {
-                        const isMaxWeight = maxWeightExercise?.title === item.title;
+                    <Accordion
+                        type="single"
+                        collapsible
+                    >
+                        {titleBySession.map((item: any, index: number) => {
+                            const isMaxWeight = maxWeightExercise?.title === item.title;
 
-                        return (
-                            <Accordion
-                                type="single"
-                                collapsible
-                                key={item.title}
-                                onValueChange={() => setActiveItem(pre => {
-
-                                    return pre.includes(index) ? pre.filter(item => item !== index) : [...pre, index]
-                                }
-                                )}
-                            >
+                            return (
                                 <AccordionItem
+                                    key={item._id}
                                     value={item.title}
                                     className={`border-0 ${isMaxWeight ? 'bg-indigo-50/50 dark:bg-indigo-900/10' : ''
                                         }`}
@@ -120,9 +114,7 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="hidden md:block px-2 py-1 text-xs font-medium rounded-full bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-300 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/30 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                                                {activeItem.includes(index) ? '접기' : '자세히'}
-                                            </div>
+
                                         </div>
                                     </AccordionTrigger>
 
@@ -238,9 +230,9 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
                                         </div>
                                     </AccordionContent>
                                 </AccordionItem>
-                            </Accordion>
-                        );
-                    })}
+                            );
+                        })}
+                    </Accordion>
                 </div>
             ) : (
                 <div className="flex flex-col items-center justify-center py-12 px-4 text-center">

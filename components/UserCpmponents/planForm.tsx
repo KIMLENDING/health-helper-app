@@ -8,13 +8,25 @@ import { CardContent, } from "../ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { ExerciseOption } from "@/utils/util";
+import { useState } from "react";
 
 const formSchema = z.object({
-    sets: z.number({ invalid_type_error: "숫자를 입력해주세요" }).min(1, "1 이상의 숫자를 입력해주세요"),
-    reps: z.number({ invalid_type_error: "숫자를 입력해주세요" }).min(1, "1 이상의 숫자를 입력해주세요"),
-    weight: z.number({ invalid_type_error: "숫자를 입력해주세요" }).min(1, "1 이상의 숫자를 입력해주세요"),
+    // Number 타입으로 변환 후 유효성 검사 input에서 type="number"의 반환 값은 string임을 Number로 변환해야함
+    sets: z.preprocess(
+        (val) => Number(val),
+        z.number({ invalid_type_error: "숫자를 입력해주세요" }).min(1, "1 이상의 숫자를 입력해주세요")
+    ),
+    reps: z.preprocess(
+        (val) => Number(val),
+        z.number({ invalid_type_error: "숫자를 입력해주세요" }).min(1, "1 이상의 숫자를 입력해주세요")
+    ),
+    weight: z.preprocess(
+        (val) => Number(val),
+        z.number({ invalid_type_error: "숫자를 입력해주세요" }).min(1, "1 이상의 숫자를 입력해주세요")
+    ),
 })
 const PlanDialogForm = ({ item, SetState }: { item: ExerciseOption, SetState: React.Dispatch<React.SetStateAction<ExerciseOption[]>> }) => {
+    const [open, setOpen] = useState(false);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -42,12 +54,14 @@ const PlanDialogForm = ({ item, SetState }: { item: ExerciseOption, SetState: Re
                 } else {
                     return exercise // 기존 데이터를 그대로 반환합니다.
                 }
+
             })
         });
+        setOpen(false); // 모달 닫기
     };
 
     return (
-        <Dialog key={item.exerciseId} >
+        <Dialog key={item.exerciseId} open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button >
                     {item && '상세 설정'}
@@ -100,11 +114,11 @@ const PlanDialogForm = ({ item, SetState }: { item: ExerciseOption, SetState: Re
                                     )}
                                 />
                                 <DialogFooter className="sm:justify-start">
-                                    <DialogClose asChild>
-                                        <Button type="submit" variant="secondary">
-                                            저장
-                                        </Button>
-                                    </DialogClose>
+
+                                    <Button type="submit" variant="secondary">
+                                        저장
+                                    </Button>
+
                                 </DialogFooter>
                             </form>
                         </Form>

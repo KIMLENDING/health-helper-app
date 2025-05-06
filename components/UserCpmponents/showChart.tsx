@@ -46,8 +46,6 @@ const ShowChart = () => {
         setActiveSlide(index);
     };
 
-
-
     React.useEffect(() => {
         if (!api) {
             return
