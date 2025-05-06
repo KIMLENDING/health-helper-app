@@ -37,6 +37,8 @@ const ExercisePlanDetailPage = (props: {
     const [editedExercises, setEditedExercises] = useState<any[]>([]);
     const [deleteItem, setDeleteItem] = useState<string[]>([]); // 삭제된 운동 ID 목록
 
+    // 다이얼로그 상태
+    const [open, setOpen] = React.useState(false);
     // 플랜 삭제
     const { mutate: deletPlan } = useDeletePlan();
 
@@ -422,15 +424,15 @@ const ExercisePlanDetailPage = (props: {
                     </div>
                 ) : (
                     <div className="flex justify-center mt-8">
-                        <DrawerDialogDemo planId={planId}>
-                            <Button
-                                variant="default"
-                                className="flex items-center gap-2"
-                                disabled={isPending || (data.exercises.length === 0)}
-                            >
-                                <Play className="h-4 w-4" /> 이 플랜으로 운동 시작하기
-                            </Button>
-                        </DrawerDialogDemo>
+                        <Button
+                            variant="default"
+                            className="flex items-center gap-2"
+                            disabled={isPending || (data.exercises.length === 0)}
+                        >
+                            <Play className="h-4 w-4" /> 이 플랜으로 운동 시작하기
+                        </Button>
+                        {open && <DrawerDialogDemo planId={planId} open={open} setOpen={setOpen} />}
+
                     </div>
                 )}
             </div>

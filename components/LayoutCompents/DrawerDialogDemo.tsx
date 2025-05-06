@@ -11,26 +11,26 @@ import {
     Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerFooter, DrawerTitle, DrawerDescription, DrawerClose,
 } from "@/components/ui/drawer"
 
-
-
 import LoadingOverlay from "./LoadingOverlay"
 import { useInProgress } from "@/server/user/exerciseSession/queries"
 import { useCreateExerciseSession } from "@/server/user/exerciseSession/mutations"
 
 type Props = {
-    children: React.ReactNode;
+    children?: React.ReactNode;
     planId: string;
+    open: boolean;
+    setOpen: (open: boolean) => void;
 }
 
 /** 진행할 플랜을 시작하거나 진행중인 운동 페이지로 이동시키는 버튼*/
-export default function DrawerDialogDemo({ children, planId }: Props) {
+export default function DrawerDialogDemo({ children, planId, open, setOpen }: Props) {
     const router = useRouter();
-    const [open, setOpen] = React.useState(false);
     const { data: inProgress } = useInProgress(); // ✅ 진행중인 운동 세션 조회
     const { latestSessionId } = inProgress || {}; // ✅ 진행중인 운동 세션 ID
     const isDesktop = useMediaQuery("(min-width: 768px)");
     const { mutateAsync, isPending } = useCreateExerciseSession();
     const [isLoading, setLoading] = React.useState(false);
+
 
     const handleStartSession = async () => {
         if (!planId) return;
@@ -67,6 +67,7 @@ export default function DrawerDialogDemo({ children, planId }: Props) {
                 취소
             </Button>
             <Button
+
                 className="flex-1 hover:bg-zinc-300 hover:dark:bg-zinc-600"
                 variant="secondary"
                 onClick={latestSessionId ? handleContinueSession : handleStartSession}
@@ -104,10 +105,11 @@ export default function DrawerDialogDemo({ children, planId }: Props) {
     if (isLoading) return <LoadingOverlay isLoading={isLoading} text={'로딩 중'} />; // ✅ 로딩 오버레이
     return (
         <>
-            <UI.Root autoFocus open={open} onOpenChange={setOpen}>
-                <UI.Trigger asChild>
-                    <div className="flex flex-row gap-2">{children}</div>
+            <UI.Root modal={true} autoFocus={true} open={open} onOpenChange={setOpen}>
+                <UI.Trigger >
+                    {/* <div className="flex flex-row gap-2">{children}</div> */}
                 </UI.Trigger>
+
                 <UI.Content className={isDesktop ? "sm:max-w-[425px]" : ""}>
                     <UI.Header className={isDesktop ? "" : "text-left"}>
                         <UI.Title className={latestSessionId ? "text-red-300" : ""}>{Title}</UI.Title>
@@ -119,10 +121,9 @@ export default function DrawerDialogDemo({ children, planId }: Props) {
                         </UI.Close>
                     </UI.Footer>
                 </UI.Content>
+
             </UI.Root>
             {isPending && <LoadingOverlay isLoading={isPending} text={'로딩 중'} />} {/* ✅ 로딩 오버레이 */}
         </>
     );
 }
-
-// export default DrawerDialogDemo;

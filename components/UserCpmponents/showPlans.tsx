@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
     Dumbbell,
     ChevronRight,
@@ -15,6 +15,7 @@ import { DrawerDialogDemo } from './DynamicComponents'
 
 const ShowPlans = () => {
     const { data, isError, isLoading } = useExercisePlan()
+    const [open, setOpen] = React.useState(false);
 
     return (
         <div className="mx-auto w-full max-w-4xl  ">
@@ -53,17 +54,17 @@ const ShowPlans = () => {
                             return (
                                 <Card key={plan._id || index} className="bg-white dark:bg-zinc-800 border-0 shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden">
                                     <CardHeader className="p-4 pb-1">
-                                        <DrawerDialogDemo planId={plan._id!}>
-                                            <div className="flex items-center justify-between cursor-pointer">
-                                                <div className="flex items-center gap-2">
-                                                    <Dumbbell className="text-blue-500" size={20} />
-                                                    <CardTitle className="text-lg font-bold truncate" title={plan.title}>
-                                                        {plan.title}
-                                                    </CardTitle>
-                                                </div>
-                                                <ChevronRight size={16} className="text-gray-400" />
+                                        <button className="flex items-center justify-between cursor-pointer" onClick={() => setOpen(true)}>
+                                            <div className="flex items-center gap-2">
+                                                <Dumbbell className="text-blue-500" size={20} />
+                                                <CardTitle className="text-lg font-bold truncate" title={plan.title}>
+                                                    {plan.title}
+                                                </CardTitle>
                                             </div>
-                                        </DrawerDialogDemo>
+                                            <ChevronRight size={16} className="text-gray-400" />
+                                        </button>
+                                        {open && <DrawerDialogDemo planId={plan._id!} open={open} setOpen={setOpen} />}
+
                                     </CardHeader>
                                     <CardContent className="text-sm text-gray-500 p-4 pt-1 ">
                                         <div className="flex justify-between px-2">
