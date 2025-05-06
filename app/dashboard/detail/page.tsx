@@ -9,15 +9,17 @@ import {
 } from "@/components/ui/accordion"
 import { useEffect, useState } from "react";
 import { TotalTitleBySession, TotalTitleByWeight } from "@/components/UserCpmponents/DynamicComponents";  // 동적 import
-import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAllSessions } from "@/server/user/exerciseSession/queries";
 import { formatToKST } from "@/utils/date";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 const Page = () => {
     const [year, setYear] = useState(new Date().getFullYear());
     const [month, setMonth] = useState(new Date().getMonth() + 1);
     const [page, setPage] = useState(1);
     const { data, isLoading, isError } = useAllSessions(year, month, page, 5);
-    const [activeItem, setActiveItem] = useState<number[]>([]);
+    const router = useRouter();
     // 월, 연도 변경 시 첫 페이지로 초기화
     useEffect(() => {
         setPage(1);
@@ -49,8 +51,20 @@ const Page = () => {
     return (
         <div className="container mx-auto p-4 max-w-4xl">
             <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 rounded-xl shadow-lg mb-6">
-                <h1 className="text-3xl font-bold text-white mb-2">운동 기록</h1>
-                <p className="text-blue-100">나의 운동 여정을 한눈에 확인하세요</p>
+                <div className="flex items-center gap-4">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-10 w-10 rounded-full bg-white/20 text-white hover:bg-white/30 hover:text-white"
+                        onClick={() => router.back()}
+                    >
+                        <ArrowLeft className="h-5 w-5" />
+                    </Button>
+                    <div>
+                        <h1 className="text-3xl font-bold text-white mb-2">운동 기록</h1>
+                        <p className="text-blue-100">나의 운동 여정을 한눈에 확인하세요</p>
+                    </div>
+                </div>
             </div>
 
             {/* 🔹 연도 & 월 선택 */}

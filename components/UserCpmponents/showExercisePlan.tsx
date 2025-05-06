@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useExercisePlan } from '@/server/user/exercisePlan/queries';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
-import { Dumbbell, Flag, PlusCircle, Calendar, Clock, ArrowLeft } from 'lucide-react';
+import { Card, CardContent } from '../ui/card';
+import { Dumbbell, PlusCircle, Calendar, Clock, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
@@ -13,7 +13,7 @@ import { formatDate } from '@/lib/utils';
 const ShowExercisePlan = () => {
     const { data, error, isLoading } = useExercisePlan();
     const [searchTerm, setSearchTerm] = useState('');
-    const router = useRouter();
+    const route = useRouter();
     if (error) {
         return (
             <div className="flex flex-col items-center justify-center h-64 rounded-xl bg-red-50 dark:bg-red-900/20">
@@ -38,7 +38,7 @@ const ShowExercisePlan = () => {
                         variant="ghost"
                         size="icon"
                         className="h-10 w-10 rounded-full bg-white/20 text-white hover:bg-white/30 hover:text-white"
-                        onClick={() => router.back()}
+                        onClick={() => route.back()}
                     >
                         <ArrowLeft className="h-5 w-5" />
                     </Button>

@@ -2,7 +2,7 @@
 import LoadingOverlay from '@/components/LayoutCompents/LoadingOverlay';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Dumbbell, Save, X, Edit, Trash2, PlusSquare, Loader2, Play, ChevronsDown, Info, Layers, Repeat, Weight, } from 'lucide-react';
+import { Dumbbell, Save, X, Edit, Trash2, PlusSquare, Loader2, Play, ChevronsDown, Info, Layers, Repeat, Weight, ArrowLeft, } from 'lucide-react';
 import React, { use, useEffect, useRef, useState } from 'react';
 import { formatDate } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
@@ -158,7 +158,18 @@ const ExercisePlanDetailPage = (props: {
                         className="text-xl font-bold "
                     />
                 ) : (
-                    <h1 className="text-2xl font-bold">{data.title}</h1>
+                    <div className='flex items-center gap-4'>
+
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-10 w-10 rounded-full bg-white/20 text-white hover:bg-white/30 hover:text-white"
+                            onClick={() => route.back()}
+                        >
+                            <ArrowLeft className="h-5 w-5" />
+                        </Button>
+                        <h1 className="text-2xl font-bold">{data.title}</h1>
+                    </div>
                 )}
                 <div className='flex items-center gap-2 shrink-0  '>
                     <Badge variant="outline" className="px-3 py-1 shrink-0">
