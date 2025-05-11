@@ -24,19 +24,27 @@ const Page = (props: {
 }) => {
     const params = use(props.params);
     const planId = params.planId;
-    const { data: preData } = useExercisePlanById(planId);
-    const { data, isLoading } = useEexercises();
+    const { data: preData } = useExercisePlanById(planId); // 플랜 상세 조회
+    const { data, isLoading } = useEexercises(); // 운동 종목 전체 조회
     const { data: selectedItmes } = useSelectedExercises(); // 필요한 운동 종목 데이터를 가져옴
     const [exerciseOption, setExerciseOption] = useState<ExerciseOption[]>([]) //  세트, 반복횟수, 무게 저장하는 변수
     const { mutate, isPending } = useUpdatePlan(); // 플랜 업데이트를 위한 훅 (운동 추가)
     const router = useRouter(); // 페이지 이동을 위한 훅
     const filteredData = React.useMemo(() => {
         // useMemo를 사용하여 성능 최적화
-        // selectedItems로 인해 filteredData이 다시 계산되면서 테이블의 불필요한 재랜더링을 방지하기 위해 useMemo를 사용함
+        // DataTable 컴포넌트에서  filteredData를 props로 전달받아 사용
+        // selectedItmes은 DataTable 컴포넌트에서 React-Query로 가져온 데이터
+        // selectedItmes이 useEffect의 의존성 배열임 즉 selectedItmes이 변경되면 useEffect가 실행됨
+        // 그럼 filteredData가 재계산됨 그럼 DataTable 컴포넌트가 리렌더링됨
+        // 하지만 filteredData는 페이지 로드시 단 한번만 계산하면 됨 
+        // 그렇기 때문에 useMemo를 사용하여 성능 최적화를 하면 DataTable 컴포넌트가 리렌더링되지 않음
         return data?.filter(
             (exercise: any) => !preData?.exercises.some((pre: any) => pre.exerciseId._id === exercise._id)
         );
     }, [data, preData]);
+    // const filteredData = data?.filter(
+    //     (exercise: any) => !preData?.exercises.some((pre: any) => pre.exerciseId._id === exercise._id)
+    // );
 
     useEffect(() => {
         // 초기 값 설정 - selectedItmes이 추가 되면 exerciseOption에 초기값을 설정
