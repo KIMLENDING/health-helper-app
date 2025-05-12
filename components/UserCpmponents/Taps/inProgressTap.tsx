@@ -1,7 +1,7 @@
 'use client'
 import LoadingOverlay from '@/components/LayoutCompents/LoadingOverlay'
 import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner'
-import { DrawerDialogDone } from '@/components/LayoutCompents/DrawerDialogDone'
+import DrawerDialogDone from '@/components/LayoutCompents/DrawerDialogDone'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardTitle } from '@/components/ui/card'
