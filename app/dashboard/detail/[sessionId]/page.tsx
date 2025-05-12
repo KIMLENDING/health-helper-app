@@ -13,7 +13,7 @@ const Page = () => {
     if (isLoading) return <div className='w-full h-full flex items-center justify-center '><LoadingSpinner className='w-[5vh] h-[5vh]' /></div>;
     if (isError) return <div>Error loading data</div>;
     return (
-        <div className='px-4'>
+        <div className='p-4 '>
 
             <div className="space-y-6">
                 <TotalTitleByWeight data={data} />
