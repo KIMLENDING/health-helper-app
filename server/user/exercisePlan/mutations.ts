@@ -92,7 +92,7 @@ export const useEditPlan = () => {
             return fetcher(`${process.env.NEXTAUTH_URL}/api/user/exercisePlan/${data.exercisePlanId}`, 'PATCH', data)
         },
         onSuccess: async (data) => {
-            toast({ variant: 'default2', title: `${data.message}${data.exercisePlan._id}` });
+            toast({ variant: 'default2', title: `${data.message}` });
             await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] })
             await queryClient.invalidateQueries({ queryKey: ["exercisePlan", data.exercisePlan._id] })
         },
