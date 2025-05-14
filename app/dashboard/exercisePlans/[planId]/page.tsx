@@ -16,8 +16,7 @@ import { useRouter } from 'next/navigation';
 import { useDeletePlan, useEditPlan } from '@/server/user/exercisePlan/mutations';
 import { useExercisePlanById } from '@/server/user/exercisePlan/queries';
 import { formatToKST } from '@/utils/date';
-import DrawerDialogDemo from '@/components/LayoutCompents/DrawerDialogDemo';
-
+import { DrawerDialogDemo } from '@/components/UserCpmponents/DynamicComponents';
 
 
 
@@ -429,6 +428,7 @@ const ExercisePlanDetailPage = (props: {
                             variant="default"
                             className="flex items-center gap-2"
                             disabled={isPending || (data.exercises.length === 0)}
+                            onClick={() => setOpen(true)}
                         >
                             <Play className="h-4 w-4" /> 이 플랜으로 운동 시작하기
                         </Button>
