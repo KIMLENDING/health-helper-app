@@ -154,8 +154,9 @@ const ExercisePlanDetailPage = (props: {
     if (!data) return <div className="p-8 text-center">운동 계획을 찾을 수 없습니다.</div>;
 
     return (
-        <section className='mx-auto w-full max-w-4xl px-4 py-6'>
-            <div className="mb-6 flex items-center justify-between gap-2">
+        <section className='mx-auto w-full max-w-4xl p-2'>
+            <div className="mb-6 flex items-center justify-between gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 p-6 rounded-xl shadow-lg overflow-x-scroll">
+
                 {isEditing ? (
                     <Input
                         value={editedTitle}
@@ -163,8 +164,8 @@ const ExercisePlanDetailPage = (props: {
                         className="text-xl font-bold "
                     />
                 ) : (
-                    <div className='flex items-center gap-4'>
 
+                    <div className="flex items-center gap-4">
                         <Button
                             variant="ghost"
                             size="icon"
@@ -175,9 +176,10 @@ const ExercisePlanDetailPage = (props: {
                         </Button>
                         <h1 className="text-2xl font-bold">{data.title}</h1>
                     </div>
+
                 )}
                 <div className='flex items-center gap-2 shrink-0  '>
-                    <Badge variant="outline" className="px-3 py-1 shrink-0">
+                    <Badge variant="default" className="px-3 py-1 shrink-0">
                         {formatDate(formatToKST(data.createdAt!))}
                     </Badge>
 
@@ -217,14 +219,21 @@ const ExercisePlanDetailPage = (props: {
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
+
             </div>
 
-            <div className="mb-4 flex items-center  ">
+            <div className="mb-4 flex items-center justify-between ">
 
                 <Badge variant="secondary" className="px-3 py-1">
                     <Dumbbell className="mr-2 h-4 w-4" />
                     총 {(isEditing ? editedExercises : data.exercises).length}개 운동
                 </Badge>
+                {isEditing && deleteItem.length > 0 && (
+                    <Badge variant="destructive" className="px-3 py-1">
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        삭제할 운동 {deleteItem.length}개
+                    </Badge>
+                )}
 
             </div>
 

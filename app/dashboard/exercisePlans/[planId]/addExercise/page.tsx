@@ -114,10 +114,10 @@ const Page = (props: {
     const addedExercises = totalExercises - filteredData.length;
 
     return (
-        <section className="mx-auto w-full  max-w-4xl  p-4 space-y-6">
+        <section className="mx-auto w-full  max-w-4xl  p-2 space-y-6">
 
-            <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 rounded-xl shadow-lg">
-                <div className="flex items-center gap-4">
+            <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 rounded-xl shadow-lg ">
+                <div className="flex items-center gap-4 ">
                     <Button
                         variant="ghost"
                         size="icon"
