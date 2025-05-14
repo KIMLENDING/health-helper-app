@@ -49,7 +49,7 @@ const Page = () => {
     };
 
     return (
-        <div className="container mx-auto p-4 max-w-4xl">
+        <div className="container mx-auto p-2 max-w-4xl">
             <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 rounded-xl shadow-lg mb-6">
                 <div className="flex items-center gap-4">
                     <Button
@@ -135,7 +135,7 @@ const Page = () => {
 
                                     </div>
                                 </AccordionTrigger>
-                                <AccordionContent className="px-6 pb-6 pt-2">
+                                <AccordionContent >
                                     <div className="space-y-6">
                                         <TotalTitleByWeight data={session} />
                                         <TotalTitleBySession data={session} />

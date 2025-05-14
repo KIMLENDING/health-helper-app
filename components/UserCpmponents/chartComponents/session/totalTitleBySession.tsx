@@ -48,7 +48,7 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
         (!max || current.totalWeight > max.totalWeight) ? current : max, null);
 
     return (
-        <Card className="border border-gray-200 dark:border-zinc-800 shadow-lg overflow-hidden">
+        <Card className="border-none overflow-hidden">
             <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-6">
                 <div className="flex items-center gap-3 mb-2">
                     <div className="bg-indigo-100 dark:bg-indigo-900/40 p-2 rounded-lg">
@@ -77,8 +77,8 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
                                     className={`border-0 ${isMaxWeight ? 'bg-indigo-50/50 dark:bg-indigo-900/10' : ''
                                         }`}
                                 >
-                                    <AccordionTrigger className="py-0 hover:no-underline group px-4">
-                                        <div className="flex items-center justify-between w-full py-4 px-2">
+                                    <AccordionTrigger className="py-0 hover:no-underline group p-4">
+                                        <div className="flex items-center justify-between w-full py-2 ">
                                             <div className="flex items-center gap-3">
                                                 <div className={`p-2 rounded-lg ${isMaxWeight
                                                     ? 'bg-indigo-100 dark:bg-indigo-800/50'
@@ -118,7 +118,7 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
                                         </div>
                                     </AccordionTrigger>
 
-                                    <AccordionContent className="px-6 pb-6">
+                                    <AccordionContent >
                                         <div className="bg-white dark:bg-zinc-800/50 rounded-lg p-4 border border-gray-100 dark:border-zinc-800">
                                             <div className="mb-3 px-1">
                                                 <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">세트별 분석</h4>

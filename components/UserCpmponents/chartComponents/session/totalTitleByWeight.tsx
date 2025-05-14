@@ -77,7 +77,7 @@ const TotalTitleByWeight = ({ data }: { data: any }) => {
     }, [data]);
 
     return (
-        <Card className="overflow-hidden border border-gray-200 dark:border-zinc-800 shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <Card className="overflow-hidden border-none ">
             <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 pb-4">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
