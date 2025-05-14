@@ -16,7 +16,8 @@ import { useRouter } from 'next/navigation';
 import { useDeletePlan, useEditPlan } from '@/server/user/exercisePlan/mutations';
 import { useExercisePlanById } from '@/server/user/exercisePlan/queries';
 import { formatToKST } from '@/utils/date';
-import { DrawerDialogDemo } from '@/components/UserCpmponents/DynamicComponents';
+import DrawerDialogDemo from '@/components/LayoutCompents/DrawerDialogDemo';
+
 
 
 

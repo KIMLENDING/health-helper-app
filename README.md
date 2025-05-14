@@ -7,6 +7,7 @@ H-Helper는 사용자가 운동 계획을 체계적으로 관리하고, 기록�
 - 실제 서비스를 염두에 두고 설계된 CRUD 및 인증 흐름 구현
 - **React Query Hydration**을 활용한 SSR로 빠른 로딩 제공
 - **동적 임포트**를 통해 초기 번들 크기 최적화
+- **Next-PWA**를 활용한 프로그레시브 웹 앱(PWA) 구현으로 모바일 접근성 강화
 
 ## 개발 기간
 
@@ -96,6 +97,24 @@ H-Helper는 사용자가 운동 계획을 체계적으로 관리하고, 기록�
 - MongoDB 트랜잭션을 사용하여 계정 삭제와 연관 데이터 삭제를 원자적으로 처리
 - ExercisePlan과 ExerciseSession 데이터를 계정 삭제 요청과 함께 안전하게 삭제
 - 삭제 중 문제가 발생하면 트랜잭션을 롤백하여 데이터 무결성을 유지.
+
+### 6. **Next-PWA를 활용한 모바일 웹앱 경험 제공**
+
+- `next-pwa` 라이브러리를 활용하여 프로그레시브 웹 앱(PWA) 기능 구현
+- 서비스 워커로 오프라인 기능과 캐싱 전략 제공
+- 홈 화면 설치 기능으로 네이티브 앱과 유사한 경험 제공
+- 웹 앱 매니페스트를 통해 아이콘, 테마 색상, 시작 URL 등 앱 특성 정의
+
+```json
+{
+  "name": "Health helper",
+  "short_name": "Health helper",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1DA1F2"
+}
+```
 
 ---
 
@@ -304,6 +323,7 @@ Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
 - **React Query**
 - **React Hook Form**
 - **Zod**
+- **Next-PWA**
 - **TailwindCSS 4.0**
 - **Shadcn-UI**
 - **Vercel Deploy**
