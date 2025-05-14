@@ -79,27 +79,14 @@ const CreatPlanUser = () => {
             exercises: exerciseOption
         }
 
-        try {
-            const res = await mutateAsync(exercisePlan);
-            if (res) {
-                form.reset(); // 폼 초기화
-                setExerciseOption([]); // 데이터 초기화
 
-                toast({
-                    title: "플랜 생성 완료!",
-                    description: `"${values.title}" 플랜이 성공적으로 저장되었습니다.`,
-                    variant: "default",
-                });
-
-                router.push('/dashboard'); // 페이지 이동
-            }
-        } catch (error) {
-            toast({
-                title: "플랜 저장 실패",
-                description: "문제가 발생했습니다. 다시 시도해주세요.",
-                variant: "destructive",
-            });
+        const res = await mutateAsync(exercisePlan);
+        if (res) {
+            form.reset(); // 폼 초기화
+            setExerciseOption([]); // 데이터 초기화
+            router.push('/dashboard'); // 페이지 이동
         }
+
     }
 
     return (
