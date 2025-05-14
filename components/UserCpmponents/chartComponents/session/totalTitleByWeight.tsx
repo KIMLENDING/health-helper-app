@@ -87,7 +87,7 @@ const TotalTitleByWeight = ({ data }: { data: any }) => {
                         <CardTitle className="text-xl">운동 분석</CardTitle>
                     </div>
                 </div>
-                <CardDescription className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                <CardDescription className="mt-2 text-sm text-gray-600 dark:text-gray-400 break-words">
                     운동별 들어올린 무게와 반복 횟수를 분석한 차트입니다.
                 </CardDescription>
             </CardHeader>

@@ -56,7 +56,7 @@ const TotalTitleBySession = ({ data }: { data: any }) => {
                     </div>
                     <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">세션별 운동 분석</h2>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 ml-10">
+                <p className="text-sm text-gray-600 dark:text-gray-400 ml-10 break-words">
                     각 운동별 세트, 반복 횟수, 무게를 세부적으로 분석합니다.
                 </p>
             </div>

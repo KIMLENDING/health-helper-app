@@ -62,7 +62,7 @@ const Page = () => {
                     </Button>
                     <div>
                         <h1 className="text-3xl font-bold text-white mb-2">운동 기록</h1>
-                        <p className="text-blue-100">나의 운동 여정을 한눈에 확인하세요</p>
+                        <p className="text-blue-100 break-keep">나의 운동 여정을 한눈에 확인하세요</p>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@ const Page = () => {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                         <Calendar className="h-5 w-5 text-blue-500" />
-                        <h2 className="font-semibold text-lg">기간 선택</h2>
+                        <h2 className="font-semibold text-lg break-keep">기간 선택</h2>
                     </div>
 
                     <div className="flex gap-3">
@@ -150,8 +150,8 @@ const Page = () => {
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 dark:bg-zinc-700 rounded-full mb-4">
                         <Calendar className="h-8 w-8 text-gray-400 dark:text-zinc-500" />
                     </div>
-                    <p className="text-lg font-medium text-gray-600 dark:text-zinc-300">운동 기록이 없습니다.</p>
-                    <p className="text-sm text-gray-500 dark:text-zinc-400 mt-1">
+                    <p className="text-lg font-medium text-gray-600 dark:text-zinc-300 break-keep">운동 기록이 없습니다.</p>
+                    <p className="text-sm text-gray-500 dark:text-zinc-400 mt-1 break-keep">
                         이 기간에 기록된 운동 데이터가 없어요.
                     </p>
                 </div>

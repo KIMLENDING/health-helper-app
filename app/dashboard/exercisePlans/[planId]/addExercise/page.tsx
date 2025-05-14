@@ -114,7 +114,7 @@ const Page = (props: {
     const addedExercises = totalExercises - filteredData.length;
 
     return (
-        <section className="mx-auto w-full  max-w-4xl  py-4 space-y-6">
+        <section className="mx-auto w-full  max-w-4xl  p-4 space-y-6">
 
             <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 rounded-xl shadow-lg">
                 <div className="flex items-center gap-4">
@@ -128,7 +128,7 @@ const Page = (props: {
                     </Button>
                     <div className="flex-1">
                         <h1 className="text-3xl font-bold text-white mb-2">운동 추가</h1>
-                        <p className="text-emerald-100">
+                        <p className="text-emerald-100 break-keep">
                             <span className='text-xl text-black '>{preData?.title}</span> 에 필요한 운동을 추가하세요.
                         </p>
                     </div>
@@ -138,21 +138,21 @@ const Page = (props: {
 
             <Card className="border-muted shadow-sm dark:shadow-md dark:shadow-black/10">
                 <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                        <CardTitle className="text-xl font-semibold flex items-center">
+                    <div className="flex items-center justify-between ">
+                        <CardTitle className="text-xl font-semibold flex items-center break-keep">
                             <PlusCircle className="h-5 w-5 mr-2 text-primary" />
                             사용 가능한 운동
                         </CardTitle>
                         <div className="flex space-x-2">
-                            <Badge variant="secondary" className="font-normal">
+                            <Badge variant="secondary" className="font-normal break-keep">
                                 총 {totalExercises}개 운동
                             </Badge>
-                            <Badge variant="outline" className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/50">
+                            <Badge variant="outline" className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/50 break-keep">
                                 {filteredData.length}개 선택 가능
                             </Badge>
                         </div>
                     </div>
-                    <CardDescription>
+                    <CardDescription className='break-keep'>
                         이미 플랜에 추가된 운동 {addedExercises}개는 목록에서 제외되었습니다.
                     </CardDescription>
                 </CardHeader>
@@ -167,7 +167,7 @@ const Page = (props: {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <ListPlus className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                            <CardTitle className="text-lg font-medium">선택된 운동</CardTitle>
+                            <CardTitle className="text-lg font-medium break-keep">선택된 운동</CardTitle>
                         </div>
                         <Badge
                             variant={exerciseOption?.length > 0 ? "default" : "outline"}
@@ -176,7 +176,7 @@ const Page = (props: {
                             {exerciseOption?.length || 0}개 선택됨
                         </Badge>
                     </div>
-                    <CardDescription>
+                    <CardDescription >
                         각 운동의 세트, 반복 횟수, 무게를 설정하세요
                     </CardDescription>
                 </CardHeader>
@@ -231,7 +231,7 @@ const Page = (props: {
                                     <Dumbbell className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
                                 </div>
                                 <p className="font-medium text-gray-700 dark:text-gray-300">운동이 선택되지 않았습니다</p>
-                                <p className="text-sm mt-1 text-gray-500 dark:text-gray-400">
+                                <p className="text-sm mt-1 text-gray-500 dark:text-gray-400 break-keep">
                                     위의 &apos;운동 선택&apos; 섹션에서 원하는 운동을 추가해주세요
                                 </p>
                             </div>
