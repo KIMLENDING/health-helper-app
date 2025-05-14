@@ -25,15 +25,16 @@ import {
 } from "@/components/ui/drawer"
 
 /** action함수를 받아서 진행 시키기 전 모달을 띄워 다시 한 번 확인 하는 컴포넌트 */
-export default function DrawerDialogDone({ children,
-    onAction, title, description
+export default function DrawerDialogAction({
+    onAction, title, description, open, setOpen
 }: Readonly<{
-    children: React.ReactNode;
+    // children: React.ReactNode;
     onAction: () => void;
     title?: string;
     description?: string;
+    open: boolean;
+    setOpen: (open: boolean) => void;
 }>) {
-    const [open, setOpen] = React.useState(false)
     const isDesktop = useMediaQuery("(min-width: 768px)")
 
     const Title = title || '운동을 종료 하시겠습니까?'
@@ -73,7 +74,7 @@ export default function DrawerDialogDone({ children,
 
         <UI.Root autoFocus open={open} onOpenChange={setOpen}>
             <UI.Trigger asChild>
-                <div className="flex flex-row gap-2">{children}</div>
+                {/* <div className="flex flex-row gap-2">{children}</div> */}
             </UI.Trigger>
             <UI.Content className={isDesktop ? "sm:max-w-[425px]" : ""}>
                 <UI.Header className={isDesktop ? "" : "text-left"}>

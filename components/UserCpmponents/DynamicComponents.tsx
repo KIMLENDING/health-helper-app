@@ -10,3 +10,6 @@ export const SidebarLeft = dynamic(() => import('@/components/sidebar-left'), { 
 export const DrawerDialogDemo = dynamic(() => import('@/components/LayoutCompents/DrawerDialogDemo'), {
     loading: () => <LoadingSpinner />
 });
+export const DrawerDialogAction = dynamic(() => import('@/components/LayoutCompents/DrawerDialogAction'), {
+    loading: () => <LoadingSpinner />
+});

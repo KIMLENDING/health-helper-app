@@ -1,7 +1,7 @@
 'use client'
 import LoadingOverlay from '@/components/LayoutCompents/LoadingOverlay'
 import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner'
-import DrawerDialogDone from '@/components/LayoutCompents/DrawerDialogDone'
+import DrawerDialogAction from '@/components/LayoutCompents/DrawerDialogAction'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardTitle } from '@/components/ui/card'
@@ -28,6 +28,7 @@ const InProgressTap = ({ data, sessionId, isPending, handleDone }: InProgressTPr
     const [editedReps, setEditedReps] = useState<number>(0);
     const [editedWeight, setEditedWeight] = useState<number>(0);
     const [addWeight, setAddWeight] = useState(5);
+    const [open, setOpen] = React.useState(false);
 
     const { mutateAsync: editSet } = useEditExerciseSession();
     const { mutate } = useActionExerciseSession();
@@ -187,9 +188,21 @@ const InProgressTap = ({ data, sessionId, isPending, handleDone }: InProgressTPr
             {!data.exercises.find(ex => ex.state === 'inProgress') ? (
                 <div className="text-center">진행중인 운동이 없습니다.</div>
             ) : (
-                <DrawerDialogDone onAction={handleDone}>
-                    <Button className="flex-1">운동 종료</Button>
-                </DrawerDialogDone>
+                <div className='min-w-screen flex '>
+
+                    <Button
+                        variant="default"
+                        className="flex-1"
+                        disabled={isPending || (data.exercises.length === 0)}
+                        onClick={() => setOpen(true)}
+                    >
+                        운동 종료
+                    </Button>
+                    {open && <DrawerDialogAction onAction={handleDone} open={open} setOpen={setOpen} title='운동 종료' description='운동을 종료하면 종료한 운동은 다시 시작할 수 없습니다.' />
+                    }
+
+                </div>
+
             )}
 
             {isPending && <LoadingOverlay isLoading={isPending} text={'서버에 저장 중...'} />} {/* ✅ 로딩 오버레이 */}

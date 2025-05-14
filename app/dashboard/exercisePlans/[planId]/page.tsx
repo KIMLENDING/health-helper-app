@@ -15,8 +15,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useRouter } from 'next/navigation';
 import { useDeletePlan, useEditPlan } from '@/server/user/exercisePlan/mutations';
 import { useExercisePlanById } from '@/server/user/exercisePlan/queries';
-import { formatToKST } from '@/utils/date';
-import { DrawerDialogDemo } from '@/components/UserCpmponents/DynamicComponents';
+import { DrawerDialogDemo, DrawerDialogAction } from '@/components/UserCpmponents/DynamicComponents';
 
 
 
@@ -38,7 +37,8 @@ const ExercisePlanDetailPage = (props: {
     const [deleteItem, setDeleteItem] = useState<string[]>([]); // 삭제된 운동 ID 목록
 
     // 다이얼로그 상태
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false); // 운동 시작하기 다이얼로그 상태
+    const [openDelete, setOpenDelete] = React.useState(false); // 운동 삭제 다이얼로그 상태
     // 플랜 삭제
     const { mutate: deletPlan } = useDeletePlan();
 
@@ -149,7 +149,7 @@ const ExercisePlanDetailPage = (props: {
         if (weight >= 10) return 'bg-yellow-200 dark:bg-yellow-300/50';
         return 'bg-secondary/10';
     }
-
+    console.log(openDelete)
 
     // 로딩 상태에 따라 다른 컴포넌트 렌더링
     if (isPending) return <LoadingOverlay isLoading={isPending} text={'처리 중...'} />;
@@ -214,7 +214,7 @@ const ExercisePlanDetailPage = (props: {
                             <DropdownMenuItem
                                 disabled={isPending || isEditing}
                                 className="flex items-center cursor-pointer text-red-500 hover:bg-red-50 dark:hover:bg-red-950/50 focus:bg-red-50 dark:focus:bg-red-950/50"
-                                onClick={() => handleDeletePlan()}
+                                onClick={() => setOpenDelete(true)}
                             >
                                 <Trash2 className="mr-2 h-4 w-4" />
                                 <span>플랜 삭제</span>
@@ -222,8 +222,12 @@ const ExercisePlanDetailPage = (props: {
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
-
             </div>
+
+            {openDelete && <div className='min-w-screen flex '>
+                <DrawerDialogAction onAction={handleDeletePlan} open={openDelete} setOpen={setOpenDelete} title='플랜 삭제' description='운동 플랜을 삭제하면 복구할 수 없습니다. 정말 삭제하시겠습니까?' />
+            </div>
+            }
 
             <div className="mb-4 flex items-center justify-between ">
 
