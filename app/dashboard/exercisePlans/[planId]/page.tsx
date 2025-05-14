@@ -61,6 +61,9 @@ const ExercisePlanDetailPage = (props: {
     // 편집 취소
     const handleCancelEditing = () => {
         setIsEditing(false);
+        setDeleteItem([]); // 삭제 항목 초기화
+        setEditedTitle(data?.title || '');
+
     };
 
     // 특정 운동의 세부 정보 수정
@@ -179,9 +182,9 @@ const ExercisePlanDetailPage = (props: {
 
                 )}
                 <div className='flex items-center gap-2 shrink-0  '>
-                    <Badge variant="default" className="px-3 py-1 shrink-0">
+                    {/* <Badge variant="default" className="px-3 py-1 shrink-0">
                         {formatDate(formatToKST(data.createdAt!))}
-                    </Badge>
+                    </Badge> */}
 
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
