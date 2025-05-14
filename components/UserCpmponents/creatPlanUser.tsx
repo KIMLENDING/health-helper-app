@@ -117,8 +117,8 @@ const CreatPlanUser = () => {
                             <ArrowLeft className="h-5 w-5" />
                         </Button>
                         <div>
-                            <h1 className="text-3xl font-bold text-white mb-2 truncate">운동 플랜 생성</h1>
-                            <p className="text-emerald-100 truncate">나만의 맞춤형 운동 루틴을 설계하세요.</p>
+                            <h1 className="text-3xl font-bold text-white mb-2 break-keep">운동 플랜 생성</h1>
+                            <p className="text-emerald-100 break-keep">나만의 맞춤형 운동 루틴을 설계하세요.</p>
                         </div>
                     </div>
                 </div>
@@ -127,17 +127,17 @@ const CreatPlanUser = () => {
                 <div className="flex justify-between items-center px-2">
                     <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-medium">1</div>
-                        <span className="text-sm font-medium truncate">루틴 이름 입력</span>
+                        <span className="text-sm font-medium break-keep">루틴 이름 입력</span>
                     </div>
                     <div className="h-0.5 flex-1 bg-zinc-400 dark:bg-zinc-700 mx-2"></div>
                     <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-medium">2</div>
-                        <span className="text-sm font-medium truncate">운동 선택</span>
+                        <span className="text-sm font-medium break-keep">운동 선택</span>
                     </div>
                     <div className="h-0.5 flex-1 bg-zinc-400 dark:bg-zinc-700 mx-2"></div>
                     <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-medium">3</div>
-                        <span className="text-sm font-medium truncate">세트 구성</span>
+                        <span className="text-sm font-medium break-keep">세트 구성</span>
                     </div>
                 </div>
 
@@ -147,7 +147,7 @@ const CreatPlanUser = () => {
                         <CardHeader className="pb-3 bg-emerald-50/50 dark:bg-emerald-900/10">
                             <div className="flex items-center gap-2">
                                 <CalendarClock className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                                <CardTitle className="text-lg font-medium truncate">루틴 정보</CardTitle>
+                                <CardTitle className="text-lg font-medium break-keep">루틴 정보</CardTitle>
                             </div>
                             <CardDescription>
                                 이 루틴의 이름과 목적을 입력하세요
@@ -192,7 +192,7 @@ const CreatPlanUser = () => {
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <ListPlus className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                                    <CardTitle className="text-lg font-medium truncate">선택된 운동</CardTitle>
+                                    <CardTitle className="text-lg font-medium break-keep">선택된 운동</CardTitle>
                                 </div>
                                 <Badge
                                     variant={exerciseOption?.length > 0 ? "default" : "outline"}
@@ -217,7 +217,7 @@ const CreatPlanUser = () => {
                                                 <div className="flex items-center justify-between">
                                                     <CardTitle className="text-base flex items-center gap-2">
                                                         <div className="h-2 w-2 rounded-full bg-emerald-500"></div>
-                                                        <span className="truncate">{item.title}</span>
+                                                        <span className="break-keep">{item.title}</span>
                                                     </CardTitle>
                                                     <div className="opacity-90 group-hover:opacity-100 transition-opacity">
                                                         <TooltipProvider>
@@ -254,7 +254,7 @@ const CreatPlanUser = () => {
                                             <Dumbbell className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
                                         </div>
                                         <p className="font-medium text-gray-700 dark:text-gray-300">운동이 선택되지 않았습니다</p>
-                                        <p className="text-sm mt-1 text-gray-500 dark:text-gray-400 truncate">
+                                        <p className="text-sm mt-1 text-gray-500 dark:text-gray-400 break-keep">
                                             위의 &apos;운동 선택&apos; 섹션에서 원하는 운동을 추가해주세요
                                         </p>
                                     </div>
@@ -273,7 +273,7 @@ const CreatPlanUser = () => {
                             <CardFooter className="bg-emerald-50/50 dark:bg-emerald-900/10 border-t pt-4">
                                 <div className="flex items-start gap-3 w-full">
                                     <Info className="h-5 w-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
-                                    <p className="text-sm text-emerald-700 dark:text-emerald-300 truncate">
+                                    <p className="text-sm text-emerald-700 dark:text-emerald-300 break-keep">
                                         각 운동 항목을 수정하려면 해당 운동 오른쪽의 편집 버튼을 클릭하세요.
                                         운동 순서는 위에서 선택한 순서대로 저장됩니다.
                                     </p>

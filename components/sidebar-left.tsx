@@ -92,8 +92,8 @@ const SidebarLeft = () => {
   const { data: session } = useSession()
 
   return (
-    <Sidebar className="border-r-0 " variant='floating'  >
-      <SidebarHeader className="bg-zinc-300 dark:bg-inherit">
+    <Sidebar className="border-r-0  " variant='floating'  >
+      <SidebarHeader className=" dark:bg-inherit">
         {session && <NavUser user={{
           name: (session.user as CustomSession)?.name || "Unknown",
           email: (session.user as CustomSession)?.email || "unknown@example.com",
