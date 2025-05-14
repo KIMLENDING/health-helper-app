@@ -50,12 +50,48 @@ H-Helper는 사용자가 운동 계획을 체계적으로 관리하고, 기록�
 - `LeftSidebar`와 같은 비동기적으로 로드 가능한 컴포넌트를 동적 임포트(`next/dynamic`)로 처리.
 - 초기 번들 크기를 줄이고, 필요한 시점에만 컴포넌트를 로드하여 성능 최적화.
 
-### 3. **반응형 Drawer / Dialog 통합 구조 구현**
+### 3. **React Hook Form과 Zod를 활용한 효율적인 폼 관리**
+
+- `react-hook-form`을 사용하여 제어 컴포넌트의 불필요한 리렌더링을 방지하고, 성능 최적화.
+- `zod` 스키마를 통해 타입 안전성이 보장된 폼 유효성 검증 구현.
+- 스키마 기반의 폼 상태 관리로 코드의 일관성과 가독성 향상.
+- 예를 들어, 운동 추가 폼에서는 다음과 같은 방식으로 구현:
+
+  ```tsx
+  const formSchema = z.object({
+    title: z
+      .string()
+      .min(2, {
+        message: "운동 이름은 최소 2자 이상이어야 합니다.",
+      })
+      .max(50, {
+        message: "운동 이름은 최대 50자까지 입력 가능합니다.",
+      }),
+    description: z
+      .string()
+      .min(2, {
+        message: "설명은 최소 2자 이상이어야 합니다.",
+      })
+      .max(200, {
+        message: "설명은 최대 200자까지 입력 가능합니다.",
+      }),
+    url: z.string().url({
+      message: "유효한 URL 형식이 아닙니다.",
+    }),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { title: "", description: "", url: "" },
+  });
+  ```
+
+### 4. **반응형 Drawer / Dialog 통합 구조 구현**
 
 - 모바일 UX를 고려한 반응형 UI 설계.
 - TailwindCSS와 Shadcn UI를 활용하여 일관된 스타일링 제공.
 
-### 4. **회원 탈퇴 시 연관 데이터 정리**
+### 5. **회원 탈퇴 시 연관 데이터 정리**
 
 - MongoDB 트랜잭션을 사용하여 계정 삭제와 연관 데이터 삭제를 원자적으로 처리
 - ExercisePlan과 ExerciseSession 데이터를 계정 삭제 요청과 함께 안전하게 삭제
@@ -266,6 +302,8 @@ Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
 - **TypeScript**
 - **MongoDB**
 - **React Query**
+- **React Hook Form**
+- **Zod**
 - **TailwindCSS 4.0**
 - **Shadcn-UI**
 - **Vercel Deploy**
