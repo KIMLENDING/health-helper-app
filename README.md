@@ -331,12 +331,13 @@ Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
 ## 🎬 기능 데모
 
 H-Helper의 주요 기능들은 다음과 같은 화면을 통해 사용자에게 제공됩니다:
+사진을 클릭하면 영상을 볼 수 있습니다.
 
 ### 📊 대시보드
 
-<!-- [![대시보드](https://img.youtube.com/vi/Iu8P_U5YRts/0.jpg)](https://youtube.com/shorts/Iu8P_U5YRts) -->
+[![대시보드](https://img.youtube.com/vi/Iu8P_U5YRts/0.jpg)](https://youtube.com/shorts/Iu8P_U5YRts)
 
-[![대시보드](https://github.com/user-attachments/assets/236c619b-9f7b-48f8-8b84-8c72bd0e2c0a)](https://youtube.com/shorts/Iu8P_U5YRts)
+<!-- [![대시보드](https://github.com/user-attachments/assets/236c619b-9f7b-48f8-8b84-8c72bd0e2c0a)](https://youtube.com/shorts/Iu8P_U5YRts) -->
 
 - 주간 운동 달성률 실시간 확인
 - 최근 운동 기록 요약 및 빠른 접근
@@ -352,9 +353,9 @@ H-Helper의 주요 기능들은 다음과 같은 화면을 통해 사용자에�
 
 ### 🏋️‍♀️ 운동 세션
 
-<!-- [![운동 세션](https://img.youtube.com/vi/IteSWqhRKQ4/0.jpg)](https://youtube.com/shorts/IteSWqhRKQ4) -->
+[![운동 세션](https://img.youtube.com/vi/IteSWqhRKQ4/0.jpg)](https://youtube.com/shorts/IteSWqhRKQ4)
 
-[![운동 세션](https://github.com/user-attachments/assets/b63d444b-2c54-4562-906d-5857f866b045)](https://youtube.com/shorts/IteSWqhRKQ4)
+<!-- [![운동 세션](https://github.com/user-attachments/assets/b63d444b-2c54-4562-906d-5857f866b045)](https://youtube.com/shorts/IteSWqhRKQ4) -->
 
 - 세트별 실시간 기록 관리
 - 내장 휴식 타이머
@@ -378,9 +379,9 @@ H-Helper의 주요 기능들은 다음과 같은 화면을 통해 사용자에�
 
 ### 📋 플랜 개요
 
-<!-- [![플랜 개요](https://img.youtube.com/vi/cYChNV_fW1U/0.jpg)](https://youtube.com/shorts/cYChNV_fW1U) -->
+[![플랜 개요](https://img.youtube.com/vi/cYChNV_fW1U/0.jpg)](https://youtube.com/shorts/cYChNV_fW1U)
 
-[![플랜 개요](https://github.com/user-attachments/assets/4b6837de-50c1-4acb-8d73-a03ef46fc116)](https://youtube.com/shorts/cYChNV_fW1U)
+<!-- [![플랜 개요](https://github.com/user-attachments/assets/4b6837de-50c1-4acb-8d73-a03ef46fc116)](https://youtube.com/shorts/cYChNV_fW1U) -->
 
 - 모든 플랜을 한눈에 확인
 - 빠른 운동 시작 및 관리
