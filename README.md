@@ -334,7 +334,9 @@ H-Helper의 주요 기능들은 다음과 같은 화면을 통해 사용자에�
 
 ### 📊 대시보드
 
-[![대시보드](https://img.youtube.com/vi/Iu8P_U5YRts/0.jpg)](https://youtube.com/shorts/Iu8P_U5YRts)
+<!-- [![대시보드](https://img.youtube.com/vi/Iu8P_U5YRts/0.jpg)](https://youtube.com/shorts/Iu8P_U5YRts) -->
+
+[![대시보드](https://github.com/user-attachments/assets/236c619b-9f7b-48f8-8b84-8c72bd0e2c0a)]
 
 - 주간 운동 달성률 실시간 확인
 - 최근 운동 기록 요약 및 빠른 접근
