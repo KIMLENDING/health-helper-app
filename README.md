@@ -327,3 +327,55 @@ Next.js 15 App Router + TypeScript 기반 API 경로 문서입니다.
 - **TailwindCSS 4.0**
 - **Shadcn-UI**
 - **Vercel Deploy**
+
+## 🎬 기능 데모
+
+H-Helper의 주요 기능들은 다음과 같은 화면을 통해 사용자에게 제공됩니다:
+
+### 📊 대시보드
+
+[![대시보드](https://img.youtube.com/vi/Iu8P_U5YRts/0.jpg)](https://youtube.com/shorts/Iu8P_U5YRts)
+
+- 주간 운동 달성률 실시간 확인
+- 최근 운동 기록 요약 및 빠른 접근
+- 운동 통계 분석 및 시각화 데이터 제공
+
+### ✏️ 운동 계획 생성
+
+[![운동 계획 생성](https://img.youtube.com/vi/XDjYkSRRXGM/0.jpg)](https://youtube.com/shorts/XDjYkSRRXGM)
+
+- 간편한 운동 선택 인터페이스
+- 세트/반복 횟수/무게 상세 설정
+- 드래그 앤 드롭으로 운동 순서 조정
+
+### 🏋️‍♀️ 운동 세션
+
+[![운동 세션](https://img.youtube.com/vi/IteSWqhRKQ4/0.jpg)](https://youtube.com/shorts/IteSWqhRKQ4)
+
+- 세트별 실시간 기록 관리
+- 내장 휴식 타이머
+- 운동 진행률 및 완료 상태 추적
+
+### 📈 데이터 분석
+
+[![상세 분석](https://img.youtube.com/vi/e9M593R2fiE/0.jpg)](https://youtube.com/shorts/e9M593R2fiE)
+
+- 데이터 시각화를 통한 진행 상황 분석
+- 기간별 운동 성과 비교
+- 목표 대비 달성률 확인
+
+### 📝 플랜 관리
+
+[![플랜 관리](https://img.youtube.com/vi/b0pHotDF_Ak/0.jpg)](https://youtube.com/shorts/b0pHotDF_Ak)
+
+- 개별 플랜 세부 정보 수정
+- 새로운 운동 추가 및 삭제
+- 플랜 복제 및 공유 기능
+
+### 📋 플랜 개요
+
+[![플랜 개요](https://img.youtube.com/vi/cYChNV_fW1U/0.jpg)](https://youtube.com/shorts/cYChNV_fW1U)
+
+- 모든 플랜을 한눈에 확인
+- 빠른 운동 시작 및 관리
+- 플랜 정렬 및 필터링 기능
