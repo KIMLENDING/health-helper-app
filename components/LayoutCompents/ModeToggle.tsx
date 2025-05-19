@@ -14,6 +14,14 @@ import {
 
 export function ModeToggle() {
     const { setTheme } = useTheme()
+    React.useEffect(() => {
+        const theme = localStorage.getItem("theme")
+        if (theme) {
+            setTheme(theme)
+        } else {
+            setTheme("system")
+        }
+    }, [])
 
     return (
         <DropdownMenu>
@@ -25,13 +33,22 @@ export function ModeToggle() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setTheme("light")}>
+                <DropdownMenuItem onClick={() => {
+                    setTheme("light")
+                    localStorage.setItem("theme", "light")
+                }}>
                     Light
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("dark")}>
+                <DropdownMenuItem onClick={() => {
+                    setTheme("dark")
+                    localStorage.setItem("theme", "dark")
+                }}>
                     Dark
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("system")}>
+                <DropdownMenuItem onClick={() => {
+                    setTheme("system")
+                    localStorage.setItem("theme", "system")
+                }}>
                     System
                 </DropdownMenuItem>
             </DropdownMenuContent>
