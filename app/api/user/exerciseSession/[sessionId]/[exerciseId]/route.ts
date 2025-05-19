@@ -108,7 +108,7 @@ export const POST = async (req: NextRequest) => {
                 exercise.session.push({
                     set: prev.set + 1,
                     reps: prev.reps,
-                    weight: prev.weight + (addWeight || 5), // 5는 변수로 해서 사용자의 선택으로 바꿀 예정 
+                    weight: prev.weight + (addWeight),
                 });
                 // 변경 감지
                 exerciseSession.markModified("exercises");
