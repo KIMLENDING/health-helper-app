@@ -98,6 +98,7 @@ const ShowChart = () => {
 
     return (
         <section className="mx-auto w-full max-w-4xl py-4 space-y-4">
+            {/** 차트 이동 아이콘 버튼 */}
             <Card>
                 <div className={`flex ${'flex-row gap-4 justify-evenly p-4'} `}>
                     {chartItems.map((item, index) => (
@@ -105,8 +106,8 @@ const ShowChart = () => {
                             key={index}
                             onClick={() => handleSlideChange(index)}
                             className={`flex items-center gap-2 p-2 rounded-lg transition-all ${activeSlide === index
-                                ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white font-medium shadow-sm'
-                                : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-900'
+                                ? 'bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white  '
+                                : 'text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-900'
                                 }`}
                         >
                             {item.icon}
@@ -143,12 +144,12 @@ const ShowChart = () => {
                         </CardContainer>
                     </CarouselItem>
                 </CarouselContent>
-                {
+                {/* {
                     <>
                         <CarouselPrevious />
                         <CarouselNext />
                     </>
-                }
+                } */}
             </Carousel>
 
         </section>

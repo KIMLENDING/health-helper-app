@@ -13,8 +13,8 @@ const Floating = () => {
 
     const badge = <Badge variant="outline">운동 상태</Badge>
     const statusDotClass = cn(
-        'h-3 w-3 rounded-full',
-        latestSessionId ? 'bg-green-600' : 'bg-red-600'
+        'h-3 w-3 rounded-full border-[1px] ',
+        latestSessionId ? 'bg-green-600 border-green-300/50' : 'bg-zinc-600 border-zinc-300/50'
     )
 
     return (
