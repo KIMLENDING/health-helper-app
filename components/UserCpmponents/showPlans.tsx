@@ -16,6 +16,7 @@ import { DrawerDialogDemo } from '@/components/UserCpmponents/DynamicComponents'
 const ShowPlans = () => {
     const { data, isError, isLoading } = useExercisePlan()
     const [open, setOpen] = React.useState(false);
+    const [selectedPlanId, setSelectedPlanId] = React.useState<string | null>(null);
 
     return (
         <div className="mx-auto w-full max-w-4xl  ">
@@ -49,32 +50,34 @@ const ShowPlans = () => {
                     </div>
                 ) : data && data.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {data.map((plan, index) => {
+                        {data.map((plan, index) =>
 
-                            return (
-                                <Card key={plan._id || index} className="bg-white dark:bg-zinc-800 border-0 shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden">
-                                    <CardHeader className="p-4 pb-1">
-                                        <button className="flex items-center justify-between cursor-pointer" onClick={() => setOpen(true)}>
-                                            <div className="flex items-center gap-2">
-                                                <Dumbbell className="text-blue-500" size={20} />
-                                                <CardTitle className="text-lg font-bold truncate" title={plan.title}>
-                                                    {plan.title}
-                                                </CardTitle>
-                                            </div>
-                                            <ChevronRight size={16} className="text-gray-400" />
-                                        </button>
-                                        {open && <DrawerDialogDemo planId={plan._id!} open={open} setOpen={setOpen} />}
+                        (
+                            <Card key={plan._id || index} className="bg-white dark:bg-zinc-800 border-0 shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden">
+                                <CardHeader className="p-4 pb-1">
+                                    <button className="flex items-center justify-between cursor-pointer" onClick={() => {
+                                        setOpen(true);
+                                        setSelectedPlanId(plan._id!);
 
-                                    </CardHeader>
-                                    <CardContent className="text-sm text-gray-500 p-4 pt-1 ">
-                                        <div className="flex justify-between px-2">
-                                            <span>{plan.exercises?.length || 0}개 운동</span>
-                                            <span> {plan.lastPlayed ? `${Math.floor((new Date().getTime() - new Date(plan.lastPlayed).getTime()) / (1000 * 60 * 60 * 24))}일전` : '기록없음'}</span>
+                                    }} >
+                                        <div className="flex items-center gap-2">
+                                            <Dumbbell className="text-blue-500" size={20} />
+                                            <CardTitle className="text-lg font-bold truncate" title={plan.title}>
+                                                {plan.title}
+                                            </CardTitle>
                                         </div>
-                                    </CardContent>
-                                </Card>
-                            )
-                        })}
+                                        <ChevronRight size={16} className="text-gray-400" />
+                                    </button>
+                                </CardHeader>
+                                <CardContent className="text-sm text-gray-500 p-4 pt-1 ">
+                                    <div className="flex justify-between px-2">
+                                        <span>{plan.exercises?.length || 0}개 운동</span>
+                                        <span> {plan.lastPlayed ? `${Math.floor((new Date().getTime() - new Date(plan.lastPlayed).getTime()) / (1000 * 60 * 60 * 24))}일전` : '기록없음'}</span>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )
+                        )}
                     </div>
                 ) : (
 
@@ -90,6 +93,7 @@ const ShowPlans = () => {
                     </div>
                 )}
             </div>
+            {open && <DrawerDialogDemo planId={selectedPlanId!} open={open} setOpen={setOpen} />}
         </div>
     )
 }

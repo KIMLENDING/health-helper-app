@@ -63,7 +63,8 @@ export default function DrawerDialogDemo({ planId, open, setOpen }: Props) {
 
     const ActionButtons = (
         <div className="w-full flex gap-2" >
-            <Button className="flex-1 hover:bg-zinc-300 hover:dark:bg-zinc-600" variant="secondary">
+            <Button className="flex-1 hover:bg-zinc-300 hover:dark:bg-zinc-600" variant="secondary"
+                onClick={() => setOpen(false)}>
                 취소
             </Button>
             <Button
@@ -105,8 +106,8 @@ export default function DrawerDialogDemo({ planId, open, setOpen }: Props) {
     if (isLoading) return <LoadingOverlay isLoading={isLoading} text={'로딩 중'} />; // ✅ 로딩 오버레이
     return (
         <>
-            <UI.Root modal={true} autoFocus={true} open={open} onOpenChange={setOpen}>
-                <UI.Trigger >
+            <UI.Root open={open} onOpenChange={setOpen}>
+                <UI.Trigger asChild>
                     {/* <div className="flex flex-row gap-2">{children}</div> */}
                 </UI.Trigger>
 
