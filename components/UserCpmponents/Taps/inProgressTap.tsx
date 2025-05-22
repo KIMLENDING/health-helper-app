@@ -15,7 +15,6 @@ import { useActionExerciseSession, useEditExerciseSession } from '@/server/user/
 import { ExerciseSession } from '@/utils/util'
 import React, { useState } from 'react'
 import { useDialogStore } from '@/store/dialogStore'
-import { DrawerDialogActionWithStore } from '../DynamicComponents'
 
 
 interface InProgressTProps {

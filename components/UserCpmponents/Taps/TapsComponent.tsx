@@ -7,12 +7,12 @@ import { Card, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 
-import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner';
 import InProgressTap from './inProgressTap';
 import { useRouter } from 'next/navigation';
 import LoadingOverlay from '@/components/LayoutCompents/LoadingOverlay';
 import { useGetExerciseSession } from '@/server/user/exerciseSession/queries';
 import { useActionExerciseSession, useDoneExerciseSession } from '@/server/user/exerciseSession/mutations';
+import { Loader2 } from 'lucide-react';
 
 const TapsComponent = ({ sessionId }: { sessionId: string }) => {
     const [activeTab, setActiveTab] = useState('list');
@@ -119,12 +119,15 @@ const TapsComponent = ({ sessionId }: { sessionId: string }) => {
                                 inProgress: '진행중',
                                 done: '완료',
                             }[exercise.state]}
-                            {loadingIndex === exercise._id && <LoadingSpinner className="w-5 h-5" />}
+                            {loadingIndex === exercise._id && <Loader2
+                                className="animate-spin text-white"
+
+                            />}
                         </Button>
                     </Card>
                 ))}
                 <Button className='w-full' variant='default' onClick={updateSessionStatus} disabled={isPandingAction || isPendingDone}>운동 완료하기</Button>
-                {isPandingAction && <LoadingOverlay isLoading={isPandingAction} text={'서버에 저장 중...'} />} {/* ✅ 로딩 오버레이 */}
+
             </TabsContent>
 
             <InProgressTap data={data} sessionId={sessionId} isPending={isPandingAction} handleDone={handleDone} />
