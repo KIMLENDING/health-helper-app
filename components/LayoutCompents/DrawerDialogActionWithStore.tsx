@@ -11,7 +11,7 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
+
 } from "@/components/ui/dialog"
 import {
     Drawer,
@@ -21,30 +21,40 @@ import {
     DrawerFooter,
     DrawerHeader,
     DrawerTitle,
-    DrawerTrigger,
 } from "@/components/ui/drawer"
+import { useDialogStore } from "@/store/dialogStore"
 
-/** action함수를 받아서 진행 시키기 전 모달을 띄워 다시 한 번 확인 하는 컴포넌트 */
-export default function DrawerDialogAction({
-    onAction, title, description, open, setOpen
-}: Readonly<{
-    // children: React.ReactNode;
-    onAction: () => void;
-    title?: string;
-    description?: string;
-    open: boolean;
-    setOpen: (open: boolean) => void;
-}>) {
+/** 
+ * 전역 상태를 통해 다이얼로그를 표시/관리하는 컴포넌트
+ * zustand store를 사용하여 모달 상태를 전역적으로 관리
+ */
+export default function DrawerDialogActionWithStore() {
+    const {
+        isOpen,
+        title,
+        description,
+        closeDialog,
+        confirmAction,
+    } = useDialogStore();
+
     const isDesktop = useMediaQuery("(min-width: 768px)")
 
-    const Title = title || '운동을 종료 하시겠습니까?'
-    const Description = description || '운동을 종료하면 종료한 운동은 다시 시작할 수 없습니다.'
+    const Title = title;
+    const Description = description;
     const ActionButtons = (
         <div className="w-full flex gap-2">
-            <Button className="flex-1 hover:bg-zinc-300 hover:dark:bg-zinc-600" variant="secondary">
+            <Button
+                className="flex-1 hover:bg-zinc-300 hover:dark:bg-zinc-600"
+                variant="secondary"
+                onClick={closeDialog}
+            >
                 취소
             </Button>
-            <Button className="flex-1 hover:bg-zinc-300 hover:dark:bg-zinc-600" variant="secondary" onClick={onAction} >
+            <Button
+                className="flex-1 hover:bg-zinc-300 hover:dark:bg-zinc-600"
+                variant="secondary"
+                onClick={confirmAction}
+            >
                 예
             </Button>
         </div>
@@ -52,7 +62,6 @@ export default function DrawerDialogAction({
 
     const UI = isDesktop ? {
         Root: Dialog,
-        Trigger: DialogTrigger,
         Content: DialogContent,
         Header: DialogHeader,
         Footer: DialogFooter,
@@ -61,7 +70,6 @@ export default function DrawerDialogAction({
         Close: DialogClose,
     } : {
         Root: Drawer,
-        Trigger: DrawerTrigger,
         Content: DrawerContent,
         Header: DrawerHeader,
         Footer: DrawerFooter,
@@ -69,13 +77,10 @@ export default function DrawerDialogAction({
         Description: DrawerDescription,
         Close: DrawerClose,
     };
-
+    // 다이얼로그의 UI 컴포넌트 설정
     return (
 
-        <UI.Root open={open} onOpenChange={setOpen}>
-            <UI.Trigger asChild>
-                {/* <div className="flex flex-row gap-2">{children}</div> */}
-            </UI.Trigger>
+        <UI.Root autoFocus open={isOpen} onOpenChange={closeDialog}>
             <UI.Content className={isDesktop ? "sm:max-w-[425px]" : ""}>
                 <UI.Header className={isDesktop ? "" : "text-left"}>
                     <UI.Title className={"text-red-300"}>{Title}</UI.Title>
@@ -91,16 +96,25 @@ export default function DrawerDialogAction({
     )
 }
 
-
-
 /**
- * Blocked aria-hidden on an element because its descendant retained focus. 
- * The focus must not be hidden from assistive technology users. 
- * Avoid using aria-hidden on a focused element or its ancestor.
- *  Consider using the inert attribute instead, which will also prevent focus. 
- * For more details, see the aria-hidden section of the WAI-ARIA specification at https://w3c.github.io/aria/#aria-hidden.
-Element with focus: button
-
-즉 보이지 못하는 곳에 포커스가 되어 있다는 소리임 
-이게 자동으로 포커스를 맞춰주기 때문에 생기는 문제 인듯 그래서 autoFocus={false}를 넣어주면 해결됨
+ * 사용 예시:
+ * 
+ * import { useDialogStore } from "@/store/dialogStore";
+ * 
+ * function SomeComponent() {
+ *   const { openDialog } = useDialogStore();
+ * 
+ *   const handleDelete = () => {
+ *     openDialog({
+ *       title: "정말 삭제하시겠습니까?",
+ *       description: "이 작업은 되돌릴 수 없습니다.",
+ *       onConfirm: () => {
+ *         // 삭제 로직 실행
+ *         console.log("삭제 완료!");
+ *       }
+ *     });
+ *   };
+ * 
+ *   return <Button onClick={handleDelete}>항목 삭제</Button>;
+ * }
  */

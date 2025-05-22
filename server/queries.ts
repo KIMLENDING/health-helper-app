@@ -5,9 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 /** 컴포넌트간 데이터를 받아오기 위한 기능 */
 export const useSelectedExercises = () => {
     return useQuery<Exercise[]>({
-        queryKey: ["selectedExercise"],
+        queryKey: ["selectedExercises"],
         initialData: [],
-        enabled: false, // 서버 요청 없이 local 데이터만 사용
+        enabled: false,
     });
 };
 

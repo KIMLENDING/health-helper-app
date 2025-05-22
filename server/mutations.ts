@@ -14,7 +14,7 @@ export const useSelectedExercise = () => {
             return selectedExercises;
         },
         onSuccess: async (data) => {
-            queryClient.setQueryData(["selectedExercise"], data); // 데이터 저장
+            queryClient.setQueryData(["selectedExercises"], data); // 데이터 저장
 
         },
         onError: (error) => {

@@ -11,7 +11,7 @@ import {
 import Link from 'next/link'
 
 import { useExercisePlan } from '@/server/user/exercisePlan/queries'
-import { DrawerDialogDemo } from './DynamicComponents'
+import { DrawerDialogDemo } from '@/components/UserCpmponents/DynamicComponents';
 
 const ShowPlans = () => {
     const { data, isError, isLoading } = useExercisePlan()

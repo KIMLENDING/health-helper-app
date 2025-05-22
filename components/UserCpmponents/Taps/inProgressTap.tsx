@@ -1,7 +1,7 @@
 'use client'
 import LoadingOverlay from '@/components/LayoutCompents/LoadingOverlay'
 import LoadingSpinner from '@/components/LayoutCompents/LoadingSpinner'
-import DrawerDialogAction from '@/components/LayoutCompents/DrawerDialogAction'
+
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardTitle } from '@/components/ui/card'
@@ -14,6 +14,8 @@ import { useActionExerciseSession, useEditExerciseSession } from '@/server/user/
 
 import { ExerciseSession } from '@/utils/util'
 import React, { useState } from 'react'
+import { useDialogStore } from '@/store/dialogStore'
+import { DrawerDialogActionWithStore } from '../DynamicComponents'
 
 
 interface InProgressTProps {
@@ -28,10 +30,19 @@ const InProgressTap = ({ data, sessionId, isPending, handleDone }: InProgressTPr
     const [editedReps, setEditedReps] = useState<number>(0);
     const [editedWeight, setEditedWeight] = useState<number>(0);
     const [addWeight, setAddWeight] = useState(5);
-    const [open, setOpen] = React.useState(false);
+    // const [open, setOpen] = React.useState(false);
 
     const { mutateAsync: editSet } = useEditExerciseSession();
     const { mutate } = useActionExerciseSession();
+
+    const { openDialog } = useDialogStore();
+    const handleOpenDialog = () => {
+        openDialog({
+            title: '운동 종료',
+            description: '운동을 종료하면 종료한 운동은 다시 시작할 수 없습니다.',
+            onConfirm: handleDone,
+        });
+    };
 
     const handleEditClick = (setId: string, reps: number, weight: number) => {
         setEditingSetId(setId);
@@ -194,12 +205,16 @@ const InProgressTap = ({ data, sessionId, isPending, handleDone }: InProgressTPr
                         variant="default"
                         className="flex-1"
                         disabled={isPending || (data.exercises.length === 0)}
-                        onClick={() => setOpen(true)}
+                        onClick={() => {
+                            // setOpen(true);
+                            setTimeout(() => { handleOpenDialog(); }, 30); //포커스가 이동할 시간을 줘야함 그렇지 않으면 
+                            //Blocked aria-hidden on an element because its descendant retained focus. 오류 발생함
+                        }}
                     >
                         운동 종료
                     </Button>
-                    {open && <DrawerDialogAction onAction={handleDone} open={open} setOpen={setOpen} title='운동 종료' description='운동을 종료하면 종료한 운동은 다시 시작할 수 없습니다.' />
-                    }
+                    {/* {open && <DrawerDialogActionWithStore />
+                    } */}
 
                 </div>
 

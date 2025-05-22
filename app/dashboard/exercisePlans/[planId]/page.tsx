@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dumbbell, Save, X, Edit, Trash2, PlusSquare, Loader2, Play, ChevronsDown, Info, Layers, Repeat, Weight, ArrowLeft, } from 'lucide-react';
 import React, { use, useEffect, useRef, useState } from 'react';
-import { formatDate } from '@/lib/utils';
+
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
@@ -15,7 +15,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useRouter } from 'next/navigation';
 import { useDeletePlan, useEditPlan } from '@/server/user/exercisePlan/mutations';
 import { useExercisePlanById } from '@/server/user/exercisePlan/queries';
-import { DrawerDialogDemo, DrawerDialogAction } from '@/components/UserCpmponents/DynamicComponents';
+import { DrawerDialogDemo, DrawerDialogActionWithStore } from '@/components/UserCpmponents/DynamicComponents';
+import { useDialogStore } from '@/store/dialogStore';
 
 
 
@@ -38,9 +39,18 @@ const ExercisePlanDetailPage = (props: {
 
     // 다이얼로그 상태
     const [open, setOpen] = React.useState(false); // 운동 시작하기 다이얼로그 상태
-    const [openDelete, setOpenDelete] = React.useState(false); // 운동 삭제 다이얼로그 상태
+    // const [openDelete, setOpenDelete] = React.useState(false); // 운동 삭제 다이얼로그 상태
     // 플랜 삭제
     const { mutate: deletPlan } = useDeletePlan();
+
+    const { openDialog } = useDialogStore();
+    const handleOpenDialog = () => {
+        openDialog({
+            title: '운동 플랜 삭제',
+            description: '운동 플랜을 삭제하면 복구할 수 없습니다. 정말 삭제하시겠습니까?',
+            onConfirm: handleDeletePlan,
+        });
+    };
 
     // 스크롤 상태를 추적하기 위한 상태 추가
     const [isScrolled, setIsScrolled] = useState(false);
@@ -149,7 +159,7 @@ const ExercisePlanDetailPage = (props: {
         if (weight >= 10) return 'bg-yellow-200 dark:bg-yellow-300/50';
         return 'bg-secondary/10';
     }
-    console.log(openDelete)
+
 
     // 로딩 상태에 따라 다른 컴포넌트 렌더링
     if (isPending) return <LoadingOverlay isLoading={isPending} text={'처리 중...'} />;
@@ -214,7 +224,11 @@ const ExercisePlanDetailPage = (props: {
                             <DropdownMenuItem
                                 disabled={isPending || isEditing}
                                 className="flex items-center cursor-pointer text-red-500 hover:bg-red-50 dark:hover:bg-red-950/50 focus:bg-red-50 dark:focus:bg-red-950/50"
-                                onClick={() => setOpenDelete(true)}
+                                onSelect={() => {
+                                    // setOpenDelete(true);// 다이얼로그가 열리기 전에 상태 업데이트
+                                    setTimeout(() => { handleOpenDialog(); }, 30); //포커스가 이동할 시간을 줘야함 그렇지 않으면 
+                                    //Blocked aria-hidden on an element because its descendant retained focus. 오류 발생함
+                                }}
                             >
                                 <Trash2 className="mr-2 h-4 w-4" />
                                 <span>플랜 삭제</span>
@@ -224,10 +238,8 @@ const ExercisePlanDetailPage = (props: {
                 </div>
             </div>
 
-            {openDelete && <div className='min-w-screen flex '>
-                <DrawerDialogAction onAction={handleDeletePlan} open={openDelete} setOpen={setOpenDelete} title='플랜 삭제' description='운동 플랜을 삭제하면 복구할 수 없습니다. 정말 삭제하시겠습니까?' />
-            </div>
-            }
+
+
 
             <div className="mb-4 flex items-center justify-between ">
 

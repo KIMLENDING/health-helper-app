@@ -13,6 +13,7 @@ import { cookies } from "next/headers";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import getQueryClient from "@/utils/getQueryClient";
 import LeftSideBar from "@/components/LayoutCompents/LeftSideBar"
+import { DrawerDialogActionWithStore } from "@/components/UserCpmponents/DynamicComponents";
 
 
 
@@ -52,6 +53,7 @@ export default async function DachboardLayout({
           </header>
           {children}
         </main>
+        <DrawerDialogActionWithStore />
       </SidebarInset>
     </SidebarProvider>
   )

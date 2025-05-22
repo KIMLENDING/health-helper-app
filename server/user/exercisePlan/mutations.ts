@@ -50,7 +50,7 @@ export const useUpdatePlan = () => {
             toast({ variant: 'default2', title: `${data.message}` });
             await queryClient.invalidateQueries({ queryKey: ["exercisePlans"] })
             await queryClient.invalidateQueries({ queryKey: ["exercisePlan", data.exercisePlan._id] })
-            queryClient.removeQueries({ queryKey: ["selectedExercise"] }); // 캐시된 데이터를 초기화합니다.
+            queryClient.removeQueries({ queryKey: ["selectedExercises"] }); // 캐시된 데이터를 초기화합니다.
         },
         onError: handleMutationError,
     })
