@@ -15,7 +15,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useRouter } from 'next/navigation';
 import { useDeletePlan, useEditPlan } from '@/server/user/exercisePlan/mutations';
 import { useExercisePlanById } from '@/server/user/exercisePlan/queries';
-import { DrawerDialogDemo, DrawerDialogActionWithStore } from '@/components/UserCpmponents/DynamicComponents';
+import { DrawerDialogDemo } from '@/components/UserCpmponents/DynamicComponents';
 import { useDialogStore } from '@/store/dialogStore';
 
 
@@ -40,10 +40,12 @@ const ExercisePlanDetailPage = (props: {
     // 다이얼로그 상태
     const [open, setOpen] = React.useState(false); // 운동 시작하기 다이얼로그 상태
     // const [openDelete, setOpenDelete] = React.useState(false); // 운동 삭제 다이얼로그 상태
+
     // 플랜 삭제
     const { mutate: deletPlan } = useDeletePlan();
 
     const { openDialog } = useDialogStore();
+
     const handleOpenDialog = () => {
         openDialog({
             title: '운동 플랜 삭제',
@@ -142,6 +144,8 @@ const ExercisePlanDetailPage = (props: {
             }
         };
     }, []);
+
+
 
     // 무게 클래스 결정 함수
     function getWeightClass(weight: number): string {

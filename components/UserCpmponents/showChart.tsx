@@ -4,7 +4,7 @@ import CardContainer from './chartComponents/CardContainer';
 import TitlebyDay from './chartComponents/TitlebyDay';
 import TimeByDay from './chartComponents/TimeByDay';
 import WeightByDay from './chartComponents/WeightByDay';
-import { Carousel, CarouselApi, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '../ui/carousel';
+import { Carousel, CarouselApi, CarouselContent, CarouselItem, } from '../ui/carousel';
 import { useSidebar } from '../ui/sidebar';
 import WeightByPart from './chartComponents/WeightByPart';
 import { useWeekSessions } from '@/server/queries';

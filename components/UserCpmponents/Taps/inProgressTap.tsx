@@ -36,6 +36,7 @@ const InProgressTap = ({ data, sessionId, isPending, handleDone }: InProgressTPr
 
     const { openDialog } = useDialogStore();
     const handleOpenDialog = () => {
+
         openDialog({
             title: '운동 종료',
             description: '운동을 종료하면 종료한 운동은 다시 시작할 수 없습니다.',

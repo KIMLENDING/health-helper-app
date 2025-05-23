@@ -111,7 +111,7 @@ const CreatPlanUser = () => {
                 </div>
 
                 {/* 단계별 프로세스 가이드 */}
-                <div className="flex justify-between items-center px-2">
+                {/* <div className="flex justify-between items-center px-2">
                     <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-medium">1</div>
                         <span className="text-sm font-medium break-keep">루틴 이름 입력</span>
@@ -126,7 +126,7 @@ const CreatPlanUser = () => {
                         <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-medium">3</div>
                         <span className="text-sm font-medium break-keep">세트 구성</span>
                     </div>
-                </div>
+                </div> */}
 
                 <div className='flex flex-col gap-6'>
                     {/* 루틴 이름 입력 카드 */}
