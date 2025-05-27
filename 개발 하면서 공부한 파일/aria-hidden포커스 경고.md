@@ -2,7 +2,6 @@
 🤔 어떤 경고인가요?
 Radix 기반의 Dialog나 Drawer를 사용할 때 다음과 같은 콘솔 경고를 본 적 있나요?
 
-
 Blocked aria-hidden on an element because its descendant retained focus.
 The focus must not be hidden from assistive technology users.
 이 경고는 접근성(Accessibility, a11y) 측면에서 중요한 의미를 담고 있습니다. 하지만 원인과 해결책을 이해하지 못하면 꽤 당황스럽죠.
@@ -36,12 +35,10 @@ aria-hidden="true" 처리된 DOM 안에 여전히 포커스를 유지할 경우
 Radix의 Dialog / Drawer 컴포넌트에는 autoFocus라는 prop이 존재합니다.
 이걸 활성화하면, 모달이 열릴 때 내부의 포커스 가능한 요소로 자동으로 focus가 이동하게 됩니다.
 
-
 <Dialog autoFocus open={open} onOpenChange={setOpen}>
   ...
 </Dialog>
 또는 Drawer 사용 시도 동일합니다:
-
 
 <Drawer autoFocus open={open} onOpenChange={setOpen}>
   ...
@@ -51,7 +48,6 @@ Radix의 Dialog / Drawer 컴포넌트에는 autoFocus라는 prop이 존재합니
 
 💡 보너스: 특정 버튼에 자동 포커스 주고 싶다면?
 autoFocus 외에도 initialFocusRef를 사용할 수 있어요:
-
 
 const confirmButtonRef = React.useRef(null)
 
@@ -69,9 +65,35 @@ autoFocus={true}를 Dialog/Drawer에 설정하면 문제는 사라지고, 접근
 
 필요 시 initialFocusRef로 포커스 위치를 명확하게 컨트롤할 수 있습니다
 
+## DropDown 컴포넌트와 모달을 동시에 사용할 때
+
+- 모달을 오픈하는 버튼이 드롭다운 컴포넌트 안에 있을 때
+- 처음 모달을 열고 닫으면 aria-hidden 경고가 발생함
+- 원인
+- 드롭다운에서 버튼을 누르게 되면 드롭다운이 사라지고 모달로 포커스가 이동 해야 하는데
+- 이동하지 못하고 사라진 드롭다운에 포커스가 남아있음 이게 문제가 됨
+- 해결 방법
+- 모달을 열기 전 포커스가 이동할 시간을 주면됨 setTimeOut을 사용하면 됨
+
+```ts
+   <DropdownMenuItem
+          disabled={isPending || isEditing}
+          className="flex items-center cursor-pointer text-red-500 hover:bg-red-50 dark:hover:bg-focus:bg-red-50 dark:focus:bg-red-950/50"
+          onSelect={() => {
+              // setOpenDelete(true);// 다이얼로그가 열리기 전에 상태 업데이트
+              setTimeout(() => { handleOpenDialog(); }, 30); //포커스가 이동할 시간을 줘야함 그렇지 않으면
+              //Blocked aria-hidden on an element because its descendant retained focus. 오류 발생함
+          }}
+      >
+          <Trash2 className="mr-2 h-4 w-4" />
+          <span>플랜 삭제</span>
+      </DropdownMenuItem>
+  </DropdownMenuContent>
+```
+
 🙋‍♂️ 참고한 기술 스택
 ✅ Next.js 15 (App Router)
 ✅ Radix UI 기반 Shadcn UI
 ✅ React 18
-✅ TailwindCSS 
+✅ TailwindCSS
 ✅ Vercel 배포 환경
