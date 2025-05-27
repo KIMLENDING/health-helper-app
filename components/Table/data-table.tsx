@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import {
     ColumnDef,
     SortingState,
@@ -31,7 +31,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
-    Settings2Icon,
     SearchIcon,
     FilterIcon,
     ChevronLeftIcon,
@@ -50,10 +49,11 @@ interface DataTableProps<TData, TValue> {
 
 const availableTags = ["상체", "하체", "가슴", "등", "어깨", "팔", "허벅지", "종아리"]
 
-export function DataTable<TData, TValue>({
+// 데이터 테이블 컴포넌트 정의
+const DataTableComponent = <TData, TValue>({
     columns,
     data,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData, TValue>) => {
     const { data: session } = useSession();
     const [sorting, setSorting] = useState<SortingState>([{ id: "title", desc: false }])
     const [rowSelection, setRowSelection] = useState({})
@@ -250,8 +250,11 @@ export function DataTable<TData, TValue>({
                         다음
                         <ChevronRightIcon className="h-4 w-4 ml-1" />
                     </Button>
-                </div>
-            </div>
+                </div>            </div>
         </div>
     )
 }
+
+// 성능 최적화를 위해 React.memo로 감싸서 export
+// columns와 data가 변경되지 않으면 리렌더링 방지
+export const DataTable = React.memo(DataTableComponent) as typeof DataTableComponent;
