@@ -61,10 +61,10 @@ const LeftSideBar = () => {
 
 | 항목               | 개선 전        | 개선 후          |
 | ------------------ | -------------- | ---------------- |
-| 초기 HTML 크기     | **19.6KB**     | **18.6KB**       |
+| 초기 HTML 크기     | **9.6kB**      | **9.5kB**        |
 | 사이드바 로드 시점 | 페이지 진입 시 | 사용자 트리거 시 |
 
-> 측정 도구: `Chrome DevTools > Performance > Size of initial HTML`
+> 측정 도구(vercel배포 기준): `Chrome DevTools > Performance > Size of initial HTML`
 
 ### 인사이트
 
