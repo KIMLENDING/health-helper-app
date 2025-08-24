@@ -172,7 +172,7 @@ const ExercisePlanDetailPage = (props: {
 
     return (
         <section className='mx-auto w-full max-w-4xl p-2'>
-            <div className="mb-6 flex items-center justify-between gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 p-6 rounded-xl shadow-lg overflow-x-scroll">
+            <div className="mb-6 flex items-center justify-between gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 p-6 rounded-xl shadow-lg ">
 
                 {isEditing ? (
                     <Input
