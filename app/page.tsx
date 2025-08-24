@@ -33,6 +33,7 @@ const Page = () => {
                         회원가입
                     </Link>
                 </div>
+
             </nav>
 
             <main>

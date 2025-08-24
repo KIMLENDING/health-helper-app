@@ -14,6 +14,7 @@ import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import getQueryClient from "@/utils/getQueryClient";
 import LeftSideBar from "@/components/LayoutCompents/LeftSideBar"
 import { DrawerDialogActionWithStore } from "@/components/UserCpmponents/DynamicComponents";
+import BackButton from "@/components/LayoutCompents/BackArrow";
 
 
 const fetchData = async () => {
@@ -43,6 +44,8 @@ export default async function DachboardLayout({
           <header className="sticky top-0 flex justify-between h-14 shrink-0 items-center gap-2 bg-background z-50 shadow-md px-4">
             <div className="flex items-center gap-2">
               <SidebarTrigger />
+              <Separator orientation="vertical" className="h-4" />
+              <BackButton />
               <Separator orientation="vertical" className="h-4" />
               <ModeToggle />
             </div>
