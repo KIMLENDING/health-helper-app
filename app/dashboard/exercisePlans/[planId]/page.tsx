@@ -77,7 +77,7 @@ const ExercisePlanDetailPage = (props: {
         setEditedTitle(data?.title || '');
 
     };
-
+    console.log('qnsrl')
     // 특정 운동의 세부 정보 수정
     const handleExerciseChange = (exerciseIndex: number, field: string, value: number) => {
         const updatedExercises = [...editedExercises];
