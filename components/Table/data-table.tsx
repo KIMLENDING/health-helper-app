@@ -41,6 +41,7 @@ import {
 import { useSession } from "next-auth/react"
 import { useSelectedExercise } from "@/server/mutations"
 import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -113,7 +114,8 @@ const DataTableComponent = <TData, TValue>({
     useEffect(() => {
         table.getColumn("tags")?.setFilterValue(selectedTags)
     }, [selectedTags, table])
-
+    console.log("table", table.getRowModel().rows)
+    console.log("filtered", table.getRowModel().rows.map((row) => row.getVisibleCells()))
     return (
         <div className="py-2 dark:bg-zinc-950 border-muted shadow-sm">
             <div className="mb-6 ">
@@ -183,7 +185,7 @@ const DataTableComponent = <TData, TValue>({
                                 {headerGroup.headers.map((header) => (
                                     <TableHead
                                         key={header.id}
-                                        className=" text-black dark:text-white py-3"
+                                        className=" text-black dark:text-white flex items-center justify-center"
                                     >
                                         {header.isPlaceholder
                                             ? null
@@ -208,7 +210,14 @@ const DataTableComponent = <TData, TValue>({
                                     `}
                                 >
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id} className="py-3">
+                                        <TableCell key={cell.id} className={cn(`
+                                            flex items-center justify-start
+                                            ${cell.column.id === 'select' && ''}
+                                            ${cell.column.id === 'title' && 'w-[140px] '}
+                                            ${cell.column.id === 'tags' && 'w-full'}
+
+
+                                        `)} >
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
