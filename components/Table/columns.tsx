@@ -31,7 +31,6 @@ export const columns: ColumnDef<Exercise>[] = [
                 }
                 onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)} // 모든 페이지의 행 선택/해제
                 aria-label="Select all"
-
             />
 
         ),
@@ -70,7 +69,7 @@ export const columns: ColumnDef<Exercise>[] = [
             const tags = getValue() as string[]
             tags.join(", ")
             return (
-                <div className="overflow-y-scroll text-ellipsis max-h-16">{tags.join(", ")}</div>
+                <div className="overflow-y-scroll text-ellipsis max-h-16 scrollbar-hide">{tags.join(", ")}</div>
             )
         }
     },
