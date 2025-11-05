@@ -6,6 +6,7 @@ import SessionProvider from "@/providers/SessionProvider";
 import { getServerSession } from "next-auth";
 import { Toaster } from "@/components/ui/toaster"
 import { QueryProviders } from "@/providers/QueryProvider";
+import { ViewTransitions } from "next-view-transitions";
 
 
 
@@ -70,9 +71,9 @@ export default async function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-
-
-              {children}
+              <ViewTransitions>
+                {children}
+              </ViewTransitions>
 
               <Toaster />
             </ThemeProvider>
