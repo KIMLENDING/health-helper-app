@@ -35,7 +35,7 @@ const TapsComponent = ({ sessionId }: { sessionId: string }) => {
                 router.push('/dashboard');
                 return;
             }
-            router.push(`/dashboard/detail/${data._id}`);
+            router.push(`/dashboard/detail`);
         } catch (error) {
             console.error("운동 세션 종료 중 오류 발생:", error);
         } finally {
