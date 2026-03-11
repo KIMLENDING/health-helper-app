@@ -49,6 +49,7 @@ export const useDoneExerciseSession = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (data: any) => {
+
             const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user/exerciseSession/${data.sessionId}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json', },
@@ -66,7 +67,7 @@ export const useDoneExerciseSession = () => {
             const date = new Date();
             const year = date.getFullYear();
             const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1 필요
-            queryClient.invalidateQueries({ queryKey: ["allSessions", year, month, 1] }) // detail페이지의 데이터 업데이트
+            queryClient.removeQueries({ queryKey: ["allSessions", year, month, 1] }) // detail페이지의 데이터 업데이트
             await queryClient.invalidateQueries({ queryKey: ["inProgress"] });
             if (data.updatedSession) { // 데이터가 있을 경우에만 invalidateQueries 호출
                 await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.updatedSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트

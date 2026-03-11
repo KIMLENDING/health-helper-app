@@ -112,7 +112,7 @@ const Page = () => {
                     ))}
                 </div>
             ) : data?.allSession?.length > 0 ? (
-                <Accordion type="single" collapsible className="space-y-4">
+                <Accordion type="single" collapsible className="space-y-4" defaultValue={data?.allSession[0]._id}>
                     {data?.allSession.map((session: ExerciseSession) => {
                         const { formatted, dayOfWeek } = formatDate(formatToKST(session.createdAt!) || '');
 
