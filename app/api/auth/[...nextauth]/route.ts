@@ -94,7 +94,7 @@ export const authOptions: any = {
         token.image = user.image || profile?.avatar_url; // user의 image를 token에 추가
         token.provider = account?.provider; // user의 provider를 token에 추가
         if (!user._id) {
-          connect();
+          await connect();
           const userId = await User.findOne({ email: user.email, provider: account.provider });
           token._id = userId?._id; // user의 _id를 token에 추가
         } else {
