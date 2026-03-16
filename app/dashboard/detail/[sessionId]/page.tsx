@@ -51,7 +51,7 @@ const Page = () => {
                             </span>
                             {formattedDate}
                         </h2>
-                        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1 ">
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
                             이번 세션에서는 총 <strong className="text-blue-500">{data?.exercises?.length || 0}</strong>개의 운동을 진행하셨네요!
                         </p>
                     </div>
