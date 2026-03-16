@@ -3,7 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { TotalTitleBySession, TotalTitleByWeight } from '@/components/UserCpmponents/DynamicComponents';
 import { useGetExerciseSession } from '@/server/user/exerciseSession/queries';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Calendar1, CalendarCheck2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import React from 'react'
 import LoadingOverlay from '@/components/LayoutCompents/LoadingOverlay';
@@ -47,22 +47,22 @@ const Page = () => {
                     <div>
                         <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
                             <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 p-1.5 rounded-lg">
-                                <Calendar />
+                                <CalendarCheck2 />
                             </span>
                             {formattedDate}
                         </h2>
-                        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1 ml-9">
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1 ">
                             이번 세션에서는 총 <strong className="text-blue-500">{data?.exercises?.length || 0}</strong>개의 운동을 진행하셨네요!
                         </p>
                     </div>
                 </div>
 
                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150 fill-mode-both">
-                    <div className="bg-zinc-50 dark:bg-zinc-900/50 p-4 sm:p-6 rounded-xl border border-zinc-100 dark:border-zinc-800">
+                    <div className="bg-zinc-50 dark:bg-zinc-900/50  rounded-xl border border-zinc-100 dark:border-zinc-800">
                         <TotalTitleByWeight data={data!} />
                     </div>
 
-                    <div className="bg-zinc-50 dark:bg-zinc-900/50 p-4 sm:p-6 rounded-xl border border-zinc-100 dark:border-zinc-800">
+                    <div className="bg-zinc-50 dark:bg-zinc-900/50  rounded-xl border border-zinc-100 dark:border-zinc-800">
                         <TotalTitleBySession data={data!} />
                     </div>
                 </div>
