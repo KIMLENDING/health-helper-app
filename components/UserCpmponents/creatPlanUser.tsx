@@ -49,20 +49,22 @@ const CreatPlanUser = () => {
     const router = useRouter(); // 라우터
 
     useEffect(() => {
-        // 초기 값 설정 - data가 추가 되면 exerciseOption 초기값 필드를 추가
         if (!data) return;
-
         const defaultData = { sets: 4, reps: 6, weight: 30 };
-        const newState: ExerciseOption[] = data.map(ex => ({
-            exerciseId: ex._id,
-            title: ex.title,
-            sets: exerciseOption.find(v => v.exerciseId === ex._id)?.sets || defaultData.sets, // 기존값 || 기본값
-            reps: exerciseOption.find(v => v.exerciseId === ex._id)?.reps || defaultData.reps,
-            weight: exerciseOption.find(v => v.exerciseId === ex._id)?.weight || defaultData.weight,
-        }));
 
-        setExerciseOption(newState);
+        // setState의 인자로 콜백 함수를 주면 최신 상태(prev)를 안전하게 꺼내 쓸 수 있습니다.
+        setExerciseOption(prev =>
+            data.map(ex => ({
+                exerciseId: ex._id,
+                title: ex.title,
+                // 바깥의 exerciseOption 대신 확실한 최신 값인 prev를 참조
+                sets: prev.find(v => v.exerciseId === ex._id)?.sets || defaultData.sets,
+                reps: prev.find(v => v.exerciseId === ex._id)?.reps || defaultData.reps,
+                weight: prev.find(v => v.exerciseId === ex._id)?.weight || defaultData.weight,
+            }))
+        );
     }, [data]);
+
 
     async function onSubmit2(values: z.infer<typeof formSchema2>) {
         // 루틴 제출 로직
