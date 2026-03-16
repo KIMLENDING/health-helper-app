@@ -120,8 +120,8 @@ const ShowWeek = () => {
                                 {weekSessionMapping.map((day, index) => (
                                     <div key={index} className="flex flex-col items-center">
                                         {day.id ? (
-                                            <div
-                                                // href={`/dashboard/detail/${day.id}`}
+                                            <Link
+                                                href={`/dashboard/detail/${day.id}`}
                                                 className="w-full"
                                             >
                                                 <div className={`
@@ -151,7 +151,7 @@ const ShowWeek = () => {
                                                 `}>
                                                     {day.label}
                                                 </span>
-                                            </div>
+                                            </Link>
                                         ) : (
                                             <>
                                                 <div className={`
