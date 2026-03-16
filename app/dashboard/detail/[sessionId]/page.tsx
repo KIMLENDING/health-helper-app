@@ -7,6 +7,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import React from 'react'
 import LoadingOverlay from '@/components/LayoutCompents/LoadingOverlay';
+import { Calendar } from '@/components/ui/calendar';
 
 const Page = () => {
     const params = useParams();
@@ -46,7 +47,7 @@ const Page = () => {
                     <div>
                         <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
                             <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 p-1.5 rounded-lg">
-                                📅
+                                <Calendar />
                             </span>
                             {formattedDate}
                         </h2>
