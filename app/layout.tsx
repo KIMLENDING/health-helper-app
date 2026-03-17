@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import SessionProvider from "@/providers/SessionProvider";
-import { getServerSession } from "next-auth";
 import { Toaster } from "@/components/ui/toaster"
 import { QueryProviders } from "@/providers/QueryProvider";
 import { ViewTransitions } from "next-view-transitions";
