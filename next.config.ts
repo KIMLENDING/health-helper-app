@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
-import withPWA from "next-pwa"; // next-pwa 플러그인 추가
-import withPlugins from "next-compose-plugins"; // next-compose-plugins 추가
+import withPWAInit from "@ducanh2912/next-pwa";
+
+const withPWA = withPWAInit({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+});
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -15,18 +19,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withPlugins(
-  [
-    [
-      withPWA,
-      {
-        pwa: {
-          dest: "public",
-          disable: process.env.NODE_ENV === "development",
-        },
-      },
-    ],
-
-  ],
-  nextConfig
-);
+export default withPWA(nextConfig);
