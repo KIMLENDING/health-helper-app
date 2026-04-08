@@ -63,7 +63,7 @@ export const useDoneExerciseSession = () => {
             return response.json();
         },
         onSuccess: async (data) => {
-            toast({ variant: 'default2', title: `${data.message}` });
+            // toast({ variant: 'default2', title: `${data.message}` });
             // 모든 운동을 완료 했기 때문에 inProgress 쿼리 갱신을 위한 무효화
             const date = new Date();
             const year = date.getFullYear();
@@ -106,7 +106,7 @@ export const useActionExerciseSession = () => {
             return response.json();
         },
         onSuccess: async (data) => {
-            toast({ variant: "default2", title: "운동 상태가 업데이트되었습니다." });
+            // toast({ variant: "default2", title: "운동 상태가 업데이트되었습니다." });
             // invalidate 관련 로직은 성공 시 처리하는 게 더 명확
             await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.exerciseSession._id] });
             // await queryClient.invalidateQueries({ queryKey: ["inProgress"] }); //*  2025/04/09-03:51 수정 
@@ -140,7 +140,7 @@ export const useEditExerciseSession = () => {
             return response.json();
         },
         onSuccess: async (data) => {
-            toast({ variant: 'default2', title: data.message });
+            // toast({ variant: 'default2', title: data.message });
             await queryClient.invalidateQueries({ queryKey: ['exerciseSession', data.updatedSession._id] })
         },
         onError: (error: any) => {
