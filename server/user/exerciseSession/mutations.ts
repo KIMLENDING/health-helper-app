@@ -29,6 +29,7 @@ export const useCreateExerciseSession = () => {
             toast({ variant: "default2", title: "운동을 시작합니다!" });
             await queryClient.invalidateQueries({ queryKey: ["exerciseSession", data.newExerciseSession._id] }) // 데이터 갱신 후 자동으로 UI 업데이트
             await queryClient.invalidateQueries({ queryKey: ["inProgress"] }) // 데이터 갱신 후 자동으로 UI 업데이트
+            await queryClient.invalidateQueries({ queryKey: ["weekSessions"] }) // 주간 운동 세션 데이터 갱신
         },
         onError: (error) => {
             const message = error instanceof Error ? error.message : String(error);
