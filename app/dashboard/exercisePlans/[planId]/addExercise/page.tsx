@@ -2,6 +2,7 @@
 import { columns } from '@/components/Table/columns';
 import { DataTable } from '@/components/Table/data-table';
 import { useSelectedExercises } from '@/server/queries';
+import { useSelectedExercise } from '@/server/mutations';
 import React, { use, useEffect, useState } from 'react';
 import { Loader2, PlusCircle, ListFilter, ListPlus, ArrowLeft, Info, Dumbbell, Save } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -30,6 +31,12 @@ const Page = (props: {
     const [exerciseOption, setExerciseOption] = useState<ExerciseOption[]>([]) //  세트, 반복횟수, 무게 저장하는 변수
     const { mutate, isPending } = useUpdatePlan(); // 플랜 업데이트를 위한 훅 (운동 추가)
     const router = useRouter(); // 페이지 이동을 위한 훅
+    const useSelectedExerciseMutation = useSelectedExercise();
+
+    const handleRowSelectionChange = (selectedRows: any[]) => {
+        useSelectedExerciseMutation.mutate(selectedRows);
+    };
+
     const filteredData = React.useMemo(() => {
         // useMemo를 사용하여 성능 최적화
         // DataTable 컴포넌트에서  filteredData를 props로 전달받아 사용
@@ -158,7 +165,15 @@ const Page = (props: {
                 </CardHeader>
                 <CardContent className="pt-0">
                     <div className="rounded-md overflow-hidden">
-                        <DataTable columns={columns} data={filteredData} />
+                    <DataTable
+                        columns={columns}
+                        data={filteredData}
+                        title="운동 목록"
+                        titleIcon={<Dumbbell className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />}
+                        filterKey="title"
+                        availableTags={['상체', '하체', '가슴', '등', '어깨', '팔', '허벅지', '종아리']}
+                        onRowSelectionChange={handleRowSelectionChange}
+                    />
                     </div>
                 </CardContent>
             </Card>

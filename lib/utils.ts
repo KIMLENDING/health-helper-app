@@ -17,29 +17,30 @@ export const chartConfig = {
     label: "Mobile",
     color: "#60a5fa",
   },
-  title: {
-    label: "Title",
-    color: "#2563eb",
+  titleWeight: {
+    label: "총 무게(kg)",
+    color: "#3b82f6", // blue-500
   },
   totalWeight: {
     label: "횟수 x 무게(kg)",
-    color: "#2563eb",
+    color: "#22c55e", // green-500
   },
   day: {
     label: "요일",
-    color: "#2563eb",
+    color: "#3b82f6",
   },
   totalTime: {
     label: "운동시간(s)",
-    color: "#2563eb",
+    color: "#a855f7", // purple-500
   },
   part: {
     label: "운동부위",
-    color: "#2563eb",
+    color: "#f97316", // orange-500
+  },
+  weight: {
+    label: "총 무게(kg)",
+    color: "#f97316", // orange-500
   }
-
-
-
 } satisfies ChartConfig;
 
 export function formatDate(dateString: string) {

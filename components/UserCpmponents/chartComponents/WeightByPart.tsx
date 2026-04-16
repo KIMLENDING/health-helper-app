@@ -1,83 +1,48 @@
+import React from 'react';
+import BaseChart, { createTooltipFormatter } from './BaseChart';
+import { ChartTooltipContent, ChartLegendContent } from '@/components/ui/chart';
 
+const TAG_FILTER = ['가슴', '어깨', '등', '하체'] as const;
 
-
-
-import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-
-import React from 'react'
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
-
-
-const chartConfig = {
-    part: {
-        label: "운동부위",
-        color: "#2563eb",
-    },
-    weight: {
-        label: "무게(kg)",
-        color: "#2563eb",
-    }
-
-} satisfies ChartConfig;
 const WeightByPart = ({ data }: { data: any }) => {
-
-    const tagFilter = ['가슴', '어깨', '등', '하체']
-    const result = tagFilter.reduce((acc: any, tag: string) => {
+    const result = TAG_FILTER.reduce<Record<string, number>>((acc, tag) => {
         acc[tag] = 0;
         return acc;
     }, {});
 
-
-    //  ['가슴', '어깨', '등', '하체'] 태그별 총 무게 계산
-    data?.sessions.flatMap((session: any) => {
-        return session.exercises.map((exercise: any) => {
-            return {
-                totalWeight: exercise.session.map((s: any) => {
-                    return s.reps * s.weight // 한 세트당 무게
-                }).reduce((acc: number, cur: number) => acc + cur, 0),
-                tag: exercise.exerciseId.tags.filter((tags: any) => {
-                    return tagFilter.includes(tags) // 필터링된 태그만 반환 ['가슴', '어깨', '등', '하체']
-                }
-                ),
-            }
-        })
-    }).forEach((item: any) => {
-        item.tag.forEach((tag: any) => {
-            if (tagFilter.includes(tag)) {
-                result[tag] += item.totalWeight; // 해당 태그의 총 무게
-            }
+    data?.sessions
+        .flatMap((session: any) =>
+            session.exercises.map((exercise: any) => ({
+                totalWeight: exercise.session.reduce((sum: number, s: any) => sum + s.reps * s.weight, 0),
+                tags: exercise.exerciseId.tags.filter((t: string) => TAG_FILTER.includes(t as any)),
+            }))
+        )
+        .forEach((item: any) => {
+            item.tags.forEach((tag: string) => {
+                result[tag] += item.totalWeight;
+            });
         });
-    });
-    const b = Object.entries(result).map(([key, value]) => {
-        return { part: key, weight: value }
-    });
 
+    const chartData = Object.entries(result).map(([part, weight]) => ({ part, weight }));
 
     return (
-        <ChartContainer config={chartConfig} className={`min-h-[200px] aspect-auto w-full`}>
-            <BarChart accessibilityLayer data={b}
-                margin={{
-                    top: 20,
-                    left: 12,
-                    right: 12,
-                }}
+        <BaseChart data={chartData} type="bar">
+            <BaseChart.Grid />
+            <BaseChart.XAxis dataKey="part" tickFormatter={(v) => v.slice(0, 3)} />
+            <BaseChart.Tooltip
+                cursor={true}
+                content={<ChartTooltipContent />}
+                formatter={createTooltipFormatter({
+                    titleKey: 'part',
+                    labelName: '총 무게(kg)',
+                    valueKey: 'weight',
+                    valueSuffix: 'kg',
+                })}
+            />
+            <BaseChart.Legend content={<ChartLegendContent />} />
+            <BaseChart.Bar dataKey="weight" fill="var(--color-weight)" radius={4} />
+        </BaseChart>
+    );
+};
 
-            >
-                <ChartTooltip content={<ChartTooltipContent />} />
-
-                <CartesianGrid strokeDasharray="3 3" stroke="#616266" vertical={false} />
-                <XAxis
-                    dataKey="part"
-                    tickLine={false}
-                    tickMargin={10}
-                    axisLine={false}
-                    tickFormatter={(value) => value.slice(0, 3)}
-                />
-                <ChartLegend content={<ChartLegendContent />} />
-                <Bar dataKey="weight" fill="var(--color-weight)" radius={4} />
-            </BarChart>
-        </ChartContainer>
-
-    )
-}
-export default WeightByPart
+export default WeightByPart;

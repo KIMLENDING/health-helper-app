@@ -123,33 +123,14 @@ const ShowChart = () => {
             }}
                 orientation={isMobile ? "vertical" : 'horizontal'} className='bg-muted/50  rounded-xl ' >
                 <CarouselContent className={` ${isMobile ? 'h-[17rem] ' : ''} select-none`} >
-                    <CarouselItem >
-                        <CardContainer title='주간 운동 종목 Top 5' icon={<BarChart2 className="h-5 w-5 text-blue-500" />}>
-                            <TitlebyDay data={data} />
-                        </CardContainer>
-                    </CarouselItem>
-                    <CarouselItem >
-                        <CardContainer title='주간 운동 시간' icon={<Clock className="h-5 w-5 text-purple-500" />}>
-                            <TimeByDay data={data} />
-                        </CardContainer>
-                    </CarouselItem>
-                    <CarouselItem >
-                        <CardContainer title='주간 운동량(kg)' icon={<Activity className="h-5 w-5 text-green-500" />}>
-                            <WeightByDay data={data} />
-                        </CardContainer>
-                    </CarouselItem>
-                    <CarouselItem >
-                        <CardContainer title='주간 부위별 운동량(kg)' icon={<Dumbbell className="h-5 w-5 text-orange-500" />}>
-                            <WeightByPart data={data} />
-                        </CardContainer>
-                    </CarouselItem>
+                    {chartItems.map((item, index) => (
+                        <CarouselItem key={index}>
+                            <CardContainer title={item.title} icon={item.icon}>
+                                {item.component}
+                            </CardContainer>
+                        </CarouselItem>
+                    ))}
                 </CarouselContent>
-                {/* {
-                    <>
-                        <CarouselPrevious />
-                        <CarouselNext />
-                    </>
-                } */}
             </Carousel>
 
         </section>
