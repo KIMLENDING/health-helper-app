@@ -79,13 +79,12 @@ function simpleMdToHtml(md) {
         .replace(/^### (.*$)/gm, '<h3 class="sub-title">$1</h3>')
         .replace(/^\* (.*$)/gm, "<li>$1</li>")
         .replace(/^- (.*$)/gm, "<li>$1</li>")
-        .replace(/\*\*(.*)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
         .replace(/`([^`]+)`/g, "<code>$1</code>")
         .replace(/^> (.*$)/gm, '<blockquote class="quote">$1</blockquote>')
         .replace(/---/g, '<hr class="divider">')
-        .replace(/\n\n/g, "</p><p>")
-        .replace(/(<li>.*<\/li>)/gs, (match) => "<ul>" + match + "</ul>")
-        .replace(/<\/ul><ul>/g, "");
+        .replace(/\n\s*\n/g, "</p><p>")
+        .replace(/((?:<li>.*?<\/li>\s*)+)/g, "<ul>$1</ul>");
 
     return "<p>" + html + "</p>";
 }
